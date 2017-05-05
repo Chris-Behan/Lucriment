@@ -76,6 +76,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         databaseReference.child(user.getDisplayName()).setValue(UserInformation);
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
 
+
     }
 
     public void rbClick(View v){

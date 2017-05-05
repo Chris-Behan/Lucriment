@@ -56,6 +56,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -73,7 +75,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private TextView mDetailTextView;
     private SignInButton googleButton;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private FirebaseAuth.AuthStateListener testListener;
     private CallbackManager mCallbackManager;
+    private DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +86,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //initialize database
+     //   databaseReference = FirebaseDatabase.getInstance().getReference();
+      //  databaseReference.child()
 
 
-
-
+       // String userEmail = "Chris Behan";
         authStateListener = new FirebaseAuth.AuthStateListener(){
+           // String userEmail = getDisplayName();
+            //firebaseAuth = FirebaseAuth.getInstance();
 
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+
                 if(firebaseAuth.getCurrentUser() !=null){
                     finish();
-                    startActivity(new Intent(LoginActivity.this, CreationActivity.class));
+                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                 }
             }
         };
@@ -112,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(), CreationActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
         // initizlie buttons
         signInButton = (Button)  findViewById(R.id.signInButton);
@@ -160,6 +173,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         googleButton.setOnClickListener(this);
     }
 
+    private String getDisplayName(){
+        String name = firebaseAuth.getCurrentUser().getDisplayName().toString();
+        return name;
+    }
+
     //handle facebook login
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
@@ -173,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                           // updateUI(user);
+                            // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -189,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     //handle email login
-    private void userLogin(){
+    public void userLogin(){
         String email = signInEmail.getText().toString().trim();
         String password = signInpassword.getText().toString().trim();
 
@@ -208,30 +226,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email,password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressDialog.dismiss();
-                                if(task.isSuccessful()){
-                                    finish();
-                                    startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                                }
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if(task.isSuccessful()){
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                         }
-                    });
+                    }
+                });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.signInButton:
-            userLogin();
-            break;
+                userLogin();
+                break;
             case R.id.textViewSignUp:
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.googleButton:
-               signIn();
+                signIn();
                 break;
         }
 
@@ -241,6 +259,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    private void callthis(){
+        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                Toast.LENGTH_SHORT).show();
     }
 
 
@@ -289,7 +311,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                          //  updateUI(user);
+                            //  updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
