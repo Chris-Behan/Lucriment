@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Lucriment</string>
+    <string name="facebook_app_id">675451355984493</string>
+    <string-array name="SchoolNames">
+        <item>University of Calgary</item>
+        <item>Mount Royal University</item>
+        <item>University of Alberta</item>
+    </string-array>
+
+    <string name="fb_login_protocol_scheme">fb434720066875970</string>
+</resources>

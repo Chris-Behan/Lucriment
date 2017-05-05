@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "744405150169",
+    "firebase_url": "https://lucriment.firebaseio.com",
+    "project_id": "lucriment",
+    "storage_bucket": "lucriment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744405150169:android:29cbefa6ac56c2d7",
+        "android_client_info": {
+          "package_name": "com.lucriment.lucriment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744405150169-43uoat0nsbtvdb5ilun6or995skabg1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Cp2QJ8rlciRse1TkqT00qQl_A-WdY3U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
