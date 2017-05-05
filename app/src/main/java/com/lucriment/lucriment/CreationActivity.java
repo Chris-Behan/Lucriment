@@ -65,7 +65,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         schoolSelector.setAdapter(schoolNameAdapter);
 
     }
-
+        //save user information
     private void saveUserInformation(){
         String accountType = rb.getText().toString().trim();
         String school = schoolSelector.getSelectedItem().toString().trim();
