@@ -1,11 +1,15 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -13,8 +17,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,6 +35,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
     private RadioButton rb;
     private Spinner schoolSelector;
     //private FirebaseUser user;
+    private EditText name;
 
 
     @Override
@@ -48,6 +56,10 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         schoolSelector = (Spinner) findViewById(R.id.schoolSelect);
         registerButton = (Button) findViewById(R.id.createButton);
         rg = (RadioGroup) findViewById(R.id.radioGroup);
+        name = (EditText) findViewById(R.id.Name);
+        if(firebaseAuth.getCurrentUser().getDisplayName() == null){
+            name.setVisibility(View.VISIBLE);
+        }
 
 
         //initialize database
@@ -70,11 +82,31 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         String accountType = rb.getText().toString().trim();
         String school = schoolSelector.getSelectedItem().toString().trim();
         //String school = "UofC";
-        System.out.println(school);
-        UserInfo UserInformation = new UserInfo(accountType,school);
+       // System.out.println(school);
+
+        String email = firebaseAuth.getCurrentUser().getEmail();
+        UserInfo UserInformation = new UserInfo(accountType,school, email);
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        databaseReference.child(user.getDisplayName()).setValue(UserInformation);
+        if(user.getDisplayName() == null) {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(name.getText().toString())
+
+                    .build();
+
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+
+                            }
+                        }
+                    });
+        }
+        databaseReference.child(user.getUid()).setValue(UserInformation);
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
+        finish();
+        startActivity(new Intent(CreationActivity.this, ProfileActivity.class));
 
 
     }

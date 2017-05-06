@@ -6,14 +6,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.facebook.login.LoginManager;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -21,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView profileName;
     private Button logoutButton;
     private DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +37,46 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String name = user.getDisplayName();
+
         // check whether or not user is logged in
         if(firebaseAuth.getCurrentUser() == null){
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }else{
-            DatabaseReference db = databaseReference.child(name);
-            if(databaseReference.child(name)== null){
-                finish();
-                startActivity(new Intent(this, CreationActivity.class));
-            }
+            //String key = databaseReference.getRef();
+
         }
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               if( dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+
+               } else{
+
+                   finish();
+                   startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
+               }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
         //FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
         profileName = (TextView) findViewById(R.id.profileLabel);
-
-        profileName.setText("Welcome "+ user.getDisplayName());
+        if(firebaseAuth.getCurrentUser().getDisplayName() == null){
+            profileName.setText("Welcome " );
+        }else {
+            profileName.setText("Welcome " + user.getDisplayName());
+        }
         logoutButton = (Button) findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(this);

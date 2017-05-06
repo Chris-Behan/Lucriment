@@ -8,13 +8,15 @@ public class UserInfo {
 
     public String accountType;
     public String school;
+    public String email;
 
     public UserInfo(){
 
     }
 
-    public UserInfo(String accountType, String school) {
+    public UserInfo(String accountType, String school, String email) {
         this.accountType = accountType;
         this.school = school;
+        this.email = email;
     }
 }

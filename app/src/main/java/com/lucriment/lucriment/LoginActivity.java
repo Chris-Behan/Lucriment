@@ -233,6 +233,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         if(task.isSuccessful()){
                             finish();
                             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        }else{
+                            progressDialog.dismiss();
+                            Toast.makeText(LoginActivity.this, "There is no account associated with the email you entered, please try again", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
