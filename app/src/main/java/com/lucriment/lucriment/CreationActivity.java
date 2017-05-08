@@ -86,7 +86,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
        // System.out.println(school);
 
         String email = firebaseAuth.getCurrentUser().getEmail();
-        UserInfo UserInformation = new UserInfo(accountType,school, email);
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user.getDisplayName() == null) {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -104,6 +104,8 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
                         }
                     });
         }
+        String displayName = firebaseAuth.getCurrentUser().getDisplayName().toString();
+        UserInfo UserInformation = new UserInfo(accountType,school, email, displayName);
         if(accountType.equals("Tutor")) {
             databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);
         }else{
@@ -133,5 +135,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         if(v == registerButton){
             saveUserInformation();
         }
+
+
     }
 }

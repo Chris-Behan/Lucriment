@@ -38,7 +38,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String name = user.getDisplayName();
-        browseButton = (Button)findViewById(R.id.browseButton);
+
 
         // check whether or not user is logged in
         if(firebaseAuth.getCurrentUser() == null){
@@ -82,20 +82,29 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             profileName.setText("Welcome " + user.getDisplayName());
         }
         logoutButton = (Button) findViewById(R.id.logoutButton);
+        browseButton = (Button)findViewById(R.id.browseButton1);
+
+        browseButton.setOnClickListener(this);
 
         logoutButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(v == logoutButton){
-            firebaseAuth.signOut();
-            LoginManager.getInstance().logOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        if(v == browseButton){
-            
+
+
+        switch (v.getId()){
+            case R.id.logoutButton:
+                firebaseAuth.signOut();
+                LoginManager.getInstance().logOut();
+                finish();
+                startActivity(new Intent(this, LoginActivity.class));
+                break;
+            case R.id.browseButton1:
+                finish();
+                startActivity(new Intent(this, BrowseActivity.class));
+                break;
+
         }
 
     }
