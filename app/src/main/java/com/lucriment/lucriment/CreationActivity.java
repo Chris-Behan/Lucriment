@@ -34,6 +34,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
     private RadioGroup rg;
     private RadioButton rb;
     private Spinner schoolSelector;
+
     //private FirebaseUser user;
     private EditText name;
 
@@ -103,7 +104,11 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
                         }
                     });
         }
-        databaseReference.child(user.getUid()).setValue(UserInformation);
+        if(accountType.equals("Tutor")) {
+            databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);
+        }else{
+            databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
+        }
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
         finish();
         startActivity(new Intent(CreationActivity.this, ProfileActivity.class));

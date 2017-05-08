@@ -1,12 +1,14 @@
 package com.lucriment.lucriment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -26,10 +28,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView signInTextView;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private InputMethodManager imm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //initialize input method manager for hiding keyboard
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
         // initizlie firebase authentication
         firebaseAuth = FirebaseAuth.getInstance();
         // check if user is already logged in
@@ -67,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void signUp(){
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
+        imm.hideSoftInputFromWindow(emailText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordText.getWindowToken(), 0);
+
         // check if email is empty
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter email", Toast.LENGTH_SHORT).show();

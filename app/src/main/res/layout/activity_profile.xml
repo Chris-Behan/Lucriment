@@ -53,6 +53,15 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:text="Logout" />
+
+            <Button
+                android:id="@+id/browseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:text="Browse Tutors"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
 

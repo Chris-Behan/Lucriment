@@ -1,15 +1,19 @@
 package com.lucriment.lucriment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -78,6 +82,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth.AuthStateListener testListener;
     private CallbackManager mCallbackManager;
     private DatabaseReference databaseReference;
+    private InputMethodManager imm;
+
 
 
     @Override
@@ -87,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         //initialize database
      //   databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -128,12 +135,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         }
         // initizlie buttons
+
         signInButton = (Button)  findViewById(R.id.signInButton);
         signInEmail = (EditText) findViewById(R.id.signInEmail);
         signInpassword = (EditText) findViewById(R.id.signInPassword);
         signUpTextView = (TextView) findViewById(R.id.textViewSignUp);
         googleButton = (SignInButton) findViewById(R.id.googleButton);
         progressDialog = new ProgressDialog(this);
+
+
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
@@ -210,6 +220,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void userLogin(){
         String email = signInEmail.getText().toString().trim();
         String password = signInpassword.getText().toString().trim();
+        imm.hideSoftInputFromWindow(signInEmail.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(signInpassword.getWindowToken(), 0);
 
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter email", Toast.LENGTH_SHORT).show();

@@ -26,6 +26,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView profileName;
     private Button logoutButton;
     private DatabaseReference databaseReference;
+    private Button browseButton;
 
 
     @Override
@@ -37,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String name = user.getDisplayName();
+        browseButton = (Button)findViewById(R.id.browseButton);
 
         // check whether or not user is logged in
         if(firebaseAuth.getCurrentUser() == null){
@@ -50,10 +52,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               if( dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                DataSnapshot studentSnap = dataSnapshot.child("Students");
+                DataSnapshot tutorSnap = dataSnapshot.child("Tutors");
+               if( studentSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
 
-               } else{
-
+               } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+               }else{
                    finish();
                    startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
                }
@@ -89,6 +93,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             LoginManager.getInstance().logOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        }
+        if(v == browseButton){
+            
         }
 
     }
