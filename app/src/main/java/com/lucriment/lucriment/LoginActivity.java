@@ -96,13 +96,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         //initialize database
-     //   databaseReference = FirebaseDatabase.getInstance().getReference();
-      //  databaseReference.child()
+        //   databaseReference = FirebaseDatabase.getInstance().getReference();
+        //  databaseReference.child()
 
 
-       // String userEmail = "Chris Behan";
+        // String userEmail = "Chris Behan";
         authStateListener = new FirebaseAuth.AuthStateListener(){
-           // String userEmail = getDisplayName();
+            // String userEmail = getDisplayName();
             //firebaseAuth = FirebaseAuth.getInstance();
 
             @Override

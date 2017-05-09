@@ -78,12 +78,12 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         schoolSelector.setAdapter(schoolNameAdapter);
 
     }
-        //save user information
+    //save user information
     private void saveUserInformation(){
         String accountType = rb.getText().toString().trim();
         String school = schoolSelector.getSelectedItem().toString().trim();
         //String school = "UofC";
-       // System.out.println(school);
+        // System.out.println(school);
 
         String email = firebaseAuth.getCurrentUser().getEmail();
 
@@ -104,7 +104,11 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
                         }
                     });
         }
-        String displayName = firebaseAuth.getCurrentUser().getDisplayName().toString();
+      //  String displayName = firebaseAuth.getCurrentUser().getDisplayName().toString();
+        String displayName = name.getText().toString();
+        if(name.getVisibility() == View.INVISIBLE){
+            displayName = firebaseAuth.getCurrentUser().getDisplayName();
+        }
         UserInfo UserInformation = new UserInfo(accountType,school, email, displayName);
         if(accountType.equals("Tutor")) {
             databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);

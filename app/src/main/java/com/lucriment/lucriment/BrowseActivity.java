@@ -1,9 +1,12 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,20 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BrowseActivity extends AppCompatActivity {
+public class BrowseActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private ArrayList<String> tNames;
+    private Button backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
         firebaseAuth = FirebaseAuth.getInstance();
+        backButton = (Button) findViewById(R.id.backButton);
 
-       // databaseReference = FirebaseDatabase.getInstance().getReference();
+        backButton.setOnClickListener(this);
+
+
+
+        // databaseReference = FirebaseDatabase.getInstance().getReference();
         getTutors();
-       // populateTutorList();
+        // populateTutorList();
     }
 
     private void populateTutorList(ArrayList<String> names){
@@ -47,7 +56,7 @@ public class BrowseActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-              tNames =  collectNames((Map<String,Object>) dataSnapshot.getValue());
+                tNames =  collectNames((Map<String,Object>) dataSnapshot.getValue());
                 populateTutorList(tNames);
             }
 
@@ -65,5 +74,14 @@ public class BrowseActivity extends AppCompatActivity {
             tutorNames.add((String)Tutor.get("name"));
         }
         return tutorNames;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == backButton){
+            finish();
+            startActivity(new Intent(BrowseActivity.this, ProfileActivity.class));
+        }
     }
 }

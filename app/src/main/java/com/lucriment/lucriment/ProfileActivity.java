@@ -54,13 +54,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot studentSnap = dataSnapshot.child("Students");
                 DataSnapshot tutorSnap = dataSnapshot.child("Tutors");
-               if( studentSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                if( studentSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
 
-               } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-               }else{
-                   finish();
-                   startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
-               }
+                } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                }else{
+                    finish();
+                    startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
+                }
             }
 
             @Override
