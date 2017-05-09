@@ -102,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.browseButton1:
                 finish();
-                startActivity(new Intent(this, BrowseActivity.class));
+                startActivity(new Intent(this, TutorListActivity.class));
                 break;
 
         }

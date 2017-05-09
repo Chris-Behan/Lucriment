@@ -47,7 +47,8 @@
 
         <activity android:name=".CreationActivity" />
         <activity android:name=".BrowseActivity" />
-        <activity android:name=".TutorCreation"></activity>
+        <activity android:name=".TutorCreation" />
+        <activity android:name=".TutorListActivity"></activity>
     </application>
 
 </manifest>
