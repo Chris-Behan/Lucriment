@@ -46,7 +46,8 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".CreationActivity" />
-        <activity android:name=".BrowseActivity"></activity>
+        <activity android:name=".BrowseActivity" />
+        <activity android:name=".TutorCreation"></activity>
     </application>
 
 </manifest>
