@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ProfileImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:adjustViewBounds="true"
+        android:maxHeight="80dp"
+        android:maxWidth="80dp"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textAppearance="?android:attr/textAppearanceLarge"
+       android:text="Name"
+       android:id="@+id/browseDisplayName"
+       android:layout_gravity="center_horizontal"
+       android:layout_alignTop="@+id/ProfileImage"
+       android:layout_toRightOf="@+id/ProfileImage"
+       android:layout_marginLeft="18dp"
+       android:layout_marginStart="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Rate"
+        android:id="@+id/browseRate"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignBottom="@+id/browseEducation"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Education"
+        android:id="@+id/browseEducation"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/browseDisplayName"
+        android:layout_alignLeft="@+id/browseDisplayName"
+        android:layout_alignStart="@+id/browseDisplayName" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Classes:"
+        android:id="@+id/browseClasses"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/browseEducation"
+        android:layout_alignLeft="@+id/browseEducation"
+        android:layout_alignStart="@+id/browseEducation" />
+
+</RelativeLayout>

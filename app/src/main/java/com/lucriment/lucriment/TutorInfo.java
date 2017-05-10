@@ -17,6 +17,7 @@ public class TutorInfo {
     }
 
     public TutorInfo(String email, String name, String education, String classes, double rate) {
+
         this.email = email;
         this.name = name;
         this.education = education;
