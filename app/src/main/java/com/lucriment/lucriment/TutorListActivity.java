@@ -1,12 +1,15 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +31,7 @@ import java.util.Map;
 public class TutorListActivity extends AppCompatActivity implements View.OnClickListener {
     private DatabaseReference databaseReference;
     private Button backButton;
+    public TutorInfo selectedTutor;
 
     private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
     @Override
@@ -35,6 +39,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
         getTutors();
+        registerTutorClicks();
         //initialize buttons
         backButton = (Button) findViewById(R.id.backButton);
 
@@ -46,6 +51,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
 
     }
+
 
 
 
@@ -80,6 +86,10 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    public TutorInfo getTutor(){
+        return selectedTutor;
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -88,6 +98,8 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             startActivity(new Intent(TutorListActivity.this, ProfileActivity.class));
         }
     }
+
+
 
     private class myListAdapter extends ArrayAdapter<TutorInfo> {
 
@@ -126,6 +138,23 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+    }
+
+    private void registerTutorClicks() {
+        ListView list = (ListView) findViewById(R.id.tView);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TutorInfo selectedTutor1 = tutors.get(position);
+               // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
+                i.putExtra("selectedTutor", selectedTutor1);
+
+                startActivity(i);
+
+            }
+        });
+
     }
 
 }
