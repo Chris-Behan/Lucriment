@@ -46,5 +46,90 @@
             android:layout_below="@+id/tutorName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="22dp" />
+
+        <Button
+            android:id="@+id/contactButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:allowUndo="false"
+            android:autoText="false"
+            android:maxHeight="20dp"
+            android:text="Contact" />
+
+        <TextView
+            android:id="@+id/educationLabel"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Education:"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_below="@+id/contactButton"
+            android:layout_toLeftOf="@+id/contactButton"
+            android:layout_toStartOf="@+id/contactButton" />
+
+        <TextView
+            android:id="@+id/decriptionLabel"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:text="Bio:"
+            android:layout_below="@+id/educationLabel"
+            android:layout_alignLeft="@+id/educationLabel"
+            android:layout_alignStart="@+id/educationLabel" />
+
+        <TextView
+            android:id="@+id/rateLabel"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="37dp"
+            android:text="Rate per hour:"
+            android:layout_below="@+id/decriptionLabel"
+            android:layout_alignLeft="@+id/decriptionLabel"
+            android:layout_alignStart="@+id/decriptionLabel" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Back"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/contactButton"
+            android:layout_alignEnd="@+id/contactButton" />
+
+        <TextView
+            android:id="@+id/tutorEducationFIeld"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_alignBottom="@+id/educationLabel"
+            android:layout_toRightOf="@+id/tutorName"
+            android:layout_toEndOf="@+id/tutorName" />
+
+        <TextView
+            android:id="@+id/tutorBioField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_above="@+id/rateLabel"
+            android:layout_alignLeft="@+id/tutorEducationFIeld"
+            android:layout_alignStart="@+id/tutorEducationFIeld" />
+
+        <TextView
+            android:id="@+id/tutorRateField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rateLabel"
+            android:layout_alignLeft="@+id/tutorBioField"
+            android:layout_alignStart="@+id/tutorBioField"
+            android:text="TextView" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
