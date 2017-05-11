@@ -34,18 +34,25 @@ public class ViewMessagesActivity extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> listOfChats = new ArrayList<>();
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Chats");
+    private String myID, tutorId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
-
+        tutorId = getIntent().getParcelableExtra("tutorID");
         chats = (ListView) findViewById(R.id.currentChats);
         chatName = (EditText) findViewById(R.id.addChatField);
         addButton = (Button) findViewById(R.id.addButton);
-
-
+        myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if(getIntent().hasExtra("tutorID"))
+        tutorId = getIntent().getExtras().get("tutorID").toString();
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfChats);
         chats.setAdapter(arrayAdapter);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put(myID + "_"+ tutorId,"");
+        chatRoot.updateChildren(map);
+        chatName.setText("");
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +69,15 @@ public class ViewMessagesActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Set<String> set = new HashSet<String>();
-                Iterator i = dataSnapshot.getChildren().iterator();
+                Iterator<DataSnapshot> i = dataSnapshot.getChildren().iterator();
+
                 while(i.hasNext()){
-                    set.add(((DataSnapshot)i.next()).getKey());
+                    String currentKey = ((DataSnapshot)i.next()).getKey();
+                    if(currentKey.contains(myID)){
+                        set.add(currentKey);
+                    }
+                  //  set.add(((DataSnapshot)i.next()).getKey());
+
                 }
                 listOfChats.clear();
                 listOfChats.addAll(set);
@@ -80,6 +93,8 @@ public class ViewMessagesActivity extends AppCompatActivity {
         registerChatSelect();
 
     }
+
+
 
     private void registerChatSelect(){
         final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();

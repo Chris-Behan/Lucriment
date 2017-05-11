@@ -21,6 +21,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private String classes;
     private String education;
     private String email;
+    private String id;
     private double rate;
     private EditText classField;
     private EditText rateField;
@@ -56,13 +57,13 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
+        id = firebaseAuth.getCurrentUser().getUid();
         displayName = firebaseAuth.getCurrentUser().getDisplayName();
         classes = classField.getText().toString();
         rate = Double.parseDouble(rateField.getText().toString());
         education = educationField.getText().toString();
         email = firebaseAuth.getCurrentUser().getEmail();
-        TutorInfo tutorInfo = new TutorInfo(email,displayName,education,classes,rate);
+        TutorInfo tutorInfo = new TutorInfo(email,displayName,education,classes,rate, id);
         databaseReference.child("Tutors").child(user.getUid()).setValue(tutorInfo);
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
         finish();

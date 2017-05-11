@@ -12,6 +12,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView tutorName;
     private TutorListActivity tutorListActivity;
     private Button backButton;
+    private Button contactButton;
     private TextView educationField;
     private TextView bioField;
     private TextView rateField;
@@ -27,6 +28,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
         bioField = (TextView) findViewById(R.id.tutorBioField);
         rateField = (TextView) findViewById(R.id.tutorRateField);
+        contactButton = (Button) findViewById(R.id.contactButton);
 
        // selectedTutor = TutorListActivity.getTutor();
         tutorName.setText(selectedTutor.getName());
@@ -35,6 +37,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         rateField.setText(String.valueOf(selectedTutor.getRate()));
 
         backButton.setOnClickListener(this);
+        contactButton.setOnClickListener(this);
         //setup buttons and fields
       //  tutorName.setText();
 
@@ -46,6 +49,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         if(v == backButton){
             finish();
             startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
+        }
+        if(v == contactButton){
+            Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
+            i.putExtra("tutorID", selectedTutor.getID());
+
+            startActivity(i);
         }
     }
 }
