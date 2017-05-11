@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button logoutButton;
     private DatabaseReference databaseReference;
     private Button browseButton;
+    private Button viewMessagesButton;
 
 
     @Override
@@ -83,7 +84,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
         logoutButton = (Button) findViewById(R.id.logoutButton);
         browseButton = (Button)findViewById(R.id.browseButton1);
+        viewMessagesButton = (Button) findViewById(R.id.viewMessagesButton);
 
+        viewMessagesButton.setOnClickListener(this);
         browseButton.setOnClickListener(this);
 
         logoutButton.setOnClickListener(this);
@@ -104,6 +107,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 startActivity(new Intent(this, TutorListActivity.class));
                 break;
+            case  R.id.viewMessagesButton:
+                finish();
+                startActivity(new Intent(this, ViewMessagesActivity.class));
+                break;
+
 
         }
 

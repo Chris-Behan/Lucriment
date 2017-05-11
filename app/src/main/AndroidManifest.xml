@@ -27,6 +27,18 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -49,7 +61,9 @@
         <activity android:name=".BrowseActivity" />
         <activity android:name=".TutorCreation" />
         <activity android:name=".TutorListActivity" />
-        <activity android:name=".SelectedTutorActivity"></activity>
+        <activity android:name=".SelectedTutorActivity" />
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".ViewMessagesActivity"></activity>
     </application>
 
 </manifest>

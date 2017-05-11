@@ -62,6 +62,15 @@
                 android:text="Browse Tutors"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
+
+            <Button
+                android:id="@+id/viewMessagesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:text="View Messages"
+                android:layout_below="@+id/browseButton1"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
 
