@@ -54,6 +54,7 @@ public class ViewMessagesActivity extends AppCompatActivity {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put(chatName.getText().toString(),"");
                 chatRoot.updateChildren(map);
+                chatName.setText("");
             }
         });
 

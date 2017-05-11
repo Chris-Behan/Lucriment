@@ -80,7 +80,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         while(i.hasNext()){
                 chatString = (String) ((DataSnapshot)i.next()).getValue();
                 displayNameString = (String) ((DataSnapshot)i.next()).getValue();
-                conversation.append(displayNameString + " : " + chatString + " \n");
+                conversation.append(chatString + " : " + displayNameString + " \n");
         }
     }
 
@@ -94,9 +94,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
                 DatabaseReference messageRoot = root.child(tempKey);
                 Map<String,Object> map2 = new HashMap<String,Object>();
-                map2.put("User Name", userName);
                 map2.put("msg", messageField.getText().toString());
+                map2.put("User Name", userName);
                 messageRoot.updateChildren(map2);
+                messageField.setText("");
+                break;
 
 
         }

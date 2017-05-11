@@ -56,6 +56,6 @@
             android:layout_alignParentStart="true"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="message" />
+            android:hint="message" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
