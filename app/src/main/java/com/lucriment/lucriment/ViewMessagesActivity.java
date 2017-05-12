@@ -26,11 +26,10 @@ import java.util.Set;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-public class ViewMessagesActivity extends AppCompatActivity {
+public class ViewMessagesActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ListView chats;
-    private EditText chatName;
-    private Button addButton;
+    private Button backButton;
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> listOfChats = new ArrayList<>();
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Chats");
@@ -41,44 +40,41 @@ public class ViewMessagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_messages);
         tutorId = getIntent().getParcelableExtra("tutorID");
         chats = (ListView) findViewById(R.id.currentChats);
-        chatName = (EditText) findViewById(R.id.addChatField);
-        addButton = (Button) findViewById(R.id.addButton);
+        backButton = (Button) findViewById(R.id.backToProfile);
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if(getIntent().hasExtra("tutorID"))
         tutorId = getIntent().getExtras().get("tutorID").toString();
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfChats);
+        backButton.setOnClickListener(this);
+
         chats.setAdapter(arrayAdapter);
+        if(tutorId != null) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put(myID + "_" + tutorId, "");
+            chatRoot.updateChildren(map);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(myID + "_"+ tutorId,"");
-        chatRoot.updateChildren(map);
-        chatName.setText("");
+        }
 
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put(chatName.getText().toString(),"");
-                chatRoot.updateChildren(map);
-                chatName.setText("");
-            }
-        });
 
         chatRoot.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Set<String> set = new HashSet<String>();
+                HashSet<String> set = new HashSet<String>();
                 Iterator<DataSnapshot> i = dataSnapshot.getChildren().iterator();
 
                 while(i.hasNext()){
                     String currentKey = ((DataSnapshot)i.next()).getKey();
+                //    String tutorName = ((DataSnapshot)i.next()).getKey();
                     if(currentKey.contains(myID)){
+                      //  int a = currentKey.indexOf('_') +1;
+                      //  int b = currentKey.length();
                         set.add(currentKey);
                     }
                   //  set.add(((DataSnapshot)i.next()).getKey());
 
                 }
+               // HashSet<String> nameSet = convertToTutorUserName(set);
                 listOfChats.clear();
                 listOfChats.addAll(set);
 
@@ -94,7 +90,30 @@ public class ViewMessagesActivity extends AppCompatActivity {
 
     }
 
+    private HashSet<String> convertToTutorUserName(final HashSet<String> set){
+        final HashSet<String> tutorNames = new HashSet<String>();
+        DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("Tutors");
+        for(final String s : set){
 
+            dbr.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String Name = dataSnapshot.child(s).child("name").getValue().toString();
+                    tutorNames.add(Name);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            //String Name = dbr.child(s).child("name").getKey().toString();
+            //tutorNames.add(Name);
+
+        }
+            return tutorNames;
+    }
 
     private void registerChatSelect(){
         final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -102,11 +121,25 @@ public class ViewMessagesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-                intent.putExtra("chatName",((TextView)view).getText().toString());
-                intent.putExtra("userName", userName);
+                String t = ((TextView)view).getText().toString();
+               // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
+             //       myID = tutorId;
+              //  }
+                intent.putExtra("chatID",(t));
+               // intent.putExtra("userName", userName);
                 startActivity(intent);
             }
         });
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.backToProfile:
+                finish();
+                startActivity(new Intent(this, ProfileActivity.class));
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,11 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,6 +29,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference root;
     private String tempKey;
     private String chatString, displayNameString;
+    private Button backButton;
+    private String chatID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +40,19 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         sendButton = (Button) findViewById(R.id.sentButton);
         messageField = (EditText) findViewById(R.id.messageField);
         conversation = (TextView) findViewById(R.id.convo);
+        backButton = (Button) findViewById(R.id.prevButton);
 
+            chatID = getIntent().getExtras().get("chatID").toString();
+            userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
+           //userName = getIntent().getExtras().get("userName").toString();
+      //  chatName = getIntent().getExtras().get("chatName").toString();
+       // DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("Chats");
 
-        userName = getIntent().getExtras().get("userName").toString();
-        chatName = getIntent().getExtras().get("chatName").toString();
-        root = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatName);
+        root = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatID);
 
-        setTitle(chatName);
+        setTitle(chatID);
 
+        backButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
 
         root.addChildEventListener(new ChildEventListener() {
@@ -99,6 +109,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 messageRoot.updateChildren(map2);
                 messageField.setText("");
                 break;
+            case R.id.prevButton:
+                finish();
+                startActivity(new Intent(MessageActivity.this, ViewMessagesActivity.class));
 
 
         }

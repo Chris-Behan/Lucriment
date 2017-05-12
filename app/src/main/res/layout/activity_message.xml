@@ -57,5 +57,15 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="message" />
+
+        <Button
+            android:id="@+id/prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
