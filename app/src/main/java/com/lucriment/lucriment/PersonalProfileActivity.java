@@ -22,10 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
 
 public class PersonalProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +50,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
     private ProgressDialog picUploadDialog;
     private static final int GALLERYINTENT = 2;
     private ImageView imageView;
+    private Uri downloadUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,17 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 userInfo = getIntent().getParcelableExtra("userInfo");
             }
         }
+
+        StorageReference pathReference = storageReference.child("ProfilePics").child(firebaseAuth.getCurrentUser().getUid());
+        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.with(PersonalProfileActivity.this).load(uri).fit().centerCrop().into(imageView);
+            }
+        });
+
+
+
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -93,8 +109,9 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
         educationField.setText(userInfo.getSchool());
         bioField.setText(userInfo.bio);
+       // String dURI = "https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=78db062a-a4c8-4221-893f-6510243d590b";
 
-
+       // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
 
 
         editButton.setOnClickListener(this);
@@ -121,7 +138,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     picUploadDialog.dismiss();
                     Toast.makeText(PersonalProfileActivity.this, "Upload Complete", Toast.LENGTH_SHORT).show();
-                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    downloadUri = taskSnapshot.getDownloadUrl();
                     Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
 
                 }
