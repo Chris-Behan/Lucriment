@@ -28,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseReference databaseReference;
     private Button browseButton;
     private Button viewMessagesButton;
+    private Button viewProfileButton;
+    private UserInfo userInfo;
 
 
     @Override
@@ -38,8 +40,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String name = user.getDisplayName();
 
+        String name = user.getDisplayName();
+        if(getIntent().hasExtra("userInfo"))
+        userInfo = getIntent().getParcelableExtra("userInfo");
 
         // check whether or not user is logged in
         if(firebaseAuth.getCurrentUser() == null){
@@ -56,7 +60,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 DataSnapshot studentSnap = dataSnapshot.child("Students");
                 DataSnapshot tutorSnap = dataSnapshot.child("Tutors");
                 if( studentSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-
+                    for(DataSnapshot userSnapShot: studentSnap.getChildren()){
+                        if(userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                            userInfo = userSnapShot.getValue(UserInfo.class);
+                        }
+                    }
                 } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 }else{
                     finish();
@@ -85,9 +93,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         logoutButton = (Button) findViewById(R.id.logoutButton);
         browseButton = (Button)findViewById(R.id.browseButton1);
         viewMessagesButton = (Button) findViewById(R.id.viewMessagesButton);
+        viewProfileButton = (Button) findViewById(R.id.viewProfile);
 
         viewMessagesButton.setOnClickListener(this);
         browseButton.setOnClickListener(this);
+        viewProfileButton.setOnClickListener(this);
 
         logoutButton.setOnClickListener(this);
     }
@@ -111,6 +121,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 startActivity(new Intent(this, ViewMessagesActivity.class));
                 break;
+            case R.id.viewProfile:
+                Intent i = new Intent(ProfileActivity.this, PersonalProfileActivity.class);
+                i.putExtra("userInfo", userInfo);
+
+                startActivity(i);
+
 
 
         }

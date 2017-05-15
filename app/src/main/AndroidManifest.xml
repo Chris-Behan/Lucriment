@@ -63,7 +63,8 @@
         <activity android:name=".TutorListActivity" />
         <activity android:name=".SelectedTutorActivity" />
         <activity android:name=".MessageActivity" />
-        <activity android:name=".ViewMessagesActivity"></activity>
+        <activity android:name=".ViewMessagesActivity" />
+        <activity android:name=".PersonalProfileActivity"></activity>
     </application>
 
 </manifest>

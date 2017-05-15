@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lucriment.lucriment.PersonalProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+
+        <TextView
+            android:id="@+id/tutorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Name"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tutorName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:adjustViewBounds="true"
+            android:maxHeight="80dp"
+            android:maxWidth="80dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:allowUndo="false"
+            android:autoText="false"
+            android:maxHeight="20dp"
+            android:text="Edit"
+            android:layout_alignBottom="@+id/backButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="13dp"
+            android:layout_marginEnd="13dp" />
+
+        <TextView
+            android:id="@+id/educationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="63dp"
+            android:text="School:"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/imageView"
+            android:layout_alignRight="@+id/backButton"
+            android:layout_alignEnd="@+id/backButton" />
+
+        <TextView
+            android:id="@+id/decriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/educationLabel"
+            android:layout_alignStart="@+id/educationLabel"
+            android:layout_below="@+id/educationLabel"
+            android:layout_marginTop="37dp"
+            android:text="Bio:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/contactButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/contactButton"
+            android:layout_marginBottom="20dp"
+            android:text="Back" />
+
+        <TextView
+            android:id="@+id/tutorEducationFIeld"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_alignBottom="@+id/educationLabel"
+            android:layout_alignLeft="@+id/tutorName"
+            android:layout_alignStart="@+id/tutorName" />
+
+        <TextView
+            android:id="@+id/tutorBioField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/decriptionLabel"
+            android:layout_alignLeft="@+id/tutorEducationFIeld"
+            android:layout_alignStart="@+id/tutorEducationFIeld"
+            android:maxWidth="100dp"
+            android:text="TextView" />
+
+        <EditText
+            android:id="@+id/editBioField"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/decriptionLabel"
+            android:layout_toEndOf="@+id/educationLabel"
+            android:layout_toRightOf="@+id/educationLabel"
+            android:hint="say something about yourself"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/uploadPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="upload"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

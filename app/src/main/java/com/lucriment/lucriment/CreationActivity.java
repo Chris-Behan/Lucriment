@@ -117,8 +117,12 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         }else{
             databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
             Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
-            finish();
-            startActivity(new Intent(CreationActivity.this, ProfileActivity.class));
+            Intent i = new Intent(CreationActivity.this, ProfileActivity.class);
+            i.putExtra("userInfo", UserInformation);
+
+            startActivity(i);
+
+
         }
 
 
