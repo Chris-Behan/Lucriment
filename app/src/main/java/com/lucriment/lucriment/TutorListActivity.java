@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,11 +17,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -32,6 +37,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     private DatabaseReference databaseReference;
     private Button backButton;
     public TutorInfo selectedTutor;
+    private StorageReference storageReference;
 
     private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
     @Override
@@ -46,6 +52,8 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
         //set onclick listener
         backButton.setOnClickListener(this);
 
+
+        storageReference = FirebaseStorage.getInstance().getReference();
         //tutors.add(new TutorInfo("joe", "rob", "biull", "pete", 5));
 
 
@@ -120,7 +128,14 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             TutorInfo currentTutor = tutors.get(position);
 
             //fill the view
-            ImageView imageVIew = (ImageView)itemView.findViewById(R.id.ProfileImage);
+            final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
+            StorageReference pathReference = storageReference.child("ProfilePics").child(currentTutor.getID());
+            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with(TutorListActivity.this).load(uri).fit().centerCrop().into(imageView);
+                }
+            });
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getName());

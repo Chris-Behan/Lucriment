@@ -111,6 +111,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         }
         UserInfo UserInformation = new UserInfo(accountType,school, email, displayName);
         if(accountType.equals("Tutor")) {
+            databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
             finish();
             startActivity(new Intent(CreationActivity.this, TutorCreation.class));
            // databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);

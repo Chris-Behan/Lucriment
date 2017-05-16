@@ -14,6 +14,7 @@ public class TutorInfo implements Parcelable {
     private String education;
     private String classes;
     private String id;
+    private String bio;
     private double rate;
 
 
@@ -29,6 +30,7 @@ public class TutorInfo implements Parcelable {
         this.classes = classes;
         this.rate = rate;
         this.id = id;
+
     }
 
     public TutorInfo(Parcel in){
@@ -63,6 +65,14 @@ public class TutorInfo implements Parcelable {
     }
 
     public String getID(){return id;}
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 
     @Override
     public int describeContents() {
