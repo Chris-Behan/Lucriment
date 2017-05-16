@@ -57,7 +57,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
        // selectedTutor = TutorListActivity.getTutor();
         tutorName.setText(selectedTutor.getName());
         educationField.setText(selectedTutor.getEducation());
-        bioField.setText("");
+        bioField.setText(selectedTutor.getBio());
         rateField.setText(String.valueOf(selectedTutor.getRate()));
         classesField.setText(selectedTutor.getClasses());
         backButton.setOnClickListener(this);

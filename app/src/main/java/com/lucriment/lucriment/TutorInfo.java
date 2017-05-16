@@ -30,11 +30,12 @@ public class TutorInfo implements Parcelable {
         this.classes = classes;
         this.rate = rate;
         this.id = id;
+        this.bio = bio;
 
     }
 
     public TutorInfo(Parcel in){
-        String[] data = new String[6];
+        String[] data = new String[7];
         in.readStringArray(data);
         this.email = data[0];
         this.name = data[1];
@@ -42,6 +43,7 @@ public class TutorInfo implements Parcelable {
         this.classes = data[3];
         this.rate = Double.parseDouble(data[4]);
         this.id = data[5];
+        this.bio = data[6];
     }
 
     public String getEmail() {
@@ -81,7 +83,7 @@ public class TutorInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.email, this.name, this.education, this.classes, String.valueOf(this.rate), this.id});
+        dest.writeStringArray(new String[]{this.email, this.name, this.education, this.classes, String.valueOf(this.rate), this.id, this.bio});
 
     }
 

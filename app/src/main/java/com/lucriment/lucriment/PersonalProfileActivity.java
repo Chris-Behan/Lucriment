@@ -176,6 +176,11 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 bioField.setText(editBioText.getText());
                 userInfo.setBio(editBioText.getText().toString());
                 databaseReference.child("Students").child(user.getUid()).setValue(userInfo);
+                if(userInfo.accountType.equals("Tutor")){
+                    databaseReference.child("Tutors").child(user.getUid()).child("bio").setValue(userInfo.getBio());
+                }
+
+
             }
 
         }
