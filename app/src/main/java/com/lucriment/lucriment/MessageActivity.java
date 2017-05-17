@@ -55,7 +55,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             receiver = tutor.getName();
             senderID = firebaseAuth.getCurrentUser().getUid().toString();
             receiverID = tutor.getUid();
-
+            getMessageFromFirebaseUser(senderID,receiverID);
            // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
 
@@ -124,7 +124,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                             // Chat message is retreived.
                                             Chat chat = dataSnapshot.getValue(Chat.class);
-                                            appendChatCovnversation(dataSnapshot);
+                                            chatString = chat.message;
+
+                                            displayNameString = chat.sender;
+                                            conversation.append(displayNameString + " : " + chatString + " \n");
                                         }
 
                                         @Override
@@ -158,7 +161,10 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                             // Chat message is retreived.
                                             Chat chat = dataSnapshot.getValue(Chat.class);
-                                            appendChatCovnversation(dataSnapshot);
+                                            chatString = chat.message;
+
+                                            displayNameString = chat.sender;
+                                            conversation.append(displayNameString + " : " + chatString + " \n");
                                         }
 
                                         @Override
@@ -197,6 +203,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         Iterator i = dataSnapshot.getChildren().iterator();
         while(i.hasNext()){
                 chatString = (String) ((DataSnapshot)i.next()).getValue();
+
                 displayNameString = (String) ((DataSnapshot)i.next()).getValue();
                 conversation.append(chatString + " : " + displayNameString + " \n");
         }
@@ -256,6 +263,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
                Chat chat = new Chat(sender, receiver, senderID, receiverID,messageField.getText().toString(), tsLong);
                 sendMessageToFirebaseUser(chat);
+                messageField.setText("");
 
                 /*
                 Map<String,Object> map = new HashMap<String,Object>();
