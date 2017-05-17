@@ -16,6 +16,7 @@ public class UserInfo implements Parcelable {
     public String bio;
     public String firebasetoken;
     public String uid;
+    public String myChats;
 
     public UserInfo(){
 
@@ -41,6 +42,7 @@ public class UserInfo implements Parcelable {
         this.name = name;
         this.firebasetoken = firebasetoken;
         this.uid = uid;
+        this.myChats = "";
     }
 
     public String getBio() {
@@ -73,6 +75,14 @@ public class UserInfo implements Parcelable {
 
     public String getUid() {
         return uid;
+    }
+
+    public String getMyChats() {
+        return myChats;
+    }
+
+    public void setMyChats(String myChats) {
+        this.myChats = myChats;
     }
 
     @Override

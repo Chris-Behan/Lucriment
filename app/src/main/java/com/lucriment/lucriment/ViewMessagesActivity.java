@@ -38,6 +38,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Chats");
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
+    private List<Chat> chatList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +56,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                         while (dataSnapshots.hasNext()) {
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (!TextUtils.equals(user.uid,
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (user.getMyChats().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
                                 users.add(user);
                                 set.add(user.getName());
 
@@ -175,18 +175,20 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     public void getAllUsersFromFirebase() {
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Students")
+                .child("Chats")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
                                 .iterator();
                        users = new ArrayList<>();
+                        chatList = new ArrayList<Chat>();
                         while (dataSnapshots.hasNext()) {
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
+                            Chat currentChat = dataSnapshotChild.getValue(Chat.class);
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (!TextUtils.equals(user.uid,
-                                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (currentChat.senderUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
+                            currentChat.receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 users.add(user);
                                 listOfChats.add(user.name);
                             }

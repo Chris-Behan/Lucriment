@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +21,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
 public class SelectedTutorActivity extends AppCompatActivity implements View.OnClickListener {
     private TutorInfo selectedTutor;
     private TextView tutorName;
@@ -32,9 +38,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView classesField;
     private ImageView imageView;
     private StorageReference storageReference;
-    private DatabaseReference databaseReference;
+    private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("Students");
     private String bio;
     private UserInfo userInfo;
+    private String myChats;
+    private String myChats2;
+    private List<UserInfo> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +52,27 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        userRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashSet<String> set = new HashSet<String>();
+                Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
+                        .iterator();
+                users = new ArrayList<>();
+                while (dataSnapshots.hasNext()) {
+                    DataSnapshot dataSnapshotChild = dataSnapshots.next();
+                    UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
+                    if(user.getUid().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
+                   myChats= user.getMyChats();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         // initialize buttons and fields
         tutorName = (TextView) findViewById(R.id.tutorName);
@@ -83,6 +113,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
         }
         if(v == contactButton){
+            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Students").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            myChats = (myChats + selectedTutor.getID().toString());
+            chatRoot.child("myChats").setValue(myChats);
+            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("Students").child(selectedTutor.getID());
+            myChats2 = (myChats2 + FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+            chatRoot2.child("myChats").setValue(myChats2);
             Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
             i.putExtra("tutorID", selectedTutor.getID());
 
