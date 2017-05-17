@@ -109,7 +109,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         if(name.getVisibility() == View.INVISIBLE){
             displayName = firebaseAuth.getCurrentUser().getDisplayName();
         }
-        UserInfo UserInformation = new UserInfo(accountType,school, email, displayName);
+        UserInfo UserInformation = new UserInfo(accountType,school, email, displayName, firebaseAuth.getCurrentUser().getUid());
         if(accountType.equals("Tutor")) {
             databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
             finish();

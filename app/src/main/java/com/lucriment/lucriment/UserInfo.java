@@ -14,27 +14,33 @@ public class UserInfo implements Parcelable {
     public String email;
     public String name;
     public String bio;
+    public String firebasetoken;
+    public String uid;
 
     public UserInfo(){
 
     }
 
     public UserInfo(Parcel in ){
-        String[] data = new String[4];
+        String[] data = new String[6];
         in.readStringArray(data);
         this.email = data[0];
         this.name = data[1];
         this.school = data[2];
         this.bio = data[3];
+        this.firebasetoken = data[4];
+        this.uid = data[5];
 
 
     }
 
-    public UserInfo(String accountType, String school, String email, String name) {
+    public UserInfo(String accountType, String school, String email, String name, String uid) {
         this.accountType = accountType;
         this.school = school;
         this.email = email;
         this.name = name;
+        this.firebasetoken = firebasetoken;
+        this.uid = uid;
     }
 
     public String getBio() {
@@ -61,6 +67,14 @@ public class UserInfo implements Parcelable {
         return name;
     }
 
+    public String getFirebasetoken() {
+        return firebasetoken;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,7 +82,7 @@ public class UserInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.email, this.name, this.school, this.bio});
+        dest.writeStringArray(new String[]{this.email, this.name, this.school, this.bio, this.firebasetoken, this.uid});
 
     }
 

@@ -3,6 +3,8 @@ package com.lucriment.lucriment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import android.widget.AdapterView;
@@ -34,16 +37,50 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<String> listOfChats = new ArrayList<>();
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Chats");
     private String myID, tutorId;
+    private List<UserInfo> users = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Students")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        HashSet<String> set = new HashSet<String>();
+                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
+                                .iterator();
+                        users = new ArrayList<>();
+                        while (dataSnapshots.hasNext()) {
+                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
+                            UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
+                            if (!TextUtils.equals(user.uid,
+                                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                users.add(user);
+                                set.add(user.getName());
+
+                            }
+                        } listOfChats.addAll(set);
+                        arrayAdapter.notifyDataSetChanged();
+                        // All users are retrieved except the one who is currently logged
+                        // in device.
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Unable to retrieve the users.
+                    }
+                });
+
+
         tutorId = getIntent().getParcelableExtra("tutorID");
         chats = (ListView) findViewById(R.id.currentChats);
         backButton = (Button) findViewById(R.id.backToProfile);
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if(getIntent().hasExtra("tutorID"))
             tutorId = getIntent().getExtras().get("tutorID").toString();
+
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfChats);
         backButton.setOnClickListener(this);
 
@@ -56,7 +93,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
         }
 
 
-
+        /*
         chatRoot.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -85,10 +122,12 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        }); */
         registerChatSelect();
 
     }
+
+
 
     private HashSet<String> convertToTutorUserName(final HashSet<String> set){
         final HashSet<String> tutorNames = new HashSet<String>();
@@ -121,17 +160,48 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-                String t = ((TextView)view).getText().toString();
+                UserInfo selectedUser = users.get(position);
                 // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
                 //       myID = tutorId;
                 //  }
-                intent.putExtra("chatID",(t));
+                intent.putExtra("user", selectedUser);
                 // intent.putExtra("userName", userName);
                 startActivity(intent);
             }
         });
 
     }
+
+    public void getAllUsersFromFirebase() {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Students")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
+                                .iterator();
+                       users = new ArrayList<>();
+                        while (dataSnapshots.hasNext()) {
+                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
+                            UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
+                            if (!TextUtils.equals(user.uid,
+                                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                users.add(user);
+                                listOfChats.add(user.name);
+                            }
+                        }
+                        // All users are retrieved except the one who is currently logged
+                        // in device.
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Unable to retrieve the users.
+                    }
+                });
+    }
+
 
     @Override
     public void onClick(View v) {

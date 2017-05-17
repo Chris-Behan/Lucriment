@@ -16,6 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -31,30 +35,41 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private String chatString, displayNameString;
     private Button backButton;
     private String chatID;
+    private String receiverID;
+    private String senderID;
+    private String sender;
+    private String receiver;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
+        firebaseAuth = FirebaseAuth.getInstance();
         sendButton = (Button) findViewById(R.id.sentButton);
         messageField = (EditText) findViewById(R.id.messageField);
         conversation = (TextView) findViewById(R.id.convo);
         backButton = (Button) findViewById(R.id.prevButton);
+        UserInfo tutor = getIntent().getParcelableExtra("user");
+            sender = firebaseAuth.getCurrentUser().getDisplayName();
+            receiver = tutor.getName();
+            senderID = firebaseAuth.getCurrentUser().getUid().toString();
+            receiverID = tutor.getUid();
 
-            chatID = getIntent().getExtras().get("chatID").toString();
+           // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
+
            //userName = getIntent().getExtras().get("userName").toString();
       //  chatName = getIntent().getExtras().get("chatName").toString();
        // DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("Chats");
 
-        root = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatID);
+      //  root = FirebaseDatabase.getInstance().getReference().child("Chats").child(chatID);
 
-        setTitle(chatID);
+       // setTitle(chatID);
 
         backButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
-
+/*
         root.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -81,8 +96,101 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+*/
+
+    }
 
 
+    public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
+        final String room_type_1 = senderUid + "_" + receiverUid;
+        final String room_type_2 = receiverUid + "_" + senderUid;
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference();
+
+        databaseReference.child("Chats")
+                .getRef()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(room_type_1)) {
+                            //Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_1 + " exists");
+                            FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child("Chats")
+                                    .child(room_type_1)
+                                    .addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                            // Chat message is retreived.
+                                            Chat chat = dataSnapshot.getValue(Chat.class);
+                                            appendChatCovnversation(dataSnapshot);
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            // Unable to get message.
+                                        }
+                                    });
+                        } else if (dataSnapshot.hasChild(room_type_2)) {
+                           // Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
+                            FirebaseDatabase.getInstance()
+                                    .getReference()
+                                    .child("Chats")
+                                    .child(room_type_2)
+                                    .addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                            // Chat message is retreived.
+                                            Chat chat = dataSnapshot.getValue(Chat.class);
+                                            appendChatCovnversation(dataSnapshot);
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            // Unable to get message.
+                                        }
+                                    });
+                        } else {
+                          //  Log.e(TAG, "getMessageFromFirebaseUser: no such room available");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Unable to get message
+                    }
+                });
     }
 
     private void appendChatCovnversation(DataSnapshot dataSnapshot) {
@@ -94,10 +202,62 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    public void sendMessageToFirebaseUser(
+            final Chat chat
+            ) {
+        final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
+        final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference();
+
+        databaseReference.child("Chats")
+                .getRef()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(room_type_1)) {
+                            //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
+                            databaseReference.child("Chats")
+                                    .child(room_type_1)
+                                    .child(String.valueOf(chat.timestamp))
+                                    .setValue(chat);
+                        } else if (dataSnapshot.hasChild(room_type_2)) {
+                            //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
+                            databaseReference.child("Chats")
+                                    .child(room_type_2)
+                                    .child(String.valueOf(chat.timestamp))
+                                    .setValue(chat);
+                        } else {
+                            // Log.e(TAG, "sendMessageToFirebaseUser: success");
+                            databaseReference.child("Chats")
+                                    .child(room_type_1)
+                                    .child(String.valueOf(chat.timestamp))
+                                    .setValue(chat);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Unable to send message.
+                    }
+                });
+    }
+
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.sentButton:
+                Calendar cc = Calendar.getInstance();
+                Date date = cc.getTime();
+                // SimpleDateFormat format1 = new SimpleDateFormat("dd MMM");
+                SimpleDateFormat format2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+                Long tsLong = System.currentTimeMillis()/1000;
+
+               Chat chat = new Chat(sender, receiver, senderID, receiverID,messageField.getText().toString(), tsLong);
+                sendMessageToFirebaseUser(chat);
+
+                /*
                 Map<String,Object> map = new HashMap<String,Object>();
                 tempKey = root.push().getKey();
                 root.updateChildren(map);
@@ -108,6 +268,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 map2.put("User Name", userName);
                 messageRoot.updateChildren(map2);
                 messageField.setText("");
+                */
                 break;
             case R.id.prevButton:
                 finish();
