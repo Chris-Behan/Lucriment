@@ -1,11 +1,13 @@
 package com.lucriment.lucriment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,15 +19,17 @@ import android.widget.TimePicker;
 
 import org.w3c.dom.Text;
 
-public class ScheduleActivity extends AppCompatActivity implements  View.OnClickListener,
+public class ScheduleActivity extends FragmentActivity implements  View.OnClickListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    Button selectTimeButton;
-    TextView timeResult;
-    TextView toView;
-    int day, month, year, hour, minute;
-    int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2,minuteFinal2;
-    boolean fromSet = false;
+   private Button selectTimeButton;
+    private TextView timeResult;
+    private TextView toView;
+    private TextView freqView;
+    private String frequency;
+    private int day, month, year, hour, minute;
+    private int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2,minuteFinal2;
+    private boolean fromSet = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +37,11 @@ public class ScheduleActivity extends AppCompatActivity implements  View.OnClick
         selectTimeButton = (Button) findViewById(R.id.selectTime);
         timeResult = (TextView) findViewById(R.id.TimeView);
         toView = (TextView) findViewById(R.id.toView);
+        freqView = (TextView) findViewById(R.id.freqView);
 
 
         selectTimeButton.setOnClickListener(this);
+
 
     }
 
@@ -71,13 +77,17 @@ public class ScheduleActivity extends AppCompatActivity implements  View.OnClick
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
-        TimePickerDialog timePickerDialog1 = new TimePickerDialog(ScheduleActivity.this, ScheduleActivity.this, hour,minute, true);
+
+        TimePickerDialog timePickerDialog1 = new TimePickerDialog(ScheduleActivity.this,AlertDialog.THEME_HOLO_LIGHT, ScheduleActivity.this, hour,minute, true);
         timePickerDialog1.setMessage("To");
         timePickerDialog1.show();
 
-        TimePickerDialog timePickerDialog2 = new TimePickerDialog(ScheduleActivity.this, ScheduleActivity.this, hour,minute, true);
+        TimePickerDialog timePickerDialog2 = new TimePickerDialog(ScheduleActivity.this,AlertDialog.THEME_HOLO_LIGHT, ScheduleActivity.this, hour,minute, true);
         timePickerDialog2.setMessage("From");
         timePickerDialog2.show();
+
+
+
 
 
 
@@ -105,6 +115,10 @@ public class ScheduleActivity extends AppCompatActivity implements  View.OnClick
                     "Day: " + dayFinal + "\n" +
                     "Hour: " + hourFinal2 + "\n" +
                     "Minute: " + minuteFinal2 + "\n");
+            FrequencyDialog fe = new FrequencyDialog();
+            fe.show(getFragmentManager(), "my dialog");
+
+
 
         }
 

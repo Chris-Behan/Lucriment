@@ -51,5 +51,15 @@
             android:layout_below="@+id/TimeView"
             android:layout_alignLeft="@+id/TimeView"
             android:layout_alignStart="@+id/TimeView" />
+
+        <TextView
+            android:id="@+id/freqView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/toView"
+            android:layout_alignStart="@+id/toView"
+            android:layout_below="@+id/toView"
+            android:layout_marginTop="102dp"
+            android:text="TextView" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
