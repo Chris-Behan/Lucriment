@@ -160,7 +160,13 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
-                UserInfo selectedUser = users.get(position);
+                UserInfo selectedUser = new UserInfo();
+                String s = ((TextView)view).getText().toString();
+                for(UserInfo currentUser: users){
+                    if(currentUser.getName().equals(s)){
+                        selectedUser = currentUser;
+                    }
+                }
                 // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
                 //       myID = tutorId;
                 //  }
