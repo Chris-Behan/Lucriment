@@ -84,6 +84,18 @@
                 android:layout_alignStart="@+id/viewMessagesButton"
                 android:layout_alignRight="@+id/viewMessagesButton"
                 android:layout_alignEnd="@+id/viewMessagesButton" />
+
+            <Button
+                android:id="@+id/scheduleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewProfile"
+                android:layout_marginTop="22dp"
+                android:text="Schedule"
+                android:layout_alignLeft="@+id/viewProfile"
+                android:layout_alignStart="@+id/viewProfile"
+                android:layout_alignRight="@+id/viewProfile"
+                android:layout_alignEnd="@+id/viewProfile" />
         </RelativeLayout>
 
 
