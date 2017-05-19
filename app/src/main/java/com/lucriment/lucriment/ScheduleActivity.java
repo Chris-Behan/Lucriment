@@ -19,7 +19,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class ScheduleActivity extends FragmentActivity implements  View.OnClickListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, FrequencyDialog.NoticeDialogListener {
@@ -32,18 +42,39 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     private int day, month, year, hour, minute;
     private int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2,minuteFinal2;
     private boolean fromSet = false;
+    private DatabaseReference databaseReference;
     private FrequencyDialog fe = new FrequencyDialog();
+    private FirebaseAuth firebaseAuth;
+    private ArrayList<Availability> aList = new ArrayList<>();
+    private ArrayList<Availability> aList2 = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
         selectTimeButton = (Button) findViewById(R.id.selectTime);
-        timeResult = (TextView) findViewById(R.id.TimeView);
-        toView = (TextView) findViewById(R.id.toView);
-        freqView = (TextView) findViewById(R.id.freqView);
-
-
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         selectTimeButton.setOnClickListener(this);
+
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("Availability");
+        databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
+                    Availability ava = avaSnapShot.getValue(Availability.class);
+                    aList.add(ava);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
     }
@@ -103,24 +134,15 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
             hourFinal = hourOfDay;
             minuteFinal = minute;
-            timeResult.setText("Year: " + yearFinal + "\n" +
-                    "Month: " + monthFinal + "\n" +
-                    "Day: " + dayFinal + "\n" +
-                    "Hour: " + hourFinal + "\n" +
-                    "Minute: " + minuteFinal + "\n");
 
             fromSet = true;
         }else{
             hourFinal2 = hourOfDay;
             minuteFinal2 = minute;
-            toView.setText("Year: " + yearFinal + "\n" +
-                    "Month: " + monthFinal + "\n" +
-                    "Day: " + dayFinal + "\n" +
-                    "Hour: " + hourFinal2 + "\n" +
-                    "Minute: " + minuteFinal2 + "\n");
+
 
             fe.show(getFragmentManager(), "my dialog");
-
+            fromSet = false;
 
 
         }
@@ -131,12 +153,19 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         frequency = fe.getSelection();
-        freqView.setText(frequency);
+        uploadAvailability();
 
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    private void uploadAvailability(){
+        Availability availability = new Availability(dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2, minuteFinal2, frequency);
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        aList.add(availability);
+        databaseReference.child("Tutors").child(user.getUid()).child("Availability").setValue(aList);
     }
 }
