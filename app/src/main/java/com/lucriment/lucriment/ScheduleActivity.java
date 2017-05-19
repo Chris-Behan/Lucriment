@@ -4,21 +4,28 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -47,6 +56,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     private FirebaseAuth firebaseAuth;
     private ArrayList<Availability> aList = new ArrayList<>();
     private ArrayList<Availability> aList2 = new ArrayList<>();
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +67,9 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         selectTimeButton.setOnClickListener(this);
+        backButton = (Button) findViewById(R.id.back);
+        backButton.setOnClickListener(this);
+
 
         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("Availability");
         databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -67,7 +80,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
                     aList.add(ava);
 
                 }
-
+                populateScheduleList();
             }
 
             @Override
@@ -93,6 +106,9 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
                 datePickerDialog.show();
 
             break;
+            case R.id.back:
+                finish();
+                startActivity(new Intent(ScheduleActivity.this, ProfileActivity.class));
 
 
 
@@ -167,5 +183,55 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         FirebaseUser user = firebaseAuth.getCurrentUser();
         aList.add(availability);
         databaseReference.child("Tutors").child(user.getUid()).child("Availability").setValue(aList);
+    }
+
+    private class myListAdapter extends ArrayAdapter<Availability> {
+
+        public myListAdapter(){
+            super(ScheduleActivity.this, R.layout.timecardlayout, aList);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(int position,  View convertView,  ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.timecardlayout, parent, false);
+            }
+
+            Availability currentAva = aList.get(position);
+           // TutorInfo currentTutor = tutors.get(position);
+
+
+            // set image imageVIew.setImageResource();
+            TextView fromText = (TextView) itemView.findViewById(R.id.fromView);
+            fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute());
+
+            TextView toText = (TextView) itemView.findViewById(R.id.toView);
+            toText.setText(currentAva.getTohour() + ":"+ currentAva.getTominute());
+
+            TextView dateText = (TextView) itemView.findViewById(R.id.dateView);
+            dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());
+
+
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+    }
+
+
+
+    private void populateScheduleList(){
+        //  populateTutorList();
+        ArrayAdapter<Availability> adapter = new ScheduleActivity.myListAdapter();
+       // ArrayAdapter<TutorInfo> adapter = new TutorListActivity.myListAdapter();
+        ListView list = (ListView) findViewById(R.id.sList);
+        list.setAdapter(adapter);
+        //adapter.getView();
+
     }
 }
