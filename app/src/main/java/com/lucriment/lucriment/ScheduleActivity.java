@@ -2,6 +2,7 @@ package com.lucriment.lucriment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
@@ -16,11 +17,12 @@ import android.widget.DatePicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 public class ScheduleActivity extends FragmentActivity implements  View.OnClickListener,
-        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, FrequencyDialog.NoticeDialogListener {
 
    private Button selectTimeButton;
     private TextView timeResult;
@@ -30,6 +32,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     private int day, month, year, hour, minute;
     private int dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2,minuteFinal2;
     private boolean fromSet = false;
+    private FrequencyDialog fe = new FrequencyDialog();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,13 +118,25 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
                     "Day: " + dayFinal + "\n" +
                     "Hour: " + hourFinal2 + "\n" +
                     "Minute: " + minuteFinal2 + "\n");
-            FrequencyDialog fe = new FrequencyDialog();
+
             fe.show(getFragmentManager(), "my dialog");
 
 
 
         }
 
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        frequency = fe.getSelection();
+        freqView.setText(frequency);
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
 
     }
 }

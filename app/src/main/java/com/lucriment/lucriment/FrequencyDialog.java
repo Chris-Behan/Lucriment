@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -16,6 +17,26 @@ import java.util.concurrent.BlockingDeque;
 public class FrequencyDialog extends DialogFragment {
     public String getSelection() {
         return selection;
+    }
+
+    public interface NoticeDialogListener {
+        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogNegativeClick(DialogFragment dialog);
+    }
+
+    NoticeDialogListener mListener;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (NoticeDialogListener) activity;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement NoticeDialogListener");
+        }
     }
 
     public void setSelection(String selection) {
@@ -51,7 +72,7 @@ public class FrequencyDialog extends DialogFragment {
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                mListener.onDialogPositiveClick(FrequencyDialog.this);
             }
         });
 

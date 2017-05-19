@@ -127,12 +127,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.viewProfile:
                 Intent i = new Intent(ProfileActivity.this, PersonalProfileActivity.class);
                 i.putExtra("userInfo", userInfo);
-
                 startActivity(i);
+                break;
             case R.id.scheduleButton:
                  finish();
                 startActivity(new Intent(this, ScheduleActivity.class));
-
+                break;
 
 
         }
