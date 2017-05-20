@@ -72,9 +72,10 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
 
         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("Availability");
-        databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                aList.clear();
                 for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
                     Availability ava = avaSnapShot.getValue(Availability.class);
                     aList.add(ava);
@@ -207,10 +208,9 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
             // set image imageVIew.setImageResource();
             TextView fromText = (TextView) itemView.findViewById(R.id.fromView);
-            fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute());
+            fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute() + " - " + currentAva.getTohour() + ":"+ currentAva.getTominute());
 
-            TextView toText = (TextView) itemView.findViewById(R.id.toView);
-            toText.setText(currentAva.getTohour() + ":"+ currentAva.getTominute());
+
 
             TextView dateText = (TextView) itemView.findViewById(R.id.dateView);
             dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());

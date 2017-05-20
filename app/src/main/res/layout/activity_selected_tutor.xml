@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -39,58 +39,53 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tutorName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="22dp"
             android:adjustViewBounds="true"
             android:maxHeight="80dp"
             android:maxWidth="80dp"
-            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+            android:layout_below="@+id/tutorName"
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:id="@+id/contactButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
             android:allowUndo="false"
             android:autoText="false"
             android:maxHeight="20dp"
-            android:text="Contact" />
+            android:text="Contact"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/educationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/contactButton"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="82dp"
             android:text="Education:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/classesLabel"
+            android:layout_alignLeft="@+id/classesLabel"
+            android:layout_alignStart="@+id/classesLabel" />
 
         <TextView
             android:id="@+id/decriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/educationLabel"
-            android:layout_alignStart="@+id/educationLabel"
-            android:layout_below="@+id/educationLabel"
-            android:layout_marginTop="37dp"
             android:text="Bio:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/educationLabel"
+            android:layout_alignLeft="@+id/educationLabel"
+            android:layout_alignStart="@+id/educationLabel" />
 
         <TextView
             android:id="@+id/rateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/decriptionLabel"
-            android:layout_alignStart="@+id/decriptionLabel"
-            android:layout_below="@+id/decriptionLabel"
-            android:layout_marginTop="37dp"
             android:text="Rate per hour:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/decriptionLabel"
+            android:layout_alignLeft="@+id/decriptionLabel"
+            android:layout_alignStart="@+id/decriptionLabel" />
 
         <Button
             android:id="@+id/backButton"
@@ -133,21 +128,29 @@
             android:id="@+id/classesField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
             android:text="TextView"
             android:layout_below="@+id/contactButton"
-            android:layout_toRightOf="@+id/imageView"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_marginTop="14dp" />
+            android:layout_alignLeft="@+id/tutorEducationFIeld"
+            android:layout_alignStart="@+id/tutorEducationFIeld" />
 
         <TextView
             android:id="@+id/classesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Classes Taught:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/classesField"
+            android:layout_alignBottom="@+id/classesField"
             android:layout_toLeftOf="@+id/backButton"
-            android:layout_toStartOf="@+id/backButton" />
+            android:layout_toStartOf="@+id/backButton"
+            android:text="Classes Taught:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ListView
+            android:id="@+id/tutorAList"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_above="@+id/backButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

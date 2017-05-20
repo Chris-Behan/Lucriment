@@ -3,6 +3,8 @@ package com.lucriment.lucriment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by ChrisBehan on 5/9/2017.
  */
@@ -16,6 +18,7 @@ public class TutorInfo implements Parcelable {
     private String id;
     private String bio;
     private double rate;
+    private ArrayList<Availability> avaList;
 
 
     public TutorInfo(){

@@ -15,17 +15,6 @@
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/toView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/fromView"
-        android:layout_marginLeft="41dp"
-        android:layout_marginStart="41dp"
-        android:layout_toEndOf="@+id/fromView"
-        android:layout_toRightOf="@+id/fromView"
-        android:text="TextView" />
-
-    <TextView
         android:id="@+id/dateView"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="250dp"
