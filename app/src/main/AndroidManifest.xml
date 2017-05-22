@@ -67,7 +67,8 @@
         <activity android:name=".ViewMessagesActivity" />
         <activity android:name=".PersonalProfileActivity" />
         <activity android:name=".ScheduleActivity" />
-        <activity android:name=".RequestSessionActivity"></activity>
+        <activity android:name=".RequestSessionActivity" />
+        <activity android:name=".TimePickerActivity"></activity>
     </application>
 
 </manifest>

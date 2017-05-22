@@ -1,10 +1,12 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,7 +60,7 @@ public class RequestSessionActivity extends AppCompatActivity {
 
         populateItemList();
         populateSelectionList();
-
+        registerFieldClicks();
     }
 
     private void populateItemList(){
@@ -119,5 +121,22 @@ public class RequestSessionActivity extends AppCompatActivity {
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+    }
+
+    private void registerFieldClicks() {
+        ListView list = (ListView) findViewById(R.id.sessionInfoList);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 //timeField = itemList.get(position);
+                // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(RequestSessionActivity.this, TimePickerActivity.class);
+                i.putExtra("timeField", selectedAvailability);
+                i.putExtra("tutor",tutor);
+                startActivity(i);
+
+            }
+        });
+
     }
 }
