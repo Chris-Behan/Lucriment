@@ -207,10 +207,11 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Availability selectedAvailability = avaList.get(position);
+                Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
+                i.putExtra("Availability", selectedAvailability);
+                i.putExtra("tutor", selectedTutor);
 
-                Toast.makeText(SelectedTutorActivity.this,
-                        String.valueOf(selectedAvailability.getDay()),
-                        Toast.LENGTH_SHORT).show();
+                startActivity(i);
 
             }
         });
