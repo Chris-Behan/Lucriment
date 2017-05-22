@@ -64,14 +64,16 @@ public class RequestSessionActivity extends AppCompatActivity {
     private void populateItemList(){
         TwoItemField field1 = new TwoItemField("Subject", "Select");
         TwoItemField field2 = new TwoItemField("Location", "Select");
-        TwoItemField field3 = new TwoItemField("Date", "Select");
-        TwoItemField field4 = new TwoItemField("Starts", "Select");
-        TwoItemField field5 = new TwoItemField("Ends", "Select");
+        TwoItemField field3 = new TwoItemField("Time", "Select");
+
+        if(selectedAvailability!=null){
+            field1.setData(tutor.getClasses());
+            field3.setData(selectedAvailability.getTime());
+        }
         itemList.add(field1);
         itemList.add(field2);
         itemList.add(field3);
-        itemList.add(field4);
-        itemList.add(field5);
+
 
 
     }

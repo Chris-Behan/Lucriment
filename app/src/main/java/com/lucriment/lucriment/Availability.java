@@ -10,6 +10,8 @@ import android.os.Parcelable;
 public class Availability implements Parcelable{
     private int day, month, year, fromhour, fromminute, tohour, tominute;
     private String frequency;
+    private String[] monthNames = new String[]{"","January","February","March","April","May","June","July",
+    "August","September","October","November","December"};
 
     public  Availability(){
 
@@ -69,8 +71,26 @@ public class Availability implements Parcelable{
         return tominute;
     }
 
+    public String getDate(){return (getMonthName(month) + ", " + day + ", ");}
+
+    public String getFromTime(){
+        return (fromhour +":"+fromminute);
+    }
+    public String getToTime(){
+        return (tohour+":"+tominute);
+    }
+
     public String getFrequency() {
         return frequency;
+    }
+
+    public String getTime(){
+        return getDate()+"  " + getFromTime()+" - " + getToTime();
+    }
+
+    public String getMonthName(int month){
+
+        return monthNames[month];
     }
 
     @Override
