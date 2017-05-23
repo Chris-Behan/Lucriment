@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -38,7 +41,9 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleActivity extends FragmentActivity implements  View.OnClickListener,
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, FrequencyDialog.NoticeDialogListener {
@@ -117,6 +122,67 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
     }
 
+    //LOOK OVER THIS, TAKEN FROM STACKOVERFLOW
+    private class CustomTimePickerDialog extends TimePickerDialog {
+
+        private final static int TIME_PICKER_INTERVAL = 15;
+        private TimePicker mTimePicker;
+        private final OnTimeSetListener mTimeSetListener;
+
+        public CustomTimePickerDialog(Context context, OnTimeSetListener listener,
+                                      int hourOfDay, int minute, boolean is24HourView) {
+            super(context, TimePickerDialog.THEME_HOLO_LIGHT, null, hourOfDay,
+                    minute / TIME_PICKER_INTERVAL, is24HourView);
+            mTimeSetListener = listener;
+        }
+
+        @Override
+        public void updateTime(int hourOfDay, int minuteOfHour) {
+            mTimePicker.setCurrentHour(hourOfDay);
+            mTimePicker.setCurrentMinute(minuteOfHour / TIME_PICKER_INTERVAL);
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case BUTTON_POSITIVE:
+                    if (mTimeSetListener != null) {
+                        mTimeSetListener.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
+                                mTimePicker.getCurrentMinute() * TIME_PICKER_INTERVAL);
+                    }
+                    break;
+                case BUTTON_NEGATIVE:
+                    cancel();
+                    break;
+            }
+        }
+
+        @Override
+        public void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            try {
+                Class<?> classForid = Class.forName("com.android.internal.R$id");
+                Field timePickerField = classForid.getField("timePicker");
+                mTimePicker = (TimePicker) findViewById(timePickerField.getInt(null));
+                Field field = classForid.getField("minute");
+
+                NumberPicker minuteSpinner = (NumberPicker) mTimePicker
+                        .findViewById(field.getInt(null));
+                minuteSpinner.setMinValue(0);
+                minuteSpinner.setMaxValue((60 / TIME_PICKER_INTERVAL) - 1);
+                List<String> displayedValues = new ArrayList<>();
+                for (int i = 0; i < 60; i += TIME_PICKER_INTERVAL) {
+                    displayedValues.add(String.format("%02d", i));
+                }
+                minuteSpinner.setDisplayedValues(displayedValues
+                        .toArray(new String[displayedValues.size()]));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -128,12 +194,12 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
-
-        TimePickerDialog timePickerDialog1 = new TimePickerDialog(ScheduleActivity.this,AlertDialog.THEME_HOLO_LIGHT, ScheduleActivity.this, hour,minute, true);
+        
+        CustomTimePickerDialog timePickerDialog1 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this,hour,minute, false);
         timePickerDialog1.setMessage("To");
         timePickerDialog1.show();
 
-        TimePickerDialog timePickerDialog2 = new TimePickerDialog(ScheduleActivity.this,AlertDialog.THEME_HOLO_LIGHT, ScheduleActivity.this, hour,minute, true);
+        CustomTimePickerDialog timePickerDialog2 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this, hour,minute, false);
         timePickerDialog2.setMessage("From");
         timePickerDialog2.show();
 

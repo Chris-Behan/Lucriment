@@ -63,6 +63,8 @@ public class RequestSessionActivity extends AppCompatActivity {
         registerFieldClicks();
     }
 
+
+
     private void populateItemList(){
         TwoItemField field1 = new TwoItemField("Subject", "Select");
         TwoItemField field2 = new TwoItemField("Location", "Select");

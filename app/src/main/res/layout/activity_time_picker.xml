@@ -37,5 +37,17 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             />
+
+        <GridView
+            android:gravity="center"
+            android:id="@+id/timeGrid"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

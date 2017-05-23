@@ -85,6 +85,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
         backButton.setOnClickListener(this);
 
         chats.setAdapter(arrayAdapter);
+
         if(tutorId != null) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(myID + "_" + tutorId, "");
