@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CalendarView;
@@ -30,8 +31,11 @@ public class TimePickerActivity extends AppCompatActivity  {
     private ArrayList<Availability> todaysAvailability = new ArrayList<>();
     private TutorInfo tutor;
     private GridView gridView;
+    private GridView gridView2;
     private final ArrayList<String> items = new ArrayList<>();
+    private final ArrayList<String> items2 = new ArrayList<>();
     private  final gridAdapter myGridAdapter = new gridAdapter(items);
+   // private  final gridAdapter myGridAdapter2 = new gridAdapter(items2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +47,6 @@ public class TimePickerActivity extends AppCompatActivity  {
 
 
         gridView.setAdapter(myGridAdapter);
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
-        items.add("12:30 - 1:30");
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutor.getID()).child("Availability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -85,8 +79,21 @@ public class TimePickerActivity extends AppCompatActivity  {
             }
         });
 
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), items.get(position), 0).show();
+                    getToTimes();
+                   // gridView.setAdapter(myGridAdapter2);
+                   // myGridAdapter.notifyDataSetChanged();
+                }
+            });
 
 
+    }
+
+    private void getToTimes() {
+        
     }
 
     private void processStartAvailability(Availability ava){
@@ -100,7 +107,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         int timeDiff = endTotal-startTotal;
         int increment = (timeDiff -60)/15;
       //  items.add(startHour + ":" + startMinute);
-        while(increment>0){
+        while(increment>=0){
             String processedTime;
             if(startMinute<45) {
                 if(startMinute==0){
@@ -113,6 +120,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             }else{
                  processedTime = startHour + ":" + startMinute;
                 items.add(processedTime);
+                startMinute =0;
                 startHour+= 1;
             }
             increment--;
