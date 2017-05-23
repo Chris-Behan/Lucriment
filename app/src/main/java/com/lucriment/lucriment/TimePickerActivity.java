@@ -32,6 +32,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     private GridView gridView;
     private final ArrayList<String> items = new ArrayList<>();
     private  final gridAdapter myGridAdapter = new gridAdapter(items);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
                     Availability ava = avaSnapShot.getValue(Availability.class);
                     avaList.add(ava);
-                    items.add(ava.getFromTime());
+
 
                 }
                     myGridAdapter.notifyDataSetChanged();
@@ -88,6 +89,38 @@ public class TimePickerActivity extends AppCompatActivity  {
 
     }
 
+    private void processStartAvailability(Availability ava){
+        int startHour = ava.getFromhour();
+        int startMinute = ava.getFromminute();
+        int endHour = ava.getTohour();
+        int endMinute = ava.getTominute();
+
+        int startTotal = startHour*60 + startMinute;
+        int endTotal = endHour*60 + endMinute;
+        int timeDiff = endTotal-startTotal;
+        int increment = (timeDiff -60)/15;
+      //  items.add(startHour + ":" + startMinute);
+        while(increment>0){
+            String processedTime;
+            if(startMinute<45) {
+                if(startMinute==0){
+                     processedTime = startHour + ":00";
+                }else {
+                     processedTime = startHour + ":" + startMinute;
+                }
+                items.add(processedTime);
+                startMinute+= 15;
+            }else{
+                 processedTime = startHour + ":" + startMinute;
+                items.add(processedTime);
+                startHour+= 1;
+            }
+            increment--;
+        }
+
+
+    }
+
 
     private void getSelectedDayAva(int year, int day, int month){
         items.clear();
@@ -95,7 +128,8 @@ public class TimePickerActivity extends AppCompatActivity  {
            // int montha = month +1;
             if(ava.getDay()== day && ava.getMonth() == month+1 && ava.getYear() == year){
                 todaysAvailability.add(ava);
-                items.add(ava.getToTime());
+                processStartAvailability(ava);
+                //items.add(ava.getToTime());
                 Toast.makeText(getApplicationContext(), "exists", 0).show();
             }
         }

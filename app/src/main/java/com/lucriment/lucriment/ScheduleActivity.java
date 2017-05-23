@@ -194,12 +194,11 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
-        
-        CustomTimePickerDialog timePickerDialog1 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this,hour,minute, false);
-        timePickerDialog1.setMessage("To");
-        timePickerDialog1.show();
+        tpd2();
 
-        CustomTimePickerDialog timePickerDialog2 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this, hour,minute, false);
+
+
+        CustomTimePickerDialog timePickerDialog2 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this, hour,minute, true);
         timePickerDialog2.setMessage("From");
         timePickerDialog2.show();
 
@@ -209,6 +208,12 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
 
 
+    }
+
+    private void tpd2(){
+        CustomTimePickerDialog timePickerDialog1 = new CustomTimePickerDialog(ScheduleActivity.this,ScheduleActivity.this,hour,minute, true);
+        timePickerDialog1.setMessage("To");
+        timePickerDialog1.show();
     }
 
     @Override
@@ -224,8 +229,14 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
             minuteFinal2 = minute;
 
 
-            fe.show(getFragmentManager(), "my dialog");
-            fromSet = false;
+            if(hourFinal2 > hourFinal && minuteFinal2 >= minuteFinal) {
+                fe.show(getFragmentManager(), "my dialog");
+                fromSet = false;
+            }else{
+                Toast.makeText(ScheduleActivity.this, "Session must be atlesat one hour long", Toast.LENGTH_SHORT).show();
+
+                tpd2();
+            }
 
 
         }
@@ -235,6 +246,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
+
         frequency = fe.getSelection();
         uploadAvailability();
 
@@ -242,7 +254,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-
+            fromSet = false;
     }
 
     private void uploadAvailability(){
