@@ -228,8 +228,11 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
             hourFinal2 = hourOfDay;
             minuteFinal2 = minute;
 
+            int total1 = hourFinal*60 + minuteFinal;
+            int total2 = hourFinal2 *60 + minuteFinal2;
 
-            if(hourFinal2 > hourFinal && minuteFinal2 >= minuteFinal) {
+
+            if(total2> total1+60) {
                 fe.show(getFragmentManager(), "my dialog");
                 fromSet = false;
             }else{

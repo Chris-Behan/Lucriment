@@ -34,8 +34,9 @@ public class TimePickerActivity extends AppCompatActivity  {
     private GridView gridView2;
     private final ArrayList<String> items = new ArrayList<>();
     private final ArrayList<String> items2 = new ArrayList<>();
+    private final ArrayList<String> finishTimes = new ArrayList<>();
     private  final gridAdapter myGridAdapter = new gridAdapter(items);
-   // private  final gridAdapter myGridAdapter2 = new gridAdapter(items2);
+    private  final gridAdapter myGridAdapter2 = new gridAdapter(items2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +83,55 @@ public class TimePickerActivity extends AppCompatActivity  {
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(getApplicationContext(), items.get(position), 0).show();
-                    getToTimes();
-                   // gridView.setAdapter(myGridAdapter2);
-                   // myGridAdapter.notifyDataSetChanged();
+                    //Toast.makeText(getApplicationContext(), items.get(position), 0).show();
+                    getToTimes(items.get(position));
+
+                    gridView.setAdapter(myGridAdapter2);
+                    myGridAdapter.notifyDataSetChanged();
                 }
             });
 
 
     }
 
-    private void getToTimes() {
-        
+    private void getToTimes(String selectedTime) {
+        String time = selectedTime;
+        String hour = time.substring(0,time.indexOf(':'));
+        String minute = time.substring(time.indexOf(':')+1,time.length());
+        int startMinute = Integer.valueOf(minute);
+        int startHour = Integer.valueOf(hour);
+        int timeValue = Integer.valueOf(hour)*60 + Integer.valueOf(minute);
+        Availability thisAva = new Availability();
+        for(Availability ava:todaysAvailability){
+            int avaFromVal = ava.getFromValue();
+            int avaToVal = ava.getToValue();
+            if(timeValue>=avaFromVal && timeValue<=avaToVal){
+                thisAva = ava;
+            }
+        }
+
+        int endTotal = thisAva.getToValue();
+        int endMinute = thisAva.getTominute();
+        int endHour = thisAva.getTohour();
+        int timeDiff = endTotal - timeValue;
+        int increment = (timeDiff-60)/15;
+
+        while(increment>=0){
+            String processedTime;
+            if(endMinute==0){
+                processedTime = endHour + ":" + endMinute;
+                endHour-=1;
+                endMinute = 45;
+            }else{
+                processedTime = endHour + ":" + endMinute;
+                endMinute-= 15;
+            }
+            items2.add(processedTime);
+            increment--;
+
+        }
+
+        Toast.makeText(getApplicationContext(), time, 0).show();
     }
 
     private void processStartAvailability(Availability ava){
@@ -131,12 +169,14 @@ public class TimePickerActivity extends AppCompatActivity  {
 
 
     private void getSelectedDayAva(int year, int day, int month){
+        todaysAvailability.clear();
         items.clear();
         for(Availability ava: avaList ){
            // int montha = month +1;
             if(ava.getDay()== day && ava.getMonth() == month+1 && ava.getYear() == year){
                 todaysAvailability.add(ava);
                 processStartAvailability(ava);
+                finishTimes.add(ava.getToTime());
                 //items.add(ava.getToTime());
                 Toast.makeText(getApplicationContext(), "exists", 0).show();
             }

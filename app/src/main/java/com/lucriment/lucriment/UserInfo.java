@@ -81,6 +81,8 @@ public class UserInfo implements Parcelable {
         return myChats;
     }
 
+
+
     public void setMyChats(String myChats) {
         this.myChats = myChats;
     }
