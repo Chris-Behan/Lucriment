@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TimePickerActivity extends AppCompatActivity  {
     private CalendarView cv;
@@ -37,6 +39,10 @@ public class TimePickerActivity extends AppCompatActivity  {
     private final ArrayList<String> finishTimes = new ArrayList<>();
     private  final gridAdapter myGridAdapter = new gridAdapter(items);
     private  final gridAdapter myGridAdapter2 = new gridAdapter(items2);
+    private String selectedFromTime;
+    private String selectedToTime;
+    private Availability today;
+    private boolean timeState = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +90,24 @@ public class TimePickerActivity extends AppCompatActivity  {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //Toast.makeText(getApplicationContext(), items.get(position), 0).show();
-                    getToTimes(items.get(position));
+                    if(timeState) {
+                        selectedFromTime = items.get(position);
+                        getToTimes(items.get(position));
 
-                    gridView.setAdapter(myGridAdapter2);
-                    myGridAdapter.notifyDataSetChanged();
+                        gridView.setAdapter(myGridAdapter2);
+                        myGridAdapter.notifyDataSetChanged();
+                        timeState= false;
+                    }else{
+
+                        selectedToTime = items2.get(position);
+                        Toast.makeText(getApplicationContext(), selectedToTime, 0).show();
+                        Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
+                        Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.getDay(),today.getMonth(), today.getYear());
+                        i.putExtra("requestedTime", requestedAva);
+                        i.putExtra("tutor",tutor);
+                        startActivity(i);
+
+                    }
                 }
             });
 
@@ -95,9 +115,9 @@ public class TimePickerActivity extends AppCompatActivity  {
     }
 
     private void getToTimes(String selectedTime) {
-        String time = selectedTime;
-        String hour = time.substring(0,time.indexOf(':'));
-        String minute = time.substring(time.indexOf(':')+1,time.length());
+        String starttime = selectedTime;
+        String hour = starttime.substring(0,starttime.indexOf(':'));
+        String minute = starttime.substring(starttime.indexOf(':')+1,starttime.length());
         int startMinute = Integer.valueOf(minute);
         int startHour = Integer.valueOf(hour);
         int timeValue = Integer.valueOf(hour)*60 + Integer.valueOf(minute);
@@ -109,7 +129,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 thisAva = ava;
             }
         }
-
+        today = thisAva;
         int endTotal = thisAva.getToValue();
         int endMinute = thisAva.getTominute();
         int endHour = thisAva.getTohour();
@@ -119,7 +139,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         while(increment>=0){
             String processedTime;
             if(endMinute==0){
-                processedTime = endHour + ":" + endMinute;
+                processedTime = endHour + ":00";
                 endHour-=1;
                 endMinute = 45;
             }else{
@@ -130,8 +150,8 @@ public class TimePickerActivity extends AppCompatActivity  {
             increment--;
 
         }
-
-        Toast.makeText(getApplicationContext(), time, 0).show();
+        Collections.reverse(items2);
+       // Toast.makeText(getApplicationContext(), time, 0).show();
     }
 
     private void processStartAvailability(Availability ava){

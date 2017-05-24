@@ -27,6 +27,15 @@ public class Availability implements Parcelable{
         this.tominute = tominute;
         this.frequency = frequency;
     }
+    public Availability(String from, String to, int day, int month, int year){
+        this.fromhour = Integer.valueOf(from.substring(0,from.indexOf(':')));
+        this.fromminute = Integer.valueOf(from.substring(from.indexOf(':')+1,from.length()));
+        this.tohour = Integer.valueOf(to.substring(0,to.indexOf(':')));
+        this.tominute = Integer.valueOf(to.substring(to.indexOf(':')+1,to.length()));
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
 
     public Availability(Parcel in){
         String[] data = new String[8];

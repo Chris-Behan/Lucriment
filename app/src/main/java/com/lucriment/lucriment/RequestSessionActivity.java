@@ -33,6 +33,8 @@ public class RequestSessionActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private ImageView imageView;
+    private String fromTime, toTime, day;
+    private Availability requestedTime;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,10 @@ public class RequestSessionActivity extends AppCompatActivity {
         nameView = (TextView) findViewById(R.id.textView5);
         rateView = (TextView) findViewById(R.id.textView6);
         imageView = (ImageView) findViewById(R.id.imageView2);
+        if(getIntent().hasExtra("requestedTime")){
+            requestedTime = getIntent().getParcelableExtra("requestedTime");
 
+        }
         storageReference = FirebaseStorage.getInstance().getReference();
 
         nameView.setText(tutor.getName());
@@ -72,7 +77,13 @@ public class RequestSessionActivity extends AppCompatActivity {
 
         if(selectedAvailability!=null){
             field1.setData(tutor.getClasses());
-            field3.setData(selectedAvailability.getTime());
+            if(requestedTime!=null){
+                field3.setData(requestedTime.getTime());
+            }else {
+                field3.setData(selectedAvailability.getTime());
+            }
+        }else{
+            field3.setData(requestedTime.getTime());
         }
         itemList.add(field1);
         itemList.add(field2);
