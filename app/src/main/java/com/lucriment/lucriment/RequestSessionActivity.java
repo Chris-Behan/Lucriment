@@ -47,7 +47,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private Button requestButton;
     private final int requestcode_placepicker = 1;
-    private ArrayList<Availability> sessionReqList = new ArrayList<>();
+    private ArrayList<SessionRequest> sessionReqList = new ArrayList<>();
     private String selectedLocation;
     private ArrayAdapter<TwoItemField> adapter;
     @Override
@@ -55,6 +55,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_session);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        if(getIntent().hasExtra("location"))
+            selectedLocation = getIntent().getStringExtra("location");
         if(getIntent().hasExtra("Availability"))
         selectedAvailability = getIntent().getParcelableExtra("Availability");
         tutor = getIntent().getParcelableExtra("tutor");
@@ -86,7 +88,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             public void onDataChange(DataSnapshot dataSnapshot) {
                 sessionReqList.clear();
                 for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
-                    Availability ava = avaSnapShot.getValue(Availability.class);
+                    SessionRequest ava = avaSnapShot.getValue(SessionRequest.class);
                     sessionReqList.add(ava);
 
                 }
@@ -144,7 +146,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
 
         if(v == requestButton){
-            sessionReqList.add(requestedTime);
+            SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            sessionReqList.add(sessionRequest);
         databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
         }
     }
@@ -228,6 +231,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
                     Intent i = new Intent(RequestSessionActivity.this, TimePickerActivity.class);
                     i.putExtra("timeField", selectedAvailability);
                     i.putExtra("tutor", tutor);
+                    i.putExtra("location", selectedLocation);
                     startActivity(i);
                 }
 

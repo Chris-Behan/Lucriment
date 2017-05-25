@@ -19,7 +19,7 @@ public class SessionsActivity extends AppCompatActivity {
 
     private ListView requestList;
     private FirebaseAuth firebaseAuth;
-    private ArrayList<Availability> sessionList;
+    private ArrayList<SessionRequest> sessionList = new ArrayList<>();
 
 
     @Override
@@ -37,9 +37,11 @@ public class SessionsActivity extends AppCompatActivity {
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               // aList.clear();
-                for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
-                    Availability ava = avaSnapShot.getValue(Availability.class);
+                sessionList.clear();
+                for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
+                    SessionRequest sessionRequest = sSnapShot.getValue(SessionRequest.class);
+                    sessionList.add(sessionRequest);
+//                 /   Availability ava = avaSnapShot.getValue(Availability.class);
                 //    aList.add(ava);
 
                 }

@@ -42,11 +42,14 @@ public class TimePickerActivity extends AppCompatActivity  {
     private String selectedFromTime;
     private String selectedToTime;
     private Availability today;
+    private String selectedLocation;
     private boolean timeState = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getIntent().hasExtra("location"))
+            selectedLocation = getIntent().getStringExtra("location");
         setContentView(R.layout.activity_time_picker);
         cv = (CalendarView) findViewById(R.id.calendarView2);
         tutor = getIntent().getParcelableExtra("tutor");
@@ -109,6 +112,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                         Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.getDay(),today.getMonth(), today.getYear());
                         i.putExtra("requestedTime", requestedAva);
                         i.putExtra("tutor",tutor);
+                        i.putExtra("location", selectedLocation);
                         startActivity(i);
 
                     }
