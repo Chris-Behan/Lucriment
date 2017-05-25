@@ -35,6 +35,7 @@ public class Availability implements Parcelable{
         this.day = day;
         this.month = month;
         this.year = year;
+        this.frequency = "Never";
     }
 
     public Availability(Parcel in){
@@ -94,7 +95,11 @@ public class Availability implements Parcelable{
         return (fromhour +":"+fromminute);
     }
     public String getToTime(){
-        return (tohour+":"+tominute);
+        if(tominute == 0){
+            return (tohour+":00");
+        }else {
+            return (tohour + ":" + tominute);
+        }
     }
 
     public String getFrequency() {

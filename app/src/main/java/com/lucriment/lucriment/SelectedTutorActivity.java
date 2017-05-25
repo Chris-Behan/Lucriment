@@ -37,6 +37,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TutorListActivity tutorListActivity;
     private Button backButton;
     private Button contactButton;
+    private Button requestButton;
     private TextView educationField;
     private TextView bioField;
     private TextView rateField;
@@ -71,7 +72,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     avaList.add(ava);
 
                 }
-                populateScheduleList();
+               // populateScheduleList();
             }
 
             @Override
@@ -102,7 +103,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             }
         });
 
-        registerScheduleClicks();
+        //registerScheduleClicks();
 
         // initialize buttons and fields
         tutorName = (TextView) findViewById(R.id.tutorName);
@@ -113,6 +114,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         contactButton = (Button) findViewById(R.id.contactButton);
         imageView = (ImageView) findViewById(R.id.imageView);
         classesField = (TextView) findViewById(R.id.classesField);
+        requestButton = (Button) findViewById(R.id.requestButton);
 
        // selectedTutor = TutorListActivity.getTutor();
         tutorName.setText(selectedTutor.getName());
@@ -122,6 +124,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         classesField.setText(selectedTutor.getClasses());
         backButton.setOnClickListener(this);
         contactButton.setOnClickListener(this);
+        requestButton.setOnClickListener(this);
 
         StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getID());
         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -151,6 +154,14 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             chatRoot2.child("myChats").setValue(myChats2);
             Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
             i.putExtra("tutorID", selectedTutor.getID());
+
+            startActivity(i);
+        }
+        if(v == requestButton){
+
+            Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
+
+            i.putExtra("tutor", selectedTutor);
 
             startActivity(i);
         }
@@ -190,7 +201,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             // return super.getView(position, convertView, parent);
         }
     }
-
+/*
     private void populateScheduleList(){
         //  populateTutorList();
         ArrayAdapter<Availability> adapter = new SelectedTutorActivity.myListAdapter();
@@ -200,7 +211,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         //adapter.getView();
 
     }
-
+    */
+    /*
     private void registerScheduleClicks() {
         ListView list = (ListView) findViewById(R.id.tutorAList);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -216,5 +228,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             }
         });
 
+
     }
+    */
 }

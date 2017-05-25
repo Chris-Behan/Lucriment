@@ -31,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button viewProfileButton;
     private UserInfo userInfo;
     private Button ScheduleButton;
+    private Button SessionsButton;
 
 
     @Override
@@ -96,7 +97,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewMessagesButton = (Button) findViewById(R.id.viewMessagesButton);
         viewProfileButton = (Button) findViewById(R.id.viewProfile);
         ScheduleButton = (Button) findViewById(R.id.scheduleButton);
+        SessionsButton = (Button) findViewById(R.id.sessionsButton);
 
+        SessionsButton.setOnClickListener(this);
         ScheduleButton.setOnClickListener(this);
         viewMessagesButton.setOnClickListener(this);
         browseButton.setOnClickListener(this);
@@ -133,7 +136,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                  finish();
                 startActivity(new Intent(this, ScheduleActivity.class));
                 break;
-
+            case R.id.sessionsButton:
+                finish();
+                startActivity(new Intent(this, SessionsActivity.class));
+                break;
 
         }
 

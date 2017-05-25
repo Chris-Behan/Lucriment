@@ -43,15 +43,14 @@
             android:layout_height="match_parent">
 
 
-
             <Button
 
                 android:id="@+id/logoutButton"
                 android:layout_width="106dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="39dp"
                 android:text="Logout"
-                android:layout_marginBottom="59dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
 
@@ -59,43 +58,55 @@
                 android:id="@+id/browseButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:text="Browse Tutors"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="36dp"
+                android:text="Browse Tutors" />
 
             <Button
                 android:id="@+id/viewMessagesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
-                android:text="View Messages"
                 android:layout_below="@+id/browseButton1"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="21dp"
+                android:text="View Messages" />
 
             <Button
                 android:id="@+id/viewProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/viewMessagesButton"
+                android:layout_alignLeft="@+id/viewMessagesButton"
+                android:layout_alignRight="@+id/viewMessagesButton"
+                android:layout_alignStart="@+id/viewMessagesButton"
                 android:layout_below="@+id/viewMessagesButton"
                 android:layout_marginTop="20dp"
-                android:text="Profile"
-                android:layout_alignLeft="@+id/viewMessagesButton"
-                android:layout_alignStart="@+id/viewMessagesButton"
-                android:layout_alignRight="@+id/viewMessagesButton"
-                android:layout_alignEnd="@+id/viewMessagesButton" />
+                android:text="Profile" />
 
             <Button
                 android:id="@+id/scheduleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/viewProfile"
+                android:layout_alignLeft="@+id/viewProfile"
+                android:layout_alignRight="@+id/viewProfile"
+                android:layout_alignStart="@+id/viewProfile"
                 android:layout_below="@+id/viewProfile"
                 android:layout_marginTop="22dp"
-                android:text="Schedule"
-                android:layout_alignLeft="@+id/viewProfile"
-                android:layout_alignStart="@+id/viewProfile"
-                android:layout_alignRight="@+id/viewProfile"
-                android:layout_alignEnd="@+id/viewProfile" />
+                android:text="Schedule" />
+
+            <Button
+                android:id="@+id/sessionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sessions"
+                android:layout_above="@+id/logoutButton"
+                android:layout_alignRight="@+id/scheduleButton"
+                android:layout_alignEnd="@+id/scheduleButton"
+                android:layout_marginBottom="19dp"
+                android:layout_alignLeft="@+id/scheduleButton"
+                android:layout_alignStart="@+id/scheduleButton" />
         </RelativeLayout>
 
 

@@ -8,22 +8,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class RequestSessionActivity extends AppCompatActivity {
+public class RequestSessionActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Availability selectedAvailability;
     private TutorInfo tutor;
@@ -36,15 +45,23 @@ public class RequestSessionActivity extends AppCompatActivity {
     private String fromTime, toTime, day;
     private Availability requestedTime;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
+    private Button requestButton;
+    private final int requestcode_placepicker = 1;
+    private ArrayList<Availability> sessionReqList = new ArrayList<>();
+    private String selectedLocation;
+    private ArrayAdapter<TwoItemField> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_session);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        if(getIntent().hasExtra("Availability"))
         selectedAvailability = getIntent().getParcelableExtra("Availability");
         tutor = getIntent().getParcelableExtra("tutor");
         nameView = (TextView) findViewById(R.id.textView5);
         rateView = (TextView) findViewById(R.id.textView6);
         imageView = (ImageView) findViewById(R.id.imageView2);
+        requestButton = (Button) findViewById(R.id.requestButton);
         if(getIntent().hasExtra("requestedTime")){
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
@@ -63,9 +80,30 @@ public class RequestSessionActivity extends AppCompatActivity {
             }
         });
 
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutor.getID()).child("SessionRequests");
+        databaseReference1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                sessionReqList.clear();
+                for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
+                    Availability ava = avaSnapShot.getValue(Availability.class);
+                    sessionReqList.add(ava);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         populateItemList();
         populateSelectionList();
         registerFieldClicks();
+
+        requestButton.setOnClickListener(this);
     }
 
 
@@ -74,15 +112,15 @@ public class RequestSessionActivity extends AppCompatActivity {
         TwoItemField field1 = new TwoItemField("Subject", "Select");
         TwoItemField field2 = new TwoItemField("Location", "Select");
         TwoItemField field3 = new TwoItemField("Time", "Select");
+        if(selectedLocation!=null){
+            field2.setData(selectedLocation);
+        }
 
-        if(selectedAvailability!=null){
+
+        if(requestedTime==null){
             field1.setData(tutor.getClasses());
-            if(requestedTime!=null){
-                field3.setData(requestedTime.getTime());
-            }else {
-                field3.setData(selectedAvailability.getTime());
-            }
         }else{
+            field1.setData(tutor.getClasses());
             field3.setData(requestedTime.getTime());
         }
         itemList.add(field1);
@@ -95,11 +133,20 @@ public class RequestSessionActivity extends AppCompatActivity {
 
 
     private void populateSelectionList(){
-        ArrayAdapter<TwoItemField> adapter = new RequestSessionActivity.myListAdapter();
+        adapter = new RequestSessionActivity.myListAdapter();
         ListView list = (ListView) findViewById(R.id.sessionInfoList);
         list.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == requestButton){
+            sessionReqList.add(requestedTime);
+        databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
+        }
     }
 
     private class myListAdapter extends ArrayAdapter<TwoItemField> {
@@ -136,6 +183,34 @@ public class RequestSessionActivity extends AppCompatActivity {
         }
     }
 
+    private void startPlacePicker(){
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+        try{
+            Intent intent = intentBuilder.build(this);
+            startActivityForResult(intent,requestcode_placepicker);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == requestcode_placepicker && resultCode == RESULT_OK){
+            displaySelectedPlaceFromPlacePicker(data);
+        }
+    }
+
+    private void displaySelectedPlaceFromPlacePicker(Intent data){
+        Place placeSelected = PlacePicker.getPlace(data,this);
+        String name = placeSelected.getName().toString();
+        String address = placeSelected.getAddress().toString();
+        selectedLocation = name +", "+ address;
+        itemList.get(1).setData(selectedLocation);
+        adapter.notifyDataSetChanged();
+    }
+
     private void registerFieldClicks() {
         ListView list = (ListView) findViewById(R.id.sessionInfoList);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -143,10 +218,18 @@ public class RequestSessionActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  //timeField = itemList.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                Intent i = new Intent(RequestSessionActivity.this, TimePickerActivity.class);
-                i.putExtra("timeField", selectedAvailability);
-                i.putExtra("tutor",tutor);
-                startActivity(i);
+                if(position ==1){
+                    startPlacePicker();
+
+
+                }
+
+                if(position ==2) {
+                    Intent i = new Intent(RequestSessionActivity.this, TimePickerActivity.class);
+                    i.putExtra("timeField", selectedAvailability);
+                    i.putExtra("tutor", tutor);
+                    startActivity(i);
+                }
 
             }
         });
