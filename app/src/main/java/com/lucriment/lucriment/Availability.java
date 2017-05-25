@@ -89,6 +89,7 @@ public class Availability implements Parcelable{
         return tohour*60 + tominute;
     }
 
+
     public String getDate(){return (getMonthName(month) + ", " + day + ", ");}
 
     public String getFromTime(){
