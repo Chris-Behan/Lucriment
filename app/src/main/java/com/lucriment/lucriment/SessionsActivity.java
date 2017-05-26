@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
+public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener {
 
     private ListView requestList;
     private ListView bookedList;
@@ -38,6 +39,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private FirebaseUser user = firebaseAuth.getCurrentUser();
     private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
+    private Button backButton;
     //private ArrayList<SessionsActivity>
 
 
@@ -51,7 +53,9 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);
         bookedList = (ListView) findViewById(R.id.bookedList);
+        backButton = (Button) findViewById(R.id.backButton);
 
+        backButton.setOnClickListener(this);
       //  DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -137,6 +141,15 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     @Override
     public void onAcceptNegativeClick(DialogFragment dialog) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v == backButton){
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
     }
 
 
