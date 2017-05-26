@@ -46,4 +46,24 @@
         android:layout_toEndOf="@+id/name"
         android:layout_marginLeft="135dp"
         android:layout_marginStart="135dp" />
+
+    <Button
+        android:id="@+id/acceptButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accept"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/subject"
+        android:layout_toEndOf="@+id/subject"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp" />
+
+    <Button
+        android:id="@+id/declineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decline"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

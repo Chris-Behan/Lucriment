@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -95,8 +97,10 @@ public class SessionsActivity extends AppCompatActivity {
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
-            TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+            Button acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
+            Button declineButton = (Button) itemView.findViewById(R.id.declineButton);
 
             //set inner fields
             nameText.setText(session.getStudentName());
@@ -104,7 +108,22 @@ public class SessionsActivity extends AppCompatActivity {
             timeText.setText(session.getTime().getTime());
             locationText.setText(session.getLocation());
 
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    AcceptDialogFragment acceptDialog = new AcceptDialogFragment();
+                   acceptDialog.show(getFragmentManager(), "accept");
+                }
+            });
+
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   DeclineDialogFragment declineDialog = new DeclineDialogFragment();
+                    declineDialog.show(getFragmentManager(), "decline");
+                }
+            });
 
 
 
