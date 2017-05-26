@@ -28,24 +28,27 @@ import java.util.List;
 public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener {
 
     private ListView requestList;
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
     private ArrayList<SessionRequest> sessionList = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter;
     private SessionRequest clickedSession;
+    private int indexOfClickedSession;
+    private FirebaseUser user = firebaseAuth.getCurrentUser();
+    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sessions);
-        firebaseAuth = FirebaseAuth.getInstance();
+       // firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);
 
 
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
+      //  DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -82,7 +85,9 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
-       clickedSession.getTime();
+
+        sessionList.remove(indexOfClickedSession);
+        databaseReference1.setValue(sessionList);
     }
 
     @Override
@@ -99,7 +104,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
         // @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
             // make sure we have a view to work with
             if(itemView == null){
@@ -125,6 +130,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 @Override
                 public void onClick(View v) {
                     clickedSession = session;
+                    indexOfClickedSession = position;
                     AcceptDialogFragment acceptDialog = new AcceptDialogFragment();
                    acceptDialog.show(getFragmentManager(), "accept");
                 }
@@ -134,6 +140,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 @Override
                 public void onClick(View v) {
                     clickedSession = session;
+                    indexOfClickedSession = position;
                    DeclineDialogFragment declineDialog = new DeclineDialogFragment();
                     declineDialog.show(getFragmentManager(), "decline");
                 }
