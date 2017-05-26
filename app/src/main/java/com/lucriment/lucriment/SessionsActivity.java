@@ -1,5 +1,7 @@
 package com.lucriment.lucriment;
 
+import android.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,12 +25,13 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionsActivity extends AppCompatActivity {
+public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener {
 
     private ListView requestList;
     private FirebaseAuth firebaseAuth;
     private ArrayList<SessionRequest> sessionList = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter;
+    private SessionRequest clickedSession;
 
 
     @Override
@@ -77,7 +80,17 @@ public class SessionsActivity extends AppCompatActivity {
 
     }
 
-    private class sessionListAdapter extends ArrayAdapter<SessionRequest> {
+    @Override
+    public void onDeclinePositiveClick(DialogFragment dialog) {
+       clickedSession.getTime();
+    }
+
+    @Override
+    public void onDeclineNegativeClick(DialogFragment dialog) {
+
+    }
+
+    private class sessionListAdapter extends ArrayAdapter<SessionRequest>  {
 
         public sessionListAdapter(){
             super(SessionsActivity.this, R.layout.sessionrequestlayout, sessionList);
@@ -92,7 +105,7 @@ public class SessionsActivity extends AppCompatActivity {
             if(itemView == null){
                 itemView = getLayoutInflater().inflate(R.layout.sessionrequestlayout, parent, false);
             }
-            SessionRequest session = sessionList.get(position);
+            final SessionRequest session = sessionList.get(position);
 
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
@@ -111,7 +124,7 @@ public class SessionsActivity extends AppCompatActivity {
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    clickedSession = session;
                     AcceptDialogFragment acceptDialog = new AcceptDialogFragment();
                    acceptDialog.show(getFragmentManager(), "accept");
                 }
@@ -120,6 +133,7 @@ public class SessionsActivity extends AppCompatActivity {
             declineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    clickedSession = session;
                    DeclineDialogFragment declineDialog = new DeclineDialogFragment();
                     declineDialog.show(getFragmentManager(), "decline");
                 }
@@ -130,6 +144,8 @@ public class SessionsActivity extends AppCompatActivity {
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+
+
     }
 
 }
