@@ -28,14 +28,17 @@ import java.util.List;
 public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
 
     private ListView requestList;
+    private ListView bookedList;
     private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
     private ArrayList<SessionRequest> sessionList = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter;
+    private ArrayAdapter<SessionRequest> adapter2;
     private SessionRequest clickedSession;
     private int indexOfClickedSession;
     private FirebaseUser user = firebaseAuth.getCurrentUser();
     private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
+    //private ArrayList<SessionsActivity>
 
 
     @Override
@@ -47,7 +50,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);
-
+        bookedList = (ListView) findViewById(R.id.bookedList);
 
       //  DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
         databaseReference1.addValueEventListener(new ValueEventListener() {
@@ -62,6 +65,25 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
                 }
                 populateSelectionList();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("BookedSessions");
+        databaseReference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                bookedSessions.clear();
+                for(DataSnapshot bSnapShot: dataSnapshot.getChildren()){
+                    SessionRequest sessionRequest = bSnapShot.getValue(SessionRequest.class);
+                    bookedSessions.add(sessionRequest);
+                }
+                populateBookedList();
             }
 
             @Override
@@ -73,6 +95,13 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
 
 
+
+    }
+
+    private void populateBookedList(){
+        adapter2 = new SessionsActivity.bookedListAdapter();
+        ListView list = (ListView) findViewById(R.id.bookedList);
+        list.setAdapter(adapter2);
 
     }
 
@@ -109,6 +138,46 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     public void onAcceptNegativeClick(DialogFragment dialog) {
 
     }
+
+
+    private class bookedListAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public bookedListAdapter(){
+            super(SessionsActivity.this, R.layout.bookedsessionlayout, bookedSessions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
+            }
+            final SessionRequest session = bookedSessions.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+
+
+            //set inner fields
+            nameText.setText(session.getStudentName());
+            subjectText.setText(session.getSubject());
+            timeText.setText(session.getTime().getTime());
+            locationText.setText(session.getLocation());
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+    }
+
 
     private class sessionListAdapter extends ArrayAdapter<SessionRequest>  {
 
