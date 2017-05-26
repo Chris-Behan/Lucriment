@@ -25,7 +25,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener {
+public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
 
     private ListView requestList;
     private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
@@ -35,6 +35,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private int indexOfClickedSession;
     private FirebaseUser user = firebaseAuth.getCurrentUser();
     private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
+    private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
 
 
     @Override
@@ -92,6 +93,20 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
     @Override
     public void onDeclineNegativeClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onAcceptPositiveClick(DialogFragment dialog) {
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("BookedSessions");
+        bookedSessions.add(clickedSession);
+        databaseReference2.setValue(bookedSessions);
+        sessionList.remove(indexOfClickedSession);
+        databaseReference1.setValue(sessionList);
+    }
+
+    @Override
+    public void onAcceptNegativeClick(DialogFragment dialog) {
 
     }
 
