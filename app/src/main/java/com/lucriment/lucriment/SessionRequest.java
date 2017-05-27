@@ -9,12 +9,13 @@ public class SessionRequest {
     private String location;
     private Availability time;
     private String studentName;
-
-    public SessionRequest(String subject, String location, Availability time, String name) {
+    private double cost;
+    public SessionRequest(String subject, String location, Availability time, String name, double cost) {
         this.subject = subject;
         this.location = location;
         this.time = time;
         this.studentName = name;
+        this.cost = cost;
     }
 
     public SessionRequest(){
@@ -31,6 +32,10 @@ public class SessionRequest {
 
     public String getLocation() {
         return location;
+    }
+
+    public double getCost() {
+        return cost;
     }
 
     public Availability getTime() {

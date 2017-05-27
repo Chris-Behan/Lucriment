@@ -89,6 +89,10 @@ public class Availability implements Parcelable{
         return tohour*60 + tominute;
     }
 
+    public double getTimeInHours(){
+        return ((double)(getToValue() - getFromValue()))/60;
+    }
+
 
     public String getDate(){return (getMonthName(month) + ", " + day + ", ");}
 
@@ -115,6 +119,11 @@ public class Availability implements Parcelable{
 
         return monthNames[month];
     }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
 
     @Override
     public int describeContents() {

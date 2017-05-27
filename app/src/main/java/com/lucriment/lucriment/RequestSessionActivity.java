@@ -50,6 +50,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private ArrayList<SessionRequest> sessionReqList = new ArrayList<>();
     private String selectedLocation;
     private ArrayAdapter<TwoItemField> adapter;
+    private TextView cost;
+    private double sessioncost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         rateView = (TextView) findViewById(R.id.textView6);
         imageView = (ImageView) findViewById(R.id.imageView2);
         requestButton = (Button) findViewById(R.id.requestButton);
+        cost = (TextView) findViewById(R.id.costView);
         if(getIntent().hasExtra("requestedTime")){
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
@@ -124,6 +127,9 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         }else{
             field1.setData(tutor.getClasses());
             field3.setData(requestedTime.getTime());
+            sessioncost = (requestedTime.getTimeInHours()*tutor.getRate());
+            cost.setText(" $"+sessioncost+"");
+            cost.setVisibility(View.VISIBLE);
         }
         itemList.add(field1);
         itemList.add(field2);
@@ -146,7 +152,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
 
         if(v == requestButton){
-            SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             sessionReqList.add(sessionRequest);
         databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
         }
