@@ -51,6 +51,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private String selectedLocation;
     private ArrayAdapter<TwoItemField> adapter;
     private TextView cost;
+    private Button backButton;
     private double sessioncost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         imageView = (ImageView) findViewById(R.id.imageView2);
         requestButton = (Button) findViewById(R.id.requestButton);
         cost = (TextView) findViewById(R.id.costView);
+        backButton = (Button) findViewById(R.id.backButton);
         if(getIntent().hasExtra("requestedTime")){
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
@@ -109,6 +111,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         registerFieldClicks();
 
         requestButton.setOnClickListener(this);
+        backButton.setOnClickListener(this);
     }
 
 
@@ -155,6 +158,10 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             sessionReqList.add(sessionRequest);
         databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
+        }
+        if(v== backButton){
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
         }
     }
 

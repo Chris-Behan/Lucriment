@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -100,7 +101,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
 
 
-
+        registerSessionClicks();
 
     }
 
@@ -184,6 +185,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
             final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+            TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
 
 
             //set inner fields
@@ -191,6 +193,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().getTime());
             locationText.setText(session.getLocation());
+            paymentText.setText("$"+session.getCost());
 
 
             return itemView;
@@ -221,16 +224,18 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
-            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.time);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
             Button acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
             Button declineButton = (Button) itemView.findViewById(R.id.declineButton);
+            TextView paymentText = (TextView) itemView.findViewById(R.id.payment);
 
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().getTime());
             locationText.setText(session.getLocation());
+            paymentText.setText("$"+String.valueOf(session.getCost()));
 
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -258,6 +263,28 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             // return super.getView(position, convertView, parent);
         }
 
+
+    }
+
+    private void registerSessionClicks() {
+        ListView list = (ListView) findViewById(R.id.bookedList);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SessionRequest selectedSession = bookedSessions.get(position);
+               // TutorInfo selectedTutor1 = tutors.get(position);
+                // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(SessionsActivity.this, SessionDetails.class);
+                i.putExtra("name",selectedSession.getStudentName());
+                i.putExtra("time",selectedSession.getTime());
+                i.putExtra("location", selectedSession.getLocation());
+                i.putExtra("subject",selectedSession.getSubject());
+              //  i.putExtra("selectedTutor", selectedTutor1);
+
+                startActivity(i);
+
+            }
+        });
 
     }
 

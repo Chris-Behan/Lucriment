@@ -13,14 +13,30 @@
         android:layout_height="0dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="67dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="80dp"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="67dp">
-        // email field
+        android:layout_marginStart="67dp"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/ProfileImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="12dp"
+            android:layout_weight="0.11"
+            android:adjustViewBounds="true"
+            android:maxHeight="80dp"
+            android:maxWidth="80dp"
+            app:srcCompat="@drawable/pic1" />
+
 
         <EditText
             android:id="@+id/signInEmail"
@@ -70,6 +86,7 @@
             android:textAlignment="center" />
 
     </LinearLayout>
+
 
 
 </android.support.constraint.ConstraintLayout>

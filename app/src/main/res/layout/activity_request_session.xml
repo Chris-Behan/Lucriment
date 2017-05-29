@@ -102,5 +102,15 @@
             android:layout_toLeftOf="@+id/costView"
             android:layout_toStartOf="@+id/costView" />
 
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:layout_alignBaseline="@+id/textView5"
+            android:layout_alignBottom="@+id/textView5"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
