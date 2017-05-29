@@ -222,7 +222,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         Place placeSelected = PlacePicker.getPlace(data,this);
         String name = placeSelected.getName().toString();
         String address = placeSelected.getAddress().toString();
-        selectedLocation = name +", "+ address;
+        selectedLocation = address;
         itemList.get(1).setData(selectedLocation);
         adapter.notifyDataSetChanged();
     }
