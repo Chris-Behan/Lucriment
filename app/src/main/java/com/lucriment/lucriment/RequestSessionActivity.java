@@ -155,8 +155,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
 
         if(v == requestButton){
-            SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
-            sessionReqList.add(sessionRequest);
+          //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
+            //sessionReqList.add(sessionRequest);
         databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
         }
         if(v== backButton){

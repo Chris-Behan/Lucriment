@@ -2,6 +2,7 @@ package com.lucriment.lucriment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -109,7 +110,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                         selectedToTime = items2.get(position);
                         Toast.makeText(getApplicationContext(), selectedToTime, 0).show();
                         Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
-                     //   Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.getDay(),today.getMonth(), today.getYear());
+                     //   Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.returnDay(),today.returnMonth(), today.returnYear());
                       //  i.putExtra("requestedTime", requestedAva);
                         i.putExtra("tutor",tutor);
                         i.putExtra("location", selectedLocation);
@@ -131,14 +132,14 @@ public class TimePickerActivity extends AppCompatActivity  {
         int timeValue = Integer.valueOf(hour)*60 + Integer.valueOf(minute);
         Availability thisAva = new Availability();
         for(Availability ava:todaysAvailability){
-          //  int avaFromVal = ava.getFromValue();
-         //   int avaToVal = ava.getToValue();
-         //   if(timeValue>=avaFromVal && timeValue<=avaToVal){
-           //     thisAva = ava;
-          //  }
+            int avaFromVal = ava.returnFromValue();
+            int avaToVal = ava.returnToValue();
+            if(timeValue>=avaFromVal && timeValue<=avaToVal){
+                thisAva = ava;
+            }
         }
     //    today = thisAva;
-      //  int endTotal = thisAva.getToValue();
+      //  int endTotal = thisAva.returnToValue();
      //   int endMinute = thisAva.getTominute();
      //   int endHour = thisAva.getTohour();
      //   int timeDiff = endTotal - timeValue;
@@ -196,18 +197,23 @@ public class TimePickerActivity extends AppCompatActivity  {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void getSelectedDayAva(int year, int day, int month){
         todaysAvailability.clear();
         items.clear();
+        Calendar cal = Calendar.getInstance();
+
         for(Availability ava: avaList ){
+
+
            // int montha = month +1;
-      /*      if(ava.getDay()== day && ava.getMonth() == month+1 && ava.getYear() == year){
+           if(ava.returnDay()== day && ava.returnMonth() == month+1 && ava.returnYear() == year){
                 todaysAvailability.add(ava);
                 processStartAvailability(ava);
-                finishTimes.add(ava.getToTime());
-                //items.add(ava.getToTime());
+                finishTimes.add(ava.returnToTime());
+                items.add(ava.returnToTime());
                 Toast.makeText(getApplicationContext(), "exists", 0).show();
-            } */
+            } 
         }
         myGridAdapter.notifyDataSetChanged();
     }

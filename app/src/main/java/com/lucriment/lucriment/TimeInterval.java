@@ -24,4 +24,8 @@ public class TimeInterval {
     public long getTo() {
         return to;
     }
+
+    public String returnTime(){
+        return getFrom() + " - " + getTo();
+    }
 }

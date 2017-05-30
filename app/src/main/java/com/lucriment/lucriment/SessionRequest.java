@@ -7,10 +7,10 @@ package com.lucriment.lucriment;
 public class SessionRequest {
     private String subject;
     private String location;
-    private Availability time;
+    private TimeInterval time;
     private String studentName;
     private double cost;
-    public SessionRequest(String subject, String location, Availability time, String name, double cost) {
+    public SessionRequest(String subject, String location, TimeInterval time, String name, double cost) {
         this.subject = subject;
         this.location = location;
         this.time = time;
@@ -38,7 +38,7 @@ public class SessionRequest {
         return cost;
     }
 
-    public Availability getTime() {
+    public TimeInterval getTime() {
         return time;
     }
 }

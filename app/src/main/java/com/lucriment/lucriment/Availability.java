@@ -78,6 +78,73 @@ public class Availability implements Parcelable{
         return to;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnFromHour(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getFrom());
+        int fromHour = cal.get(Calendar.HOUR_OF_DAY);
+        return fromHour;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnFromMinute(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getFrom());
+        int fromMinute =  cal.get(Calendar.MINUTE);
+        return fromMinute;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnToHour(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getTo());
+        int toHour =  cal.get(Calendar.HOUR_OF_DAY);
+        return toHour;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnToMinute(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getTo());
+        int toMinute =  cal.get(Calendar.MINUTE);
+        return toMinute;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnDay(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getFrom());
+        int toMinute = cal.get(Calendar.DAY_OF_MONTH);
+        return toMinute;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnMonth(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getFrom());
+        int toMinute =  cal.get(Calendar.MONTH);
+        return toMinute;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnFromValue(){
+
+        return returnFromHour()*60 + returnFromMinute();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnToValue(){
+
+        return returnToHour()*60 + returnToMinute();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public int returnYear(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time.getFrom());
+        int toMinute =  cal.get(Calendar.YEAR);
+        return toMinute;
+    }
+
+
+
+
 
     @Override
     public int describeContents() {

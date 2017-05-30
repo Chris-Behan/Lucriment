@@ -273,20 +273,20 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
             hourFinal2 = hourOfDay;
             minuteFinal2 = minute;
 
-            if(hourFinal<10){
-                toString1 += ("0"+hourFinal);
+            if(hourFinal2<10){
+                toString1 += ("0"+hourFinal2);
             }else{
-                toString1+= hourFinal;
+                toString1+= hourFinal2;
             }
-            if(minuteFinal<10){
-                toString1 += ("0"+minuteFinal);
+            if(minuteFinal2<10){
+                toString1 += ("0"+minuteFinal2);
             }else{
-                toString1+= minuteFinal;
+                toString1+= minuteFinal2;
             }
             try {
                 Date mDate = sdf.parse(toString1);
-                long timeInMilliseconds = mDate.getTime();
-                fromTimeInMili = timeInMilliseconds;
+                long timeInMilliseconds1 = mDate.getTime();
+                toTimeInMili = timeInMilliseconds1;
             } catch (ParseException e) {
                 e.printStackTrace();
             } catch (java.text.ParseException e) {
