@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.net.ParseException;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -43,6 +45,7 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ScheduleActivity extends FragmentActivity implements  View.OnClickListener,
@@ -61,12 +64,17 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     private FirebaseAuth firebaseAuth;
     private ArrayList<Availability> aList = new ArrayList<>();
     private ArrayList<Availability> aList2 = new ArrayList<>();
+    private int timeInMili;
+    private long fromTimeInMili;
+    private long toTimeInMili;
+    private String timeString,monthString,dayString,hourString,minuteString;
     private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+        //initialize buttons
         selectTimeButton = (Button) findViewById(R.id.selectTime);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -75,7 +83,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         backButton = (Button) findViewById(R.id.back);
         backButton.setOnClickListener(this);
 
-
+        //get your Availabiliities
         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("Availability");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -182,7 +190,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         }
     }
 
-
+    //listener for selecting day in calendar
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -190,9 +198,21 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         monthFinal = month +1;
         dayFinal = dayOfMonth;
 
+
         Calendar cal = Calendar.getInstance();
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
+        timeString = String.valueOf(year);
+        if(monthFinal<10){
+            timeString+= ("0"+monthFinal);
+        }else{
+            timeString += monthFinal;
+        }
+        if(dayFinal<10){
+            timeString += ("0"+dayFinal);
+        }else{
+            timeString += dayFinal;
+        }
 
         tpd2();
 
@@ -216,23 +236,69 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         timePickerDialog1.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar cal = Calendar.getInstance();
+        String fromString1 = timeString;
         if(!fromSet) {
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmm");
             hourFinal = hourOfDay;
             minuteFinal = minute;
+            if(hourFinal<10){
+                fromString1 += ("0"+hourFinal);
+            }else{
+                fromString1+= hourFinal;
+            }
+            if(minuteFinal<10){
+                fromString1 += ("0"+minuteFinal);
+            }else{
+                fromString1+= minuteFinal;
+            }
+            try {
+                Date mDate = sdf.parse(fromString1);
+                long timeInMilliseconds = mDate.getTime();
+                fromTimeInMili = timeInMilliseconds;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+
 
             fromSet = true;
         }else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmm");
+            String toString1 = timeString;
             hourFinal2 = hourOfDay;
             minuteFinal2 = minute;
+
+            if(hourFinal<10){
+                toString1 += ("0"+hourFinal);
+            }else{
+                toString1+= hourFinal;
+            }
+            if(minuteFinal<10){
+                toString1 += ("0"+minuteFinal);
+            }else{
+                toString1+= minuteFinal;
+            }
+            try {
+                Date mDate = sdf.parse(toString1);
+                long timeInMilliseconds = mDate.getTime();
+                fromTimeInMili = timeInMilliseconds;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+
 
             int total1 = hourFinal*60 + minuteFinal;
             int total2 = hourFinal2 *60 + minuteFinal2;
 
 
-            if(total2> total1+60) {
+            if(total2>= total1+60) {
                 fe.show(getFragmentManager(), "my dialog");
                 fromSet = false;
             }else{
@@ -261,7 +327,8 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
     }
 
     private void uploadAvailability(){
-        Availability availability = new Availability(dayFinal, monthFinal, yearFinal, hourFinal, minuteFinal, hourFinal2, minuteFinal2, frequency);
+        TimeInterval time = new TimeInterval(fromTimeInMili,toTimeInMili);
+        Availability availability = new Availability(time, frequency);
         FirebaseUser user = firebaseAuth.getCurrentUser();
         aList.add(availability);
         databaseReference.child("Tutors").child(user.getUid()).child("Availability").setValue(aList);
