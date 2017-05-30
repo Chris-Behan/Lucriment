@@ -35,7 +35,7 @@
             android:adjustViewBounds="true"
             android:maxHeight="80dp"
             android:maxWidth="80dp"
-            app:srcCompat="@drawable/pic1" />
+             />
 
 
         <EditText
