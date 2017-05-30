@@ -3,7 +3,7 @@ package com.lucriment.lucriment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.database.IgnoreExtraProperties;
+import java.sql.Time;
 
 /**
  * Created by ChrisBehan on 5/19/2017.
@@ -11,16 +11,14 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 public class Availability implements Parcelable{
     private int day, month, year, fromhour, fromminute, tohour, tominute;
-    private long from,to;
     private String frequency;
-    private TimeInterval timeInterval;
     private String[] monthNames = new String[]{"","January","February","March","April","May","June","July",
     "August","September","October","November","December"};
+    private TimeInterval timeInterval;
 
     public  Availability(){
 
     }
-
     public Availability(TimeInterval ti, String frequency){
         this.timeInterval = ti;
         this.frequency = frequency;
@@ -60,6 +58,10 @@ public class Availability implements Parcelable{
         this.frequency = data[7];
 
 
+    }
+
+    public TimeInterval getTimeInterval() {
+        return timeInterval;
     }
 
     public int getDay() {
@@ -102,21 +104,6 @@ public class Availability implements Parcelable{
         return ((double)(getToValue() - getFromValue()))/60;
     }
 
-    public long getFrom() {
-        return from;
-    }
-
-    public long getTo() {
-        return to;
-    }
-
-    public TimeInterval getTimeInterval() {
-        return timeInterval;
-    }
-
-    public String[] getMonthNames() {
-        return monthNames;
-    }
 
     public String getDate(){return (getMonthName(month) + ", " + day + ", ");}
 
