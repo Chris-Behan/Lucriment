@@ -8,6 +8,10 @@ public class TimeInterval {
     private long from;
     private long to;
 
+    public TimeInterval(){
+
+    }
+
     public TimeInterval(long from, long to) {
         this.from = from;
         this.to = to;

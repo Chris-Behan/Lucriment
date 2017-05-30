@@ -189,12 +189,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
             // set image imageVIew.setImageResource();
             TextView fromText = (TextView) itemView.findViewById(R.id.fromView);
-            fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute() + " - " + currentAva.getTohour() + ":"+ currentAva.getTominute());
+         //   fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute() + " - " + currentAva.getTohour() + ":"+ currentAva.getTominute());
 
 
 
             TextView dateText = (TextView) itemView.findViewById(R.id.dateView);
-            dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());
+          //  dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());
 
 
             return itemView;

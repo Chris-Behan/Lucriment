@@ -52,7 +52,7 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         }
         classLabel.setText(subject);
         name.setText(nameString);
-       timeInterval.setText(ava.getTime());
+      // timeInterval.setText(ava.getTime());
         location.setText(locationName);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

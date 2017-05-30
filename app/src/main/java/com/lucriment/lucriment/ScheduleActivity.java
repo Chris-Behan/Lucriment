@@ -355,13 +355,14 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
 
             // set image imageVIew.setImageResource();
+
             TextView fromText = (TextView) itemView.findViewById(R.id.fromView);
-            fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute() + " - " + currentAva.getTohour() + ":"+ currentAva.getTominute());
+          fromText.setText(currentAva.returnFromTime()+" - "+ currentAva.returnToTime());
 
 
 
             TextView dateText = (TextView) itemView.findViewById(R.id.dateView);
-            dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());
+            dateText.setText(currentAva.returnDate());
 
 
 

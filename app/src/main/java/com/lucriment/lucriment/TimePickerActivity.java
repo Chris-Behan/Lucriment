@@ -109,8 +109,8 @@ public class TimePickerActivity extends AppCompatActivity  {
                         selectedToTime = items2.get(position);
                         Toast.makeText(getApplicationContext(), selectedToTime, 0).show();
                         Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
-                        Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.getDay(),today.getMonth(), today.getYear());
-                        i.putExtra("requestedTime", requestedAva);
+                     //   Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.getDay(),today.getMonth(), today.getYear());
+                      //  i.putExtra("requestedTime", requestedAva);
                         i.putExtra("tutor",tutor);
                         i.putExtra("location", selectedLocation);
                         startActivity(i);
@@ -131,43 +131,43 @@ public class TimePickerActivity extends AppCompatActivity  {
         int timeValue = Integer.valueOf(hour)*60 + Integer.valueOf(minute);
         Availability thisAva = new Availability();
         for(Availability ava:todaysAvailability){
-            int avaFromVal = ava.getFromValue();
-            int avaToVal = ava.getToValue();
-            if(timeValue>=avaFromVal && timeValue<=avaToVal){
-                thisAva = ava;
-            }
+          //  int avaFromVal = ava.getFromValue();
+         //   int avaToVal = ava.getToValue();
+         //   if(timeValue>=avaFromVal && timeValue<=avaToVal){
+           //     thisAva = ava;
+          //  }
         }
-        today = thisAva;
-        int endTotal = thisAva.getToValue();
-        int endMinute = thisAva.getTominute();
-        int endHour = thisAva.getTohour();
-        int timeDiff = endTotal - timeValue;
-        int increment = (timeDiff-60)/15;
+    //    today = thisAva;
+      //  int endTotal = thisAva.getToValue();
+     //   int endMinute = thisAva.getTominute();
+     //   int endHour = thisAva.getTohour();
+     //   int timeDiff = endTotal - timeValue;
+    //    int increment = (timeDiff-60)/15;
 
-        while(increment>=0){
-            String processedTime;
-            if(endMinute==0){
-                processedTime = endHour + ":00";
-                endHour-=1;
-                endMinute = 45;
-            }else{
-                processedTime = endHour + ":" + endMinute;
-                endMinute-= 15;
-            }
-            items2.add(processedTime);
-            increment--;
+    //    while(increment>=0){
+        //    String processedTime;
+        //    if(endMinute==0){
+         //       processedTime = endHour + ":00";
+         //       endHour-=1;
+         //       endMinute = 45;
+        //    }else{
+         //       processedTime = endHour + ":" + endMinute;
+         //       endMinute-= 15;
+         //   }
+       //     items2.add(processedTime);
+        //    increment--;
 
         }
-        Collections.reverse(items2);
+    //    Collections.reverse(items2);
        // Toast.makeText(getApplicationContext(), time, 0).show();
-    }
+  //  }
 
     private void processStartAvailability(Availability ava){
-        int startHour = ava.getFromhour();
+    /*    int startHour = ava.getFromhour();
         int startMinute = ava.getFromminute();
         int endHour = ava.getTohour();
-        int endMinute = ava.getTominute();
-
+        int endMinute = ava.getTominute(); */
+/*
         int startTotal = startHour*60 + startMinute;
         int endTotal = endHour*60 + endMinute;
         int timeDiff = endTotal-startTotal;
@@ -190,7 +190,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 startHour+= 1;
             }
             increment--;
-        }
+        } */
 
 
     }
@@ -201,13 +201,13 @@ public class TimePickerActivity extends AppCompatActivity  {
         items.clear();
         for(Availability ava: avaList ){
            // int montha = month +1;
-            if(ava.getDay()== day && ava.getMonth() == month+1 && ava.getYear() == year){
+      /*      if(ava.getDay()== day && ava.getMonth() == month+1 && ava.getYear() == year){
                 todaysAvailability.add(ava);
                 processStartAvailability(ava);
                 finishTimes.add(ava.getToTime());
                 //items.add(ava.getToTime());
                 Toast.makeText(getApplicationContext(), "exists", 0).show();
-            }
+            } */
         }
         myGridAdapter.notifyDataSetChanged();
     }

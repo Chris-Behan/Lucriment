@@ -129,8 +129,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             field1.setData(tutor.getClasses());
         }else{
             field1.setData(tutor.getClasses());
-            field3.setData(requestedTime.getTime());
-            sessioncost = (requestedTime.getTimeInHours()*tutor.getRate());
+           // field3.setData(requestedTime.getTime());
+          //  sessioncost = (requestedTime.getTimeInHours()*tutor.getRate());
             cost.setText(" $"+sessioncost+"");
             cost.setVisibility(View.VISIBLE);
         }

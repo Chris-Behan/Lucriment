@@ -191,7 +191,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().getTime());
+        //    timeText.setText(session.getTime().getTime());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+session.getCost());
 
@@ -233,7 +233,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().getTime());
+      //      timeText.setText(session.getTime().getTime());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+String.valueOf(session.getCost()));
 
