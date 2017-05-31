@@ -193,7 +193,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnTime());
             locationText.setText(session.getLocation());
-            paymentText.setText("$"+session.getCost());
+            paymentText.setText("$"+session.getPrice());
 
 
             return itemView;
@@ -235,7 +235,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnTime());
             locationText.setText(session.getLocation());
-            paymentText.setText("$"+String.valueOf(session.getCost()));
+            paymentText.setText("$"+String.valueOf(session.getPrice()));
 
             acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override

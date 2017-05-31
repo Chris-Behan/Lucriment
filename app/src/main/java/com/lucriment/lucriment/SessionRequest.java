@@ -5,21 +5,54 @@ package com.lucriment.lucriment;
  */
 
 public class SessionRequest {
-    private String subject;
+    private boolean confirmed;
     private String location;
-    private TimeInterval time;
+    private String tutorId;
+    private String tutorName;
+    private String studentId;
     private String studentName;
-    private double cost;
-    public SessionRequest(String subject, String location, TimeInterval time, String name, double cost) {
-        this.subject = subject;
-        this.location = location;
-        this.time = time;
-        this.studentName = name;
-        this.cost = cost;
+    private String subject;
+    private int price;
+    private TimeInterval time;
+
+
+    public SessionRequest(TimeInterval ti) {
+
     }
 
-    public SessionRequest(){
+    public SessionRequest() {
 
+    }
+
+    public SessionRequest(String location, String tutorId, String tutorName, String studentId, String studentName, String subject, int price, TimeInterval time) {
+        this.location = location;
+        this.tutorId = tutorId;
+        this.tutorName = tutorName;
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.subject = subject;
+        this.price = price;
+        this.time = time;
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getTutorId() {
+        return tutorId;
+    }
+
+    public String getTutorName() {
+        return tutorName;
+    }
+
+    public String getStudentId() {
+        return studentId;
     }
 
     public String getStudentName() {
@@ -30,15 +63,14 @@ public class SessionRequest {
         return subject;
     }
 
-    public String getLocation() {
-        return location;
+    public int getPrice() {
+        return price;
     }
 
-    public double getCost() {
-        return cost;
-    }
 
     public TimeInterval getTime() {
         return time;
     }
 }
+
+

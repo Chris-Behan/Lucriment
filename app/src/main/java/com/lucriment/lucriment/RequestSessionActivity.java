@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +44,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private TextView rateView;
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
     private DatabaseReference databaseReference;
     private ImageView imageView;
     private String fromTime, toTime, day;
@@ -55,13 +57,18 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private ArrayAdapter<TwoItemField> adapter;
     private TextView cost;
     private Button backButton;
-    private double sessioncost;
+    private int sessioncost;
     private String selectedTimeInterval;
+    TwoItemField field1 = new TwoItemField("Subject", "Select");
+    TwoItemField field2 = new TwoItemField("Location", "Select");
+    TwoItemField field3 = new TwoItemField("Time", "Select");
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_session);
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
@@ -78,6 +85,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
         }
+
         storageReference = FirebaseStorage.getInstance().getReference();
 
         nameView.setText(tutor.getName());
@@ -117,6 +125,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             cal.setTimeInMillis(requestedTime.getFrom());
             int fromHour = cal.get(Calendar.HOUR_OF_DAY);
             int fromMinute = cal.get(Calendar.MINUTE);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
 
             cal.setTimeInMillis(requestedTime.getTo());
             int toHour = cal.get(Calendar.HOUR_OF_DAY);
@@ -137,9 +147,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
 
     private void populateItemList(){
-        TwoItemField field1 = new TwoItemField("Subject", "Select");
-        TwoItemField field2 = new TwoItemField("Location", "Select");
-        TwoItemField field3 = new TwoItemField("Time", "Select");
+
         if(selectedLocation!=null){
             field2.setData(selectedLocation);
         }
@@ -175,6 +183,9 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
 
         if(v == requestButton){
+
+            SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getID(),tutor.getName(),user.getUid(),user.getDisplayName(), field1.getData(),sessioncost,requestedTime );
+            sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
         databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
