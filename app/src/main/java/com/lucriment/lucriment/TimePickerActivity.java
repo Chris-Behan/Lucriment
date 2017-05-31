@@ -1,7 +1,9 @@
 package com.lucriment.lucriment;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -25,8 +27,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class TimePickerActivity extends AppCompatActivity  {
     private CalendarView cv;
@@ -45,6 +49,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     private Availability today;
     private String selectedLocation;
     private boolean timeState = true;
+    private Date fromdate, todate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         });
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @TargetApi(Build.VERSION_CODES.N)
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //Toast.makeText(getApplicationContext(), items.get(position), 0).show();
@@ -110,8 +116,36 @@ public class TimePickerActivity extends AppCompatActivity  {
                         selectedToTime = items2.get(position);
                         Toast.makeText(getApplicationContext(), selectedToTime, 0).show();
                         Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
-                     //   Availability requestedAva = new Availability(selectedFromTime,selectedToTime,today.returnDay(),today.returnMonth(), today.returnYear());
-                      //  i.putExtra("requestedTime", requestedAva);
+                        Date mDate = null;
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
+                        String rMonth = "";
+                        String rDay = "";
+                        if(today.returnMonth()<10){
+                            rMonth = "0"+ today.returnMonth();
+                        }else{
+                            rMonth = ""+today.returnMonth();
+                        }
+                        if(today.returnDay()<10){
+                            rDay = "0" + today.returnDay();
+                        }else{
+                            rDay = ""+today.returnDay();
+                        }
+                        String fromTimeString = ""+today.returnYear()+rMonth+rDay+selectedFromTime;
+                        String toTimeString = ""+today.returnYear()+rMonth+rDay+selectedToTime;
+                        fromdate = null;
+                        todate = null;
+                        try {
+                            fromdate = sdf.parse(fromTimeString);
+                            todate = sdf.parse(toTimeString);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        long fromTimeInMilis = fromdate.getTime();
+                        long toTimeInMilis = todate.getTime();
+
+                        TimeInterval selectedTI = new TimeInterval(fromTimeInMilis,toTimeInMilis);
+                        Availability requestedAva = new Availability();
+                        i.putExtra("requestedTime", selectedTI);
                         i.putExtra("tutor",tutor);
                         i.putExtra("location", selectedLocation);
                         startActivity(i);
@@ -121,8 +155,10 @@ public class TimePickerActivity extends AppCompatActivity  {
             });
 
 
+
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     private void getToTimes(String selectedTime) {
         String starttime = selectedTime;
         String hour = starttime.substring(0,starttime.indexOf(':'));
@@ -161,6 +197,8 @@ public class TimePickerActivity extends AppCompatActivity  {
         }
         Collections.reverse(items2);
 
+
+
     }
 
     private void processStartAvailability(Availability ava){
@@ -173,7 +211,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         int endTotal = endHour*60 + endMinute;
         int timeDiff = endTotal-startTotal;
         int increment = (timeDiff -60)/15;
-        items.add(startHour + ":" + startMinute);
+
         while(increment>=0){
             String processedTime;
             if(startMinute<45) {
@@ -190,6 +228,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 startMinute =0;
                 startHour+= 1;
             }
+          //  items.add(startHour + ":" + startMinute);
             increment--;
         }
 
@@ -213,7 +252,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 todaysAvailability.add(ava);
                 processStartAvailability(ava);
                 finishTimes.add(ava.returnToTime());
-                items.add(ava.returnToTime());
+              //  items.add(ava.returnToTime());
                 Toast.makeText(getApplicationContext(), "exists", 0).show();
             } 
         }

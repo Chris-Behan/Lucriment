@@ -26,6 +26,9 @@ public class Availability implements Parcelable{
         this.time = ti;
         this.frequency = frequency;
     }
+    public Availability(TimeInterval ti){
+        this.time = ti;
+    }
 
 
 

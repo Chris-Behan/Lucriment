@@ -242,7 +242,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         Calendar cal = Calendar.getInstance();
         String fromString1 = timeString;
         if(!fromSet) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             hourFinal = hourOfDay;
             minuteFinal = minute;
             if(hourFinal<10){
@@ -268,7 +268,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
 
             fromSet = true;
         }else{
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
             String toString1 = timeString;
             hourFinal2 = hourOfDay;
             minuteFinal2 = minute;

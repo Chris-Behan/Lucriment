@@ -1,7 +1,10 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +46,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private DatabaseReference databaseReference;
     private ImageView imageView;
     private String fromTime, toTime, day;
-    private Availability requestedTime;
+    private TimeInterval requestedTime;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private Button requestButton;
     private final int requestcode_placepicker = 1;
@@ -53,6 +56,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private TextView cost;
     private Button backButton;
     private double sessioncost;
+    private String selectedTimeInterval;
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,12 +111,27 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             }
         });
 
+
+        if(requestedTime!=null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(requestedTime.getFrom());
+            int fromHour = cal.get(Calendar.HOUR_OF_DAY);
+            int fromMinute = cal.get(Calendar.MINUTE);
+
+            cal.setTimeInMillis(requestedTime.getTo());
+            int toHour = cal.get(Calendar.HOUR_OF_DAY);
+            int toMinute = cal.get(Calendar.MINUTE);
+
+            selectedTimeInterval = fromHour+":"+fromMinute+" - "+toHour+":"+toMinute;
+        }
+
         populateItemList();
         populateSelectionList();
         registerFieldClicks();
 
         requestButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
+
     }
 
 
@@ -129,7 +149,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             field1.setData(tutor.getClasses());
         }else{
             field1.setData(tutor.getClasses());
-           // field3.setData(requestedTime.getTime());
+           field3.setData(selectedTimeInterval);
           //  sessioncost = (requestedTime.getTimeInHours()*tutor.getRate());
             cost.setText(" $"+sessioncost+"");
             cost.setVisibility(View.VISIBLE);
