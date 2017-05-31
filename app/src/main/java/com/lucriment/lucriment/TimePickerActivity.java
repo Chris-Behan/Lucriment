@@ -52,7 +52,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
         setContentView(R.layout.activity_time_picker);
-        cv = (CalendarView) findViewById(R.id.calendarView2);
+        cv = (CalendarView) findViewById(R.id.calendarViewx);
         tutor = getIntent().getParcelableExtra("tutor");
         gridView = (GridView) findViewById(R.id.timeGrid);
 
@@ -138,42 +138,42 @@ public class TimePickerActivity extends AppCompatActivity  {
                 thisAva = ava;
             }
         }
-    //    today = thisAva;
-      //  int endTotal = thisAva.returnToValue();
-     //   int endMinute = thisAva.getTominute();
-     //   int endHour = thisAva.getTohour();
-     //   int timeDiff = endTotal - timeValue;
-    //    int increment = (timeDiff-60)/15;
+        today = thisAva;
+        int endTotal = thisAva.returnToValue();
+       int endMinute = thisAva.returnToMinute();
+       int endHour = thisAva.returnToHour();
+       int timeDiff = endTotal - timeValue;
+        int increment = (timeDiff-60)/15;
 
-    //    while(increment>=0){
-        //    String processedTime;
-        //    if(endMinute==0){
-         //       processedTime = endHour + ":00";
-         //       endHour-=1;
-         //       endMinute = 45;
-        //    }else{
-         //       processedTime = endHour + ":" + endMinute;
-         //       endMinute-= 15;
-         //   }
-       //     items2.add(processedTime);
-        //    increment--;
+        while(increment>=0){
+            String processedTime;
+            if(endMinute==0){
+                processedTime = endHour + ":00";
+               endHour-=1;
+                endMinute = 45;
+            }else{
+                processedTime = endHour + ":" + endMinute;
+                endMinute-= 15;
+            }
+            items2.add(processedTime);
+            increment--;
 
         }
-    //    Collections.reverse(items2);
-       // Toast.makeText(getApplicationContext(), time, 0).show();
-  //  }
+        Collections.reverse(items2);
+
+    }
 
     private void processStartAvailability(Availability ava){
-    /*    int startHour = ava.getFromhour();
-        int startMinute = ava.getFromminute();
-        int endHour = ava.getTohour();
-        int endMinute = ava.getTominute(); */
-/*
+        int startHour = ava.returnFromHour();
+        int startMinute = ava.returnFromMinute();
+        int endHour = ava.returnToHour();
+        int endMinute = ava.returnToMinute();
+
         int startTotal = startHour*60 + startMinute;
         int endTotal = endHour*60 + endMinute;
         int timeDiff = endTotal-startTotal;
         int increment = (timeDiff -60)/15;
-      //  items.add(startHour + ":" + startMinute);
+        items.add(startHour + ":" + startMinute);
         while(increment>=0){
             String processedTime;
             if(startMinute<45) {
@@ -191,7 +191,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 startHour+= 1;
             }
             increment--;
-        } */
+        }
 
 
     }
@@ -205,9 +205,11 @@ public class TimePickerActivity extends AppCompatActivity  {
 
         for(Availability ava: avaList ){
 
-
+        int rday = ava.returnDay();
+            int rmonth = ava.returnMonth();
+            int ryear = ava.returnYear();
            // int montha = month +1;
-           if(ava.returnDay()== day && ava.returnMonth() == month+1 && ava.returnYear() == year){
+           if(ava.returnDay()== day && ava.returnMonth() == month && ava.returnYear() == year){
                 todaysAvailability.add(ava);
                 processStartAvailability(ava);
                 finishTimes.add(ava.returnToTime());
