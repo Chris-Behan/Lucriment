@@ -71,6 +71,10 @@ public class SessionRequest {
     public TimeInterval getTime() {
         return time;
     }
+
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }
 }
 
 

@@ -74,7 +74,12 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                     if(thisKey.contains(ID)){
                     strings.add(thisKey);
                         for(DataSnapshot innerSnap:sSnapShot.getChildren()){
-                            sessionList.add(innerSnap.getValue(SessionRequest.class));
+                            SessionRequest currentIteratedSession = innerSnap.getValue(SessionRequest.class);
+                            if(currentIteratedSession.isConfirmed()){
+                                bookedSessions.add(currentIteratedSession);
+                            }else {
+                                sessionList.add(currentIteratedSession);
+                            }
                         }
 
                        // SessionRequest test1 = cur.getValue(SessionRequest.class);
@@ -97,9 +102,10 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 //    sessionList.add(sessionRequest);
 //                 /   Availability ava = avaSnapShot.getValue(Availability.class);
                 //    aList.add(ava);
-
+                    populateSelectionList();
+                    populateBookedList();
                 }
-                populateSelectionList();
+
 
             }
 
@@ -108,7 +114,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
             }
         });
-
+/*
         DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("BookedSessions");
         databaseReference3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -118,7 +124,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                     SessionRequest sessionRequest = bSnapShot.getValue(SessionRequest.class);
                     bookedSessions.add(sessionRequest);
                 }
-                populateBookedList();
+
             }
 
             @Override
@@ -127,7 +133,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             }
         });
 
-
+*/
 
         registerSessionClicks();
 
@@ -169,11 +175,12 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
     @Override
     public void onAcceptPositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("BookedSessions");
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
+        clickedSession.setConfirmed(true);
         bookedSessions.add(clickedSession);
-        databaseReference2.setValue(bookedSessions);
+       // databaseReference2.setValue(bookedSessions);
         sessionList.remove(indexOfClickedSession);
-        databaseReference1.setValue(sessionList);
+        databaseReference2.setValue(bookedSessions);
     }
 
     @Override
