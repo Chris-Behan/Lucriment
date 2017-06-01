@@ -30,7 +30,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
     private ListView requestList;
     private ListView bookedList;
-    private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
+    private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();
+    private ArrayList<SessionRequest> allSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> sessionList = new ArrayList<SessionRequest>();
     private ArrayAdapter<SessionRequest> adapter;
     private ArrayAdapter<SessionRequest> adapter2;
@@ -68,6 +69,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
 
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
+                    allSessions.clear();
+                    bookedSessions.clear();
                     String thisKey = sSnapShot.getKey();
                   //  GenericTypeIndicator<HashMap<String,SessionRequest>> t = new GenericTypeIndicator<HashMap<String, SessionRequest>>() {};
                  //   seshreq = sSnapShot.getValue(t);
@@ -75,6 +78,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                     strings.add(thisKey);
                         for(DataSnapshot innerSnap:sSnapShot.getChildren()){
                             SessionRequest currentIteratedSession = innerSnap.getValue(SessionRequest.class);
+                            allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
                                 bookedSessions.add(currentIteratedSession);
                             }else {
@@ -177,10 +181,12 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     public void onAcceptPositiveClick(DialogFragment dialog) {
         DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
         clickedSession.setConfirmed(true);
-        bookedSessions.add(clickedSession);
+       // allSessions.add(clickedSession);
+      //  bookedSessions.add(clickedSession);
        // databaseReference2.setValue(bookedSessions);
         sessionList.remove(indexOfClickedSession);
-        databaseReference2.setValue(bookedSessions);
+        databaseReference2.setValue(allSessions);
+
     }
 
     @Override
