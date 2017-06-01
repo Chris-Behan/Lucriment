@@ -3,9 +3,7 @@ package com.lucriment.lucriment;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,19 +19,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener {
 
     private ListView requestList;
     private ListView bookedList;
     private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();;
-    private ArrayList<SessionRequest> sessionList = new ArrayList<>();
+    private ArrayList<SessionRequest> sessionList = new ArrayList<SessionRequest>();
     private ArrayAdapter<SessionRequest> adapter;
     private ArrayAdapter<SessionRequest> adapter2;
     private SessionRequest clickedSession;
@@ -42,6 +40,10 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private Button backButton;
+    private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    HashSet<SessionRequest> set = new HashSet<>();
+    private ArrayList seshreq;
+
     //private ArrayList<SessionsActivity>
 
 
@@ -56,18 +58,41 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         requestList = (ListView) findViewById(R.id.requestList);
         bookedList = (ListView) findViewById(R.id.bookedList);
         backButton = (Button) findViewById(R.id.backButton);
-        //SET LISTENER
+        //SET BUTTON LISTENERS
         backButton.setOnClickListener(this);
-
-        //LOAD SESSION LIST
+        //GET SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                sessionList.clear();
-                for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
-                    SessionRequest sessionRequest = sSnapShot.getValue(SessionRequest.class);
-                    sessionList.add(sessionRequest);
 
+
+                for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
+                    String thisKey = sSnapShot.getKey();
+                    GenericTypeIndicator<ArrayList<SessionRequest>> t = new GenericTypeIndicator<ArrayList<SessionRequest>>() {};
+                    seshreq = sSnapShot.getValue(t);
+                    if(thisKey.contains(ID)){
+                       DataSnapshot cur = sSnapShot;
+
+                       // SessionRequest test1 = cur.getValue(SessionRequest.class);
+                       // ArrayList a = new ArrayList();
+                      //  set.add(sSnapShot.getValue(SessionRequest.class));
+                      //  a = sSnapShot.getValue(ArrayList.class);
+                        Toast.makeText(SessionsActivity.this, "Key Success.",
+                                Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+
+                   // sessionList.add(set)
+                   // for(DataSnapshot innerSnap: sSnapShot.getChildren()){
+                     //   SessionRequest sessionRequest = innerSnap.getValue(SessionRequest.class);
+                     //   sessionList.add(sessionRequest);
+                  //  }
+                //    SessionRequest sessionRequest = sSnapShot.getValue(SessionRequest.class);
+                //    sessionList.add(sessionRequest);
+//                 /   Availability ava = avaSnapShot.getValue(Availability.class);
+                //    aList.add(ava);
 
                 }
                 populateSelectionList();
@@ -123,7 +148,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         ListView list = (ListView) findViewById(R.id.requestList);
         list.setAdapter(adapter);
 
-
+        ArrayList test2 = seshreq;
     }
 
     @Override
