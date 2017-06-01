@@ -42,7 +42,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private Button backButton;
     private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     HashSet<SessionRequest> set = new HashSet<>();
-    private ArrayList seshreq;
+    private HashMap<String,SessionRequest> seshreq;
+    ArrayList<String> strings = new ArrayList<>();
 
     //private ArrayList<SessionsActivity>
 
@@ -68,10 +69,13 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
                     String thisKey = sSnapShot.getKey();
-                    GenericTypeIndicator<ArrayList<SessionRequest>> t = new GenericTypeIndicator<ArrayList<SessionRequest>>() {};
-                    seshreq = sSnapShot.getValue(t);
+                  //  GenericTypeIndicator<HashMap<String,SessionRequest>> t = new GenericTypeIndicator<HashMap<String, SessionRequest>>() {};
+                 //   seshreq = sSnapShot.getValue(t);
                     if(thisKey.contains(ID)){
-                       DataSnapshot cur = sSnapShot;
+                    strings.add(thisKey);
+                        for(DataSnapshot innerSnap:sSnapShot.getChildren()){
+                            sessionList.add(innerSnap.getValue(SessionRequest.class));
+                        }
 
                        // SessionRequest test1 = cur.getValue(SessionRequest.class);
                        // ArrayList a = new ArrayList();
@@ -148,7 +152,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         ListView list = (ListView) findViewById(R.id.requestList);
         list.setAdapter(adapter);
 
-        ArrayList test2 = seshreq;
+        ArrayList<String> t23 = strings;
     }
 
     @Override
