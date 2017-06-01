@@ -72,8 +72,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                     allSessions.clear();
                     bookedSessions.clear();
                     String thisKey = sSnapShot.getKey();
-                  //  GenericTypeIndicator<HashMap<String,SessionRequest>> t = new GenericTypeIndicator<HashMap<String, SessionRequest>>() {};
-                 //   seshreq = sSnapShot.getValue(t);
+
                     if(thisKey.contains(ID)){
                     strings.add(thisKey);
                         for(DataSnapshot innerSnap:sSnapShot.getChildren()){
@@ -86,10 +85,6 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             }
                         }
 
-                       // SessionRequest test1 = cur.getValue(SessionRequest.class);
-                       // ArrayList a = new ArrayList();
-                      //  set.add(sSnapShot.getValue(SessionRequest.class));
-                      //  a = sSnapShot.getValue(ArrayList.class);
                         Toast.makeText(SessionsActivity.this, "Key Success.",
                                 Toast.LENGTH_SHORT).show();
 
@@ -97,15 +92,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
                     }
 
-                   // sessionList.add(set)
-                   // for(DataSnapshot innerSnap: sSnapShot.getChildren()){
-                     //   SessionRequest sessionRequest = innerSnap.getValue(SessionRequest.class);
-                     //   sessionList.add(sessionRequest);
-                  //  }
-                //    SessionRequest sessionRequest = sSnapShot.getValue(SessionRequest.class);
-                //    sessionList.add(sessionRequest);
-//                 /   Availability ava = avaSnapShot.getValue(Availability.class);
-                //    aList.add(ava);
+
+
                     populateSelectionList();
                     populateBookedList();
                 }
@@ -118,26 +106,6 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
             }
         });
-/*
-        DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("BookedSessions");
-        databaseReference3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                bookedSessions.clear();
-                for(DataSnapshot bSnapShot: dataSnapshot.getChildren()){
-                    SessionRequest sessionRequest = bSnapShot.getValue(SessionRequest.class);
-                    bookedSessions.add(sessionRequest);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-*/
 
         registerSessionClicks();
 
@@ -317,7 +285,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(SessionsActivity.this, SessionDetails.class);
                 i.putExtra("name",selectedSession.getStudentName());
-              //  i.putExtra("time",selectedSession.getTime());
+                i.putExtra("time",selectedSession.getTime());
                 i.putExtra("location", selectedSession.getLocation());
                 i.putExtra("subject",selectedSession.getSubject());
               //  i.putExtra("selectedTutor", selectedTutor1);

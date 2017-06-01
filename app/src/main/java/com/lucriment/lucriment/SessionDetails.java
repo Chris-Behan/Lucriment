@@ -21,7 +21,7 @@ import java.util.List;
 
 public class SessionDetails extends AppCompatActivity implements OnMapReadyCallback {
 
-    private Availability ava;
+    private TimeInterval ti;
     private TextView classLabel, nameLabel, name, timeInterval, location;
     private String nameString;
     private String className;
@@ -39,7 +39,7 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         timeInterval = (TextView) findViewById(R.id.time);
 //        map = (MapView) findViewById(R.id.mapFragment);
         if(getIntent().hasExtra("time")){
-            ava = getIntent().getParcelableExtra("time");
+            ti = getIntent().getParcelableExtra("time");
         }
         if(getIntent().hasExtra("name")){
             nameString = getIntent().getStringExtra("name");
@@ -52,7 +52,7 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         }
         classLabel.setText(subject);
         name.setText(nameString);
-      // timeInterval.setText(ava.getTime());
+       timeInterval.setText(ti.returnFormattedDate());
         location.setText(locationName);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
