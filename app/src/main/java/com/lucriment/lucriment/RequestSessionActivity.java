@@ -189,7 +189,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
-        databaseReference.child("Tutors").child(tutor.getID()).child("SessionRequests").setValue(sessionReqList);
+        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getID()).setValue(sessionReqList);
         }
         if(v== backButton){
             finish();

@@ -61,7 +61,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot studentSnap = dataSnapshot.child("Students");
                 DataSnapshot tutorSnap = dataSnapshot.child("Tutors");
-                if( studentSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                if( studentSnap.hasChild(thisUser.getUid())){
                     for(DataSnapshot userSnapShot: studentSnap.getChildren()){
                         if(userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
                             userInfo = userSnapShot.getValue(UserInfo.class);

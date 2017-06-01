@@ -39,7 +39,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private SessionRequest clickedSession;
     private int indexOfClickedSession;
     private FirebaseUser user = firebaseAuth.getCurrentUser();
-    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
+    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private Button backButton;
     //private ArrayList<SessionsActivity>
@@ -53,13 +53,13 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         //initialize buttons
-     //   TextView myTextView = (TextView) findViewById(R.id.myTextView);
         requestList = (ListView) findViewById(R.id.requestList);
         bookedList = (ListView) findViewById(R.id.bookedList);
         backButton = (Button) findViewById(R.id.backButton);
-
+        //SET LISTENER
         backButton.setOnClickListener(this);
-      //  DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("SessionRequests");
+
+        //LOAD SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -67,8 +67,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
                     SessionRequest sessionRequest = sSnapShot.getValue(SessionRequest.class);
                     sessionList.add(sessionRequest);
-//                 /   Availability ava = avaSnapShot.getValue(Availability.class);
-                //    aList.add(ava);
+
 
                 }
                 populateSelectionList();
@@ -191,7 +190,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().returnTime());
+            timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+session.getPrice());
 
@@ -233,7 +232,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().returnTime());
+            timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+String.valueOf(session.getPrice()));
 
