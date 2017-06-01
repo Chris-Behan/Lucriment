@@ -57,7 +57,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private ArrayAdapter<TwoItemField> adapter;
     private TextView cost;
     private Button backButton;
-    private int sessioncost;
+    private double sessioncost;
     private String selectedTimeInterval;
     TwoItemField field1 = new TwoItemField("Subject", "Select");
     TwoItemField field2 = new TwoItemField("Location", "Select");
@@ -158,7 +158,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         }else{
             field1.setData(tutor.getClasses());
            field3.setData(selectedTimeInterval);
-          //  sessioncost = (requestedTime.getTimeInHours()*tutor.getRate());
+            double r = requestedTime.returnTimeInHours();
+            sessioncost =  (requestedTime.returnTimeInHours()*tutor.getRate());
             cost.setText(" $"+sessioncost+"");
             cost.setVisibility(View.VISIBLE);
         }

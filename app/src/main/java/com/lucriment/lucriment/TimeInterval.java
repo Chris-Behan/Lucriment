@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.icu.util.Calendar;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,6 +38,13 @@ public class TimeInterval implements Parcelable{
 
     public String returnTime(){
         return getFrom() + " - " + getTo();
+    }
+
+    public double returnTimeInHours(){
+        double timeInHours = to-from;
+        timeInHours = timeInHours/(double)1000;
+        timeInHours =  (timeInHours/(double)3600);
+        return timeInHours;
     }
 
     @Override

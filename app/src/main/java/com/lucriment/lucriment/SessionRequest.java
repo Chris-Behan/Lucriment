@@ -12,7 +12,7 @@ public class SessionRequest {
     private String studentId;
     private String studentName;
     private String subject;
-    private int price;
+    private double price;
     private TimeInterval time;
 
 
@@ -24,7 +24,7 @@ public class SessionRequest {
 
     }
 
-    public SessionRequest(String location, String tutorId, String tutorName, String studentId, String studentName, String subject, int price, TimeInterval time) {
+    public SessionRequest(String location, String tutorId, String tutorName, String studentId, String studentName, String subject, double price, TimeInterval time) {
         this.location = location;
         this.tutorId = tutorId;
         this.tutorName = tutorName;
@@ -63,7 +63,7 @@ public class SessionRequest {
         return subject;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
