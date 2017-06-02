@@ -64,7 +64,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
 
     private void getTutors(){
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Tutors");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,7 +144,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
            // educationText.setText(currentTutor.getEducation());
 
             TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
-            classText.setText(currentTutor.getSubjects().get(0));
+//            classText.setText(currentTutor.getSubjects().get(0));
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
