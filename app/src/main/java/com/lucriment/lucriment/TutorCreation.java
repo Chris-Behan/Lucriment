@@ -22,18 +22,19 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private String education;
     private String email;
     private String id;
-    private double rate;
+    private int rate;
     private EditText classField;
     private EditText rateField;
     private EditText educationField;
     private Button becomeTutor;
+    private UserInfo userInfo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_creation);
-
+        userInfo = getIntent().getParcelableExtra("userInfo");
         classField = (EditText) findViewById(R.id.classesField);
         rateField = (EditText) findViewById(R.id.rateField);
         educationField = (EditText) findViewById(R.id.educationField);
@@ -60,11 +61,11 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         id = firebaseAuth.getCurrentUser().getUid();
         displayName = firebaseAuth.getCurrentUser().getDisplayName();
         classes = classField.getText().toString();
-        rate = Double.parseDouble(rateField.getText().toString());
+        rate = Integer.parseInt(rateField.getText().toString());
         education = educationField.getText().toString();
         email = firebaseAuth.getCurrentUser().getEmail();
-        TutorInfo tutorInfo = new TutorInfo(email,displayName,education,classes,rate, id);
-        databaseReference.child("Tutors").child(user.getUid()).setValue(tutorInfo);
+        TutorInfo tutorInfo = new TutorInfo(userInfo,education,123456789,rate);
+        databaseReference.child("tutors").child(user.getUid()).setValue(tutorInfo);
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
         finish();
         startActivity(new Intent(TutorCreation.this, ProfileActivity.class));

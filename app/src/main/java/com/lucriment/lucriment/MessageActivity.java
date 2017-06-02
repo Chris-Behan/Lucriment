@@ -52,9 +52,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         backButton = (Button) findViewById(R.id.prevButton);
         UserInfo tutor = getIntent().getParcelableExtra("user");
             sender = firebaseAuth.getCurrentUser().getDisplayName();
-            receiver = tutor.getName();
+            receiver = tutor.getFullName();
             senderID = firebaseAuth.getCurrentUser().getUid().toString();
-            receiverID = tutor.getUid();
+            receiverID = tutor.getId();
             getMessageFromFirebaseUser(senderID,receiverID);
            // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();

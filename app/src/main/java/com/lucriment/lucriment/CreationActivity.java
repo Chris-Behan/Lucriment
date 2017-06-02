@@ -109,14 +109,16 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         if(name.getVisibility() == View.INVISIBLE){
             displayName = firebaseAuth.getCurrentUser().getDisplayName();
         }
-        UserInfo UserInformation = new UserInfo(accountType,school, email, displayName, firebaseAuth.getCurrentUser().getUid());
+        UserInfo UserInformation = new UserInfo(displayName, displayName.substring(displayName.indexOf(' ')+1,displayName.length()),
+                displayName.substring(0,displayName.indexOf(' ')),user.getUid(),user.getEmail(),accountType);
         if(accountType.equals("Tutor")) {
-            databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
-            finish();
-            startActivity(new Intent(CreationActivity.this, TutorCreation.class));
+            databaseReference.child("users").child(user.getUid()).setValue(UserInformation);
+            Intent i = new Intent(CreationActivity.this, TutorCreation.class);
+            i.putExtra("userInfo", UserInformation);
+            startActivity(i);
            // databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);
         }else{
-            databaseReference.child("Students").child(user.getUid()).setValue(UserInformation);
+            databaseReference.child("users").child(user.getUid()).setValue(UserInformation);
             Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(CreationActivity.this, ProfileActivity.class);
             i.putExtra("userInfo", UserInformation);

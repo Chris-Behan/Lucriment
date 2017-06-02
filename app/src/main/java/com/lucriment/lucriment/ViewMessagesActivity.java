@@ -56,9 +56,9 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                         while (dataSnapshots.hasNext()) {
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (user.getMyChats().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                            if (user.getChatsWith().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
                                 users.add(user);
-                                set.add(user.getName());
+                                set.add(user.getFullName());
 
                             }
                         } listOfChats.addAll(set);
@@ -164,7 +164,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                 UserInfo selectedUser = new UserInfo();
                 String s = ((TextView)view).getText().toString();
                 for(UserInfo currentUser: users){
-                    if(currentUser.getName().equals(s)){
+                    if(currentUser.getFullName().equals(s)){
                         selectedUser = currentUser;
                     }
                 }
@@ -197,7 +197,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                             if (currentChat.senderUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
                             currentChat.receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 users.add(user);
-                                listOfChats.add(user.name);
+                                listOfChats.add(user.getFullName());
                             }
                         }
                         // All users are retrieved except the one who is currently logged

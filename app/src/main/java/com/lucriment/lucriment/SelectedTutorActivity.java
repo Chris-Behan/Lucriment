@@ -60,7 +60,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_selected_tutor);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         storageReference = FirebaseStorage.getInstance().getReference();
-        tutorID = selectedTutor.getID();
+        tutorID = selectedTutor.getId();
 
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutorID).child("Availability");
@@ -91,8 +91,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                 while (dataSnapshots.hasNext()) {
                     DataSnapshot dataSnapshotChild = dataSnapshots.next();
                     UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                    if(user.getUid().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
-                   myChats= user.getMyChats();
+                    if(user.getId().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
+                   myChats= user.getChatsWith();
                 }
 
             }
@@ -117,16 +117,16 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         requestButton = (Button) findViewById(R.id.requestButton);
 
        // selectedTutor = TutorListActivity.getTutor();
-        tutorName.setText(selectedTutor.getName());
-        educationField.setText(selectedTutor.getEducation());
-        bioField.setText(selectedTutor.getBio());
+        tutorName.setText(selectedTutor.getFullName());
+        educationField.setText(selectedTutor.getTitle());
+        bioField.setText(selectedTutor.getAbout());
         rateField.setText(String.valueOf(selectedTutor.getRate()));
-        classesField.setText(selectedTutor.getClasses());
+        classesField.setText(selectedTutor.getSubjects().get(0));
         backButton.setOnClickListener(this);
         contactButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
 
-        StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getID());
+        StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -147,13 +147,13 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         }
         if(v == contactButton){
             DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Students").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            myChats = (myChats + selectedTutor.getID().toString());
+            myChats = (myChats + selectedTutor.getId().toString());
             chatRoot.child("myChats").setValue(myChats);
-            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("Students").child(selectedTutor.getID());
+            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("Students").child(selectedTutor.getId());
             myChats2 = (myChats2 + FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
             chatRoot2.child("myChats").setValue(myChats2);
             Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
-            i.putExtra("tutorID", selectedTutor.getID());
+            i.putExtra("tutorID", selectedTutor.getId());
 
             startActivity(i);
         }

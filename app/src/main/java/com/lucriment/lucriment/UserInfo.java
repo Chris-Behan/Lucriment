@@ -3,88 +3,140 @@ package com.lucriment.lucriment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by ChrisBehan on 5/4/2017.
  */
 
 public class UserInfo implements Parcelable {
 
-    public String accountType;
-    public String school;
-    public String email;
-    public String name;
-    public String bio;
-    public String firebasetoken;
-    public String id;
-    public String myChats;
+    private String fullName;
+    private String lastName;
+    private String firstName;
+    private String id;
+    private String chatsWith;
+    private String email;
+    private String title;
+    private String profileImage;
+    private String userType;
+    private ArrayList<String> savedTutors;
+
 
     public UserInfo(){
 
     }
 
-    public UserInfo(Parcel in ){
-        String[] data = new String[6];
-        in.readStringArray(data);
-        this.email = data[0];
-        this.name = data[1];
-        this.school = data[2];
-        this.bio = data[3];
-        this.firebasetoken = data[4];
-        this.id = data[5];
-
-
-    }
-
-    public UserInfo(String accountType, String school, String email, String name, String id) {
-        this.accountType = accountType;
-        this.school = school;
-        this.email = email;
-        this.name = name;
-        this.firebasetoken = firebasetoken;
+    public UserInfo(String fullName, String lastName, String firstName, String id, String email,  String userType) {
+        this.fullName = fullName;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.id = id;
-        this.myChats = "";
+
+        this.email = email;
+
+
+        this.userType = userType;
     }
 
-    public String getBio() {
-        return bio;
+    public UserInfo(Parcel in ){
+        String[] data = new String[9];
+        in.readStringArray(data);
+        this.fullName = data[0];
+        this.lastName = data[1];
+        this.firstName = data[2];
+        this.id = data[3];
+        this.chatsWith = data[4];
+        this.email = data[5];
+        this.title = data[6];
+        this.profileImage = data[7];
+        this.userType = data[8];
+
+
+
+
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
+
+
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getSchool() {
-        return school;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getChatsWith() {
+        return chatsWith;
+    }
+
+    public void setChatsWith(String chatsWith) {
+        this.chatsWith = chatsWith;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getName() {
-        return name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getFirebasetoken() {
-        return firebasetoken;
+    public String getTitle() {
+        return title;
     }
 
-    public String getUid() {
-        return id;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMyChats() {
-        return myChats;
+    public String getProfileImage() {
+        return profileImage;
     }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
+    public String getUserType() {
+        return userType;
+    }
 
-    public void setMyChats(String myChats) {
-        this.myChats = myChats;
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public ArrayList<String> getSavedTutors() {
+        return savedTutors;
+    }
+
+    public void setSavedTutors(ArrayList<String> savedTutors) {
+        this.savedTutors = savedTutors;
     }
 
     @Override
@@ -94,7 +146,8 @@ public class UserInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.email, this.name, this.school, this.bio, this.firebasetoken, this.id});
+        dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.profileImage,
+        this.userType});
 
     }
 

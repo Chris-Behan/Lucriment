@@ -107,8 +107,8 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
-        educationField.setText(userInfo.getSchool());
-        bioField.setText(userInfo.bio);
+        educationField.setText(userInfo.getTitle());
+        bioField.setText(userInfo.getTitle());
        // String dURI = "https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=78db062a-a4c8-4221-893f-6510243d590b";
 
        // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
@@ -174,10 +174,10 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 bioField.setVisibility(View.VISIBLE);
                 editBioText.setVisibility(View.INVISIBLE);
                 bioField.setText(editBioText.getText());
-                userInfo.setBio(editBioText.getText().toString());
+                userInfo.setTitle(editBioText.getText().toString());
                 databaseReference.child("Students").child(user.getUid()).setValue(userInfo);
-                if(userInfo.accountType.equals("Tutor")){
-                    databaseReference.child("Tutors").child(user.getUid()).child("bio").setValue(userInfo.getBio());
+                if(userInfo.getUserType().equals("Tutor")){
+                    databaseReference.child("Tutors").child(user.getUid()).child("bio").setValue(userInfo.getTitle());
                 }
 
 

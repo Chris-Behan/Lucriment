@@ -88,11 +88,11 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        nameView.setText(tutor.getName());
+        nameView.setText(tutor.getFullName());
         rateView.setText("$"+String.valueOf(tutor.getRate())+"/hr");
 
 
-        StorageReference pathReference = storageReference.child("ProfilePics").child(tutor.getID());
+        StorageReference pathReference = storageReference.child("ProfilePics").child(tutor.getId());
         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -100,7 +100,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             }
         });
 
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutor.getID()).child("SessionRequests");
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutor.getId()).child("SessionRequests");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -154,9 +154,9 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
 
         if(requestedTime==null){
-            field1.setData(tutor.getClasses());
+            field1.setData(tutor.getSubjects().get(0));
         }else{
-            field1.setData(tutor.getClasses());
+            field1.setData(tutor.getSubjects().get(0));
            field3.setData(selectedTimeInterval);
             double r = requestedTime.returnTimeInHours();
             sessioncost =  (requestedTime.returnTimeInHours()*tutor.getRate());
@@ -185,11 +185,11 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
         if(v == requestButton){
 
-            SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getID(),tutor.getName(),user.getUid(),user.getDisplayName(), field1.getData(),sessioncost,requestedTime );
+            SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getId(),tutor.getFullName(),user.getUid(),user.getDisplayName(), field1.getData(),sessioncost,requestedTime );
             sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
-        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getID()).setValue(sessionReqList);
+        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getId()).setValue(sessionReqList);
         }
         if(v== backButton){
             finish();

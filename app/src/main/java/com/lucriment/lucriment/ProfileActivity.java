@@ -59,8 +59,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot studentSnap = dataSnapshot.child("Students");
-                DataSnapshot tutorSnap = dataSnapshot.child("Tutors");
+                DataSnapshot studentSnap = dataSnapshot.child("users");
+                DataSnapshot tutorSnap = dataSnapshot.child("tutors");
                 FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if( studentSnap.hasChild(thisUser.getUid())){

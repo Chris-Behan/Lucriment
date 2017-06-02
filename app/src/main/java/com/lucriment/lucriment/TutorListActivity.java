@@ -129,7 +129,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
-            StorageReference pathReference = storageReference.child("ProfilePics").child(currentTutor.getID());
+            StorageReference pathReference = storageReference.child("ProfilePics").child(currentTutor.getId());
             pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
@@ -138,13 +138,13 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             });
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
-            nameText.setText(currentTutor.getName());
+            nameText.setText(currentTutor.getFullName());
 
             TextView educationText = (TextView) itemView.findViewById(R.id.browseEducation);
-            educationText.setText(currentTutor.getEducation());
+           // educationText.setText(currentTutor.getEducation());
 
             TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
-            classText.setText(currentTutor.getClasses());
+            classText.setText(currentTutor.getSubjects().get(0));
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
