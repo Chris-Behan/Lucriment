@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth firebaseAuth;
@@ -42,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-
+      // databaseReference.child("subjects").setValue("");
         String name = user.getDisplayName();
         if(getIntent().hasExtra("userInfo"))
         userInfo = getIntent().getParcelableExtra("userInfo");

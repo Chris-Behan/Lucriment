@@ -108,7 +108,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference();
 
-        databaseReference.child("Chats")
+        databaseReference.child("chats")
                 .getRef()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -117,7 +117,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                             //Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_1 + " exists");
                             FirebaseDatabase.getInstance()
                                     .getReference()
-                                    .child("Chats")
+                                    .child("chats")
                                     .child(room_type_1)
                                     .addChildEventListener(new ChildEventListener() {
                                         @Override
@@ -154,7 +154,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                            // Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
                             FirebaseDatabase.getInstance()
                                     .getReference()
-                                    .child("Chats")
+                                    .child("chats")
                                     .child(room_type_2)
                                     .addChildEventListener(new ChildEventListener() {
                                         @Override
@@ -218,26 +218,26 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference();
 
-        databaseReference.child("Chats")
+        databaseReference.child("chats")
                 .getRef()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild(room_type_1)) {
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
-                            databaseReference.child("Chats")
+                            databaseReference.child("chats")
                                     .child(room_type_1)
                                     .child(String.valueOf(chat.timestamp))
                                     .setValue(chat);
                         } else if (dataSnapshot.hasChild(room_type_2)) {
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
-                            databaseReference.child("Chats")
+                            databaseReference.child("chats")
                                     .child(room_type_2)
                                     .child(String.valueOf(chat.timestamp))
                                     .setValue(chat);
                         } else {
                             // Log.e(TAG, "sendMessageToFirebaseUser: success");
-                            databaseReference.child("Chats")
+                            databaseReference.child("chats")
                                     .child(room_type_1)
                                     .child(String.valueOf(chat.timestamp))
                                     .setValue(chat);

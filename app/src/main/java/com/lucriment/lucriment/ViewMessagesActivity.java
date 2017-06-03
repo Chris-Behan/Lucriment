@@ -35,7 +35,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     private Button backButton;
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> listOfChats = new ArrayList<>();
-    private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("Chats");
+    private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("chats");
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
     private List<Chat> chatList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_view_messages);
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Students")
+                .child("users")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -56,10 +56,12 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                         while (dataSnapshots.hasNext()) {
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (user.getChatsWith().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
-                                users.add(user);
-                                set.add(user.getFullName());
+                            if(user.getChatsWith()!= null) {
+                                if (user.getChatsWith().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
+                                    users.add(user);
+                                    set.add(user.getFullName());
 
+                                }
                             }
                         } listOfChats.addAll(set);
                         arrayAdapter.notifyDataSetChanged();
@@ -188,14 +190,14 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
                                 .iterator();
-                       users = new ArrayList<>();
+                        users = new ArrayList<>();
                         chatList = new ArrayList<Chat>();
                         while (dataSnapshots.hasNext()) {
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
                             Chat currentChat = dataSnapshotChild.getValue(Chat.class);
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
                             if (currentChat.senderUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
-                            currentChat.receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                    currentChat.receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 users.add(user);
                                 listOfChats.add(user.getFullName());
                             }

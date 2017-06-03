@@ -129,7 +129,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
-            new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+            new DownloadImageTask(imageView)
                     .execute(currentTutor.getProfileImage());
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
