@@ -129,13 +129,8 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
-            StorageReference pathReference = storageReference.child("ProfilePics").child(currentTutor.getId());
-            pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.with(TutorListActivity.this).load(uri).fit().centerCrop().into(imageView);
-                }
-            });
+            new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+                    .execute(currentTutor.getProfileImage());
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());

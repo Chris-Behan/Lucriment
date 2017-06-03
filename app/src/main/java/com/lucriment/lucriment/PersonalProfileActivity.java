@@ -57,6 +57,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
     private static final int GALLERYINTENT = 2;
     private ImageView imageView;
     private Uri downloadUri;
+    private boolean isTutor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +119,9 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         backButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
         if(userInfo!= null) {
+            if(userInfo.getUserType().equals("Tutor")){
+                isTutor = true;
+            }
             new DownloadImageTask((ImageView) findViewById(R.id.imageView))
                     .execute(userInfo.getProfileImage());
         }
@@ -130,30 +134,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 
 
     @Override
@@ -165,6 +146,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
             Uri uri = data.getData();
             StorageReference profilePicPath = storageReference.child("ProfilePics").child(firebaseAuth.getCurrentUser().getUid());
+
             profilePicPath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -173,8 +155,12 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                     downloadUri = taskSnapshot.getDownloadUrl();
                    // userInfo.setProfileImage(downloadUri.toString());
                     databaseReference.child("users").child(user.getUid()).child("profileImage").setValue(downloadUri.toString());
+                    if(isTutor){
+                        databaseReference.child("tutors").child(user.getUid()).child("profileImage").setValue(downloadUri.toString());
+                    }
+                    new DownloadImageTask((ImageView) findViewById(R.id.imageView))
+                            .execute(downloadUri.toString());
 
-                    Picasso.with(PersonalProfileActivity.this).load(downloadUri.toString()).fit().centerCrop().into(imageView);
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -222,7 +208,9 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         }
         if(v == uploadButton){
             Intent intent = new Intent(Intent.ACTION_PICK);
+
             intent.setType("image/*");
+           // intent.putExtra("userInfo", userInfo);
             startActivityForResult(intent, GALLERYINTENT);
         }
 
