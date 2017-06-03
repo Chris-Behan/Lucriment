@@ -84,7 +84,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         backButton.setOnClickListener(this);
 
         //get your Availabiliities
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(user.getUid()).child("Availability");
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("tutors").child(user.getUid()).child("availability");
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -331,7 +331,7 @@ public class ScheduleActivity extends FragmentActivity implements  View.OnClickL
         Availability availability = new Availability(time, frequency);
         FirebaseUser user = firebaseAuth.getCurrentUser();
         aList.add(availability);
-        databaseReference.child("Tutors").child(user.getUid()).child("Availability").setValue(aList);
+        databaseReference.child("tutors").child(user.getUid()).child("availability").setValue(aList);
     }
 
     private class myListAdapter extends ArrayAdapter<Availability> {

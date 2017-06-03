@@ -154,9 +154,9 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
 
         if(requestedTime==null){
-            field1.setData(tutor.getSubjects().get(0));
+          //  field1.setData(tutor.getSubjects().get(0));
         }else{
-            field1.setData(tutor.getSubjects().get(0));
+          //  field1.setData(tutor.getSubjects().get(0));
            field3.setData(selectedTimeInterval);
             double r = requestedTime.returnTimeInHours();
             sessioncost =  (requestedTime.returnTimeInHours()*tutor.getRate());
