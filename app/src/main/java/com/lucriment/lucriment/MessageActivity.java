@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.security.Timestamp;
@@ -227,19 +228,19 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
                             databaseReference.child("chats")
                                     .child(room_type_1)
-                                    .child(String.valueOf(chat.timestamp))
+                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
                         } else if (dataSnapshot.hasChild(room_type_2)) {
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
                             databaseReference.child("chats")
                                     .child(room_type_2)
-                                    .child(String.valueOf(chat.timestamp))
+                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
                         } else {
                             // Log.e(TAG, "sendMessageToFirebaseUser: success");
                             databaseReference.child("chats")
                                     .child(room_type_1)
-                                    .child(String.valueOf(chat.timestamp))
+                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
                         }
                     }
@@ -259,9 +260,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 Date date = cc.getTime();
                 // SimpleDateFormat format1 = new SimpleDateFormat("dd MMM");
                 SimpleDateFormat format2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-                Long tsLong = System.currentTimeMillis()/1000;
+                String tsLong = FirebaseDatabase.getInstance().getReference().push().getKey();
+                Map<String, String> testM  = ServerValue.TIMESTAMP;
 
-               Chat chat = new Chat(sender, receiver, senderID, receiverID,messageField.getText().toString(), tsLong);
+              ///long timeStamp = (long) ServerValue.TIMESTAMP;
+               Chat chat = new Chat(sender, receiver, senderID, receiverID,messageField.getText().toString(), date.getTime());
                 sendMessageToFirebaseUser(chat);
                 messageField.setText("");
 

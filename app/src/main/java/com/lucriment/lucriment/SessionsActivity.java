@@ -31,6 +31,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private ListView requestList;
     private ListView bookedList;
     private FirebaseAuth firebaseAuth  = FirebaseAuth.getInstance();
+    private ArrayList<SessionRequest> currentSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> allSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> sessionList = new ArrayList<SessionRequest>();
     private ArrayAdapter<SessionRequest> adapter;
@@ -66,10 +67,12 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                allSessions.clear();
+                bookedSessions.clear();
+                sessionList.clear();
 
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
-                    //allSessions.clear();
+
 
                     String thisKey = sSnapShot.getKey();
 
@@ -80,8 +83,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
                                 bookedSessions.add(currentIteratedSession);
-                                Toast.makeText(SessionsActivity.this, "Key Success.",
-                                        Toast.LENGTH_SHORT).show();
+                               
                             }else {
                                 sessionList.add(currentIteratedSession);
                             }
@@ -148,13 +150,20 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
     @Override
     public void onAcceptPositiveClick(DialogFragment dialog) {
+        currentSessions.clear();
         DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
         clickedSession.setConfirmed(true);
+
        // allSessions.add(clickedSession);
       //  bookedSessions.add(clickedSession);
        // databaseReference2.setValue(bookedSessions);
+        for(SessionRequest sq : allSessions){
+            if(sq.getStudentId().equals(clickedSession.getStudentId())){
+                currentSessions.add(sq);
+            }
+        }
         sessionList.remove(indexOfClickedSession);
-        databaseReference2.setValue(allSessions);
+        databaseReference2.setValue(currentSessions);
         adapter2.notifyDataSetChanged();
 
     }

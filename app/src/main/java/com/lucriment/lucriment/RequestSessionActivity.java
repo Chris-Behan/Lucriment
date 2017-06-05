@@ -100,7 +100,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             }
         });
 
-        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Tutors").child(tutor.getId()).child("SessionRequests");
+        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("sessions").child(user.getUid()+"_"+tutor.getId());
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
