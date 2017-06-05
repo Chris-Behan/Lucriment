@@ -64,7 +64,7 @@ public class TimePickerActivity extends AppCompatActivity  {
 
         gridView.setAdapter(myGridAdapter);
 
-        DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("sessions");
+        DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("availability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

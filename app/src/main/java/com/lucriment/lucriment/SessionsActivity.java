@@ -69,8 +69,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
 
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
-                    allSessions.clear();
-                    bookedSessions.clear();
+                    //allSessions.clear();
+
                     String thisKey = sSnapShot.getKey();
 
                     if(thisKey.contains(ID)){
@@ -80,22 +80,23 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
                                 bookedSessions.add(currentIteratedSession);
+                                Toast.makeText(SessionsActivity.this, "Key Success.",
+                                        Toast.LENGTH_SHORT).show();
                             }else {
                                 sessionList.add(currentIteratedSession);
                             }
                         }
 
-                        Toast.makeText(SessionsActivity.this, "Key Success.",
-                                Toast.LENGTH_SHORT).show();
 
 
+                        populateSelectionList();
+                        populateBookedList();
 
                     }
 
 
 
-                    populateSelectionList();
-                    populateBookedList();
+
                 }
 
 
@@ -154,6 +155,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
        // databaseReference2.setValue(bookedSessions);
         sessionList.remove(indexOfClickedSession);
         databaseReference2.setValue(allSessions);
+        adapter2.notifyDataSetChanged();
 
     }
 

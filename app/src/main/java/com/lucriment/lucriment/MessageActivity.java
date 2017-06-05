@@ -124,9 +124,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                             // Chat message is retreived.
                                             Chat chat = dataSnapshot.getValue(Chat.class);
-                                            chatString = chat.message;
+                                            chatString = chat.text;
 
-                                            displayNameString = chat.sender;
+                                            displayNameString = chat.senderName;
                                             conversation.append(displayNameString + " : " + chatString + " \n");
                                         }
 
@@ -161,9 +161,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                             // Chat message is retreived.
                                             Chat chat = dataSnapshot.getValue(Chat.class);
-                                            chatString = chat.message;
+                                            chatString = chat.text;
 
-                                            displayNameString = chat.sender;
+                                            displayNameString = chat.senderName;
                                             conversation.append(displayNameString + " : " + chatString + " \n");
                                         }
 
@@ -212,8 +212,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     public void sendMessageToFirebaseUser(
             final Chat chat
             ) {
-        final String room_type_1 = chat.senderUid + "_" + chat.receiverUid;
-        final String room_type_2 = chat.receiverUid + "_" + chat.senderUid;
+        final String room_type_1 = chat.senderId + "_" + chat.receiverId;
+        final String room_type_2 = chat.receiverId + "_" + chat.senderId;
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference();

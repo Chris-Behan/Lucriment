@@ -5,21 +5,21 @@ package com.lucriment.lucriment;
  */
 
 public class Chat {
-    public String sender;
-    public String receiver;
-    public String senderUid;
-    public String receiverUid;
-    public String message;
+    public String senderName;
+    public String receiverName;
+    public String senderId;
+    public String receiverId;
+    public String text;
     public long timestamp;
 
     public Chat() {}
 
     public Chat(String sender, String receiver, String senderUid, String receiverUid, String message, long timestamp) {
-        this.sender = sender;
-        this.receiver = receiver;
-        this.senderUid = senderUid;
-        this.receiverUid = receiverUid;
-        this.message = message;
+        this.senderName = sender;
+        this.receiverName = receiver;
+        this.senderId = senderUid;
+        this.receiverId = receiverUid;
+        this.text = message;
         this.timestamp = timestamp;
     }
 }

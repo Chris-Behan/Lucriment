@@ -184,7 +184,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     public void getAllUsersFromFirebase() {
         FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Chats")
+                .child("chats")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -196,8 +196,8 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                             DataSnapshot dataSnapshotChild = dataSnapshots.next();
                             Chat currentChat = dataSnapshotChild.getValue(Chat.class);
                             UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (currentChat.senderUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
-                                    currentChat.receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (currentChat.senderId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
+                                    currentChat.receiverId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 users.add(user);
                                 listOfChats.add(user.getFullName());
                             }

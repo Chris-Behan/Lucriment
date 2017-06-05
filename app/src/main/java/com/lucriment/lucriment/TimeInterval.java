@@ -50,6 +50,19 @@ public class TimeInterval implements Parcelable{
         return timeInHours;
     }
 
+    public double returnFromValue(){
+        double timeInHours = from;
+        timeInHours = timeInHours/(double)1000;
+        timeInHours =  (timeInHours/(double)3600);
+        return timeInHours;
+    }
+    public double returnToValue(){
+        double timeInHours = to;
+        timeInHours = timeInHours/(double)1000;
+        timeInHours =  (timeInHours/(double)3600);
+        return timeInHours;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public int returnDay(){
         Calendar cal = Calendar.getInstance();
