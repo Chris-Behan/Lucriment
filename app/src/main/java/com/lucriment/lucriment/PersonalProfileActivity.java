@@ -11,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,8 +69,13 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
     private Spinner classSelector;
     private String subjectPath;
     private Uri downloadUri;
+    private Button addClassButton;
+    private TutorInfo tutorInfo;
     private boolean isTutor;
+    private boolean addingClass = false;
     private String[] subjectArray;
+    private ArrayList<String> subjectsTaught = new ArrayList<>();
+    private  ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +120,16 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot studentSnap = dataSnapshot.child("users");
+                DataSnapshot tutorSnap = dataSnapshot.child("tutors").child(currentKey).child("subjects");
+                for(DataSnapshot tutorSnapShot: tutorSnap.getChildren()){
+                   subjectsTaught.add(tutorSnapShot.getValue().toString());
+                }
                 for(DataSnapshot userSnapShot: studentSnap.getChildren()){
                     if(userSnapShot.getKey().equals(currentKey)){
                             userInfo = userSnapShot.getValue(UserInfo.class);
                     }
                 }
+                populateTaughtList();
 
             }
 
@@ -138,6 +150,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         imageView = (ImageView) findViewById(R.id.imageView);
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
         classSelector = (Spinner) findViewById(R.id.classSpinner);
+        addClassButton = (Button) findViewById(R.id.addClassButton);
         picUploadDialog = new ProgressDialog(this);
         String[] testarr = new String[]{"hello","goodbye"};
 
@@ -149,7 +162,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
        // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
 
 
-
+        addClassButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
         backButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
@@ -168,9 +181,48 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         //  tutorName.setText();
 
     }
+    private void populateTaughtList() {
+      adapter = new PersonalProfileActivity.taughtClassAdapter();
+        ListView list = (ListView) findViewById(R.id.taughtlist);
+        list.setAdapter(adapter);
+    }
+
+    private class taughtClassAdapter extends ArrayAdapter<String> {
+
+        public taughtClassAdapter(){
+            super(PersonalProfileActivity.this, R.layout.taught_item, subjectsTaught);
+        }
 
 
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.taught_item, parent, false);
+            }
+            //Find tutor to work with
+            Button deleteButton = (Button) itemView.findViewById(R.id.delete);
+            String subject = subjectsTaught.get(position);
 
+            //fill the view
+
+            TextView subjectText = (TextView) itemView.findViewById(R.id.taughtLabel);
+            subjectText.setText(subject);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    subjectsTaught.remove(position);
+                    databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -215,6 +267,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                     android.R.layout.simple_list_item_1, subjectArray);
             subjectNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             subjectSelector.setAdapter(subjectNameAdapter);
+
         subjectSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -228,6 +281,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                         if(subjectPath!= null) {
                             DataSnapshot categorySnap = dataSnapshot.child("subjects").child("highschool").child(subjectPath);
                             classes.clear();
+
                             for(DataSnapshot classSnap: categorySnap.getChildren()){
                                 classes.add(classSnap.getValue().toString());
 
@@ -271,26 +325,53 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         if(v == editButton){
             if(editing){
                 editing = false;
+                addingClass = false;
+                addClassButton.setVisibility(View.INVISIBLE);
             }else{
                 editing = true;
+                addClassButton.setVisibility(View.VISIBLE);
             }
             if(editing) {
+
                 bioField.setVisibility(View.INVISIBLE);
                 editBioText.setVisibility(View.VISIBLE);
             }else{
+                subjectSelector.setVisibility(View.INVISIBLE);
+                classSelector.setVisibility(View.INVISIBLE);
                 bioField.setVisibility(View.VISIBLE);
                 editBioText.setVisibility(View.INVISIBLE);
                 bioField.setText(editBioText.getText());
                 userInfo.setTitle(editBioText.getText().toString());
-                databaseReference.child("Students").child(user.getUid()).setValue(userInfo);
+                databaseReference.child("users").child(user.getUid()).setValue(userInfo);
                 if(userInfo.getUserType().equals("Tutor")){
-                    databaseReference.child("Tutors").child(user.getUid()).child("bio").setValue(userInfo.getTitle());
+                    databaseReference.child("tutors").child(user.getUid()).child("about").setValue(userInfo.getTitle());
                 }
 
 
             }
 
         }
+        if(v == addClassButton){
+            if(addingClass){
+                subjectsTaught.add(classSelector.getSelectedItem().toString());
+                databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                addingClass = false;
+
+            }else{
+                addingClass = true;
+            }
+
+            if(addingClass){
+                addClassButton.setText("select");
+                subjectSelector.setVisibility(View.VISIBLE);
+                classSelector.setVisibility(View.VISIBLE);
+            }else{
+                addClassButton.setText("Add class");
+                subjectSelector.setVisibility(View.INVISIBLE);
+                classSelector.setVisibility(View.INVISIBLE);
+            }
+        }
+
         if(v == uploadButton){
             Intent intent = new Intent(Intent.ACTION_PICK);
 

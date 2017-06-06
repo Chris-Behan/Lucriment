@@ -87,11 +87,10 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/contactButton"
+            android:text="Back"
             android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/contactButton"
-            android:layout_marginBottom="20dp"
-            android:text="Back" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/tutorEducationFIeld"
@@ -118,7 +117,8 @@
             android:id="@+id/editBioField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/decriptionLabel"
+            android:layout_alignBaseline="@+id/decriptionLabel"
+            android:layout_alignBottom="@+id/decriptionLabel"
             android:layout_toEndOf="@+id/educationLabel"
             android:layout_toRightOf="@+id/educationLabel"
             android:hint="say something about yourself"
@@ -146,19 +146,45 @@
 
         <Spinner
             android:id="@+id/subjectSpinner"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editBioField"
-            android:layout_toRightOf="@+id/subjectsLabel"
-            android:layout_toEndOf="@+id/subjectsLabel" />
+            android:layout_alignEnd="@+id/editButton"
+            android:layout_alignLeft="@+id/tutorBioField"
+            android:layout_alignRight="@+id/editButton"
+            android:layout_alignStart="@+id/tutorBioField"
+            android:layout_below="@+id/addClassButton"
+            android:visibility="invisible" />
 
         <Spinner
             android:id="@+id/classSpinner"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/subjectSpinner"
+            android:layout_alignLeft="@+id/tutorBioField"
+            android:layout_alignRight="@+id/subjectSpinner"
+            android:layout_alignStart="@+id/tutorBioField"
             android:layout_below="@+id/subjectSpinner"
-            android:layout_toRightOf="@+id/subjectsLabel"
-            android:layout_toEndOf="@+id/subjectsLabel" />
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/addClassButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editBioField"
+            android:layout_toEndOf="@+id/tutorName"
+            android:layout_toRightOf="@+id/tutorName"
+            android:text="Add Class"
+            android:visibility="invisible" />
+
+        <ListView
+            android:id="@+id/taughtlist"
+            android:layout_width="170dp"
+            android:layout_height="100dp"
+            android:layout_alignTop="@+id/subjectSpinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/subjectSpinner"
+            android:layout_toStartOf="@+id/subjectSpinner" />
 
     </RelativeLayout>
 
