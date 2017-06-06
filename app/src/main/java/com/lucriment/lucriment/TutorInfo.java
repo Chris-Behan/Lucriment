@@ -53,7 +53,7 @@ public class TutorInfo implements Parcelable {
 
 
     public TutorInfo(Parcel in){
-        String[] data = new String[12];
+        String[] data = new String[13];
         in.readStringArray(data);
         this.fullName = data[0];
         this.lastName = data[1];
@@ -67,6 +67,7 @@ public class TutorInfo implements Parcelable {
         this.about = data[9];
         this.phoneNumber = Long.parseLong(data[10]);
         this.rate = Integer.parseInt(data[11]);
+        this.profileImage = data[12];
     }
 
     public String getFullName() {
@@ -205,7 +206,7 @@ public class TutorInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
-        this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate)});
+        this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage});
 
     }
 

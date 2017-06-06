@@ -11,9 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class PersonalProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,16 +52,24 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
     private boolean editing;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference2;
     private UserInfo userInfo;
     private EditText editBioText;
     private FirebaseUser user;
     private Button uploadButton;
+    private ArrayList<String> subjects = new ArrayList<>();
+    private ArrayList<String> classes = new ArrayList<>();
     private StorageReference storageReference;
     private ProgressDialog picUploadDialog;
     private static final int GALLERYINTENT = 2;
     private ImageView imageView;
+    private Spinner subjectSelector;
+    private Spinner classSelector;
+    private String subjectPath;
     private Uri downloadUri;
     private boolean isTutor;
+    private String[] subjectArray;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +77,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference2 = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
         if(userInfo == null) {
@@ -75,12 +88,31 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
 
 
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot highSchoolSnap = dataSnapshot.child("subjects").child("highschool");
+
+                for(DataSnapshot subjectSnap: highSchoolSnap.getChildren()){
+                    subjects.add(subjectSnap.getKey());
+                }
+
+
+
+                handleSpinner();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot studentSnap = dataSnapshot.child("Students");
+                DataSnapshot studentSnap = dataSnapshot.child("users");
                 for(DataSnapshot userSnapShot: studentSnap.getChildren()){
                     if(userSnapShot.getKey().equals(currentKey)){
                             userInfo = userSnapShot.getValue(UserInfo.class);
@@ -104,8 +136,10 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         editButton = (Button) findViewById(R.id.editButton);
         uploadButton = (Button) findViewById(R.id.uploadPhoto);
         imageView = (ImageView) findViewById(R.id.imageView);
+        subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
+        classSelector = (Spinner) findViewById(R.id.classSpinner);
         picUploadDialog = new ProgressDialog(this);
-
+        String[] testarr = new String[]{"hello","goodbye"};
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
         educationField.setText(userInfo.getFullName());
@@ -113,6 +147,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
        // String dURI = "https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=78db062a-a4c8-4221-893f-6510243d590b";
 
        // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
+
 
 
         editButton.setOnClickListener(this);
@@ -172,6 +207,56 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         }
 
     }
+
+    private void handleSpinner(){
+
+            subjectArray = subjects.toArray(new String[subjects.size()]);
+            ArrayAdapter<String> subjectNameAdapter = new ArrayAdapter<String>(PersonalProfileActivity.this,
+                    android.R.layout.simple_list_item_1, subjectArray);
+            subjectNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            subjectSelector.setAdapter(subjectNameAdapter);
+        subjectSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                subjectPath = subjectSelector.getSelectedItem().toString();
+
+
+                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference();
+                db3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(subjectPath!= null) {
+                            DataSnapshot categorySnap = dataSnapshot.child("subjects").child("highschool").child(subjectPath);
+                            classes.clear();
+                            for(DataSnapshot classSnap: categorySnap.getChildren()){
+                                classes.add(classSnap.getValue().toString());
+
+                            }
+                            String[] classesArray = classes.toArray(new String[classes.size()]);
+                            ArrayAdapter<String> classNameAdapter = new ArrayAdapter<String>(PersonalProfileActivity.this,
+                                    android.R.layout.simple_list_item_1, classesArray);
+                            classNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            classSelector.setAdapter(classNameAdapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        subjectPath = subjectSelector.getSelectedItem().toString();
+
+    }
+
+
 
     @Override
     public void onClick(View v) {

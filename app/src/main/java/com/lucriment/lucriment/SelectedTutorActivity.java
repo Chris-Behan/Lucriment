@@ -125,14 +125,15 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         backButton.setOnClickListener(this);
         contactButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
-
-        StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
+        new DownloadImageTask(imageView)
+                .execute(selectedTutor.getProfileImage());
+       /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Picasso.with(SelectedTutorActivity.this).load(uri).fit().centerCrop().into(imageView);
             }
-        });
+        }); */
         //setup buttons and fields
       //  tutorName.setText();
 

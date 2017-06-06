@@ -83,7 +83,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
                                 bookedSessions.add(currentIteratedSession);
-                               
+
                             }else {
                                 sessionList.add(currentIteratedSession);
                             }

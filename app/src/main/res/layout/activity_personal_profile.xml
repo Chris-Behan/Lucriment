@@ -51,26 +51,26 @@
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_alignBottom="@+id/backButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
             android:allowUndo="false"
             android:autoText="false"
             android:maxHeight="20dp"
-            android:text="Edit"
-            android:layout_alignBottom="@+id/backButton"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="13dp"
-            android:layout_marginEnd="13dp" />
+            android:text="Edit" />
 
         <TextView
             android:id="@+id/educationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/backButton"
+            android:layout_alignRight="@+id/backButton"
+            android:layout_below="@+id/imageView"
             android:layout_marginTop="63dp"
             android:text="School:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/imageView"
-            android:layout_alignRight="@+id/backButton"
-            android:layout_alignEnd="@+id/backButton" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/decriptionLabel"
@@ -97,12 +97,12 @@
             android:id="@+id/tutorEducationFIeld"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginLeft="36dp"
-            android:layout_marginStart="36dp"
             android:layout_alignBottom="@+id/educationLabel"
             android:layout_alignLeft="@+id/tutorName"
-            android:layout_alignStart="@+id/tutorName" />
+            android:layout_alignStart="@+id/tutorName"
+            android:layout_marginLeft="36dp"
+            android:layout_marginStart="36dp"
+            android:text="TextView" />
 
         <TextView
             android:id="@+id/tutorBioField"
@@ -124,13 +124,41 @@
             android:hint="say something about yourself"
             android:visibility="invisible" />
 
+
         <Button
             android:id="@+id/uploadPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="upload"
             android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:text="upload" />
+
+        <TextView
+            android:id="@+id/subjectsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/decriptionLabel"
+            android:layout_alignStart="@+id/decriptionLabel"
+            android:layout_below="@+id/editBioField"
+            android:layout_marginTop="20dp"
+            android:text="Subjects Taught:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/subjectSpinner"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editBioField"
+            android:layout_toRightOf="@+id/subjectsLabel"
+            android:layout_toEndOf="@+id/subjectsLabel" />
+
+        <Spinner
+            android:id="@+id/classSpinner"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/subjectSpinner"
+            android:layout_toRightOf="@+id/subjectsLabel"
+            android:layout_toEndOf="@+id/subjectsLabel" />
 
     </RelativeLayout>
 
