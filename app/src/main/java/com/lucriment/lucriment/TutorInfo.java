@@ -50,6 +50,23 @@ public class TutorInfo implements Parcelable {
         this.rate = rate;
     }
 
+    public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate, ArrayList<String> subjects) {
+        this.fullName = user.getFullName();
+        this.lastName = user.getLastName();
+        this.firstName = user.getFirstName();
+        this.id = user.getId();
+        this.chatsWith = user.getChatsWith();
+        this.email = user.getEmail();
+        this.title = user.getTitle();
+        this.userType = user.getUserType();
+        this.subjects = subjects;
+        this.postalCode = postalCode;
+        this.about = about;
+        this.availability = availability;
+        this.phoneNumber = phoneNumber;
+        this.rate = rate;
+    }
+
 
 
     public TutorInfo(Parcel in){
@@ -68,6 +85,7 @@ public class TutorInfo implements Parcelable {
         this.phoneNumber = Long.parseLong(data[10]);
         this.rate = Integer.parseInt(data[11]);
         this.profileImage = data[12];
+        //this.subjects = data[13];
     }
 
     public String getFullName() {

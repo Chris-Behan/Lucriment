@@ -154,9 +154,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         picUploadDialog = new ProgressDialog(this);
         String[] testarr = new String[]{"hello","goodbye"};
 
-        personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
-        educationField.setText(userInfo.getFullName());
-        bioField.setText(userInfo.getFullName());
+
        // String dURI = "https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=78db062a-a4c8-4221-893f-6510243d590b";
 
        // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
@@ -169,16 +167,38 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         if(userInfo!= null) {
             if(userInfo.getUserType().equals("Tutor")){
                 isTutor = true;
+                getTutorInfo();
             }
             new DownloadImageTask((ImageView) findViewById(R.id.imageView))
                     .execute(userInfo.getProfileImage());
         }
+
+        personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
+        educationField.setText(userInfo.getTitle());
+
 
    //     if(userInfo.getProfileImage()!= null) {
          //  Picasso.with(PersonalProfileActivity.this).load("https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=d18e97f6-3087-4858-9260-ff9694cc6bf7").fit().centerCrop().into(imageView);
     //    }
         //setup buttons and fields
         //  tutorName.setText();
+
+    }
+    //get Tutor info
+    private void getTutorInfo(){
+      DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();
+        databaseReference3.child("tutors").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tutorInfo = dataSnapshot.getValue(TutorInfo.class);
+                bioField.setText(tutorInfo.getAbout());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
     private void populateTaughtList() {
@@ -341,7 +361,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 bioField.setVisibility(View.VISIBLE);
                 editBioText.setVisibility(View.INVISIBLE);
                 bioField.setText(editBioText.getText());
-                userInfo.setTitle(editBioText.getText().toString());
+               // userInfo.setTitle(editBioText.getText().toString());
                 databaseReference.child("users").child(user.getUid()).setValue(userInfo);
                 if(userInfo.getUserType().equals("Tutor")){
                     databaseReference.child("tutors").child(user.getUid()).child("about").setValue(userInfo.getTitle());

@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -30,33 +30,71 @@
             android:id="@+id/educationField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Education"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:hint="Education"
+            android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/classesField"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/subjectsLabel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Classes you Teach"
-            android:layout_below="@+id/educationField"
+            android:layout_alignBottom="@+id/subjectSpinner"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:text="Subjects Taught:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/subjectSpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/classSpinner"
+            android:layout_alignStart="@+id/classSpinner"
+            android:layout_below="@+id/addClassButton"
+            android:layout_marginTop="27dp"
+            android:visibility="invisible" />
+
+        <Spinner
+            android:id="@+id/classSpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_below="@+id/subjectSpinner"
+            android:layout_toRightOf="@+id/taughtlist"
+            android:layout_toEndOf="@+id/taughtlist" />
+
+        <Button
+            android:id="@+id/addClassButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editBioField"
+            android:layout_toEndOf="@+id/tutorName"
+            android:layout_toRightOf="@+id/tutorName"
+            android:text="Add Class"
+            android:visibility="invisible" />
+
+        <ListView
+            android:id="@+id/taughtlist"
+            android:layout_width="170dp"
+            android:layout_height="100dp"
+
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/subjectsLabel" />
 
         <EditText
 
             android:id="@+id/rateField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Hourly Rate"
-            android:inputType="textEmailAddress"
-            android:layout_below="@+id/educationField"
+            android:layout_above="@+id/becomeTutor"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="51dp" />
+            android:layout_marginBottom="91dp"
+            android:hint="Hourly Rate"
+            android:inputType="textEmailAddress" />
 
         <Button
             android:id="@+id/becomeTutor"

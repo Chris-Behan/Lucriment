@@ -51,7 +51,9 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private String myChats;
     private String myChats2;
     private List<UserInfo> users;
+    private ArrayList<String> subList = new ArrayList<>();
     private String tutorID;
+    private String classesTaught = "";
     private ArrayList<Availability> avaList = new ArrayList<>();
 
     @Override
@@ -62,6 +64,25 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         storageReference = FirebaseStorage.getInstance().getReference();
         tutorID = selectedTutor.getId();
 
+        DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("subjects");
+        subjectRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot sSnapShot:dataSnapshot.getChildren()){
+                        subList.add(sSnapShot.getValue(String.class));
+                }
+
+                for(String s:subList){
+                    classesTaught = classesTaught + s+ "  ";
+                }
+                classesField.setText(classesTaught);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("availability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -120,8 +141,9 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         tutorName.setText(selectedTutor.getFullName());
         educationField.setText(selectedTutor.getTitle());
         bioField.setText(selectedTutor.getAbout());
-        rateField.setText(String.valueOf(selectedTutor.getRate()));
-//        classesField.setText(selectedTutor.getSubjects().get(0));
+        rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
+
+
         backButton.setOnClickListener(this);
         contactButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
