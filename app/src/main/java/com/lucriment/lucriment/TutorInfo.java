@@ -27,9 +27,30 @@ public class TutorInfo implements Parcelable {
     private long phoneNumber;
     private ArrayList<String> subjects;
     private int rate;
+    private String subjectString;
 
 
     public TutorInfo(){
+
+    }
+
+
+
+    public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate, ArrayList<String> subjects) {
+        this.fullName = user.getFullName();
+        this.lastName = user.getLastName();
+        this.firstName = user.getFirstName();
+        this.id = user.getId();
+        this.chatsWith = user.getChatsWith();
+        this.email = user.getEmail();
+        this.title = user.getTitle();
+        this.userType = user.getUserType();
+        this.subjects = subjects;
+        this.postalCode = postalCode;
+        this.about = about;
+        this.availability = availability;
+        this.phoneNumber = phoneNumber;
+        this.rate = rate;
 
     }
 
@@ -50,27 +71,9 @@ public class TutorInfo implements Parcelable {
         this.rate = rate;
     }
 
-    public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate, ArrayList<String> subjects) {
-        this.fullName = user.getFullName();
-        this.lastName = user.getLastName();
-        this.firstName = user.getFirstName();
-        this.id = user.getId();
-        this.chatsWith = user.getChatsWith();
-        this.email = user.getEmail();
-        this.title = user.getTitle();
-        this.userType = user.getUserType();
-        this.subjects = subjects;
-        this.postalCode = postalCode;
-        this.about = about;
-        this.availability = availability;
-        this.phoneNumber = phoneNumber;
-        this.rate = rate;
-    }
-
-
 
     public TutorInfo(Parcel in){
-        String[] data = new String[13];
+        String[] data = new String[14];
         in.readStringArray(data);
         this.fullName = data[0];
         this.lastName = data[1];
@@ -85,6 +88,7 @@ public class TutorInfo implements Parcelable {
         this.phoneNumber = Long.parseLong(data[10]);
         this.rate = Integer.parseInt(data[11]);
         this.profileImage = data[12];
+        this.subjectString = data[13];
         //this.subjects = data[13];
     }
 
@@ -92,6 +96,19 @@ public class TutorInfo implements Parcelable {
         return fullName;
     }
 
+    public String arrToString(ArrayList<String> arr){
+        String arrString = "";
+        if(arr!=null)
+        for(String s:arr){
+            arrString = s + ",";
+        }
+        return arrString;
+    }
+
+    public String[] stringToArr(String text){
+        String[] arr = text.split(",");
+        return arr;
+    }
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
@@ -116,6 +133,9 @@ public class TutorInfo implements Parcelable {
         return id;
     }
 
+    public String returnSubjectString(){
+        return subjectString;
+    }
     public void setId(String id) {
         this.id = id;
     }
@@ -204,6 +224,7 @@ public class TutorInfo implements Parcelable {
         return subjects;
     }
 
+
     public void setSubjects(ArrayList<String> subjects) {
         this.subjects = subjects;
     }
@@ -223,8 +244,14 @@ public class TutorInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
-        this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage});
+        if (subjects == null) {
+            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
+                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, this.subjectString});
+        }else{
+            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
+                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, arrToString(this.subjects)});
+        }
+
 
     }
 

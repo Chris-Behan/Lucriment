@@ -46,6 +46,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     private  final gridAdapter myGridAdapter2 = new gridAdapter(items2);
     private String selectedFromTime;
     private String selectedToTime;
+    private String selectedSubject;
     private Availability today;
     private String selectedLocation;
     private boolean timeState = true;
@@ -54,6 +55,9 @@ public class TimePickerActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getIntent().hasExtra("subject")){
+            selectedSubject = getIntent().getStringExtra("subject");
+        }
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
         setContentView(R.layout.activity_time_picker);
@@ -148,6 +152,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                         i.putExtra("requestedTime", selectedTI);
                         i.putExtra("tutor",tutor);
                         i.putExtra("location", selectedLocation);
+                        i.putExtra("subject",selectedSubject);
                         startActivity(i);
 
                     }

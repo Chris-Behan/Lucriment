@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.net.Uri;
@@ -36,9 +37,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class RequestSessionActivity extends AppCompatActivity implements View.OnClickListener {
+public class RequestSessionActivity extends AppCompatActivity implements View.OnClickListener, SubjectSelectionDialog.NoticeDialogListener {
 
     private Availability selectedAvailability;
+    private  SubjectSelectionDialog se = new SubjectSelectionDialog();
+    private String subjectSelection;
     private TutorInfo tutor;
     private TextView nameView;
     private TextView rateView;
@@ -59,6 +62,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private Button backButton;
     private double sessioncost;
     private String selectedTimeInterval;
+//    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
     TwoItemField field2 = new TwoItemField("Location", "Select");
     TwoItemField field3 = new TwoItemField("Time", "Select");
@@ -70,6 +74,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        if(getIntent().hasExtra("subject"))
+            subjectSelection = getIntent().getStringExtra("subject");
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
         if(getIntent().hasExtra("Availability"))
@@ -147,6 +153,9 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
 
     private void populateItemList(){
+        if(subjectSelection!=null){
+            field1.setData(subjectSelection);
+        }
 
         if(selectedLocation!=null){
             field2.setData(selectedLocation);
@@ -195,6 +204,19 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
         }
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        subjectSelection = se.getSelection();
+        field1.setData(subjectSelection);
+        itemList.get(0).setData(subjectSelection);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
     }
 
     private class myListAdapter extends ArrayAdapter<TwoItemField> {
@@ -266,6 +288,14 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  //timeField = itemList.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                if(position ==0){
+
+                    Bundle args = new Bundle();
+                    String[] testArr = tutor.stringToArr(tutor.returnSubjectString());
+                    args.putStringArray("subjects",testArr);
+                    se.setArguments(args);
+                    se.show(getFragmentManager(), "my dialog");
+                }
                 if(position ==1){
                     startPlacePicker();
 
@@ -277,6 +307,7 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
                     i.putExtra("timeField", selectedAvailability);
                     i.putExtra("tutor", tutor);
                     i.putExtra("location", selectedLocation);
+                    i.putExtra("subject",subjectSelection);
                     startActivity(i);
                 }
 

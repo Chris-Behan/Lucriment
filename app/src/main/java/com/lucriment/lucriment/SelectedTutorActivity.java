@@ -184,6 +184,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
             Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
 
+
             i.putExtra("tutor", selectedTutor);
 
             startActivity(i);
