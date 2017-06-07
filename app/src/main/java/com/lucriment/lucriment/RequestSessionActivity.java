@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -199,10 +200,24 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
         databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getId()).setValue(sessionReqList);
+            Toast.makeText(RequestSessionActivity.this, "Request Sent.",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
+
+
+            i.putExtra("selectedTutor", tutor);
+
+            startActivity(i);
         }
         if(v== backButton){
-            finish();
-            startActivity(new Intent(this, ProfileActivity.class));
+          //  finish();
+           // startActivity(new Intent(this, ProfileActivity.class));
+            Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
+
+
+            i.putExtra("selectedTutor", tutor);
+
+            startActivity(i);
         }
     }
 

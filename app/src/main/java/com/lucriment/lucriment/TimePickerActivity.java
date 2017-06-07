@@ -118,7 +118,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     }else{
 
                         selectedToTime = items2.get(position);
-                        Toast.makeText(getApplicationContext(), selectedToTime, 0).show();
+
                         Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
                         Date mDate = null;
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
@@ -258,7 +258,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 processStartAvailability(ava);
                 finishTimes.add(ava.returnToTime());
               //  items.add(ava.returnToTime());
-                Toast.makeText(getApplicationContext(), "exists", 0).show();
+
             } 
         }
         myGridAdapter.notifyDataSetChanged();

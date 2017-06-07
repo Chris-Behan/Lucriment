@@ -140,7 +140,25 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     public void onDeclinePositiveClick(DialogFragment dialog) {
 
         sessionList.remove(indexOfClickedSession);
-        databaseReference1.setValue(sessionList);
+
+        currentSessions.clear();
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
+        clickedSession.setConfirmed(true);
+
+        // allSessions.add(clickedSession);
+        //  bookedSessions.add(clickedSession);
+        // databaseReference2.setValue(bookedSessions);
+        for(SessionRequest sq : allSessions){
+            if(sq.getStudentId().equals(clickedSession.getStudentId())){
+                currentSessions.add(sq);
+            }
+        }
+        currentSessions.remove(clickedSession);
+        databaseReference2.setValue(currentSessions);
+        adapter2.notifyDataSetChanged();
+
+
+
     }
 
     @Override
