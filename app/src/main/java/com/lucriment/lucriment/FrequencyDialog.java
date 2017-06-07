@@ -49,7 +49,7 @@ public class FrequencyDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Repeate Frequency").setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
+        builder.setTitle("Repeat Frequency").setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){

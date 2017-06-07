@@ -362,9 +362,10 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 editBioText.setVisibility(View.INVISIBLE);
                 bioField.setText(editBioText.getText());
                // userInfo.setTitle(editBioText.getText().toString());
+                tutorInfo.setAbout(editBioText.getText().toString());
                 databaseReference.child("users").child(user.getUid()).setValue(userInfo);
                 if(userInfo.getUserType().equals("Tutor")){
-                    databaseReference.child("tutors").child(user.getUid()).child("about").setValue(userInfo.getTitle());
+                    databaseReference.child("tutors").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
                 }
 
 

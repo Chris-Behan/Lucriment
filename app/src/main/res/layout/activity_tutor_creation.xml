@@ -69,11 +69,12 @@
             android:id="@+id/addClassButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/editBioField"
-            android:layout_toEndOf="@+id/tutorName"
-            android:layout_toRightOf="@+id/tutorName"
+
             android:text="Add Class"
-            android:visibility="invisible" />
+            android:visibility="visible"
+            android:layout_below="@+id/educationField"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <ListView
             android:id="@+id/taughtlist"

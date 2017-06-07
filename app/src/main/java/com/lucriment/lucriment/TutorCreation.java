@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class TutorCreation extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private String displayName;
     private int rating;
     private ArrayList<String> classes = new ArrayList<>();
@@ -41,13 +41,15 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private UserInfo userInfo;
     private Spinner subjectSelector;
     private Spinner classSelector;
-    private Button addClassButton;
+
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> subjectsTaught = new ArrayList<>();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private  ArrayAdapter<String> adapter;
     private String[] subjectArray;
     private String subjectPath;
+    private boolean addingClass = false;
+    private Button addClassButton;
 
 
     @Override
@@ -61,8 +63,9 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         rateField = (EditText) findViewById(R.id.rateField);
         educationField = (EditText) findViewById(R.id.educationField);
         becomeTutor = (Button) findViewById(R.id.becomeTutor);
-        subjectSelector.setVisibility(View.VISIBLE);
-        classSelector.setVisibility(View.VISIBLE);
+
+       // subjectSelector.setVisibility(View.VISIBLE);
+    //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
         addClassButton.setOnClickListener(this);
 
@@ -184,6 +187,27 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         if(v == becomeTutor){
             createTutorProfile();
         }
+
+        if(v == addClassButton){
+            if(addingClass){
+                subjectsTaught.add(classSelector.getSelectedItem().toString());
+                databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                addingClass = false;
+
+            }else{
+                addingClass = true;
+            }
+
+            if(addingClass){
+                addClassButton.setText("select");
+                subjectSelector.setVisibility(View.VISIBLE);
+                classSelector.setVisibility(View.VISIBLE);
+            }else{
+                addClassButton.setText("Add class");
+                subjectSelector.setVisibility(View.INVISIBLE);
+                classSelector.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private void createTutorProfile(){
@@ -198,6 +222,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         education = educationField.getText().toString();
         email = firebaseAuth.getCurrentUser().getEmail();
         TutorInfo tutorInfo = new TutorInfo(userInfo,education,123456789,rate);
+        tutorInfo.setSubjects(subjectsTaught);
         databaseReference.child("tutors").child(user.getUid()).setValue(tutorInfo);
         Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
         finish();
