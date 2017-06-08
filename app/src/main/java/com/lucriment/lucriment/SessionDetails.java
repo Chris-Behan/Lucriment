@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.ActionBar;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -37,6 +38,8 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         location = (TextView) findViewById(R.id.location);
         classLabel = (TextView) findViewById(R.id.classtitle);
         timeInterval = (TextView) findViewById(R.id.time);
+       // ActionBar actionBar = getActionBar();
+       // actionBar.setDisplayHomeAsUpEnabled(true);
 //        map = (MapView) findViewById(R.id.mapFragment);
         if(getIntent().hasExtra("time")){
             ti = getIntent().getParcelableExtra("time");
@@ -59,10 +62,8 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
 
-
-
-
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

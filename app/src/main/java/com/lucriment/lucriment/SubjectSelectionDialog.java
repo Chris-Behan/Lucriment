@@ -50,10 +50,11 @@ public class SubjectSelectionDialog extends DialogFragment {
         Bundle args = getArguments();
         final String[] options = args.getStringArray("subjects");
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Repeat Frequency").setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
+        builder.setTitle("Select Subject").setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                selection = (String) options[which];
+              /*  switch (which){
                     case 0:
                         selection = (String) options[which];
                         break;
@@ -67,7 +68,7 @@ public class SubjectSelectionDialog extends DialogFragment {
                         selection = (String) options[which];
                         break;
 
-                }
+                } */
 
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {

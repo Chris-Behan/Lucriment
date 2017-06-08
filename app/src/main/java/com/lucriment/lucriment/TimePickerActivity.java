@@ -125,9 +125,9 @@ public class TimePickerActivity extends AppCompatActivity  {
                         String rMonth = "";
                         String rDay = "";
                         if(today.returnMonth()<10){
-                            rMonth = "0"+ today.returnMonth();
+                            rMonth = "0"+ (today.returnMonth()+1);
                         }else{
-                            rMonth = ""+today.returnMonth();
+                            rMonth = ""+(today.returnMonth()+1);
                         }
                         if(today.returnDay()<10){
                             rDay = "0" + today.returnDay();

@@ -139,7 +139,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
            // educationText.setText(currentTutor.getEducation());
 
             TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
-//            classText.setText(currentTutor.getSubjects().get(0));
+            classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );

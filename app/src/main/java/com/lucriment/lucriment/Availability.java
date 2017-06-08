@@ -15,7 +15,7 @@ import java.sql.Time;
 public class Availability implements Parcelable{
 
     private String frequency;
-    private String[] monthNames = new String[]{"","January","February","March","April","May","June","July",
+    private String[] monthNames = new String[]{"January","February","March","April","May","June","July",
     "August","September","October","November","December"};
     private TimeInterval time;
 

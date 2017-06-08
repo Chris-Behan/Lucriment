@@ -100,7 +100,11 @@ public class TutorInfo implements Parcelable {
         String arrString = "";
         if(arr!=null)
         for(String s:arr){
-            arrString = s + ",";
+            if(arrString.equals("")){
+                arrString = s;
+            }else {
+                arrString = arrString + "," + s;
+            }
         }
         return arrString;
     }

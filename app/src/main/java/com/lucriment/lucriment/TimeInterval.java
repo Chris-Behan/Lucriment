@@ -13,7 +13,7 @@ import android.support.annotation.RequiresApi;
 public class TimeInterval implements Parcelable{
     private long from;
     private long to;
-    private String[] monthNames = new String[]{"","January","February","March","April","May","June","July",
+    private String[] monthNames = new String[]{"January","February","March","April","May","June","July",
             "August","September","October","November","December"};
     public TimeInterval(){
 
