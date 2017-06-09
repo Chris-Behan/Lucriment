@@ -74,7 +74,8 @@
         <activity android:name=".SessionsActivity" />
         <activity android:name=".SessionsTableActivity" />
         <activity android:name=".SessionDetails" />
-        <activity android:name=".CurrentSession"></activity>
+        <activity android:name=".CurrentSession" />
+        <activity android:name=".PastSession"></activity>
     </application>
 
 </manifest>

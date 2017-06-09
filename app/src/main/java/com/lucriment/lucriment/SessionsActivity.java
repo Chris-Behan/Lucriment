@@ -39,9 +39,11 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     private ArrayList<SessionRequest> allSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> sessionList = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> thisSession = new ArrayList<>();
+    private ArrayList<SessionRequest> pastSessions = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter;
     private ArrayAdapter<SessionRequest> adapter2;
     private ArrayAdapter<SessionRequest> adapter3;
+    private ArrayAdapter<SessionRequest> adapter4;
     private SessionRequest clickedSession;
     private int indexOfClickedSession;
     private FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -82,6 +84,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 allSessions.clear();
                 bookedSessions.clear();
                 sessionList.clear();
+                pastSessions.clear();
 
                 Calendar curCal = Calendar.getInstance();
                 long currentTime = curCal.getTimeInMillis();
@@ -96,9 +99,14 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             SessionRequest currentIteratedSession = innerSnap.getValue(SessionRequest.class);
                             allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
-                                bookedSessions.add(currentIteratedSession);
+                                if(currentTime< currentIteratedSession.getTime().getFrom()){
+                                    bookedSessions.add(currentIteratedSession);
+                                }
+
                                 if(currentTime > currentIteratedSession.getTime().getFrom()  && currentTime < currentIteratedSession.getTime().getTo()){
                                     thisSession.add(currentIteratedSession);
+                                }else if(currentTime > currentIteratedSession.getTime().getTo()){
+                                    pastSessions.add(currentIteratedSession);
                                 }
 
                             }else {
@@ -111,6 +119,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                         populateSelectionList();
                         populateBookedList();
                         populateCurrentSession();
+                        populatePastSessions();
 
                     }
 
@@ -133,6 +142,11 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             sessionRequestLabel.setText("Pending Requests:");
         }
 
+    }
+    private void populatePastSessions(){
+        adapter4 = new SessionsActivity.pastListAdapter();
+        ListView pastList = (ListView) findViewById(R.id.pastList);
+        pastList.setAdapter(adapter4);
     }
 
     private void populateCurrentSession(){
@@ -339,6 +353,47 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
 
 
     }
+
+    private class pastListAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public pastListAdapter(){
+            super(SessionsActivity.this, R.layout.bookedsessionlayout, pastSessions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
+            }
+            final SessionRequest session = pastSessions.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+            TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
+
+
+            //set inner fields
+            nameText.setText(session.getStudentName());
+            subjectText.setText(session.getSubject());
+            timeText.setText(session.getTime().returnFormattedDate());
+            locationText.setText(session.getLocation());
+            paymentText.setText("$"+session.getPrice());
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+    }
+
 
 
     private class sessionListAdapter extends ArrayAdapter<SessionRequest>  {

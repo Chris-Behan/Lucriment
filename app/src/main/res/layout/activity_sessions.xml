@@ -6,89 +6,159 @@
     android:layout_height="match_parent"
     tools:context="com.lucriment.lucriment.SessionsActivity">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <TableLayout
+        android:layout_width="384dp"
+        android:layout_height="508dp"
         tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+        android:id="@+id/tableLayout2">
 
-        <ListView
-            android:id="@+id/requestList"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_above="@+id/bookedSessionLabel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/sessionRequestLabel"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:text="Session Requests:"
-            android:gravity="center_horizontal"
-            android:background="#e5e5e0"
+            <TextView
+                android:id="@+id/currentSessionLabel"
+                android:layout_weight="1"
+                android:background="#e5e5e0"
+                android:gravity="center_horizontal"
+                android:text="Current Session:" />
+        </TableRow>
 
-
-            android:layout_above="@+id/requestList"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <ListView
-            android:id="@+id/bookedList"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_above="@+id/backButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_height="match_parent" >
 
-        <TextView
-            android:id="@+id/bookedSessionLabel"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:text="Booked Sessions:"
-            android:gravity="center_horizontal"
-            android:background="#e5e5e0"
-            android:layout_above="@+id/bookedList"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            <ListView
+                android:id="@+id/currentList"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_above="@+id/sessionRequestLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/currentSessionLabel" />
+        </TableRow>
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:id="@+id/currentSessionLabel"
-            android:layout_width="500dp"
-            android:layout_height="wrap_content"
-            android:text="Current Session:"
-            android:gravity="center_horizontal"
-            android:background="#e5e5e0"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-        <ListView
-            android:id="@+id/currentList"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:layout_below="@+id/currentSessionLabel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/sessionRequestLabel" />
-    </RelativeLayout>
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/sessionRequestLabel"
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/requestList"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                android:layout_weight="1"
+                android:background="#e5e5e0"
+                android:gravity="center_horizontal"
+                android:text="Session Requests:" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ListView
+                android:id="@+id/requestList"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_above="@+id/bookedSessionLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/bookedSessionLabel"
+                android:layout_width="500dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/bookedList"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="#e5e5e0"
+                android:gravity="center_horizontal"
+                android:text="Upcoming Sessions:" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ListView
+                android:id="@+id/bookedList"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="100dp"
+                android:layout_above="@+id/backButton"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/pastSessionsLabel"
+                android:layout_width="500dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/bookedList"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="#e5e5e0"
+                android:gravity="center_horizontal"
+                android:text="Past Sessions:" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ListView
+                android:id="@+id/pastList"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="100dp"
+                android:layout_above="@+id/backButton"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </TableRow>
+
+
+
+    </TableLayout>
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+
+        android:text="Back"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="@+id/tableLayout2"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        android:layout_marginBottom="-48dp" />
 </android.support.constraint.ConstraintLayout>
