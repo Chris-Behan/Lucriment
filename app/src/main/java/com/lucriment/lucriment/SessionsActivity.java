@@ -56,6 +56,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     ArrayList<String> strings = new ArrayList<>();
     private String userType;
     private TextView sessionRequestLabel;
+    private String sessionID;
 
     //private ArrayList<SessionsActivity>
 
@@ -385,7 +386,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+session.getPrice());
-
+            clickedSession = session;
+            sessionID = clickedSession.getStudentId()+"_"+clickedSession.getTutorId();
 
             return itemView;
             // return super.getView(position, convertView, parent);
@@ -543,6 +545,28 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 y.putExtra("time",currSession.getTime());
                 y.putExtra("location", currSession.getLocation());
                 y.putExtra("subject",currSession.getSubject());
+                startActivity(y);
+
+            }
+        });
+
+        ListView pastList = (ListView) findViewById(R.id.pastList);
+        pastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SessionRequest pastSession = pastSessions.get(position);
+
+                Intent y = new Intent(SessionsActivity.this, PastSession.class);
+                if(userType.equals("Tutor")) {
+                    y.putExtra("name", pastSession.getStudentName());
+                }else{
+                    y.putExtra("name", pastSession.getTutorName());
+                }
+                y.putExtra("sessionID",sessionID);
+                y.putExtra("time",pastSession.getTime());
+                y.putExtra("location", pastSession.getLocation());
+                y.putExtra("subject",pastSession.getSubject());
+                y.putExtra("review",pastSession.getReview());
                 startActivity(y);
 
             }

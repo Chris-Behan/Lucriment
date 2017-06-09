@@ -14,6 +14,7 @@ public class SessionRequest {
     private String subject;
     private double price;
     private TimeInterval time;
+    private Review review;
 
 
     public SessionRequest(TimeInterval ti) {
@@ -66,7 +67,11 @@ public class SessionRequest {
     public double getPrice() {
         return price;
     }
+    public Review getReview(){return review;}
 
+    public void setReview(Review review) {
+        this.review = review;
+    }
 
     public TimeInterval getTime() {
         return time;
