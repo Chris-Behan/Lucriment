@@ -34,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private UserInfo userInfo;
     private Button ScheduleButton;
     private Button SessionsButton;
+    private String userType;
 
 
     @Override
@@ -69,9 +70,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     for(DataSnapshot userSnapShot: studentSnap.getChildren()){
                         if(userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
                             userInfo = userSnapShot.getValue(UserInfo.class);
+                            userType = userInfo.getUserType();
                         }
                     }
                 } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    userType = userInfo.getUserType();
                 }else{
                     finish();
                     startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
@@ -141,8 +144,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(this, ScheduleActivity.class));
                 break;
             case R.id.sessionsButton:
-                finish();
-                startActivity(new Intent(this, SessionsActivity.class));
+                Intent y = new Intent(ProfileActivity.this, SessionsActivity.class);
+                y.putExtra("userType", userType);
+                startActivity(y);
+
                 break;
 
         }

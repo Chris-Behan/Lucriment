@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener {
+public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener
+, CancelDialogFragment.NoticeDialogListener{
 
     private ListView requestList;
     private ListView bookedList;
@@ -51,6 +52,8 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     HashSet<SessionRequest> set = new HashSet<>();
     private HashMap<String,SessionRequest> seshreq;
     ArrayList<String> strings = new ArrayList<>();
+    private String userType;
+    private TextView sessionRequestLabel;
 
     //private ArrayList<SessionsActivity>
 
@@ -62,9 +65,12 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
        // firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
+        userType = getIntent().getStringExtra("userType");
+
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);
         bookedList = (ListView) findViewById(R.id.bookedList);
+        sessionRequestLabel = (TextView) findViewById(R.id.sessionRequestLabel);
         backButton = (Button) findViewById(R.id.backButton);
         //SET BUTTON LISTENERS
         backButton.setOnClickListener(this);
@@ -76,6 +82,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 allSessions.clear();
                 bookedSessions.clear();
                 sessionList.clear();
+
                 Calendar curCal = Calendar.getInstance();
                 long currentTime = curCal.getTimeInMillis();
                 for(DataSnapshot sSnapShot: dataSnapshot.getChildren()){
@@ -90,7 +97,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                             allSessions.add(currentIteratedSession);
                             if(currentIteratedSession.isConfirmed()){
                                 bookedSessions.add(currentIteratedSession);
-                                if(currentTime > currentIteratedSession.getTime().getFrom()/1000  && currentTime < currentIteratedSession.getTime().getTo()/1000){
+                                if(currentTime > currentIteratedSession.getTime().getFrom()  && currentTime < currentIteratedSession.getTime().getTo()){
                                     thisSession.add(currentIteratedSession);
                                 }
 
@@ -122,6 +129,9 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         });
 
         registerSessionClicks();
+        if(userType.equals("Student")){
+            sessionRequestLabel.setText("Pending Requests:");
+        }
 
     }
 
@@ -147,9 +157,15 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
     }
 
     private void populateSelectionList(){
-        adapter = new SessionsActivity.sessionListAdapter();
-        ListView list = (ListView) findViewById(R.id.requestList);
-        list.setAdapter(adapter);
+        if(userType.equals("Tutor")) {
+            adapter = new SessionsActivity.sessionListAdapter();
+            ListView list = (ListView) findViewById(R.id.requestList);
+            list.setAdapter(adapter);
+        }else{
+            adapter = new SessionsActivity.studentReqAdapter();
+            ListView list = (ListView) findViewById(R.id.requestList);
+            list.setAdapter(adapter);
+        }
 
         ArrayList<String> t23 = strings;
     }
@@ -216,6 +232,32 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
         }
+    }
+
+    @Override
+    public void onCancelPositiveClick(DialogFragment dialog) {
+        sessionList.remove(indexOfClickedSession);
+
+        currentSessions.clear();
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
+        clickedSession.setConfirmed(true);
+
+        // allSessions.add(clickedSession);
+        //  bookedSessions.add(clickedSession);
+        // databaseReference2.setValue(bookedSessions);
+        for(SessionRequest sq : allSessions){
+            if(sq.getStudentId().equals(clickedSession.getStudentId())){
+                currentSessions.add(sq);
+            }
+        }
+        currentSessions.remove(clickedSession);
+        databaseReference2.setValue(currentSessions);
+        adapter2.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancelNegativeClick(DialogFragment dialog) {
+
     }
 
     private class currentSessionAdapter extends ArrayAdapter<SessionRequest>  {
@@ -358,6 +400,61 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             // return super.getView(position, convertView, parent);
         }
 
+    }
+
+    private class studentReqAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public studentReqAdapter(){
+            super(SessionsActivity.this, R.layout.studentreqlayout, sessionList);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.studentreqlayout, parent, false);
+            }
+            final SessionRequest session = sessionList.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+            Button acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
+            Button declineButton = (Button) itemView.findViewById(R.id.declineButton);
+            TextView paymentText = (TextView) itemView.findViewById(R.id.payment);
+
+            //set inner fields
+            nameText.setText(session.getTutorName());
+            subjectText.setText(session.getSubject());
+            timeText.setText(session.getTime().returnFormattedDate());
+            locationText.setText(session.getLocation());
+            paymentText.setText("$"+String.valueOf(session.getPrice()));
+
+
+
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickedSession = session;
+                    indexOfClickedSession = position;
+                    DeclineDialogFragment declineDialog = new DeclineDialogFragment();
+                    declineDialog.show(getFragmentManager(), "decline");
+                }
+            });
+
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+
 
     }
 
@@ -377,6 +474,21 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
               //  i.putExtra("selectedTutor", selectedTutor1);
 
                 startActivity(i);
+
+            }
+        });
+
+        ListView currList = (ListView) findViewById(R.id.currentList);
+        currList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SessionRequest currSession = thisSession.get(position);
+                Intent y = new Intent(SessionsActivity.this, CurrentSession.class);
+                y.putExtra("name",currSession.getStudentName());
+                y.putExtra("time",currSession.getTime());
+                y.putExtra("location", currSession.getLocation());
+                y.putExtra("subject",currSession.getSubject());
+                startActivity(y);
 
             }
         });
