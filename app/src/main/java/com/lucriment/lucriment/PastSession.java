@@ -39,11 +39,12 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
     private GoogleMap gMap;
     private boolean leavingReview = false;
     private String SessionID;
-    private DatabaseReference databaseReference, databaseReference2;
+    private DatabaseReference databaseReference, databaseReference2, databaseReference3;
     ArrayList<SessionRequest> allSessions = new ArrayList<>();
     private SessionRequest thisSession;
     private String userType;
     private Rating currentRating;
+    private ArrayList<Review> reviews = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,14 +141,33 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         }//IF CURRENT USER IS A TUTOR, GET THE STUDENTS DATA SNAP, OTHERWISE GET TUTOR DATASNAP
         if(userType.equals("Tutor")) {
           databaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getStudentId());
+            databaseReference3 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getStudentId());
+
 
         }else{
           databaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getTutorId());
+            databaseReference3 = FirebaseDatabase.getInstance().getReference().child("tutors").child(thisSession.getTutorId());
         }
-            databaseReference2.addValueEventListener(new ValueEventListener() {
+            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      currentRating = dataSnapshot.child("rating").getValue(Rating.class);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            databaseReference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot reviewSnapshot = dataSnapshot.child("reviews");
+                        for(DataSnapshot r:reviewSnapshot.getChildren()){
+                            Review curRev = r.getValue(Review.class);
+                            reviews.add(curRev);
+                        }
                 }
 
                 @Override
@@ -176,10 +196,12 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
                     double rating = Double.valueOf(ratingBar.getRating());
                     Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setStudentReview(review);
+                    reviews.add(review);
                 }else{
                     double rating = Double.valueOf(ratingBar.getRating());
                     Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setTutorReview(review);
+                    reviews.add(review);
                 }
                 if(currentRating == null){
                     currentRating = new Rating(ratingBar.getRating(),1);
@@ -187,6 +209,7 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
                     currentRating.setNumberOfReviews(currentRating.getNumberOfReviews()+1);
                     currentRating.setTotalScore(currentRating.getTotalScore()+ratingBar.getRating());
                 }
+                databaseReference3.child("reviews").setValue(reviews);
                 databaseReference2.child("rating").setValue(currentRating);
                 databaseReference.setValue(allSessions);
                 ratingBar.setVisibility(View.INVISIBLE);
