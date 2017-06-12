@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import java.util.Calendar;
 public class PastSession extends AppCompatActivity implements View.OnClickListener {
 
     private TimeInterval ti;
-    private TextView subjectWithField, sessionLengthField, dateField, locationField;
+    private TextView subjectWithField, sessionLengthField, dateField, locationField,reviewText;
     private String nameString;
     private String className;
     private String locationName;
@@ -33,15 +34,16 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
     private MapView map;
     private Review studentReview,tutorReview;
     private Button reviewButton;
-    private RatingBar ratingBar;
+    private RatingBar ratingBar, reviewBar;
     private EditText reviewField;
     private GoogleMap gMap;
     private boolean leavingReview = false;
     private String SessionID;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, databaseReference2;
     ArrayList<SessionRequest> allSessions = new ArrayList<>();
     private SessionRequest thisSession;
     private String userType;
+    private Rating currentRating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,8 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         reviewField = (EditText) findViewById(R.id.reviewField);
         reviewButton = (Button) findViewById(R.id.reviewButton);
+        reviewBar = (RatingBar) findViewById(R.id.reviewScore);
+        reviewText = (TextView) findViewById(R.id.reviewText);
         //GET INTENTS
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
@@ -89,13 +93,24 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         if(userType.equals("Tutor")) {
             if (studentReview == null) {
                 reviewButton.setVisibility(View.VISIBLE);
-            }
+            }else{
+                reviewBar.isIndicator();
+                reviewBar.setVisibility(View.VISIBLE);
+                reviewBar.setRating((float) tutorReview.getRating());
+                reviewText.setVisibility(View.VISIBLE);
+                reviewText.setText(tutorReview.getText());}
         }else{
             if(tutorReview==null){
                 reviewButton.setVisibility(View.VISIBLE);
-            }
+            }else{reviewBar.isIndicator();
+                reviewBar.setVisibility(View.VISIBLE);
+                reviewBar.setRating((float) tutorReview.getRating());
+                reviewText.setVisibility(View.VISIBLE);
+                reviewText.setText(tutorReview.getText());}
         }
         reviewButton.setOnClickListener(this);
+
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("sessions").child(SessionID);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -115,13 +130,31 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         });
 
     }
+    //GET CURRENT SESSION
     private void processSessions(){
         for(SessionRequest s:allSessions){
 
             if(s.getTime().getFrom()==(ti.getFrom())){
                thisSession = s;
             }
+        }//IF CURRENT USER IS A TUTOR, GET THE STUDENTS DATA SNAP, OTHERWISE GET TUTOR DATASNAP
+        if(userType.equals("Tutor")) {
+          databaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getStudentId());
+
+        }else{
+          databaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getTutorId());
         }
+            databaseReference2.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                     currentRating = dataSnapshot.child("rating").getValue(Rating.class);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -141,14 +174,24 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
                 android.icu.util.Calendar cc = android.icu.util.Calendar.getInstance();
                 if(userType.equals("Tutor")) {
                     double rating = Double.valueOf(ratingBar.getRating());
-                    Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setStudentReview(review);
                 }else{
                     double rating = Double.valueOf(ratingBar.getRating());
-                    Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setTutorReview(review);
                 }
+                if(currentRating == null){
+                    currentRating = new Rating(ratingBar.getRating(),1);
+                }else{
+                    currentRating.setNumberOfReviews(currentRating.getNumberOfReviews()+1);
+                    currentRating.setTotalScore(currentRating.getTotalScore()+ratingBar.getRating());
+                }
+                databaseReference2.child("rating").setValue(currentRating);
                 databaseReference.setValue(allSessions);
+                ratingBar.setVisibility(View.INVISIBLE);
+                reviewField.setVisibility(View.INVISIBLE);
+                reviewButton.setVisibility(View.INVISIBLE);
             }
 
         }

@@ -97,6 +97,25 @@
             android:layout_below="@+id/ratingBar"
             android:layout_centerHorizontal="true" />
 
+        <RatingBar
+            android:id="@+id/reviewScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/ratingBar"
+            android:layout_alignRight="@+id/ratingBar"
+            android:layout_alignTop="@+id/reviewButton"
+            android:visibility="invisible"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/reviewText"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/reviewField"
+            android:layout_centerHorizontal="true"
+            android:text="TextView" />
+
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
