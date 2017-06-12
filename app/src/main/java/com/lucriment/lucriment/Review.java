@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Review implements Parcelable{
     private String author;
-    private double Rating;
+    private double rating;
     private String text;
     private long timeStamp;
 
@@ -18,7 +18,7 @@ public class Review implements Parcelable{
     }
     public Review(String author, double rating, String text, long timeStamp) {
         this.author = author;
-        this.Rating = rating;
+        this.rating = rating;
         this.text = text;
         this.timeStamp = timeStamp;
     }
@@ -26,7 +26,7 @@ public class Review implements Parcelable{
         String[] data = new String[4];
         in.readStringArray(data);
         this.author = data[0];
-        this.Rating = Double.valueOf(data[1]);
+        this.rating = Double.valueOf(data[1]);
         this.text = data[2];
         this.timeStamp = Long.valueOf(data[3]);
     }
@@ -37,7 +37,7 @@ public class Review implements Parcelable{
     }
 
     public double getRating() {
-        return Rating;
+        return rating;
     }
 
     public String getText() {
@@ -55,7 +55,7 @@ public class Review implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.author, String.valueOf(this.Rating), this.text, String.valueOf(this.timeStamp)});
+        dest.writeStringArray(new String[]{this.author, String.valueOf(this.rating), this.text, String.valueOf(this.timeStamp)});
     }
     public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>(){
         @Override

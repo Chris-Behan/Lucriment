@@ -140,11 +140,11 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
             else{
                 android.icu.util.Calendar cc = android.icu.util.Calendar.getInstance();
                 if(userType.equals("Tutor")) {
-                    double rating = ratingBar.getRating();
+                    double rating = Double.valueOf(ratingBar.getRating());
                     Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setStudentReview(review);
                 }else{
-                    double rating = ratingBar.getRating();
+                    double rating = Double.valueOf(ratingBar.getRating());
                     Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
                     thisSession.setTutorReview(review);
                 }
