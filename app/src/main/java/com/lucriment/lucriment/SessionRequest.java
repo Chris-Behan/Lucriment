@@ -14,7 +14,7 @@ public class SessionRequest {
     private String subject;
     private double price;
     private TimeInterval time;
-    private Review review;
+    private Review studentReview, tutorReview;
 
 
     public SessionRequest(TimeInterval ti) {
@@ -35,6 +35,32 @@ public class SessionRequest {
         this.price = price;
         this.time = time;
     }
+    public SessionRequest(String location, String tutorId, String tutorName, String studentId, String studentName, String subject, double price, TimeInterval time,
+                          Review studentReview) {
+        this.location = location;
+        this.tutorId = tutorId;
+        this.tutorName = tutorName;
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.subject = subject;
+        this.price = price;
+        this.time = time;
+        this.studentReview = studentReview;
+    }
+    public SessionRequest(String location, String tutorId, String tutorName, String studentId, String studentName, String subject, double price, TimeInterval time,
+                          Review tutorReview,Review studentReview) {
+        this.location = location;
+        this.tutorId = tutorId;
+        this.tutorName = tutorName;
+        this.studentId = studentId;
+        this.studentName = studentName;
+        this.subject = subject;
+        this.price = price;
+        this.time = time;
+        this.tutorReview = tutorReview;
+        this.studentReview = studentReview;
+    }
+
 
     public boolean isConfirmed() {
         return confirmed;
@@ -67,10 +93,18 @@ public class SessionRequest {
     public double getPrice() {
         return price;
     }
-    public Review getReview(){return review;}
+    public Review getStudentReview(){return studentReview;}
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setStudentReview(Review review) {
+        this.studentReview = review;
+    }
+
+    public Review getTutorReview() {
+        return tutorReview;
+    }
+
+    public void setTutorReview(Review tutorReview) {
+        this.tutorReview = tutorReview;
     }
 
     public TimeInterval getTime() {

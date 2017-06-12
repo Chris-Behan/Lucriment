@@ -31,7 +31,7 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
     private String locationName;
     private String subjectWith, subject;
     private MapView map;
-    private Review review;
+    private Review studentReview,tutorReview;
     private Button reviewButton;
     private RatingBar ratingBar;
     private EditText reviewField;
@@ -41,6 +41,7 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
     private DatabaseReference databaseReference;
     ArrayList<SessionRequest> allSessions = new ArrayList<>();
     private SessionRequest thisSession;
+    private String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +56,17 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         reviewField = (EditText) findViewById(R.id.reviewField);
         reviewButton = (Button) findViewById(R.id.reviewButton);
         //GET INTENTS
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         if(getIntent().hasExtra("sessionID")){
             SessionID = getIntent().getStringExtra("sessionID");
         }
-        if(getIntent().hasExtra("review")){
-            review = getIntent().getParcelableExtra("review");
+        if(getIntent().hasExtra("studentReview")){
+            studentReview = getIntent().getParcelableExtra("studentReview");
+        }
+        if(getIntent().hasExtra("tutorReview")){
+            tutorReview = getIntent().getParcelableExtra("tutorReview");
         }
         if(getIntent().hasExtra("time")){
             ti = getIntent().getParcelableExtra("time");
@@ -79,14 +86,21 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         dateField.setText(ti.returnFormattedDate());
         locationField.setText(locationName);
         sessionLengthField.setText(String.valueOf(ti.returnTimeInHours())+"hrs");
-        if(review == null){
-            reviewButton.setVisibility(View.VISIBLE);
+        if(userType.equals("Tutor")) {
+            if (studentReview == null) {
+                reviewButton.setVisibility(View.VISIBLE);
+            }
+        }else{
+            if(tutorReview==null){
+                reviewButton.setVisibility(View.VISIBLE);
+            }
         }
         reviewButton.setOnClickListener(this);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("sessions").child(SessionID);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                allSessions.clear();
                 for(DataSnapshot sessions:dataSnapshot.getChildren()){
                     allSessions.add(sessions.getValue(SessionRequest.class));
 
@@ -125,9 +139,15 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
             }
             else{
                 android.icu.util.Calendar cc = android.icu.util.Calendar.getInstance();
-                Review review = new Review(thisSession.getStudentId(),Double.valueOf(ratingBar.getRating()),reviewField.getText().toString(),cc.getTimeInMillis());
-
-
+                if(userType.equals("Tutor")) {
+                    double rating = ratingBar.getRating();
+                    Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    thisSession.setStudentReview(review);
+                }else{
+                    double rating = ratingBar.getRating();
+                    Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    thisSession.setTutorReview(review);
+                }
                 databaseReference.setValue(allSessions);
             }
 

@@ -562,11 +562,13 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
                 }else{
                     y.putExtra("name", pastSession.getTutorName());
                 }
+                y.putExtra("userType",userType);
                 y.putExtra("sessionID",sessionID);
                 y.putExtra("time",pastSession.getTime());
                 y.putExtra("location", pastSession.getLocation());
                 y.putExtra("subject",pastSession.getSubject());
-                y.putExtra("review",pastSession.getReview());
+                y.putExtra("studentReview",pastSession.getStudentReview());
+                y.putExtra("tutorReview", pastSession.getTutorReview());
                 startActivity(y);
 
             }
