@@ -50,7 +50,7 @@
             android:id="@+id/contactButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_below="@+id/imageView"
+            android:layout_below="@+id/ratingBar3"
             android:layout_centerHorizontal="true"
             android:allowUndo="false"
             android:autoText="false"
@@ -61,113 +61,122 @@
             android:id="@+id/educationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Education:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/classesLabel"
             android:layout_alignLeft="@+id/classesLabel"
             android:layout_alignStart="@+id/classesLabel"
-            android:layout_marginTop="37dp" />
+            android:layout_below="@+id/classesLabel"
+            android:layout_marginTop="37dp"
+            android:text="Education:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/decriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="About:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_alignBottom="@+id/tutorBioField"
             android:layout_alignLeft="@+id/educationLabel"
-            android:layout_alignStart="@+id/educationLabel" />
+            android:layout_alignStart="@+id/educationLabel"
+            android:text="About:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/rateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rate per hour:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_above="@+id/requestButton"
             android:layout_alignLeft="@+id/decriptionLabel"
             android:layout_alignStart="@+id/decriptionLabel"
-            android:layout_marginBottom="13dp" />
+            android:layout_marginBottom="13dp"
+            android:text="Rate per hour:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
+            android:layout_alignEnd="@+id/contactButton"
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/contactButton"
-            android:layout_alignEnd="@+id/contactButton" />
+            android:text="Back" />
 
         <TextView
             android:id="@+id/tutorEducationFIeld"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
             android:layout_alignBottom="@+id/educationLabel"
             android:layout_alignLeft="@+id/classesField"
-            android:textAlignment="center"
-            android:layout_alignStart="@+id/classesField"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignStart="@+id/classesField"
+            android:text="TextView"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tutorBioField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_marginTop="51dp"
-            android:layout_below="@+id/tutorEducationFIeld"
             android:layout_alignLeft="@+id/tutorEducationFIeld"
-            android:textAlignment="center"
-            android:layout_alignStart="@+id/tutorEducationFIeld"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignStart="@+id/tutorEducationFIeld"
+            android:layout_below="@+id/tutorEducationFIeld"
+            android:layout_marginTop="51dp"
+            android:text="TextView"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tutorRateField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_alignBottom="@+id/rateLabel"
             android:layout_alignLeft="@+id/tutorBioField"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/tutorBioField"
             android:text="TextView"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/classesField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignStart="@+id/imageView"
             android:layout_below="@+id/contactButton"
             android:layout_marginTop="14dp"
             android:text="TextView"
-            android:textAlignment="center"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignLeft="@+id/imageView"
-            android:layout_alignStart="@+id/imageView" />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/classesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Classes Taught:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_alignBottom="@+id/classesField"
             android:layout_toLeftOf="@+id/contactButton"
-            android:layout_toStartOf="@+id/contactButton" />
-
+            android:layout_toStartOf="@+id/contactButton"
+            android:text="Classes Taught:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
         <Button
             android:id="@+id/requestButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Request"
             android:layout_above="@+id/backButton"
             android:layout_alignLeft="@+id/backButton"
-            android:layout_alignStart="@+id/backButton" />
+            android:layout_alignStart="@+id/backButton"
+            android:text="Request" />
+
+        <RatingBar
+            android:id="@+id/ratingBar3"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/imageView"
+            android:layout_below="@+id/imageView"
+            android:layout_alignLeft="@+id/imageView"
+            android:layout_alignStart="@+id/imageView" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

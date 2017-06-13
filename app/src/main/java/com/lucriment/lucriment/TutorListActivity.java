@@ -39,6 +39,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     private Button backButton;
     public TutorInfo selectedTutor;
     private StorageReference storageReference;
+    private double tutorScore;
 
     private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
     @Override
@@ -140,6 +141,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             if(currentTutor.getRating()!=null) {
                 Rating rating = currentTutor.getRating();
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
+                ratingScore.isIndicator();
                 ratingScore.setRating((float) score);
             }else{}
 
@@ -161,10 +163,15 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TutorInfo selectedTutor1 = tutors.get(position);
+                Rating tutorRating = selectedTutor1.getRating();
+                if(tutorRating!=null) {
+                     tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
+
+                }
                // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", selectedTutor1);
-
+                i.putExtra("tutorScore",tutorScore);
                 startActivity(i);
 
             }

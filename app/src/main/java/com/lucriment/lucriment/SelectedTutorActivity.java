@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView bioField;
     private TextView rateField;
     private TextView classesField;
+    private RatingBar ratingBar;
     private ImageView imageView;
     private StorageReference storageReference;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
@@ -55,14 +57,18 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private String tutorID;
     private String classesTaught = "";
     private ArrayList<Availability> avaList = new ArrayList<>();
+    double score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_tutor);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
+        score = getIntent().getDoubleExtra("tutorScore",0);
         storageReference = FirebaseStorage.getInstance().getReference();
         tutorID = selectedTutor.getId();
+        Rating rating = selectedTutor.getRating();
+
 
         DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("subjects");
         subjectRoot.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -136,12 +142,15 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         imageView = (ImageView) findViewById(R.id.imageView);
         classesField = (TextView) findViewById(R.id.classesField);
         requestButton = (Button) findViewById(R.id.requestButton);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
 
        // selectedTutor = TutorListActivity.getTutor();
         tutorName.setText(selectedTutor.getFullName());
         educationField.setText(selectedTutor.getTitle());
         bioField.setText(selectedTutor.getAbout());
         rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
+        ratingBar.isIndicator();
+        ratingBar.setRating((float) score);
 
 
         backButton.setOnClickListener(this);
