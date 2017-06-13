@@ -211,6 +211,7 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
                 }
                 databaseReference3.child("reviews").setValue(reviews);
                 databaseReference2.child("rating").setValue(currentRating);
+                databaseReference3.child("rating").setValue(currentRating);
                 databaseReference.setValue(allSessions);
                 ratingBar.setVisibility(View.INVISIBLE);
                 reviewField.setVisibility(View.INVISIBLE);

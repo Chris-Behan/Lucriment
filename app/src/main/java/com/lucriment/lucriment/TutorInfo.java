@@ -28,6 +28,7 @@ public class TutorInfo implements Parcelable {
     private ArrayList<String> subjects;
     private int rate;
     private String subjectString;
+    private Rating rating;
 
 
     public TutorInfo(){
@@ -154,6 +155,14 @@ public class TutorInfo implements Parcelable {
 
     public String getEmail() {
         return email;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     public void setEmail(String email) {

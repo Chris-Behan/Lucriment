@@ -37,16 +37,17 @@
         android:text="Rate"
         android:id="@+id/browseRate"
         android:layout_gravity="center_horizontal"
-        android:layout_alignBottom="@+id/browseEducation"
+        android:layout_alignBottom="@+id/ratingBar2"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
+    <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Education"
-        android:id="@+id/browseEducation"
+        android:text="Rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:id="@+id/ratingBar2"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/browseDisplayName"
         android:layout_alignLeft="@+id/browseDisplayName"
@@ -58,8 +59,8 @@
         android:text="Classes:"
         android:id="@+id/browseClasses"
         android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/browseEducation"
-        android:layout_alignLeft="@+id/browseEducation"
-        android:layout_alignStart="@+id/browseEducation" />
+        android:layout_below="@+id/ratingBar2"
+        android:layout_alignLeft="@+id/ratingBar2"
+        android:layout_alignStart="@+id/ratingBar2" />
 
 </RelativeLayout>

@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -135,8 +136,12 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
 
-            TextView educationText = (TextView) itemView.findViewById(R.id.browseEducation);
-           // educationText.setText(currentTutor.getEducation());
+            RatingBar ratingScore = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            if(currentTutor.getRating()!=null) {
+                Rating rating = currentTutor.getRating();
+                double score = rating.getTotalScore()/rating.getNumberOfReviews();
+                ratingScore.setRating((float) score);
+            }else{}
 
             TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
             classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));
