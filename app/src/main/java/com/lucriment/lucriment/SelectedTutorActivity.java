@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,12 +34,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-public class SelectedTutorActivity extends AppCompatActivity implements View.OnClickListener {
+public class SelectedTutorActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     private TutorInfo selectedTutor;
     private TextView tutorName;
     private TutorListActivity tutorListActivity;
@@ -40,7 +48,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private Button contactButton;
     private Button requestButton;
     private TextView educationField;
-    private TextView bioField;
+    private TextView aboutField;
     private TextView rateField;
     private TextView classesField;
     private RatingBar ratingBar;
@@ -62,7 +70,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selected_tutor);
+        setContentView(R.layout.demolayout);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         score = getIntent().getDoubleExtra("tutorScore",0);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -134,28 +142,33 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
         // initialize buttons and fields
         tutorName = (TextView) findViewById(R.id.tutorName);
-        backButton = (Button) findViewById(R.id.backButton);
-        educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
-        bioField = (TextView) findViewById(R.id.tutorBioField);
+       // backButton = (Button) findViewById(R.id.backButton);
+       // educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
+        aboutField = (TextView) findViewById(R.id.tutorAboutField);
         rateField = (TextView) findViewById(R.id.tutorRateField);
         contactButton = (Button) findViewById(R.id.contactButton);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView3);
         classesField = (TextView) findViewById(R.id.classesField);
-        requestButton = (Button) findViewById(R.id.requestButton);
+      //  requestButton = (Button) findViewById(R.id.requestButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
 
        // selectedTutor = TutorListActivity.getTutor();
+        
         tutorName.setText(selectedTutor.getFullName());
-        educationField.setText(selectedTutor.getTitle());
-        bioField.setText(selectedTutor.getAbout());
+//        educationField.setText(selectedTutor.getTitle());
+        aboutField.setText(selectedTutor.getAbout());
         rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
         ratingBar.isIndicator();
         ratingBar.setRating((float) score);
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-        backButton.setOnClickListener(this);
-        contactButton.setOnClickListener(this);
-        requestButton.setOnClickListener(this);
+
+   //     backButton.setOnClickListener(this);
+    //    contactButton.setOnClickListener(this);
+    //    requestButton.setOnClickListener(this);
         new DownloadImageTask(imageView)
                 .execute(selectedTutor.getProfileImage());
        /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
@@ -173,33 +186,29 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
 
-        if(v == backButton){
-            finish();
-            startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
-        }
-        if(v == contactButton){
-            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            myChats = (myChats + selectedTutor.getId().toString());
-            chatRoot.child("chatsWith").setValue(myChats);
-            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("users").child(selectedTutor.getId());
-            myChats2 = (myChats2 + FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-            chatRoot2.child("chatsWith").setValue(myChats2);
-            Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
-            i.putExtra("tutorID", selectedTutor.getId());
-
-            startActivity(i);
-        }
-        if(v == requestButton){
-
-            Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
-
-
-            i.putExtra("tutor", selectedTutor);
-
-            startActivity(i);
-        }
+ 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Geocoder gc = new Geocoder(this);
+        try {
+            List<android.location.Address> list = gc.getFromLocationName("Calgary",1);
+            android.location.Address add = list.get(0);
+            double lat = add.getLatitude();
+            double lng = add.getLongitude();
+            LatLng sydney = new LatLng(lat, lng);
+            googleMap.addMarker(new MarkerOptions().position(sydney)
+                    .title("Calgary"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            googleMap.setMaxZoomPreference(23);
+            googleMap.setMinZoomPreference(15);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+/*
     private class myListAdapter extends ArrayAdapter<Availability> {
 
         public myListAdapter(){

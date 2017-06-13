@@ -24,7 +24,8 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+        tools:layout_constraintTop_creator="1"
+        android:id="@+id/relativeLayout">
 
         <TextView
             android:id="@+id/tutorName"
@@ -72,11 +73,12 @@
             android:id="@+id/decriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tutorBioField"
-            android:layout_alignLeft="@+id/educationLabel"
-            android:layout_alignStart="@+id/educationLabel"
             android:text="About:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignBaseline="@+id/classesField"
+            android:layout_alignBottom="@+id/classesField"
+            android:layout_alignLeft="@+id/classesLabel"
+            android:layout_alignStart="@+id/classesLabel" />
 
         <TextView
             android:id="@+id/rateLabel"
@@ -152,11 +154,12 @@
             android:id="@+id/classesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/classesField"
-            android:layout_toLeftOf="@+id/contactButton"
-            android:layout_toStartOf="@+id/contactButton"
             android:text="Classes Taught:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/decriptionLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="33dp" />
 
 
         <Button
