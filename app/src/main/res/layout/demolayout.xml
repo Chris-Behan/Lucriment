@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    >
+<ScrollView
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:fillViewport="true">
-
 
     <TableLayout
         android:layout_width="match_parent"
@@ -248,11 +254,48 @@
                     android:id="@+id/reviewList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="true"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/reviewText" />
             </RelativeLayout>
         </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+            </RelativeLayout>
+        </TableRow>
+
     </TableLayout>
 </ScrollView>
+
+    <Button
+        android:id="@+id/requestButton"
+        android:layout_width="385dp"
+        android:backgroundTint="@color/cardview_light_background"
+        android:layout_height="wrap_content"
+        android:text="Request this tutor"
+        android:textAllCaps="false"
+        android:padding="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/contactButton"
+        android:padding="0dp"
+        android:layout_width="385dp"
+        android:layout_height="wrap_content"
+        android:text="Contact"
+        android:backgroundTint="@color/cardview_light_background"
+        android:textAllCaps="false"
+        android:layout_above="@+id/requestButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

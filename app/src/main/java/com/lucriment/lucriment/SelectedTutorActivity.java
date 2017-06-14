@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +68,10 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private String tutorID;
     private String classesTaught = "";
     private ArrayList<Availability> avaList = new ArrayList<>();
+    private ArrayList<Review> revList = new ArrayList<>();
+    private ArrayAdapter<Review> revAdapter;
     double score;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         storageReference = FirebaseStorage.getInstance().getReference();
         tutorID = selectedTutor.getId();
         Rating rating = selectedTutor.getRating();
+       scrollView = (ScrollView) findViewById(R.id.scrollView);
+        scrollView.scrollTo(0,0);
 
 
         DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("subjects");
@@ -90,6 +98,22 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     classesTaught = classesTaught + s+ "  ";
                 }
                 classesField.setText(classesTaught);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        DatabaseReference reviewRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("reviews");
+        reviewRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot revSnap: dataSnapshot.getChildren()){
+                    Review rev = revSnap.getValue(Review.class);
+                    revList.add(rev);
+                }
+                processReviews();
             }
 
             @Override
@@ -149,7 +173,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         contactButton = (Button) findViewById(R.id.contactButton);
         imageView = (ImageView) findViewById(R.id.imageView3);
         classesField = (TextView) findViewById(R.id.classesField);
-      //  requestButton = (Button) findViewById(R.id.requestButton);
+        requestButton = (Button) findViewById(R.id.requestButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
 
        // selectedTutor = TutorListActivity.getTutor();
@@ -167,8 +191,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
 
    //     backButton.setOnClickListener(this);
-    //    contactButton.setOnClickListener(this);
-    //    requestButton.setOnClickListener(this);
+        contactButton.setOnClickListener(this);
+        requestButton.setOnClickListener(this);
         new DownloadImageTask(imageView)
                 .execute(selectedTutor.getProfileImage());
        /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
@@ -182,11 +206,40 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
       //  tutorName.setText();
 
     }
+    private void  processReviews(){
+        revAdapter = new SelectedTutorActivity.reviewAdapter();
+        ListView reviewList = (ListView) findViewById(R.id.reviewList);
+        reviewList.setAdapter(revAdapter);
+        scrollView.scrollTo(0,0);
+    }
 
     @Override
     public void onClick(View v) {
+        if(v == backButton){
+            finish();
+            startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
+        }
+        if(v == contactButton){
+            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            myChats = (myChats + selectedTutor.getId().toString());
+            chatRoot.child("chatsWith").setValue(myChats);
+            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("users").child(selectedTutor.getId());
+            myChats2 = (myChats2 + FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
+            chatRoot2.child("chatsWith").setValue(myChats2);
+            Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
+            i.putExtra("tutorID", selectedTutor.getId());
 
- 
+            startActivity(i);
+        }
+        if(v == requestButton) {
+
+            Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
+
+
+            i.putExtra("tutor", selectedTutor);
+
+            startActivity(i);
+        }
     }
 
     @Override
@@ -208,6 +261,46 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             e.printStackTrace();
         }
     }
+
+    private class reviewAdapter extends ArrayAdapter<Review>  {
+
+        public reviewAdapter(){
+            super(SelectedTutorActivity.this, R.layout.reviewitem, revList);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.reviewitem, parent, false);
+            }
+            final Review currentRev = revList.get(position);
+
+            TextView name = (TextView) itemView.findViewById(R.id.revItemName);
+            TextView date = (TextView) itemView.findViewById(R.id.date);
+            TextView review = (TextView) itemView.findViewById(R.id.reviewText);
+            RatingBar rating = (RatingBar) itemView.findViewById(R.id.reviewScore);
+
+            name.setText(currentRev.getAuthor());
+
+            review.setText(currentRev.getText());
+
+            rating.setRating((float) currentRev.getRating());
+
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+
+
+    }
+
 /*
     private class myListAdapter extends ArrayAdapter<Availability> {
 

@@ -375,7 +375,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
-            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
             TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/revItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:text="TextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_below="@+id/revItemName"
+        android:layout_alignLeft="@+id/revItemName"
+        android:layout_alignStart="@+id/revItemName" />
+
+    <TextView
+        android:id="@+id/reviewText"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:text="TextView"
+        android:layout_below="@+id/date"
+        android:layout_alignLeft="@+id/date"
+        android:layout_alignStart="@+id/date" />
+
+    <RatingBar
+        android:id="@+id/reviewScore"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@+id/date"
+        android:layout_toRightOf="@+id/revItemName"
+        android:layout_toEndOf="@+id/revItemName"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp" />
+</RelativeLayout>
