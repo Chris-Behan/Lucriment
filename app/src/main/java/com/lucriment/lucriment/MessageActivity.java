@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +47,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         firebaseAuth = FirebaseAuth.getInstance();
         sendButton = (Button) findViewById(R.id.sentButton);
         messageField = (EditText) findViewById(R.id.messageField);
@@ -250,6 +252,13 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                         // Unable to send message.
                     }
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        startActivity(new Intent(MessageActivity.this, ViewMessagesActivity.class));
+        return true;
     }
 
     @Override

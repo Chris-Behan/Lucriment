@@ -1,9 +1,12 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +48,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+
       // databaseReference.child("subjects").setValue("");
         String name = user.getDisplayName();
         if(getIntent().hasExtra("userInfo"))
@@ -113,6 +119,39 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewProfileButton.setOnClickListener(this);
 
         logoutButton.setOnClickListener(this);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+
+                    case R.id.search:
+                        finish();
+                        startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
+                        ProfileActivity.this.overridePendingTransition(0,0);
+                        break;
+                    case R.id.sessions:
+                        Intent y = new Intent(ProfileActivity.this, SessionsActivity.class);
+                        y.putExtra("userType", userType);
+                        startActivity(y);
+                        ProfileActivity.this.overridePendingTransition(0,0);
+                        break;
+                    case R.id.inbox:
+                        finish();
+                        startActivity(new Intent(ProfileActivity.this, ViewMessagesActivity.class));
+                        ProfileActivity.this.overridePendingTransition(0,0);
+                        break;
+                    case R.id.profile:
+                        Intent i = new Intent(ProfileActivity.this, PersonalProfileActivity.class);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                        ProfileActivity.this.overridePendingTransition(0,0);
+                        break;
+
+                }
+                return false;
+            }
+
+        });
     }
 
     @Override

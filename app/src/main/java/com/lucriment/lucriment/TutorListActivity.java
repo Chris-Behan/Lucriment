@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,13 +47,14 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getTutors();
         registerTutorClicks();
         //initialize buttons
-        backButton = (Button) findViewById(R.id.backButton);
+
 
         //set onclick listener
-        backButton.setOnClickListener(this);
+
 
 
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -60,6 +62,13 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        startActivity(new Intent(TutorListActivity.this, ProfileActivity.class));
+        return true;
     }
 
 
@@ -103,10 +112,7 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
 
-        if(v == backButton){
-            finish();
-            startActivity(new Intent(TutorListActivity.this, ProfileActivity.class));
-        }
+
     }
 
 

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -77,6 +78,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demolayout);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         score = getIntent().getDoubleExtra("tutorScore",0);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -211,6 +213,13 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         ListView reviewList = (ListView) findViewById(R.id.reviewList);
         reviewList.setAdapter(revAdapter);
         scrollView.scrollTo(0,0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
+        return true;
     }
 
     @Override

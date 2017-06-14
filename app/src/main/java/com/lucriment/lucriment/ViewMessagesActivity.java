@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,6 +44,7 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("users")
@@ -78,13 +80,13 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
 
         tutorId = getIntent().getParcelableExtra("tutorID");
         chats = (ListView) findViewById(R.id.currentChats);
-        backButton = (Button) findViewById(R.id.backToProfile);
+
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if(getIntent().hasExtra("tutorID"))
             tutorId = getIntent().getExtras().get("tutorID").toString();
 
         arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfChats);
-        backButton.setOnClickListener(this);
+
 
         chats.setAdapter(arrayAdapter);
 
@@ -212,15 +214,17 @@ public class ViewMessagesActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        startActivity(new Intent(ViewMessagesActivity.this, ProfileActivity.class));
+        return true;
+    }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.backToProfile:
-                finish();
-                startActivity(new Intent(this, ProfileActivity.class));
-        }
+
 
     }
 }
