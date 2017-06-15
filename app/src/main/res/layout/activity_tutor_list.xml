@@ -41,20 +41,13 @@
             tools:layout_constraintTop_creator="1"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true" />
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottomNavView"
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/activity_base"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="start"
-            android:background="@drawable/cast_skip_ad_label_border"
-            app:menu="@menu/bottom_navigation_menu"
-            tools:layout_editor_absoluteX="8388922dp"
-            tools:layout_constraintTop_creator="1"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true">
-
-        </android.support.design.widget.BottomNavigationView>
+            />
 
 
     </RelativeLayout>

@@ -5,26 +5,31 @@
         android:id="@+id/search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"
+        android:checkable="true"
         />
     <item
         android:id="@+id/favourites"
         android:icon="@drawable/ic_favorite_black_24dp"
         android:title="Favourites"
+        android:checkable="true"
         />
     <item
         android:id="@+id/sessions"
         android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
         android:title="Sessions"
+        android:checkable="true"
         />
     <item
         android:id="@+id/inbox"
         android:icon="@drawable/ic_inbox_black_24dp"
         android:title="Inbox"
+        android:checkable="true"
         />
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:title="Profile"
+        android:checkable="true"
         />
 
 

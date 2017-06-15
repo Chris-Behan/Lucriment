@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -56,8 +57,13 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-      //  BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
-      //  BottomNavHelper.disableShiftMode(bottomNavigationView);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+      //  selectBottomNavigationBarItem(getNavigationMenuItemId());
+       // bottomNavigationView.setSelected(true);
+
+
 
       // databaseReference.child("subjects").setValue("");
         String name = user.getDisplayName();
@@ -166,6 +172,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         }); */
     }
 
+
     @Override
     int getContentViewId() {
         return R.layout.activity_profile;
@@ -174,6 +181,16 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     @Override
     int getNavigationMenuItemId() {
         return R.id.profile;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
     }
 
     @Override
@@ -214,4 +231,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         }
 
     }
+
+
 }

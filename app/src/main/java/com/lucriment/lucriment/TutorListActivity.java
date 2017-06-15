@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TutorListActivity extends AppCompatActivity implements View.OnClickListener {
+public class TutorListActivity extends BaseActivity implements View.OnClickListener {
     private DatabaseReference databaseReference;
     private Button backButton;
     public TutorInfo selectedTutor;
@@ -48,46 +48,13 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getTutors();
         registerTutorClicks();
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch(item.getItemId()){
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-                    case R.id.search:
-                        finish();
-                        startActivity(new Intent(TutorListActivity.this, TutorListActivity.class));
-                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                        break;
-                    case R.id.sessions:
-                        Intent y = new Intent(TutorListActivity.this, SessionsActivity.class);
-                     //   y.putExtra("userType", userType);
-                        startActivity(y);
-                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                        break;
-                    case R.id.inbox:
-                        finish();
-                        startActivity(new Intent(TutorListActivity.this, ViewMessagesActivity.class));
-                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                        break;
-                    case R.id.profile:
-                        Intent i = new Intent(TutorListActivity.this, ProfileActivity.class);
-                       // i.putExtra("userInfo", userInfo);
-                        startActivity(i);
-                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                        break;
-
-
-                }
-                return false;
-            }
-
-        });
-        //initialize buttons
 
 
         //set onclick listener
@@ -100,6 +67,27 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
 
 
     }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_tutor_list;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.search;
+    }
+
+    @Override
+    String getUserType() {
+        return null;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return null;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

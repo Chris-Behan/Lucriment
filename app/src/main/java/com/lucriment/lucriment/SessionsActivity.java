@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class SessionsActivity extends FragmentActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener
+public class SessionsActivity extends BaseActivity implements DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, View.OnClickListener
 , CancelDialogFragment.NoticeDialogListener{
 
     private ListView requestList;
@@ -69,6 +70,9 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
         userType = getIntent().getStringExtra("userType");
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);
@@ -76,7 +80,7 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         sessionRequestLabel = (TextView) findViewById(R.id.sessionRequestLabel);
         backButton = (Button) findViewById(R.id.backButton);
         //SET BUTTON LISTENERS
-        backButton.setOnClickListener(this);
+//        backButton.setOnClickListener(this);
         //GET SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -144,6 +148,29 @@ public class SessionsActivity extends FragmentActivity implements DeclineDialogF
         }
 
     }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_sessions;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.sessions;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+       // return userInfo;
+        return null;
+    }
+
+
     private void populatePastSessions(){
         adapter4 = new SessionsActivity.pastListAdapter();
         ListView pastList = (ListView) findViewById(R.id.pastList);

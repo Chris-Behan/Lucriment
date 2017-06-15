@@ -21,12 +21,15 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         setContentView(getContentViewId());
 
         navigationView = (BottomNavigationView) findViewById(R.id.navigation);
+       // BottomNavHelper.disableShiftMode(navigationView);
         navigationView.setOnNavigationItemSelectedListener(this);
+        updateNavigationBarState();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+      //  BottomNavHelper.disableShiftMode(navigationView);
         updateNavigationBarState();
     }
 
@@ -34,41 +37,40 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     @Override
     public void onPause() {
         super.onPause();
-        overridePendingTransition(0, 0);
+        BottomNavHelper.disableShiftMode(navigationView);
+        this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-
-            case R.id.search:
-                finish();
-                Intent a =(new Intent(this, TutorListActivity.class));
-              //  a.putExtra("userType", userType);
-             //   a.putExtra("userInfo", userInfo);
-                this.overridePendingTransition(R.anim.fade_in,0);
-                break;
-            case R.id.sessions:
-                Intent y = new Intent(this, SessionsActivity.class);
-             //   y.putExtra("userType", userType);
-                startActivity(y);
-                this.overridePendingTransition(0,0);
-                break;
-            case R.id.inbox:
-                finish();
-                startActivity(new Intent(this, ViewMessagesActivity.class));
-                this.overridePendingTransition(0,0);
-                break;
-            case R.id.profile:
-                Intent i = new Intent(this, PersonalProfileActivity.class);
-            //    i.putExtra("userInfo", userInfo);
-                startActivity(i);
-                this.overridePendingTransition(0,0);
-                break;
 
 
+            int itemId = item.getItemId();
+            if (itemId == R.id.search) {
+                startActivity(new Intent(this, TutorListActivity.class));
+                //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            }
+        if (itemId == R.id.profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         }
+
+        if (itemId == R.id.sessions) {
+            Intent y = new Intent(this, SessionsActivity.class);
+            y.putExtra("userType", getUserType());
+            startActivity(y);
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+        }
+        if (itemId == R.id.inbox) {
+            startActivity(new Intent(this, ViewMessagesActivity.class));
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+        }
+
+
+            finish();
+
         return true;
+
     }
 
     private void updateNavigationBarState(){
@@ -91,5 +93,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     abstract int getContentViewId();
 
     abstract int getNavigationMenuItemId();
+
+    abstract String getUserType();
+
+    abstract UserInfo getUserInformation();
 
 }
