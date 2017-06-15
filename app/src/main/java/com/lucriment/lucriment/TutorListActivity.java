@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -47,9 +48,45 @@ public class TutorListActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getTutors();
         registerTutorClicks();
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+
+                    case R.id.search:
+                        finish();
+                        startActivity(new Intent(TutorListActivity.this, TutorListActivity.class));
+                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                        break;
+                    case R.id.sessions:
+                        Intent y = new Intent(TutorListActivity.this, SessionsActivity.class);
+                     //   y.putExtra("userType", userType);
+                        startActivity(y);
+                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                        break;
+                    case R.id.inbox:
+                        finish();
+                        startActivity(new Intent(TutorListActivity.this, ViewMessagesActivity.class));
+                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                        break;
+                    case R.id.profile:
+                        Intent i = new Intent(TutorListActivity.this, ProfileActivity.class);
+                       // i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                        TutorListActivity.this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                        break;
+
+
+                }
+                return false;
+            }
+
+        });
         //initialize buttons
 
 

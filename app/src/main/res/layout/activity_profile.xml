@@ -6,42 +6,27 @@
     android:layout_height="match_parent"
     tools:context="com.lucriment.lucriment.ProfileActivity">
 
-    <LinearLayout
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintRight_toRightOf="parent"
-
-        tools:layout_constraintLeft_creator="1"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1.0"
-        android:orientation="vertical"
-        android:weightSum="1"
-
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Profile"
-            android:id="@+id/profileLabel"
-            android:layout_gravity="center_horizontal"/>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="440dp">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            tools:layout_constraintTop_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintBottom_creator="1"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="8dp"
+            tools:layout_constraintLeft_creator="1"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
 
             <Button
@@ -51,8 +36,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Logout"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_below="@+id/sessionsButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp" />
 
             <Button
                 android:id="@+id/browseButton1"
@@ -108,20 +94,29 @@
                 android:layout_alignLeft="@+id/scheduleButton"
                 android:layout_alignStart="@+id/scheduleButton" />
 
+            <TextView
+                android:id="@+id/profileLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:text="Profile"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <include
+                android:id="@+id/navigation"
+                layout="@layout/activity_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                />
+
 
         </RelativeLayout>
 
-        <android.support.design.widget.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:id="@+id/bottomNavView"
-            android:background="@drawable/cast_skip_ad_label_border"
-            app:menu="@menu/bottom_navigation_menu"
-            >
 
-        </android.support.design.widget.BottomNavigationView>
 
-    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

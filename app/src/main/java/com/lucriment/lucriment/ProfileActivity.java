@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private FirebaseAuth firebaseAuth;
     private TextView profileName;
@@ -44,12 +46,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Animation animFadein;
+        Animation animFadeout;
+        animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade_in);
+        animFadeout = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.fade_out);
         // initialize firebaseAuth
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
-        BottomNavHelper.disableShiftMode(bottomNavigationView);
+      //  BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView);
+      //  BottomNavHelper.disableShiftMode(bottomNavigationView);
 
       // databaseReference.child("subjects").setValue("");
         String name = user.getDisplayName();
@@ -119,6 +127,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         viewProfileButton.setOnClickListener(this);
 
         logoutButton.setOnClickListener(this);
+        /*
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -126,8 +135,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                     case R.id.search:
                         finish();
-                        startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
-                        ProfileActivity.this.overridePendingTransition(0,0);
+                        Intent a =(new Intent(ProfileActivity.this, TutorListActivity.class));
+                        a.putExtra("userType", userType);
+                        a.putExtra("userInfo", userInfo);
+                        ProfileActivity.this.overridePendingTransition(R.anim.fade_in,0);
                         break;
                     case R.id.sessions:
                         Intent y = new Intent(ProfileActivity.this, SessionsActivity.class);
@@ -147,11 +158,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         ProfileActivity.this.overridePendingTransition(0,0);
                         break;
 
+
                 }
                 return false;
             }
 
-        });
+        }); */
+    }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_profile;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.profile;
     }
 
     @Override
