@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,7 +46,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-public class SelectedTutorActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
+public class SelectedTutorActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
     private TutorInfo selectedTutor;
     private TextView tutorName;
     private TutorListActivity tutorListActivity;
@@ -74,17 +76,22 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     double score;
     private ScrollView scrollView;
     private String userType;
+    private MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demolayout);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         score = getIntent().getDoubleExtra("tutorScore",0);
         storageReference = FirebaseStorage.getInstance().getReference();
         tutorID = selectedTutor.getId();
         Rating rating = selectedTutor.getRating();
+
        scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.scrollTo(0,0);
         if(getIntent().hasExtra("userInfo")) {
@@ -194,9 +201,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         ratingBar.isIndicator();
         ratingBar.setRating((float) score);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
 
 
    //     backButton.setOnClickListener(this);
@@ -215,6 +220,27 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
       //  tutorName.setText();
 
     }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.demolayout;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.search;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
+    }
+
     private void  processReviews(){
         revAdapter = new SelectedTutorActivity.reviewAdapter();
         ListView reviewList = (ListView) findViewById(R.id.reviewList);
@@ -244,7 +270,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             chatRoot2.child("chatsWith").setValue(myChats2);
             Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
             i.putExtra("tutorID", selectedTutor.getId());
-
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
             startActivity(i);
         }
         if(v == requestButton) {
@@ -253,7 +280,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
 
             i.putExtra("tutor", selectedTutor);
-
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
             startActivity(i);
         }
     }

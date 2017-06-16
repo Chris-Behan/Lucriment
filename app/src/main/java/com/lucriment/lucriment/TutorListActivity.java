@@ -209,6 +209,8 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
                 Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", selectedTutor1);
                 i.putExtra("tutorScore",tutorScore);
+                i.putExtra("userType", userType);
+                i.putExtra("userInfo",userInfo);
                 startActivity(i);
 
             }

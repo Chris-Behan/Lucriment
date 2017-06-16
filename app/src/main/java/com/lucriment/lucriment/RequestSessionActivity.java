@@ -6,6 +6,7 @@ import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,7 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class RequestSessionActivity extends AppCompatActivity implements View.OnClickListener, SubjectSelectionDialog.NoticeDialogListener {
+public class RequestSessionActivity extends BaseActivity implements View.OnClickListener, SubjectSelectionDialog.NoticeDialogListener {
 
     private Availability selectedAvailability;
     private  SubjectSelectionDialog se = new SubjectSelectionDialog();
@@ -63,6 +64,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     private Button backButton;
     private double sessioncost;
     private String selectedTimeInterval;
+    private UserInfo userInfo;
+    private String userType;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
     TwoItemField field2 = new TwoItemField("Location", "Select");
@@ -72,9 +75,18 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_session);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         if(getIntent().hasExtra("subject"))
             subjectSelection = getIntent().getStringExtra("subject");
         if(getIntent().hasExtra("location"))
@@ -151,6 +163,25 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
 
     }
 
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_request_session;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.search;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
+    }
 
 
     private void populateItemList(){
@@ -323,6 +354,8 @@ public class RequestSessionActivity extends AppCompatActivity implements View.On
                     i.putExtra("tutor", tutor);
                     i.putExtra("location", selectedLocation);
                     i.putExtra("subject",subjectSelection);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
                     startActivity(i);
                 }
 

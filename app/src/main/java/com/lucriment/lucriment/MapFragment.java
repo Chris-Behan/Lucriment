@@ -12,6 +12,7 @@ import android.view.ViewGroup;
  */
 
 public class MapFragment extends Fragment  {
+    private static View view;
     public MapFragment(){
 
     }

@@ -215,15 +215,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textStyle="bold" />
 
-                <fragment
-                    android:id="@+id/map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textView4"
-                    tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
 
             </RelativeLayout>
         </TableRow>
@@ -283,6 +275,7 @@
         android:text="Request this tutor"
         android:textAllCaps="false"
         android:padding="0dp"
+        android:layout_marginBottom="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -298,4 +291,12 @@
         android:layout_above="@+id/requestButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/activity_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+
 </RelativeLayout>

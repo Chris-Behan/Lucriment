@@ -7,6 +7,7 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-public class TimePickerActivity extends AppCompatActivity  {
+public class TimePickerActivity extends BaseActivity  {
     private CalendarView cv;
     private ArrayList<Availability> avaList = new ArrayList<>();
     private ArrayList<Availability> todaysAvailability = new ArrayList<>();
@@ -51,16 +52,28 @@ public class TimePickerActivity extends AppCompatActivity  {
     private String selectedLocation;
     private boolean timeState = true;
     private Date fromdate, todate;
+    private UserInfo userInfo;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_time_picker);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
+
         if(getIntent().hasExtra("subject")){
             selectedSubject = getIntent().getStringExtra("subject");
         }
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
-        setContentView(R.layout.activity_time_picker);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
         cv = (CalendarView) findViewById(R.id.calendarViewx);
         tutor = getIntent().getParcelableExtra("tutor");
         gridView = (GridView) findViewById(R.id.timeGrid);
@@ -153,6 +166,8 @@ public class TimePickerActivity extends AppCompatActivity  {
                         i.putExtra("tutor",tutor);
                         i.putExtra("location", selectedLocation);
                         i.putExtra("subject",selectedSubject);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo",userInfo);
                         startActivity(i);
 
                     }
@@ -161,6 +176,26 @@ public class TimePickerActivity extends AppCompatActivity  {
 
 
 
+    }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_time_picker;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.search;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
     }
 
     @TargetApi(Build.VERSION_CODES.N)

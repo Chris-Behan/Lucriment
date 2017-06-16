@@ -9,12 +9,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -74,12 +69,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Request"
-            android:layout_alignParentBottom="true"
+            android:layout_marginRight="21dp"
+            android:layout_marginEnd="21dp"
+            android:layout_below="@+id/sessionInfoList"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="19dp"
-            android:layout_marginEnd="19dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -87,10 +81,10 @@
             android:id="@+id/costView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/requestButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="12dp"
-            android:text="Cost" />
+            android:text="Cost"
+            android:layout_alignBaseline="@+id/textView7"
+            android:layout_alignBottom="@+id/textView7"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -98,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Session Cost:"
-            android:layout_alignBottom="@+id/costView"
+            android:layout_alignTop="@+id/requestButton"
             android:layout_toLeftOf="@+id/costView"
             android:layout_toStartOf="@+id/costView" />
 
@@ -111,6 +105,14 @@
             android:layout_alignBottom="@+id/textView5"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/activity_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
