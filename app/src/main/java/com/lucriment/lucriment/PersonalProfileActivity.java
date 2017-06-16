@@ -76,6 +76,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
     private String[] subjectArray;
     private ArrayList<String> subjectsTaught = new ArrayList<>();
     private  ArrayAdapter<String> adapter;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,35 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
                 userInfo = getIntent().getParcelableExtra("userInfo");
             }
         }
+
+        DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();
+        databaseReference3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot studentSnap = dataSnapshot.child("users");
+                DataSnapshot tutorSnap = dataSnapshot.child("tutors");
+                FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                if( studentSnap.hasChild(thisUser.getUid())){
+                    for(DataSnapshot userSnapShot: studentSnap.getChildren()){
+                        if(userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
+                            userInfo = userSnapShot.getValue(UserInfo.class);
+                            userType = userInfo.getUserType();
+                        }
+                    }
+                } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    userType = userInfo.getUserType();
+                }else{
+                    finish();
+                    startActivity(new Intent(PersonalProfileActivity.this, CreationActivity.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -174,8 +204,9 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         }
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
-        educationField.setText(userInfo.getTitle());
-
+        if(userInfo!=null) {
+            educationField.setText(userInfo.getTitle());
+        }
 
    //     if(userInfo.getProfileImage()!= null) {
          //  Picasso.with(PersonalProfileActivity.this).load("https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=d18e97f6-3087-4858-9260-ff9694cc6bf7").fit().centerCrop().into(imageView);

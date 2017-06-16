@@ -42,7 +42,8 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
     public TutorInfo selectedTutor;
     private StorageReference storageReference;
     private double tutorScore;
-
+    private UserInfo userInfo;
+    private String userType;
     private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,12 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
         registerTutorClicks();
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
 
         //set onclick listener
 
@@ -80,12 +86,12 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     String getUserType() {
-        return null;
+        return userType;
     }
 
     @Override
     UserInfo getUserInformation() {
-        return null;
+        return userInfo;
     }
 
 

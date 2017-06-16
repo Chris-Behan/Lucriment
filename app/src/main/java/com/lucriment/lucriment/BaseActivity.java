@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public void onPause() {
         super.onPause();
         BottomNavHelper.disableShiftMode(navigationView);
-        this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+        this.overridePendingTransition(0,R.anim.fade_out);
     }
 
     @Override
@@ -47,23 +47,30 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
             int itemId = item.getItemId();
             if (itemId == R.id.search) {
-                startActivity(new Intent(this, TutorListActivity.class));
-                //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                Intent y = new Intent(this, TutorListActivity.class);
+                y.putExtra("userType", getUserType());
+                y.putExtra("userInfo",getUserInformation());
+                startActivity(y);
             }
         if (itemId == R.id.profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            Intent y = new Intent(this, PersonalProfileActivity.class);
+            y.putExtra("userType", getUserType());
+            y.putExtra("userInfo",getUserInformation());
+            startActivity(y);
         }
 
         if (itemId == R.id.sessions) {
             Intent y = new Intent(this, SessionsActivity.class);
             y.putExtra("userType", getUserType());
+            y.putExtra("userInfo",getUserInformation());
             startActivity(y);
             //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         }
         if (itemId == R.id.inbox) {
-            startActivity(new Intent(this, ViewMessagesActivity.class));
-            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            Intent y = new Intent(this, ViewMessagesActivity.class);
+            y.putExtra("userType", getUserType());
+            y.putExtra("userInfo",getUserInformation());
+            startActivity(y);
         }
 
 

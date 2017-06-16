@@ -73,6 +73,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private ArrayAdapter<Review> revAdapter;
     double score;
     private ScrollView scrollView;
+    private String userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         Rating rating = selectedTutor.getRating();
        scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.scrollTo(0,0);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
 
 
         DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("subjects");
