@@ -235,7 +235,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
 
-
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
             i.putExtra("selectedTutor", tutor);
 
             startActivity(i);
@@ -245,7 +246,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
            // startActivity(new Intent(this, ProfileActivity.class));
             Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
 
-
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
             i.putExtra("selectedTutor", tutor);
 
             startActivity(i);

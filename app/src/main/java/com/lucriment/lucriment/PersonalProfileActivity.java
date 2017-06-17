@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +44,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PersonalProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class PersonalProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView personalName;
     private TutorListActivity tutorListActivity;
@@ -88,10 +89,14 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         databaseReference2 = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
-        if(userInfo == null) {
-            if (getIntent().hasExtra("userInfo")) {
-                userInfo = getIntent().getParcelableExtra("userInfo");
-            }
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
         }
 
         DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();
@@ -171,7 +176,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
         // initialize buttons and fields
         personalName = (TextView) findViewById(R.id.tutorName);
-        backButton = (Button) findViewById(R.id.backButton);
+
         educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
         bioField = (TextView) findViewById(R.id.tutorBioField);
         editBioText = (EditText) findViewById(R.id.editBioField);
@@ -192,7 +197,7 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
 
         addClassButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
-        backButton.setOnClickListener(this);
+
         uploadButton.setOnClickListener(this);
         if(userInfo!= null) {
             if(userInfo.getUserType().equals("Tutor")){
@@ -215,6 +220,27 @@ public class PersonalProfileActivity extends AppCompatActivity implements View.O
         //  tutorName.setText();
 
     }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_personal_profile;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.profile;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
+    }
+
     //get Tutor info
     private void getTutorInfo(){
       DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();

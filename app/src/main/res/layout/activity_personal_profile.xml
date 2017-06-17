@@ -9,14 +9,8 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -51,82 +45,71 @@
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_alignBottom="@+id/backButton"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginEnd="13dp"
-            android:layout_marginRight="13dp"
             android:allowUndo="false"
             android:autoText="false"
             android:maxHeight="20dp"
-            android:text="Edit" />
+            android:text="Edit"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:id="@+id/educationLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/uploadPhoto"
             android:layout_marginTop="15dp"
             android:text="Title:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/uploadPhoto"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/decriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/educationLabel"
             android:layout_marginTop="37dp"
             android:text="About:"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/educationLabel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/tutorEducationFIeld"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textAlignment="center"
             android:layout_above="@+id/decriptionLabel"
-            android:layout_toRightOf="@+id/decriptionLabel"
+            android:layout_alignEnd="@+id/editButton"
             android:layout_alignRight="@+id/editButton"
-            android:layout_alignEnd="@+id/editButton" />
+            android:layout_toRightOf="@+id/decriptionLabel"
+            android:text="TextView"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/tutorBioField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="300dp"
-            android:maxHeight="70dp"
-            android:textAlignment="center"
-            android:text="TextView"
             android:layout_alignBaseline="@+id/decriptionLabel"
             android:layout_alignBottom="@+id/decriptionLabel"
-            android:layout_toRightOf="@+id/decriptionLabel"
+            android:layout_alignEnd="@+id/tutorEducationFIeld"
             android:layout_alignRight="@+id/tutorEducationFIeld"
-            android:layout_alignEnd="@+id/tutorEducationFIeld" />
+            android:layout_toRightOf="@+id/decriptionLabel"
+            android:maxHeight="70dp"
+            android:maxWidth="300dp"
+            android:text="TextView"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/editBioField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="say something about yourself"
-            android:visibility="invisible"
             android:layout_alignBaseline="@+id/decriptionLabel"
             android:layout_alignBottom="@+id/decriptionLabel"
+            android:layout_toEndOf="@+id/backButton"
             android:layout_toRightOf="@+id/backButton"
-            android:layout_toEndOf="@+id/backButton" />
+            android:hint="say something about yourself"
+            android:visibility="invisible" />
 
 
         <Button
@@ -138,15 +121,15 @@
             android:text="upload" />
 
         <TextView
-        android:id="@+id/subjectsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/decriptionLabel"
-        android:layout_alignStart="@+id/decriptionLabel"
-        android:layout_below="@+id/editBioField"
-        android:layout_marginTop="20dp"
-        android:text="Subjects Taught:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/subjectsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/decriptionLabel"
+            android:layout_alignStart="@+id/decriptionLabel"
+            android:layout_below="@+id/editBioField"
+            android:layout_marginTop="20dp"
+            android:text="Subjects Taught:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/subjectSpinner"
@@ -155,9 +138,9 @@
             android:layout_alignEnd="@+id/editButton"
             android:layout_alignRight="@+id/editButton"
             android:layout_below="@+id/addClassButton"
-            android:visibility="invisible"
+            android:layout_toEndOf="@+id/subjectsLabel"
             android:layout_toRightOf="@+id/subjectsLabel"
-            android:layout_toEndOf="@+id/subjectsLabel" />
+            android:visibility="invisible" />
 
         <Spinner
             android:id="@+id/classSpinner"
@@ -166,9 +149,9 @@
             android:layout_alignEnd="@+id/subjectSpinner"
             android:layout_alignRight="@+id/subjectSpinner"
             android:layout_below="@+id/subjectSpinner"
-            android:visibility="invisible"
+            android:layout_toEndOf="@+id/taughtlist"
             android:layout_toRightOf="@+id/taughtlist"
-            android:layout_toEndOf="@+id/taughtlist" />
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/addClassButton"
@@ -184,12 +167,19 @@
             android:id="@+id/taughtlist"
             android:layout_width="170dp"
             android:layout_height="100dp"
-            android:layout_alignTop="@+id/subjectSpinner"
+            android:layout_alignEnd="@+id/subjectsLabel"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
 
             android:layout_alignRight="@+id/subjectsLabel"
-            android:layout_alignEnd="@+id/subjectsLabel" />
+            android:layout_alignTop="@+id/subjectSpinner" />
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/activity_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
 
     </RelativeLayout>
 

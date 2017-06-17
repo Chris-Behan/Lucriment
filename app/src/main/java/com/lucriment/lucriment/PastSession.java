@@ -1,10 +1,13 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +26,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class PastSession extends AppCompatActivity implements View.OnClickListener {
+public class PastSession extends BaseActivity implements View.OnClickListener {
 
     private TimeInterval ti;
     private TextView subjectWithField, sessionLengthField, dateField, locationField,reviewText;
@@ -45,11 +48,15 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
     private String userType;
     private Rating currentRating;
     private ArrayList<Review> reviews = new ArrayList<>();
+    private UserInfo userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_session);
-
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //INITIALIZE WIDGETS
         subjectWithField = (TextView) findViewById(R.id.subjectWithField);
         sessionLengthField = (TextView) findViewById(R.id.sessionLengthField);
@@ -61,6 +68,9 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         reviewBar = (RatingBar) findViewById(R.id.reviewScore);
         reviewText = (TextView) findViewById(R.id.reviewText);
         //GET INTENTS
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
@@ -95,11 +105,12 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
             if (studentReview == null) {
                 reviewButton.setVisibility(View.VISIBLE);
             }else{
+                if(tutorReview!=null){
                 reviewBar.isIndicator();
                 reviewBar.setVisibility(View.VISIBLE);
                 reviewBar.setRating((float) tutorReview.getRating());
                 reviewText.setVisibility(View.VISIBLE);
-                reviewText.setText(tutorReview.getText());}
+                reviewText.setText(tutorReview.getText());}}
         }else{
             if(tutorReview==null){
                 reviewButton.setVisibility(View.VISIBLE);
@@ -131,6 +142,36 @@ public class PastSession extends AppCompatActivity implements View.OnClickListen
         });
 
     }
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent y = new Intent(PastSession.this, SessionsActivity.class);
+        y.putExtra("userType", userType);
+        y.putExtra("userInfo",userInfo);
+        startActivity(y);
+        finish();
+        return true;
+    }
+
+    @Override
+    int getContentViewId() {
+       return R.layout.activity_past_session;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.sessions;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
+    }
+
     //GET CURRENT SESSION
     private void processSessions(){
         for(SessionRequest s:allSessions){

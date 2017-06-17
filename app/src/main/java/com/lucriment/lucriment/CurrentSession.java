@@ -1,9 +1,11 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,16 +31,25 @@ public class CurrentSession extends AppCompatActivity implements OnMapReadyCallb
     private String subjectWith, subject;
     private MapView map;
     private GoogleMap gMap;
+    private String userType;
+    private UserInfo userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_session);
         //INITIALIZE WIDGETS
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         subjectWithField = (TextView) findViewById(R.id.subjectWithField);
         sessionLengthField = (TextView) findViewById(R.id.sessionLengthField);
         dateField = (TextView) findViewById(R.id.dateField);
         locationField = (TextView) findViewById(R.id.locationField);
         //GET INTENTS
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         if(getIntent().hasExtra("time")){
             ti = getIntent().getParcelableExtra("time");
         }
@@ -62,6 +73,15 @@ public class CurrentSession extends AppCompatActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent y = new Intent(CurrentSession.this, SessionsActivity.class);
+        y.putExtra("userType", userType);
+        y.putExtra("userInfo",userInfo);
+        startActivity(y);
+        finish();
+        return true;
     }
 
     @Override

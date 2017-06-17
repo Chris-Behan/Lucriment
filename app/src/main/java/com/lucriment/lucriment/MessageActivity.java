@@ -42,12 +42,20 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private String sender;
     private String receiver;
     private FirebaseAuth firebaseAuth;
+    private String userType;
+    private UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         firebaseAuth = FirebaseAuth.getInstance();
         sendButton = (Button) findViewById(R.id.sentButton);
         messageField = (EditText) findViewById(R.id.messageField);
@@ -256,8 +264,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent y = new Intent(MessageActivity.this, ViewMessagesActivity.class);
+        y.putExtra("userType", userType);
+        y.putExtra("userInfo",userInfo);
+        startActivity(y);
         finish();
-        startActivity(new Intent(MessageActivity.this, ViewMessagesActivity.class));
         return true;
     }
 

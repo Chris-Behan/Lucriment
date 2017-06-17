@@ -1,11 +1,14 @@
 package com.lucriment.lucriment;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.location.Geocoder;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.identity.intents.Address;
@@ -30,6 +33,8 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
     private String subject;
     private MapView map;
     private GoogleMap gMap;
+    private String userType;
+    private UserInfo userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +43,16 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         location = (TextView) findViewById(R.id.location);
         classLabel = (TextView) findViewById(R.id.classtitle);
         timeInterval = (TextView) findViewById(R.id.time);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
        // ActionBar actionBar = getActionBar();
        // actionBar.setDisplayHomeAsUpEnabled(true);
 //        map = (MapView) findViewById(R.id.mapFragment);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         if(getIntent().hasExtra("time")){
             ti = getIntent().getParcelableExtra("time");
         }
@@ -63,6 +75,18 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
 
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent y = new Intent(SessionDetails.this, SessionsActivity.class);
+        y.putExtra("userType", userType);
+        y.putExtra("userInfo",userInfo);
+        startActivity(y);
+        finish();
+        return true;
+    }
+
 
 
     @Override

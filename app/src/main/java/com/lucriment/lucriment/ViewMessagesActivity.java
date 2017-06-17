@@ -41,6 +41,8 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
     private List<Chat> chatList = new ArrayList<>();
+    private UserInfo userInfo;
+    private String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,12 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("users")
@@ -148,12 +156,12 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     String getUserType() {
-        return null;
+        return userType;
     }
 
     @Override
     UserInfo getUserInformation() {
-        return null;
+        return userInfo;
     }
 
 
@@ -200,6 +208,8 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                 //       myID = tutorId;
                 //  }
                 intent.putExtra("user", selectedUser);
+                intent.putExtra("userType", userType);
+                intent.putExtra("userInfo",userInfo);
                 // intent.putExtra("userName", userName);
                 startActivity(intent);
             }

@@ -145,6 +145,8 @@
                 android:layout_height="300dp"
                 tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
         </TableRow>
+
     </TableLayout>
+
 
 </android.support.constraint.ConstraintLayout>

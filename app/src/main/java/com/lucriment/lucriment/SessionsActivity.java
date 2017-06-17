@@ -561,6 +561,8 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 i.putExtra("time",selectedSession.getTime());
                 i.putExtra("location", selectedSession.getLocation());
                 i.putExtra("subject",selectedSession.getSubject());
+                i.putExtra("userType",userType);
+                i.putExtra("userInfo",userInfo);
               //  i.putExtra("selectedTutor", selectedTutor1);
 
                 startActivity(i);
@@ -578,6 +580,9 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 y.putExtra("time",currSession.getTime());
                 y.putExtra("location", currSession.getLocation());
                 y.putExtra("subject",currSession.getSubject());
+                y.putExtra("userType",userType);
+                y.putExtra("userInfo",userInfo);
+
                 startActivity(y);
 
             }
@@ -596,6 +601,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                     y.putExtra("name", pastSession.getTutorName());
                 }
                 y.putExtra("userType",userType);
+                y.putExtra("userInfo",userInfo);
                 y.putExtra("sessionID",sessionID);
                 y.putExtra("time",pastSession.getTime());
                 y.putExtra("location", pastSession.getLocation());
