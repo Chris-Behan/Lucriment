@@ -8,6 +8,8 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -79,6 +81,12 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
 
         //initialize buttons
         requestList = (ListView) findViewById(R.id.requestList);

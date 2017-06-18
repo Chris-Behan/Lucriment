@@ -45,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
 
+
             int itemId = item.getItemId();
             if (itemId == R.id.search) {
                 Intent y = new Intent(this, TutorListActivity.class);
@@ -92,15 +93,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         selectBottomNavigationBarItem(actionId);
     }
 
-    void selectBottomNavigationBarItem(int itemId) {
+    private void selectBottomNavigationBarItem(int itemId) {
         Menu menu = navigationView.getMenu();
         for (int i = 0, size = menu.size(); i < size; i++) {
             MenuItem item = menu.getItem(i);
-            boolean shouldBeChecked = item.getItemId() == itemId;
-            if (shouldBeChecked) {
-                item.setChecked(true);
-                break;
-            }
+           item.setChecked(false);
         }
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,6 +52,12 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -151,7 +158,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     int getNavigationMenuItemId() {
-        return R.id.profile;
+        return R.id.inbox;
     }
 
     @Override

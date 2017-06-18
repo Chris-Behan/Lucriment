@@ -11,6 +11,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -78,6 +80,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
     private ArrayList<String> subjectsTaught = new ArrayList<>();
     private  ArrayAdapter<String> adapter;
     private String userType;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +92,18 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
         databaseReference2 = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
+
+
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -221,6 +233,15 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
     }
 
+    /*
+    private void updateNavigationBarState(int actionId){
+        Menu menu = bottomNavigationView.getMenu();
+
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(item.getItemId() == actionId);
+        }
+    } */
     @Override
     int getContentViewId() {
         return R.layout.activity_personal_profile;

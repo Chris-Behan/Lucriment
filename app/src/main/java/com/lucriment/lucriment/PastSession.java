@@ -7,6 +7,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,12 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //INITIALIZE WIDGETS
         subjectWithField = (TextView) findViewById(R.id.subjectWithField);

@@ -60,7 +60,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         sendButton = (Button) findViewById(R.id.sentButton);
         messageField = (EditText) findViewById(R.id.messageField);
         conversation = (TextView) findViewById(R.id.convo);
-        backButton = (Button) findViewById(R.id.prevButton);
+
         UserInfo tutor = getIntent().getParcelableExtra("user");
             sender = firebaseAuth.getCurrentUser().getDisplayName();
             receiver = tutor.getFullName();
@@ -78,7 +78,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
        // setTitle(chatID);
 
-        backButton.setOnClickListener(this);
+
         sendButton.setOnClickListener(this);
 /*
         root.addChildEventListener(new ChildEventListener() {
@@ -301,9 +301,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                 messageField.setText("");
                 */
                 break;
-            case R.id.prevButton:
-                finish();
-                startActivity(new Intent(MessageActivity.this, ViewMessagesActivity.class));
+
 
 
         }
