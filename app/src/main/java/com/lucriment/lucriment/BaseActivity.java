@@ -74,7 +74,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             startActivity(y);
         }
         if(itemId == R.id.favourites){
-            Intent y = new Intent(this, TutorListActivity.class);
+            Intent y = new Intent(this, Favourites.class);
             y.putExtra("userType", getUserType());
             y.putExtra("userInfo",getUserInformation());
             startActivity(y);

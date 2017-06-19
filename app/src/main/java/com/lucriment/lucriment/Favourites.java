@@ -1,88 +1,70 @@
 package com.lucriment.lucriment;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class TutorListActivity extends BaseActivity implements View.OnClickListener {
+public class Favourites extends BaseActivity {
+    //INITIALIZE VARIABLES
     private DatabaseReference databaseReference;
-    private Button backButton;
-    public TutorInfo selectedTutor;
     private StorageReference storageReference;
-    private double tutorScore;
-    private UserInfo userInfo;
+    private List<String> favourites = new ArrayList<String>();
     private String userType;
-    private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
-
+    private UserInfo userInfo;
+    private ArrayList<TutorInfo> tutors = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutor_list);
+        setContentView(R.layout.activity_favourites);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getTutors();
-        registerTutorClicks();
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
+        //GET INTENTS
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
 
-        //set onclick listener
-
-
-
-        storageReference = FirebaseStorage.getInstance().getReference();
-        //tutors.add(new TutorInfo("joe", "rob", "biull", "pete", 5));
-
+        getFavourites();
 
 
     }
 
     @Override
     int getContentViewId() {
-        return R.layout.activity_tutor_list;
+        return R.layout.activity_favourites;
     }
 
     @Override
     int getNavigationMenuItemId() {
-        return R.id.search;
+        return R.id.favourites;
     }
 
     @Override
@@ -95,29 +77,18 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
         return userInfo;
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
-        startActivity(new Intent(TutorListActivity.this, ProfileActivity.class));
-        return true;
-    }
-
-
-
-
-    private void getTutors(){
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    //GET LIST OF FAVOURITES TUTORS
+    private void getFavourites(){
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("favourites");
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
-                    TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
-                    tutors.add(tutor);
+                favourites.clear();
+                for(DataSnapshot t :dataSnapshot.getChildren()){
+                    String favourite = t.getValue(String.class);
+                    favourites.add(favourite);
                 }
-                populateTutorList();
-               // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
-              //  populateTutorList(tNames);
+                getTutors();
             }
 
             @Override
@@ -125,40 +96,41 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
-
     }
+    //GET LIST OF FAVOURITE TUTORS
+    private void getTutors(){
+        DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("tutors");
+        tutorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot t: dataSnapshot.getChildren()){
+                    TutorInfo currentTutor = t.getValue(TutorInfo.class);
 
-    private void populateTutorList(){
-      //  populateTutorList();
-        ArrayAdapter<TutorInfo> adapter = new myListAdapter();
-        ListView list = (ListView) findViewById(R.id.tView);
-        list.setAdapter(adapter);
-        //adapter.getView();
+                    if(favourites.contains(currentTutor.getId())){
+                        tutors.add(currentTutor);
+                    }
 
+                }
+                populateTutorList();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
-
-    public TutorInfo getTutor(){
-        return selectedTutor;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-
-    }
-
-
 
     private class myListAdapter extends ArrayAdapter<TutorInfo> {
 
         public myListAdapter(){
-            super(TutorListActivity.this, R.layout.tutor_profile_layout, tutors);
+            super(Favourites.this, R.layout.tutor_profile_layout, tutors);
         }
 
 
-       // @NonNull
+        // @NonNull
         @Override
-        public View getView(int position,  View convertView,  ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
             // make sure we have a view to work with
             if(itemView == null){
@@ -194,29 +166,12 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
             // return super.getView(position, convertView, parent);
         }
     }
-
-    private void registerTutorClicks() {
+    //POPULATE TUTOR LIST
+    private void populateTutorList(){
+        ArrayAdapter<TutorInfo> adapter = new Favourites.myListAdapter();
         ListView list = (ListView) findViewById(R.id.tView);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TutorInfo selectedTutor1 = tutors.get(position);
-                Rating tutorRating = selectedTutor1.getRating();
-                if(tutorRating!=null) {
-                     tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
+        list.setAdapter(adapter);
 
-                }
-               // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
-                i.putExtra("selectedTutor", selectedTutor1);
-                i.putExtra("tutorScore",tutorScore);
-                i.putExtra("userType", userType);
-                i.putExtra("userInfo",userInfo);
-                startActivity(i);
-
-            }
-        });
 
     }
-
 }

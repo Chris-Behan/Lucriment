@@ -1,6 +1,8 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
@@ -77,6 +79,9 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
     private ScrollView scrollView;
     private String userType;
     private MapView mapView;
+    private Button bookMarkButton;
+    private ArrayList<String> favourites = new ArrayList<>();
+    private boolean favourited = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,24 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+
+        DatabaseReference favouriteRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("favourites");
+        favouriteRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                favourites.clear();
+                for(DataSnapshot f: dataSnapshot.getChildren()){
+                    String tutorID = f.getValue(String.class);
+                    favourites.add(tutorID);
+                }
+                favouriteButtonState();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("subjects");
@@ -191,6 +214,7 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         classesField = (TextView) findViewById(R.id.classesField);
         requestButton = (Button) findViewById(R.id.requestButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
+        bookMarkButton = (Button) findViewById(R.id.bookMark);
 
        // selectedTutor = TutorListActivity.getTutor();
         
@@ -207,6 +231,7 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
    //     backButton.setOnClickListener(this);
         contactButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
+        bookMarkButton.setOnClickListener(this);
         new DownloadImageTask(imageView)
                 .execute(selectedTutor.getProfileImage());
        /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
@@ -218,6 +243,20 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         }); */
         //setup buttons and fields
       //  tutorName.setText();
+
+    }
+    //HANDLE STATE OF FAVOURITED BUTTON
+    private void favouriteButtonState(){
+        if(favourites.contains(selectedTutor.getId())){
+            favourited = true;
+            bookMarkButton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
+            bookMarkButton.setSelected(true);
+
+        }else{
+            favourited = false;
+            bookMarkButton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
+            bookMarkButton.setSelected(false);
+        }
 
     }
 
@@ -283,6 +322,25 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
             i.putExtra("userType", userType);
             i.putExtra("userInfo",userInfo);
             startActivity(i);
+        }
+        if(v == bookMarkButton){
+            if(!favourited) {
+                favourites.add(selectedTutor.getId());
+                DatabaseReference favouritesRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("favourites");
+                favouritesRoot.setValue(favourites);
+                bookMarkButton.setSelected(true);
+                bookMarkButton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
+                favourited = true;
+
+            }else{
+                favourites.remove(selectedTutor.getId());
+                DatabaseReference favouritesRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("favourites");
+                favouritesRoot.setValue(favourites);
+                bookMarkButton.setSelected(false);
+                bookMarkButton.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
+                favourited = false;
+
+            }
         }
     }
 

@@ -76,7 +76,8 @@
         <activity android:name=".SessionDetails" />
         <activity android:name=".CurrentSession" />
         <activity android:name=".PastSession" />
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".Favourites"></activity>
     </application>
 
 </manifest>

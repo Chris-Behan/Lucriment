@@ -181,7 +181,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
     @Override
     UserInfo getUserInformation() {
        // return userInfo;
-        return null;
+        return userInfo;
     }
 
 
