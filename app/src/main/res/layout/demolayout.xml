@@ -225,7 +225,16 @@
                     android:text="Location"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textStyle="bold" />
-
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    tools:context="com.example.mapwithmarker.MapsMarkerActivity"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
 
 
             </RelativeLayout>
@@ -308,7 +317,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        />
+        tools:layout_editor_absoluteY="459dp"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 

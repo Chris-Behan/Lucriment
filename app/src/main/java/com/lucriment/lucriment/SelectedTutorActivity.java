@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-public class SelectedTutorActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
+public class SelectedTutorActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
     private TutorInfo selectedTutor;
     private TextView tutorName;
     private TutorListActivity tutorListActivity;
@@ -87,9 +88,7 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demolayout);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavHelper.disableShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedTutor = getIntent().getParcelableExtra("selectedTutor");
         score = getIntent().getDoubleExtra("tutorScore",0);
@@ -105,6 +104,51 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.search) {
+                    Intent y = new Intent(SelectedTutorActivity.this, TutorListActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+                if (itemId == R.id.profile) {
+                    Intent y = new Intent(SelectedTutorActivity.this, PersonalProfileActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+
+                if (itemId == R.id.sessions) {
+                    Intent y = new Intent(SelectedTutorActivity.this, SessionsActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                    //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                }
+                if (itemId == R.id.inbox) {
+                    Intent y = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+                if(itemId == R.id.favourites){
+                    Intent y = new Intent(SelectedTutorActivity.this, Favourites.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+
+                }
+
+
+                finish();
+                return false;
+            }
+        });
 
         DatabaseReference favouriteRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("favourites");
         favouriteRoot.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -225,6 +269,9 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         ratingBar.isIndicator();
         ratingBar.setRating((float) score);
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
 
 
@@ -259,7 +306,7 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
         }
 
     }
-
+/*
     @Override
     int getContentViewId() {
         return R.layout.demolayout;
@@ -279,7 +326,7 @@ public class SelectedTutorActivity extends BaseActivity implements View.OnClickL
     UserInfo getUserInformation() {
         return userInfo;
     }
-
+*/
     private void  processReviews(){
         revAdapter = new SelectedTutorActivity.reviewAdapter();
         ListView reviewList = (ListView) findViewById(R.id.reviewList);
