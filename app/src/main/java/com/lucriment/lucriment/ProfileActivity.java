@@ -99,6 +99,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                     finish();
                     startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
                 }
+                initializeButtons();
             }
 
             @Override
@@ -113,26 +114,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         //FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
-        profileName = (TextView) findViewById(R.id.profileLabel);
-        if(firebaseAuth.getCurrentUser().getDisplayName() == null){
-            profileName.setText("Welcome " );
-        }else {
-            profileName.setText("Welcome " + user.getDisplayName());
-        }
-        logoutButton = (Button) findViewById(R.id.logoutButton);
-        browseButton = (Button)findViewById(R.id.browseButton1);
-        viewMessagesButton = (Button) findViewById(R.id.viewMessagesButton);
-        viewProfileButton = (Button) findViewById(R.id.viewProfile);
-        ScheduleButton = (Button) findViewById(R.id.scheduleButton);
-        SessionsButton = (Button) findViewById(R.id.sessionsButton);
 
-        SessionsButton.setOnClickListener(this);
-        ScheduleButton.setOnClickListener(this);
-        viewMessagesButton.setOnClickListener(this);
-        browseButton.setOnClickListener(this);
-        viewProfileButton.setOnClickListener(this);
-
-        logoutButton.setOnClickListener(this);
         /*
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -170,6 +152,28 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
             }
 
         }); */
+    }
+    private void initializeButtons(){
+        profileName = (TextView) findViewById(R.id.profileLabel);
+        if(firebaseAuth.getCurrentUser().getDisplayName() == null){
+            profileName.setText("Welcome " );
+        }else {
+            profileName.setText("Welcome " + userInfo.getFirstName());
+        }
+        logoutButton = (Button) findViewById(R.id.logoutButton);
+        browseButton = (Button)findViewById(R.id.browseButton1);
+        viewMessagesButton = (Button) findViewById(R.id.viewMessagesButton);
+        viewProfileButton = (Button) findViewById(R.id.viewProfile);
+        ScheduleButton = (Button) findViewById(R.id.scheduleButton);
+        SessionsButton = (Button) findViewById(R.id.sessionsButton);
+
+        SessionsButton.setOnClickListener(this);
+        ScheduleButton.setOnClickListener(this);
+        viewMessagesButton.setOnClickListener(this);
+        browseButton.setOnClickListener(this);
+        viewProfileButton.setOnClickListener(this);
+
+        logoutButton.setOnClickListener(this);
     }
 
 

@@ -3,14 +3,17 @@ package com.lucriment.lucriment;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.location.Geocoder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.cast.framework.Session;
 import com.google.android.gms.identity.intents.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,6 +68,61 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         if(getIntent().hasExtra("subject")){
             subject = getIntent().getStringExtra("subject");
         }
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.search) {
+                    Intent y = new Intent(SessionDetails.this, TutorListActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+                if (itemId == R.id.profile) {
+                    Intent y = new Intent(SessionDetails.this, PersonalProfileActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+
+                if (itemId == R.id.sessions) {
+                    Intent y = new Intent(SessionDetails.this, SessionsActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                    //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                }
+                if (itemId == R.id.inbox) {
+                    Intent y = new Intent(SessionDetails.this, ViewMessagesActivity.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+                }
+                if(itemId == R.id.favourites){
+                    Intent y = new Intent(SessionDetails.this, Favourites.class);
+                    y.putExtra("userType", userType);
+                    y.putExtra("userInfo",userInfo);
+                    startActivity(y);
+
+                }
+
+
+                finish();
+                return false;
+            }
+        });
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(R.id.sessions).setChecked(true);
+
+
+
         classLabel.setText(subject);
         name.setText(nameString);
        timeInterval.setText(ti.returnFormattedDate());

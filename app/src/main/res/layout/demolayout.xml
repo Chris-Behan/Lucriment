@@ -46,10 +46,9 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/tutorRateField"
-                android:layout_alignStart="@+id/tutorRateField"
-                android:layout_below="@+id/tutorRateField"
-                android:layout_marginTop="10dp" />
+                android:layout_below="@+id/tutorName"
+                android:layout_alignLeft="@+id/tutorName"
+                android:layout_alignStart="@+id/tutorName" />
 
             <TextView
                 android:id="@+id/tutorName"
@@ -67,11 +66,11 @@
                 android:id="@+id/tutorRateField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/tutorName"
-                android:layout_alignStart="@+id/tutorName"
-                android:layout_below="@+id/tutorName"
                 android:text="Rate Per Hour"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@+id/ratingBar3"
+                android:layout_alignLeft="@+id/ratingBar3"
+                android:layout_alignStart="@+id/ratingBar3" />
             <View
                 android:id="@+id/line1"
                 android:layout_marginRight="20dp"

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     private String selectedTimeInterval;
     private UserInfo userInfo;
     private String userType;
+    private RatingBar ratingBar;
+    double score;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
     TwoItemField field2 = new TwoItemField("Location", "Select");
@@ -81,6 +84,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        score = getIntent().getDoubleExtra("tutorScore",0);
+
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -100,6 +105,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         requestButton = (Button) findViewById(R.id.requestButton);
         cost = (TextView) findViewById(R.id.costView);
         backButton = (Button) findViewById(R.id.backButton);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar4);
+        ratingBar.setRating((float) score);
         if(getIntent().hasExtra("requestedTime")){
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
@@ -238,7 +245,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             i.putExtra("userType", userType);
             i.putExtra("userInfo",userInfo);
             i.putExtra("selectedTutor", tutor);
-
+            i.putExtra("tutorScore",score);
             startActivity(i);
         }
         if(v== backButton){
@@ -249,7 +256,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             i.putExtra("userType", userType);
             i.putExtra("userInfo",userInfo);
             i.putExtra("selectedTutor", tutor);
-
+            i.putExtra("tutorScore",score);
             startActivity(i);
         }
     }
@@ -358,6 +365,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
                     i.putExtra("subject",subjectSelection);
                     i.putExtra("userType", userType);
                     i.putExtra("userInfo",userInfo);
+                    i.putExtra("tutorScore",score);
                     startActivity(i);
                 }
 

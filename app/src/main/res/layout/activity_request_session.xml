@@ -32,6 +32,15 @@
             android:maxHeight="100dp"
             android:maxWidth="100dp"
             app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+        <RatingBar
+            android:id="@+id/ratingBar4"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/backButton"
+            android:layout_alignLeft="@+id/textView5"
+            android:layout_alignStart="@+id/textView5" />
 
         <TextView
             android:id="@+id/textView5"

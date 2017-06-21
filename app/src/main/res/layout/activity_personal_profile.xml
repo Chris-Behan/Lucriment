@@ -104,12 +104,12 @@
             android:id="@+id/editBioField"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/decriptionLabel"
-            android:layout_alignBottom="@+id/decriptionLabel"
-            android:layout_toEndOf="@+id/backButton"
-            android:layout_toRightOf="@+id/backButton"
             android:hint="say something about yourself"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_alignBaseline="@+id/tutorBioField"
+            android:layout_alignBottom="@+id/tutorBioField"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
 
         <Button

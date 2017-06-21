@@ -337,7 +337,11 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
-        startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
+        Intent i = new Intent(SelectedTutorActivity.this, TutorListActivity.class);
+        i.putExtra("tutor", selectedTutor);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
         return true;
     }
 
@@ -368,6 +372,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             i.putExtra("tutor", selectedTutor);
             i.putExtra("userType", userType);
             i.putExtra("userInfo",userInfo);
+            i.putExtra("tutorScore",score);
             startActivity(i);
         }
         if(v == bookMarkButton){

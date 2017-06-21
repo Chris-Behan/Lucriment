@@ -54,11 +54,13 @@ public class TimePickerActivity extends BaseActivity  {
     private Date fromdate, todate;
     private UserInfo userInfo;
     private String userType;
+    private double score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_picker);
+        score = getIntent().getDoubleExtra("tutorScore",0);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -168,6 +170,7 @@ public class TimePickerActivity extends BaseActivity  {
                         i.putExtra("subject",selectedSubject);
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo",userInfo);
+                        i.putExtra("tutorScore",score);
                         startActivity(i);
 
                     }
