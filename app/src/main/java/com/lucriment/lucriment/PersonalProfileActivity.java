@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +62,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
     private UserInfo userInfo;
     private EditText editBioText;
     private FirebaseUser user;
-    private Button uploadButton;
+    private Button uploadButton, logoutButton;
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> classes = new ArrayList<>();
     private StorageReference storageReference;
@@ -198,6 +199,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
         classSelector = (Spinner) findViewById(R.id.classSpinner);
         addClassButton = (Button) findViewById(R.id.addClassButton);
+        logoutButton = (Button) findViewById(R.id.logoutButton);
         picUploadDialog = new ProgressDialog(this);
         String[] testarr = new String[]{"hello","goodbye"};
 
@@ -209,6 +211,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
         addClassButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
 
         uploadButton.setOnClickListener(this);
         if(userInfo!= null) {
@@ -412,6 +415,13 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        if(v == logoutButton){
+            firebaseAuth.signOut();
+            LoginManager.getInstance().logOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+
+        }
 
         if(v == backButton){
             Intent i = new Intent(PersonalProfileActivity.this, ProfileActivity.class);

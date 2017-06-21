@@ -47,6 +47,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+
         Animation animFadein;
         Animation animFadeout;
         animFadein = AnimationUtils.loadAnimation(getApplicationContext(),
@@ -99,7 +101,13 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                     finish();
                     startActivity(new Intent(ProfileActivity.this, CreationActivity.class));
                 }
-                initializeButtons();
+               // finish();
+             //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
+               // initializeButtons();
+                Intent y = new Intent(ProfileActivity.this, TutorListActivity.class);
+                y.putExtra("userType", userType);
+                y.putExtra("userInfo",userInfo);
+                startActivity(y);
             }
 
             @Override

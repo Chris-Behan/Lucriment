@@ -21,6 +21,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,17 +47,12 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
     private UserInfo userInfo;
     private String userType;
     private List<TutorInfo> tutors = new ArrayList<TutorInfo>();
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavHelper.disableShiftMode(bottomNavigationView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getTutors();
-        registerTutorClicks();
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -63,6 +60,54 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        if(userInfo==null) {
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot studentSnap = dataSnapshot.child("users");
+                    DataSnapshot tutorSnap = dataSnapshot.child("tutors");
+                    FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if (studentSnap.hasChild(thisUser.getUid())) {
+                        for (DataSnapshot userSnapShot : studentSnap.getChildren()) {
+                            if (userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())) {
+                                userInfo = userSnapShot.getValue(UserInfo.class);
+                                userType = userInfo.getUserType();
+                            }
+                        }
+                    } else if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        userType = userInfo.getUserType();
+                    } else {
+                        finish();
+                        startActivity(new Intent(TutorListActivity.this, CreationActivity.class));
+                    }
+                    // finish();
+                    //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
+                    // initializeButtons();
+
+                    setUp();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else {
+
+            BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+            BottomNavHelper.disableShiftMode(bottomNavigationView);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getTutors();
+            registerTutorClicks();
+            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        }
+
 
         //set onclick listener
 
@@ -73,6 +118,15 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
 
 
 
+    }
+    private void setUp(){
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getTutors();
+        registerTutorClicks();
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -169,6 +223,7 @@ public class TutorListActivity extends BaseActivity implements View.OnClickListe
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
+
             new DownloadImageTask(imageView)
                     .execute(currentTutor.getProfileImage());
             // set image imageVIew.setImageResource();

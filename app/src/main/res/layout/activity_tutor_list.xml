@@ -42,6 +42,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true" />
         <include
+            android:visibility="invisible"
             android:id="@+id/navigation"
             layout="@layout/activity_base"
             android:layout_width="match_parent"

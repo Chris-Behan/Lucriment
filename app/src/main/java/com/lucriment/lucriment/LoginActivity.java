@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
         }
         // initizlie buttons
 
@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton FacebookLoginButton = (LoginButton) findViewById(R.id.Facebookbutton);
+        final LoginButton FacebookLoginButton = (LoginButton) findViewById(R.id.facebookButton);
         FacebookLoginButton.setReadPermissions("email", "public_profile");
         FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -206,7 +206,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "The email associated with this facebook account is already registered.",
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
