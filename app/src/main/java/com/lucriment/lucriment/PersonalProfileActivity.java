@@ -482,11 +482,15 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
         }
 
         if(v == uploadButton){
-            Intent intent = new Intent(Intent.ACTION_PICK);
+            Intent i = new Intent(PersonalProfileActivity.this, UploadActivity.class);
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
+            startActivity(i);
+         //   Intent intent = new Intent(Intent.ACTION_PICK);
 
-            intent.setType("image/*");
+       //     intent.setType("image/*");
            // intent.putExtra("userInfo", userInfo);
-            startActivityForResult(intent, GALLERYINTENT);
+          //  startActivityForResult(intent, GALLERYINTENT);
         }
 
     }
