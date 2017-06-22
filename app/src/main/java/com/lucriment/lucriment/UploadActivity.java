@@ -60,6 +60,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         //READ IMAGE FROM STORAGE
         selectButton.setOnClickListener(this);
+        uploadButton.setOnClickListener(this);
         mdatabaseRef = FirebaseDatabase.getInstance().getReference();
         mRoofRef = mdatabaseRef.child("users").child(userInfo.getId()).child("profileImage");
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -146,7 +147,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
          //   Firebase childRef_name = mRoofRef.child("Image_Title");
          //   childRef_name.setValue(mName);
 
-
+            finish();
+            startActivity(new Intent(this, ImageLayout.class));
             Toast.makeText(getApplicationContext(), "Updated Info", Toast.LENGTH_SHORT).show();
         }
     }
