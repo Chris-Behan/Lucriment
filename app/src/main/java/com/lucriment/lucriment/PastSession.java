@@ -12,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +52,8 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
     private Rating currentRating;
     private ArrayList<Review> reviews = new ArrayList<>();
     private UserInfo userInfo;
+    private ImageView imageView;
+    private String imagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,7 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
         reviewButton = (Button) findViewById(R.id.reviewButton);
         reviewBar = (RatingBar) findViewById(R.id.reviewScore);
         reviewText = (TextView) findViewById(R.id.reviewText);
+        imageView = (ImageView) findViewById(R.id.tutorView);
         //GET INTENTS
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -110,6 +115,7 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
         sessionLengthField.setText(String.valueOf(ti.returnTimeInHours())+"hrs");
         if(userType.equals("Tutor")) {
             if (studentReview == null) {
+
                 reviewButton.setVisibility(View.VISIBLE);
             }else{
                 if(tutorReview!=null){
@@ -186,7 +192,8 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
             if(s.getTime().getFrom()==(ti.getFrom())){
                thisSession = s;
             }
-        }//IF CURRENT USER IS A TUTOR, GET THE STUDENTS DATA SNAP, OTHERWISE GET TUTOR DATASNAP
+        }
+        //IF CURRENT USER IS A TUTOR, GET THE STUDENTS DATA SNAP, OTHERWISE GET TUTOR DATASNAP
         if(userType.equals("Tutor")) {
           databaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getStudentId());
             databaseReference3 = FirebaseDatabase.getInstance().getReference().child("users").child(thisSession.getStudentId());
@@ -200,6 +207,10 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                      currentRating = dataSnapshot.child("rating").getValue(Rating.class);
+                    imagePath = dataSnapshot.child("profileImage").getValue(String.class);
+                    Glide.with(getApplicationContext())
+                            .load(imagePath)
+                            .into(imageView);
                 }
 
                 @Override

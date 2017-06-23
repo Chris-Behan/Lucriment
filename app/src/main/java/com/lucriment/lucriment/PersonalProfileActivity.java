@@ -63,7 +63,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
     private UserInfo userInfo;
     private EditText editBioText;
     private FirebaseUser user;
-    private Button uploadButton, logoutButton;
+    private Button uploadButton, logoutButton, scheduleButton;
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> classes = new ArrayList<>();
     private StorageReference storageReference;
@@ -95,6 +95,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+
 
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -201,6 +202,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
         classSelector = (Spinner) findViewById(R.id.classSpinner);
         addClassButton = (Button) findViewById(R.id.addClassButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
+        scheduleButton = (Button) findViewById(R.id.scheduleButton);
         picUploadDialog = new ProgressDialog(this);
         String[] testarr = new String[]{"hello","goodbye"};
 
@@ -209,7 +211,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
        // Picasso.with(PersonalProfileActivity.this).load(downloadUri).fit().centerCrop().into(imageView);
 
-
+        scheduleButton.setOnClickListener(this);
         addClassButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
@@ -418,6 +420,11 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        if(v == scheduleButton){
+            finish();
+            startActivity(new Intent(this, ScheduleActivity.class));
+        }
+
         if(v == logoutButton){
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();

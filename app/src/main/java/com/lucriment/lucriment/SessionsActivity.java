@@ -583,6 +583,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SessionRequest currSession = thisSession.get(position);
+
                 Intent y = new Intent(SessionsActivity.this, CurrentSession.class);
                 y.putExtra("name",currSession.getStudentName());
                 y.putExtra("time",currSession.getTime());
@@ -590,6 +591,8 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 y.putExtra("subject",currSession.getSubject());
                 y.putExtra("userType",userType);
                 y.putExtra("userInfo",userInfo);
+                y.putExtra("sessionID",currSession.getStudentId()+"_"+currSession.getTutorId());
+                y.putExtra("time",currSession.getTime());
 
                 startActivity(y);
 

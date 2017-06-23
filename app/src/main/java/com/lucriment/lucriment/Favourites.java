@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,6 +34,7 @@ public class Favourites extends BaseActivity {
     private String userType;
     private UserInfo userInfo;
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
+    private double tutorScore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,11 +171,34 @@ public class Favourites extends BaseActivity {
             // return super.getView(position, convertView, parent);
         }
     }
+    //REGISTER CLICKS
+    private void registerFacouriteClicks(){
+        ListView favList = (ListView) findViewById(R.id.tView);
+        favList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TutorInfo clickedTutor = tutors.get(position);
+                Rating tutorRating = clickedTutor.getRating();
+                if(tutorRating!=null) {
+                    tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
+
+                }
+                Intent i = new Intent(Favourites.this, SelectedTutorActivity.class);
+                i.putExtra("selectedTutor", clickedTutor);
+                i.putExtra("tutorScore",tutorScore);
+                i.putExtra("userType", userType);
+                i.putExtra("userInfo",userInfo);
+                startActivity(i);
+            }
+        });
+    }
+
     //POPULATE TUTOR LIST
     private void populateTutorList(){
         ArrayAdapter<TutorInfo> adapter = new Favourites.myListAdapter();
         ListView list = (ListView) findViewById(R.id.tView);
         list.setAdapter(adapter);
+        registerFacouriteClicks();
 
 
     }

@@ -20,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -68,6 +69,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     private UserInfo userInfo;
     private String userType;
     private RatingBar ratingBar;
+    private TutorInfo selectedTutor;
     double score;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -85,7 +87,9 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         score = getIntent().getDoubleExtra("tutorScore",0);
-
+        if(getIntent().hasExtra("tutor")){
+            selectedTutor = getIntent().getParcelableExtra("tutor");
+        }
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -116,15 +120,11 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
 
         nameView.setText(tutor.getFullName());
         rateView.setText("$"+String.valueOf(tutor.getRate())+"/hr");
+        Glide.with(getApplicationContext())
+                .load(selectedTutor.getProfileImage())
+                .into(imageView);
 
 
-        StorageReference pathReference = storageReference.child("ProfilePics").child(tutor.getId());
-        pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.with(RequestSessionActivity.this).load(uri).fit().centerCrop().into(imageView);
-            }
-        });
 
         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("sessions").child(user.getUid()+"_"+tutor.getId());
         databaseReference1.addValueEventListener(new ValueEventListener() {

@@ -105,7 +105,42 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
-        
+        // initialize buttons and fields
+        tutorName = (TextView) findViewById(R.id.tutorName);
+        // backButton = (Button) findViewById(R.id.backButton);
+        // educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
+        aboutField = (TextView) findViewById(R.id.tutorAboutField);
+        rateField = (TextView) findViewById(R.id.tutorRateField);
+        contactButton = (Button) findViewById(R.id.contactButton);
+        imageView = (ImageView) findViewById(R.id.imageView3);
+        classesField = (TextView) findViewById(R.id.classesField);
+        requestButton = (Button) findViewById(R.id.requestButton);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
+        bookMarkButton = (Button) findViewById(R.id.bookMark);
+
+        // selectedTutor = TutorListActivity.getTutor();
+
+        tutorName.setText(selectedTutor.getFullName());
+//        educationField.setText(selectedTutor.getTitle());
+        aboutField.setText(selectedTutor.getAbout());
+        rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
+        ratingBar.isIndicator();
+        ratingBar.setRating((float) score);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+
+        //     backButton.setOnClickListener(this);
+        contactButton.setOnClickListener(this);
+        requestButton.setOnClickListener(this);
+        bookMarkButton.setOnClickListener(this);
+        Glide.with(getApplicationContext())
+                .load(selectedTutor.getProfileImage())
+                .into(imageView);
+
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
@@ -250,41 +285,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
         //registerScheduleClicks();
 
-        // initialize buttons and fields
-        tutorName = (TextView) findViewById(R.id.tutorName);
-       // backButton = (Button) findViewById(R.id.backButton);
-       // educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
-        aboutField = (TextView) findViewById(R.id.tutorAboutField);
-        rateField = (TextView) findViewById(R.id.tutorRateField);
-        contactButton = (Button) findViewById(R.id.contactButton);
-        imageView = (ImageView) findViewById(R.id.imageView3);
-        classesField = (TextView) findViewById(R.id.classesField);
-        requestButton = (Button) findViewById(R.id.requestButton);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
-        bookMarkButton = (Button) findViewById(R.id.bookMark);
 
-       // selectedTutor = TutorListActivity.getTutor();
-        
-        tutorName.setText(selectedTutor.getFullName());
-//        educationField.setText(selectedTutor.getTitle());
-        aboutField.setText(selectedTutor.getAbout());
-        rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
-        ratingBar.isIndicator();
-        ratingBar.setRating((float) score);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-
-
-   //     backButton.setOnClickListener(this);
-        contactButton.setOnClickListener(this);
-        requestButton.setOnClickListener(this);
-        bookMarkButton.setOnClickListener(this);
-        Glide.with(getApplicationContext())
-                .load(selectedTutor.getProfileImage())
-                .into(imageView);
     //    Toast.makeText(getApplicationContext(), "Updated Complete", Toast.LENGTH_SHORT).show();
       //  progressDialog.dismiss();
        /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
