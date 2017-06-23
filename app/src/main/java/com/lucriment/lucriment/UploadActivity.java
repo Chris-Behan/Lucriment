@@ -32,7 +32,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     private ProgressDialog mProgressDialog;
     private DatabaseReference mRoofRef;
     private Uri mImageUri = null;
-    private DatabaseReference mdatabaseRef;
+    private DatabaseReference mdatabaseRef, tutorRef;
     private StorageReference mStorage;
     private ImageView uploadView;
     private Button uploadButton, selectButton;
@@ -64,7 +64,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         mdatabaseRef = FirebaseDatabase.getInstance().getReference();
         mRoofRef = mdatabaseRef.child("users").child(userInfo.getId()).child("profileImage");
         mStorage = FirebaseStorage.getInstance().getReference();
-
+        tutorRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("profileImage");
 
 
 
@@ -106,8 +106,13 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     Uri downloadUri = taskSnapshot.getDownloadUrl();  //Ignore This error
+                    if(userInfo.getUserType().equals("Tutor")){
+                        mRoofRef.setValue(downloadUri.toString());
+                        tutorRef.setValue(downloadUri.toString());
 
-                    mRoofRef.setValue(downloadUri.toString());
+                    }else{
+                        mRoofRef.setValue(downloadUri.toString());
+                    }
 
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
