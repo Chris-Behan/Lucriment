@@ -1,6 +1,8 @@
 package com.lucriment.lucriment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,15 +16,25 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class ImageLayout extends AppCompatActivity {
+public class ImageLayout extends BaseActivity {
 
     RecyclerView recyclerView;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference myRef;
     private FirebaseRecyclerAdapter<TutorInfo, ImageLayoutViewHolder> mFirebaseAdapter;
+    private UserInfo userInfo;
+    private String userType;
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private double tutorScore;
 
 
     @Override
@@ -31,9 +43,62 @@ public class ImageLayout extends AppCompatActivity {
         setContentView(R.layout.activity_image_layout);
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference("tutors");
-
         recyclerView = (RecyclerView)findViewById(R.id.rView);
         recyclerView.setLayoutManager(new LinearLayoutManager(ImageLayout.this));
+
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
+        if(userInfo==null) {
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot studentSnap = dataSnapshot.child("users");
+                    DataSnapshot tutorSnap = dataSnapshot.child("tutors");
+                    FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if (studentSnap.hasChild(thisUser.getUid())) {
+                        for (DataSnapshot userSnapShot : studentSnap.getChildren()) {
+                            if (userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())) {
+                                userInfo = userSnapShot.getValue(UserInfo.class);
+                                userType = userInfo.getUserType();
+                            }
+                        }
+                    } else if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        userType = userInfo.getUserType();
+                    } else {
+                        finish();
+                        startActivity(new Intent(ImageLayout.this, CreationActivity.class));
+                    }
+                    // finish();
+                    //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
+                    // initializeButtons();
+
+                    setUp();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else {
+
+            BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+            BottomNavHelper.disableShiftMode(bottomNavigationView);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+         //   getTutors();
+         //   registerTutorClicks();
+            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        }
       //  Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
 
     }
@@ -48,7 +113,7 @@ public class ImageLayout extends AppCompatActivity {
                 (TutorInfo.class, R.layout.tutor_profile_layout, ImageLayoutViewHolder.class, myRef)
         {
 
-            public void populateViewHolder(final ImageLayoutViewHolder viewHolder, TutorInfo model, final int position) {
+            public void populateViewHolder(final ImageLayoutViewHolder viewHolder, final TutorInfo model, final int position) {
                 viewHolder.Image_URL(model.getProfileImage());
                 viewHolder.Image_Title(model.getFirstName());
                 viewHolder.RateText(String.valueOf(model.getRate()));
@@ -67,6 +132,21 @@ public class ImageLayout extends AppCompatActivity {
 
                     @Override
                     public void onClick(final View v) {
+                        TutorInfo selectedTutor1 = model;
+                        Rating tutorRating = selectedTutor1.getRating();
+                        if(tutorRating!=null) {
+                            tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
+
+                        }
+                        // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                        Intent i = new Intent(ImageLayout.this, SelectedTutorActivity.class);
+                        i.putExtra("selectedTutor", selectedTutor1);
+                        i.putExtra("tutorScore",tutorScore);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo",userInfo);
+                        startActivity(i);
+
+                        /*
                         AlertDialog.Builder builder = new AlertDialog.Builder(ImageLayout.this);
                         builder.setMessage("Do you want to Delete this data ?").setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -87,7 +167,7 @@ public class ImageLayout extends AppCompatActivity {
                                 });
                         AlertDialog dialog = builder.create();
                         dialog.setTitle("Confirm");
-                        dialog.show();
+                        dialog.show(); */
                     }
                 });
 
@@ -96,6 +176,35 @@ public class ImageLayout extends AppCompatActivity {
         };
 
         recyclerView.setAdapter(mFirebaseAdapter);
+    }
+
+    private void setUp(){
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    int getContentViewId() {
+       return R.layout.activity_image_layout;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.search;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
     }
 
     //View Holder For Recycler View
