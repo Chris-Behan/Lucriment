@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +30,11 @@ public class ImageLayout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_layout);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = FirebaseDatabase.getInstance().getReference("users");
+        myRef = FirebaseDatabase.getInstance().getReference("tutors");
 
         recyclerView = (RecyclerView)findViewById(R.id.rView);
         recyclerView.setLayoutManager(new LinearLayoutManager(ImageLayout.this));
-        Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -50,7 +51,16 @@ public class ImageLayout extends AppCompatActivity {
             public void populateViewHolder(final ImageLayoutViewHolder viewHolder, TutorInfo model, final int position) {
                 viewHolder.Image_URL(model.getProfileImage());
                 viewHolder.Image_Title(model.getFirstName());
+                viewHolder.RateText(String.valueOf(model.getRate()));
+                Rating rating = model.getRating();
+                if (rating != null) {
+                    double score = rating.getTotalScore()/rating.getNumberOfReviews();
+                    viewHolder.RatingBar((float)score);
+                }
 
+                if(model.getSubjects()!=null) {
+                    viewHolder.SubjectsText(model.getSubjects().get(0));
+                }
 
 //OnClick Item it will Delete data from Database
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -90,21 +100,37 @@ public class ImageLayout extends AppCompatActivity {
 
     //View Holder For Recycler View
     public static class ImageLayoutViewHolder extends RecyclerView.ViewHolder {
-        private final TextView image_title;
+        private final TextView tutorName;
         private final ImageView image_url;
+        private final TextView subjectsText;
+        private final TextView rateText;
+        private final RatingBar ratingBar;
 
 
 
         public ImageLayoutViewHolder(final View itemView) {
             super(itemView);
             image_url = (ImageView) itemView.findViewById(R.id.ProfileImage);
-            image_title = (TextView) itemView.findViewById(R.id.browseDisplayName);
-
-
+            tutorName = (TextView) itemView.findViewById(R.id.browseDisplayName);
+            subjectsText = (TextView) itemView.findViewById(R.id.browseClasses);
+            rateText = (TextView) itemView.findViewById(R.id.browseRate);
+            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar2);
         }
 
+        private void SubjectsText(String subjects){
+            subjectsText.setText(subjects);
+        }
+        private void RateText(String rate){
+            rateText.setText("$"+rate+"/hr");
+        }
+
+        private void RatingBar(Float rating){
+            ratingBar.setRating(rating);
+        }
+
+
         private void Image_Title(String title) {
-            image_title.setText(title);
+            tutorName.setText(title);
         }
 
         private void Image_URL(String title) {
