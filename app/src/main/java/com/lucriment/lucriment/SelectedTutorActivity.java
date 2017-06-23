@@ -23,6 +23,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -104,6 +105,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -279,8 +282,11 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         contactButton.setOnClickListener(this);
         requestButton.setOnClickListener(this);
         bookMarkButton.setOnClickListener(this);
-        new DownloadImageTask(imageView)
-                .execute(selectedTutor.getProfileImage());
+        Glide.with(getApplicationContext())
+                .load(selectedTutor.getProfileImage())
+                .into(imageView);
+    //    Toast.makeText(getApplicationContext(), "Updated Complete", Toast.LENGTH_SHORT).show();
+      //  progressDialog.dismiss();
        /* StorageReference pathReference = storageReference.child("ProfilePics").child(selectedTutor.getId());
         pathReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override

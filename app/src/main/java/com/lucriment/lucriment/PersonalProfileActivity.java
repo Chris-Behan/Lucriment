@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -219,8 +220,9 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
                 isTutor = true;
                 getTutorInfo();
             }
-            new DownloadImageTask((ImageView) findViewById(R.id.imageView))
-                    .execute(userInfo.getProfileImage());
+            Glide.with(getApplicationContext())
+                    .load(userInfo.getProfileImage())
+                    .into(imageView);
         }
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
@@ -346,8 +348,9 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
                     if(isTutor){
                         databaseReference.child("tutors").child(user.getUid()).child("profileImage").setValue(downloadUri.toString());
                     }
-                    new DownloadImageTask((ImageView) findViewById(R.id.imageView))
-                            .execute(downloadUri.toString());
+                    Glide.with(getApplicationContext())
+                            .load(downloadUri.toString())
+                            .into(imageView);
 
 
                 }

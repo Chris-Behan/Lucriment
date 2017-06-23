@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -141,8 +142,9 @@ public class Favourites extends BaseActivity {
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
-            new DownloadImageTask(imageView)
-                    .execute(currentTutor.getProfileImage());
+            Glide.with(getApplicationContext())
+                    .load(currentTutor.getProfileImage())
+                    .into(imageView);
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
