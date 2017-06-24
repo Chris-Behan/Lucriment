@@ -54,7 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 startActivity(y);
             }
         if (itemId == R.id.profile) {
-            Intent y = new Intent(this, PersonalProfileActivity.class);
+            Intent y = new Intent(this, MyProfileActivity.class);
             y.putExtra("userType", getUserType());
             y.putExtra("userInfo",getUserInformation());
             startActivity(y);

@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                >
+
+                <RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="13dp"
+                        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
+
+                    <EditText
+                        android:id="@+id/editRateField"
+                        android:layout_width="50dp"
+                        android:layout_height="39dp"
+                        android:layout_alignTop="@+id/editRate"
+                        android:layout_alignLeft="@+id/ratingBar3"
+                        android:layout_alignStart="@+id/ratingBar3"
+                        android:visibility="invisible"/>
+
+                    <RatingBar
+                        android:id="@+id/ratingBar3"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/tutorName"
+                        android:layout_alignStart="@+id/tutorName"
+                        android:layout_below="@+id/tutorName" />
+
+                    <TextView
+                        android:id="@+id/tutorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/imageView3"
+                        android:layout_marginLeft="22dp"
+                        android:layout_marginStart="22dp"
+                        android:layout_toEndOf="@+id/imageView3"
+                        android:layout_toRightOf="@+id/imageView3"
+                        android:text="Name"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/tutorRateField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/ratingBar3"
+                        android:layout_alignStart="@+id/ratingBar3"
+                        android:layout_below="@+id/ratingBar3"
+                        android:text="Rate Per Hour"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="350dp"
+                        android:layout_height="1dip"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+
+                    <Button
+                        android:id="@+id/Edit"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_edit_black_24dp"
+                        android:layout_alignBaseline="@+id/tutorName"
+                        android:layout_alignBottom="@+id/tutorName"
+                        android:layout_toRightOf="@+id/tutorName"
+                        android:layout_toEndOf="@+id/tutorName" />
+
+                    <Button
+                        android:id="@+id/uploadPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="37dp"
+                        android:text="Change"
+                        android:visibility="invisible"
+                        android:textAllCaps="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignLeft="@+id/line1"
+                        android:layout_alignStart="@+id/line1" />
+                    <Button
+                        android:id="@+id/editRate"
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="37dp"
+                        android:textAllCaps="false"
+                        android:text="Edit"
+                        android:layout_alignBaseline="@+id/tutorRateField"
+                        android:layout_alignBottom="@+id/tutorRateField"
+                        android:layout_toRightOf="@+id/tutorRateField"
+                        android:layout_toEndOf="@+id/tutorRateField" />
+
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+
+
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+
+
+                android:layout_alignParentTop="true">
+
+
+                <RelativeLayout
+                    android:layout_width="385dp"
+                    android:layout_height="150dp">
+                    <EditText
+                        android:id="@+id/editBioField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="say something about yourself"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/tutorAboutField"
+                        android:layout_alignLeft="@+id/tutorAboutField"
+                        android:layout_alignStart="@+id/tutorAboutField" />
+
+                    <View
+                        android:id="@+id/line2"
+                        android:layout_width="350dp"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+
+                    <TextView
+                        android:id="@+id/AboutLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="About:"
+                        android:layout_marginTop="16dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="12dp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="12dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/tutorAboutField"
+                        android:layout_width="300dp"
+                        android:layout_height="130dp"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginStart="14dp"
+                        android:text="TextView"
+
+                        android:layout_alignTop="@+id/AboutLabel"
+                        android:layout_toRightOf="@+id/AboutLabel"
+                        android:layout_toEndOf="@+id/AboutLabel" />
+                    <Button
+                        android:id="@+id/editAbout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="37dp"
+                        android:textAllCaps="false"
+                        android:visibility="invisible"
+                        android:text="Edit"
+                        android:layout_alignBottom="@+id/AboutLabel"
+                        android:layout_alignRight="@+id/line2"
+                        android:layout_alignEnd="@+id/line2"
+                        android:layout_marginRight="35dp"
+                        android:layout_marginEnd="35dp" />
+
+                </RelativeLayout>
+
+            </TableRow>
+
+            <TableRow
+
+                android:layout_width="wrap_content"
+                android:layout_height="150dp" >
+
+                <RelativeLayout
+                    android:layout_width="385dp"
+                    android:layout_height="150dp">
+
+                    <View
+                        android:id="@+id/line3"
+                        android:layout_width="350dp"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+                    <TextView
+                        android:id="@+id/subjectsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Subjects:"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/line3"
+                        android:layout_alignLeft="@+id/line3"
+                        android:layout_alignStart="@+id/line3" />
+
+                    <Button
+                        android:id="@+id/addClassButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="37dp"
+                        android:textAllCaps="false"
+                        android:text="Add class"
+                        android:visibility="invisible"
+                        android:layout_alignBottom="@+id/subjectsLabel"
+                        android:layout_alignRight="@+id/line3"
+                        android:layout_alignEnd="@+id/line3"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginEnd="30dp" />
+                    <Spinner
+                        android:id="@+id/subjectSpinner"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_below="@+id/addClassButton"
+                        android:layout_toRightOf="@+id/taughtlist"
+                        android:layout_toEndOf="@+id/taughtlist" />
+                    <ListView
+                        android:id="@+id/taughtlist"
+                        android:layout_width="170dp"
+                        android:layout_height="100dp"
+
+                        android:layout_below="@+id/subjectsLabel"
+                        android:layout_alignLeft="@+id/subjectsLabel"
+                        android:layout_alignStart="@+id/subjectsLabel"
+                        android:layout_marginTop="7dp" />
+                    <Spinner
+                        android:id="@+id/classSpinner"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_below="@+id/subjectSpinner"
+                        android:layout_toRightOf="@+id/taughtlist"
+                        android:layout_toEndOf="@+id/taughtlist" />
+
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp">
+
+                    <View
+                        android:id="@+id/line4"
+                        android:layout_width="350dp"
+                        android:layout_height="1dip"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/line4"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginStart="13dp"
+                        android:text="Location"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold" />
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp">
+
+                    <TextView
+                        android:id="@+id/reviewText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginStart="13dp"
+                        android:layout_marginTop="14dp"
+                        android:text="Reviews"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textStyle="bold"/>
+
+                    <ListView
+                        android:id="@+id/reviewList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/reviewText" />
+                </RelativeLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+                    <Button
+                        android:id="@+id/logoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logout"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="125dp"
+                        android:layout_marginEnd="125dp" />
+
+                </RelativeLayout>
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/activity_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        tools:layout_editor_absoluteY="459dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+
+</RelativeLayout>
