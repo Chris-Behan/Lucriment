@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 if(firebaseAuth.getCurrentUser() !=null){
                     finish();
-                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
                 }
             }
         };
@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         progressDialog.dismiss();
                         if(task.isSuccessful()){
                             finish();
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
                         }else{
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "There is no account associated with the email you entered, please try again", Toast.LENGTH_SHORT).show();

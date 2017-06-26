@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -21,12 +24,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,8 +60,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MyProfileActivity extends BaseActivity implements View.OnClickListener {
+public class MyProfileActivity extends BaseActivity implements View.OnClickListener, OnMapReadyCallback {
 
     private TextView personalName;
     private TutorListActivity tutorListActivity;
@@ -90,6 +102,12 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private TextView hourlyRate;
     private Button rateButton;
     private EditText editRate;
+    private ArrayList<Review> revList = new ArrayList<>();
+    private ArrayAdapter<Review> revAdapter;
+    private ScrollView scrollView;
+    private Button ScheduleButton;
+    private RatingBar ratingBar;
+    private float score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +122,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
 
+
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         Menu menu = bottomNavigationView.getMenu();
@@ -112,7 +131,8 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             item.setChecked(false);
         }
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
-
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        scrollView.scrollTo(0,0);
 
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -196,6 +216,23 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
+        DatabaseReference reviewRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("reviews");
+        reviewRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot revSnap: dataSnapshot.getChildren()){
+                    Review rev = revSnap.getValue(Review.class);
+                    revList.add(rev);
+                }
+                processReviews();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         // initialize buttons and fields
         personalName = (TextView) findViewById(R.id.tutorName);
 
@@ -214,7 +251,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         hourlyRate = (TextView) findViewById(R.id.tutorRateField);
         rateButton = (Button) findViewById(R.id.editRate);
         editRate = (EditText) findViewById(R.id.editRateField);
+        ScheduleButton = (Button) findViewById(R.id.scheduleButton);
         picUploadDialog = new ProgressDialog(this);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
         String[] testarr = new String[]{"hello","goodbye"};
 
 
@@ -228,6 +267,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         logoutButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
         rateButton.setOnClickListener(this);
+        scheduleButton.setOnClickListener(this);
 
         uploadButton.setOnClickListener(this);
         if(userInfo!= null) {
@@ -245,6 +285,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         if(userInfo!=null) {
 //            educationField.setText(userInfo.getTitle());
         }
+
+
+
 
         //     if(userInfo.getProfileImage()!= null) {
         //  Picasso.with(PersonalProfileActivity.this).load("https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=d18e97f6-3087-4858-9260-ff9694cc6bf7").fit().centerCrop().into(imageView);
@@ -292,6 +335,15 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 tutorInfo = dataSnapshot.getValue(TutorInfo.class);
                 bioField.setText(tutorInfo.getAbout());
                 hourlyRate.setText("$"+tutorInfo.getRate()+"/hr");
+                if(tutorInfo.getRating()!=null) {
+                    Rating rating = tutorInfo.getRating();
+                    score = (float) (rating.getTotalScore() / rating.getNumberOfReviews());
+                    ratingBar.setRating(score);
+
+                }
+                setUpMap();
+
+
             }
 
             @Override
@@ -300,11 +352,46 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
+
+    }
+
+    private void  processReviews(){
+        revAdapter = new MyProfileActivity.reviewAdapter();
+        ListView reviewList = (ListView) findViewById(R.id.reviewList);
+        reviewList.setAdapter(revAdapter);
+        scrollView.scrollTo(0,0);
     }
     private void populateTaughtList() {
         adapter = new MyProfileActivity.taughtClassAdapter();
         ListView list = (ListView) findViewById(R.id.taughtlist);
         list.setAdapter(adapter);
+    }
+
+    private void setUpMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Geocoder gc = new Geocoder(this);
+        try {
+            List<Address> list = gc.getFromLocationName(tutorInfo.getPostalCode(),1);
+            android.location.Address add = list.get(0);
+            double lat = add.getLatitude();
+            double lng = add.getLongitude();
+            LatLng sydney = new LatLng(lat, lng);
+
+            googleMap.addCircle(new CircleOptions().center(sydney).radius(600).fillColor(0x440000ff).strokeColor(Color.BLUE).strokeWidth(2));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            googleMap.setMaxZoomPreference(23);
+            googleMap.setMinZoomPreference(13);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class taughtClassAdapter extends ArrayAdapter<String> {
@@ -380,6 +467,46 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         }
 
     }
+
+    private class reviewAdapter extends ArrayAdapter<Review>  {
+
+        public reviewAdapter(){
+            super(MyProfileActivity.this, R.layout.reviewitem, revList);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.reviewitem, parent, false);
+            }
+            final Review currentRev = revList.get(position);
+
+            TextView name = (TextView) itemView.findViewById(R.id.revItemName);
+            TextView date = (TextView) itemView.findViewById(R.id.date);
+            TextView review = (TextView) itemView.findViewById(R.id.reviewText);
+            RatingBar rating = (RatingBar) itemView.findViewById(R.id.reviewScore);
+
+            name.setText(currentRev.getAuthor());
+
+            review.setText(currentRev.getText());
+
+            rating.setRating((float) currentRev.getRating());
+
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+
+
+    }
+
 
     private void handleSpinner(){
 
@@ -461,11 +588,13 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 addingClass = false;
                 addClassButton.setVisibility(View.INVISIBLE);
                 aboutButton.setVisibility(View.INVISIBLE);
+                uploadButton.setVisibility(View.INVISIBLE);
 
             }else{
                 editing = true;
                 addClassButton.setVisibility(View.VISIBLE);
                 aboutButton.setVisibility(View.VISIBLE);
+                uploadButton.setVisibility(View.VISIBLE);
             }
             if(editing) {
                 rateButton.setVisibility(View.VISIBLE);
@@ -514,7 +643,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 
 
-                databaseReference.child("users").child(user.getUid()).setValue(userInfo);
+                databaseReference.child("users").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
                 if (userInfo.getUserType().equals("Tutor")) {
                     databaseReference.child("tutors").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
                 }
@@ -571,6 +700,11 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             //     intent.setType("image/*");
             // intent.putExtra("userInfo", userInfo);
             //  startActivityForResult(intent, GALLERYINTENT);
+        }
+
+        if(v == scheduleButton){
+            finish();
+            startActivity(new Intent(this, ScheduleActivity.class));
         }
 
     }

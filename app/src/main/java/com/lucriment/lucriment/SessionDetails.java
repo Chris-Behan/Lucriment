@@ -82,7 +82,7 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
                     startActivity(y);
                 }
                 if (itemId == R.id.profile) {
-                    Intent y = new Intent(SessionDetails.this, PersonalProfileActivity.class);
+                    Intent y = new Intent(SessionDetails.this, MyProfileActivity.class);
                     y.putExtra("userType", userType);
                     y.putExtra("userInfo",userInfo);
                     startActivity(y);

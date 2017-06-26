@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -155,7 +156,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     startActivity(y);
                 }
                 if (itemId == R.id.profile) {
-                    Intent y = new Intent(SelectedTutorActivity.this, PersonalProfileActivity.class);
+                    Intent y = new Intent(SelectedTutorActivity.this, MyProfileActivity.class);
                     y.putExtra("userType", userType);
                     y.putExtra("userInfo",userInfo);
                     startActivity(y);
@@ -359,7 +360,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
         }
         if(v == contactButton){
-            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId());
             myChats = (myChats + selectedTutor.getId().toString());
             chatRoot.child("chatsWith").setValue(myChats);
             DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("users").child(selectedTutor.getId());
@@ -407,17 +408,18 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     public void onMapReady(GoogleMap googleMap) {
         Geocoder gc = new Geocoder(this);
         try {
-            List<android.location.Address> list = gc.getFromLocationName("Calgary",1);
+            List<android.location.Address> list = gc.getFromLocationName(selectedTutor.getPostalCode(),1);
             android.location.Address add = list.get(0);
             double lat = add.getLatitude();
             double lng = add.getLongitude();
             LatLng sydney = new LatLng(lat, lng);
-            googleMap.addMarker(new MarkerOptions().position(sydney)
-                    .title("Calgary"));
+
+            googleMap.addCircle(new CircleOptions().center(sydney).radius(600).fillColor(0x440000ff).strokeColor(Color.BLUE).strokeWidth(2));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
             googleMap.setMaxZoomPreference(23);
-            googleMap.setMinZoomPreference(15);
+            googleMap.setMinZoomPreference(13);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

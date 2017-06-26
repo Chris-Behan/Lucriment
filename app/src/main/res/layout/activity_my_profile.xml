@@ -31,6 +31,15 @@
 
                 <RelativeLayout>
 
+                    <Button
+                        android:id="@+id/scheduleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="37dp"
+                        android:text="Schedule"
+                        android:layout_below="@+id/tutorRateField"
+                        android:layout_alignRight="@+id/line1"
+                        android:layout_alignEnd="@+id/line1" />
+
                     <ImageView
                         android:id="@+id/imageView3"
                         android:layout_width="100dp"
@@ -389,6 +398,7 @@
         android:layout_alignParentBottom="true"
         tools:layout_editor_absoluteY="459dp"
         tools:layout_editor_absoluteX="0dp" />
+
 
 
 
