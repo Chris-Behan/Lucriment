@@ -562,10 +562,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v == scheduleButton){
-            finish();
-            startActivity(new Intent(this, ScheduleActivity.class));
-        }
+
 
         if(v == logoutButton){
             firebaseAuth.signOut();
@@ -704,8 +701,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         if(v == scheduleButton){
             finish();
-            startActivity(new Intent(this, ScheduleActivity.class));
+            startActivity(new Intent(this, DefaultAvailability.class));
         }
-
     }
 }

@@ -110,7 +110,7 @@ public class TutorListActivity extends BaseActivity {
 
 //Log.d("LOGGED", "IN onStart ");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<TutorInfo, ImageLayoutViewHolder>
-                (TutorInfo.class, R.layout.tutor_profile_layout, ImageLayoutViewHolder.class, myRef)
+                (TutorInfo.class, R.layout.tutor_profile_layout, ImageLayoutViewHolder.class, myRef.orderByChild("rate"))
         {
 
             public void populateViewHolder(final ImageLayoutViewHolder viewHolder, final TutorInfo model, final int position) {

@@ -3,9 +3,13 @@ package com.lucriment.lucriment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -433,6 +437,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
 
         // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
@@ -453,7 +458,10 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
             rating.setRating((float) currentRev.getRating());
 
-
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(currentRev.getTimeStamp());
+            date.setText(dateFormat.format(calendar.getTime()));
 
             return itemView;
             // return super.getView(position, convertView, parent);
