@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -40,7 +41,11 @@ public class DaySelectAdapter extends ArrayAdapter<TwoItemField> {
         Day.setText(day.getLabel());
         Time.setText(day.getData());
         // Return the completed view to render on screen
+
+
         return convertView;
+
+
     }
 
 

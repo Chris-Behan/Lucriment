@@ -86,7 +86,8 @@
         <activity android:name=".ImageLayout" />
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".DefaultAvailability"></activity>
+        <activity android:name=".DefaultAvailability" />
+        <activity android:name=".DayAvailability"></activity>
     </application>
 
 </manifest>
