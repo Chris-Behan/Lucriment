@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,10 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -25,94 +33,69 @@ public class DefaultTabFragment extends Fragment {
     private CustomExpandableListAdapter expandableListAdapter;
     private List<String> expandableListTitle;
     private HashMap<String, List<String>> expandableListDetail;
+    private UserInfo userInfo;
+   // private HashMap<String, ArrayList<TwoItemField>> defaultAvailability;
+    private ArrayList<TwoItemField> itemList = new ArrayList<>();
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.defaulttab, container,false);
-
-       ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-        ExpandableListData ed = new ExpandableListData();
-        expandableListDetail = ed.getData();
-        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
-        expandableListAdapter = new CustomExpandableListAdapter(getActivity(), expandableListTitle, expandableListDetail);
-        expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
+        Bundle args = getArguments();
+       // int index = args.getInt("index", 0);
+        userInfo = args.getParcelable("userInfo");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Expanded.",
-                        Toast.LENGTH_SHORT).show();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+              if(dataSnapshot.hasChild("monday")){
+                  DataSnapshot mondaySnap = dataSnapshot.child("monday");
+                 ArrayList<TwoItemField> tr = (ArrayList<TwoItemField>) mondaySnap.getValue();
+                  String a = tr.toString();
+              }
+
+//                ArrayList<TwoItemField> test =  defaultAvailability.get("monday");
+             //   for(Map.Entry<String,ArrayList<TwoItemField>>entry: test.entrySet()){
+             //       String key= entry.getKey();
+                    //    ArrayList<String> value = entry.getValue();
+             //   }
+              //  HashMap<String,String> tr = (HashMap<String,String>) test;
+               // ArrayList<String> y =tr.get("monday");
             }
-        });
-
-        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
 
             @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        expandableListTitle.get(groupPosition) + " List Collapsed.",
-                        Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        expandableListTitle.get(groupPosition)
-                                + " -> "
-                                + expandableListDetail.get(
-                                expandableListTitle.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT
-                ).show();
-                return false;
             }
         });
 
 
+        TwoItemField Monday = new TwoItemField("Monday", "Select");
+        TwoItemField Tuesday = new TwoItemField("Tuesday", "Select");
+        TwoItemField Wednesday = new TwoItemField("Wednesday", "Select");
+        TwoItemField Thursday = new TwoItemField("Thursday", "Select");
+        TwoItemField Friday = new TwoItemField("Friday", "Select");
+        TwoItemField Saturday = new TwoItemField("Saturday", "Select");
+        TwoItemField Sunday = new TwoItemField("Sunday", "Select");
+        itemList.add(Monday);
 
+        ArrayAdapter<TwoItemField> adapter = new DaySelectAdapter(getApplicationContext(),itemList);
+        ListView dayList = (ListView) view.findViewById(R.id.dayList);
+        dayList.setAdapter(adapter);
 
-        return view;
+       return view;
+    }
+    private void processDefaultAvailability(){
+        //if(defaultAvailability.containsKey("monday")){
+
+       // }
     }
 
-    private class ExpandableListData{
 
-        public LinkedHashMap<String, List<String>> getData() {
-            LinkedHashMap<String, List<String>> expandableListDetail = new LinkedHashMap<String, List<String>>();
 
-            List<String> cricket = new ArrayList<String>();
-            cricket.add("India");
-            cricket.add("Pakistan");
-            cricket.add("Australia");
-            cricket.add("England");
-            cricket.add("South Africa");
 
-            List<String> football = new ArrayList<String>();
-            football.add("Brazil");
-            football.add("Spain");
-            football.add("Germany");
-            football.add("Netherlands");
-            football.add("Italy");
 
-            List<String> basketball = new ArrayList<String>();
-            basketball.add("United States");
-            basketball.add("Spain");
-            basketball.add("Argentina");
-            basketball.add("France");
-            basketball.add("Russia");
-
-            expandableListDetail.put("Monday", cricket);
-            expandableListDetail.put("Tuesday", football);
-            expandableListDetail.put("Wednesday", basketball);
-            return expandableListDetail;
-        }
-    }
 
 
 }

@@ -701,7 +701,10 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         if(v == scheduleButton){
             finish();
-            startActivity(new Intent(this, DefaultAvailability.class));
+            Intent i = new Intent(MyProfileActivity.this, DefaultAvailability.class);
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo",userInfo);
+            startActivity(i);
         }
     }
 }
