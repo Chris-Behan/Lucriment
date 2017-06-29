@@ -169,7 +169,7 @@ public class DefaultTabFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), DayAvailability.class);
-
+                i.putExtra("nameOfDay","Monday");
                 i.putExtra("day",mondayTime.get(0));
                 startActivity(i);
             }
