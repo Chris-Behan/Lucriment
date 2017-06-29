@@ -65,8 +65,9 @@ public class DefaultAvailability extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putParcelable("userInfo",userInfo);
         dft.setArguments(args);
-        adapter.addFragment(dft,"Default Availability");
         adapter.addFragment(new CalendarTabFragment(), "Calendar");
+        adapter.addFragment(dft,"Default Availability");
+
 
         viewPager.setAdapter(adapter);
 

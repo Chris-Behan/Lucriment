@@ -188,7 +188,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 0) {
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Monday");
-                    i.putExtra("day", mondayTime.get(0));
+                    if(mondayTime.size()>0) {
+                        i.putExtra("day", mondayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", mondayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -196,7 +198,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 1){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Tuesday");
-                    i.putExtra("day", tuesdayTime.get(0));
+                    if(tuesdayTime.size()>0) {
+                        i.putExtra("day", tuesdayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", tuesdayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -204,7 +208,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 2){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Wednesday");
-                    i.putExtra("day", wednesdayTime.get(0));
+                    if(wednesdayTime.size()>0) {
+                        i.putExtra("day", wednesdayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", wednesdayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -212,7 +218,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 3){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Thursday");
-                    i.putExtra("day", thursdayTime.get(0));
+                    if(thursdayTime.size()>0) {
+                        i.putExtra("day", thursdayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", thursdayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -220,7 +228,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 4){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Friday");
-                    i.putExtra("day", fridayTime.get(0));
+                    if(fridayTime.size()>0) {
+                        i.putExtra("day", fridayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", fridayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -228,7 +238,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 5){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Saturday");
-                    i.putExtra("day", saturdayTime.get(0));
+                    if(saturdayTime.size()>0) {
+                        i.putExtra("day", saturdayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", saturdayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);
@@ -236,7 +248,9 @@ public class DefaultTabFragment extends Fragment {
                 if(position == 6){
                     Intent i = new Intent(getApplicationContext(), DayAvailability.class);
                     i.putExtra("nameOfDay", "Sunday");
-                    i.putExtra("day", sundayTime.get(0));
+                    if(sundayTime.size()>0) {
+                        i.putExtra("day", sundayTime.get(0));
+                    }
                     i.putExtra("listOfTimes", sundayTime);
                     i.putExtra("userInfo", userInfo);
                     startActivity(i);

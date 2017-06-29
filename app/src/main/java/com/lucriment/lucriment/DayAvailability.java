@@ -52,12 +52,12 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         day = getIntent().getStringExtra("nameOfDay");
         tif1 = new TwoItemField("Day",day);
         itemList.add(tif1);
-        time = getIntent().getParcelableExtra("day");
-        tif2 = new TwoItemField("From", "Select");
-        tif2.setData(time.returnFromTime());
+        if(getIntent().hasExtra("day")) {
+            time = getIntent().getParcelableExtra("day");
+            tif2.setData(time.returnFromTime());
+            tif3.setData(time.returnToTime());
+        }
         itemList.add(tif2);
-        tif3 = new TwoItemField("To","Select");
-        tif3.setData(time.returnToTime());
         itemList.add(tif3);
         itemList.add(tif4);
         adapter = new DayAvailability.myListAdapter();
@@ -74,7 +74,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
             tif2.setData(hourOfDay + ":" + minute);
             adapter.notifyDataSetChanged();
             settingFrom = false;
-            TimeInterval ti =selectedTime.get(0);
+//            TimeInterval ti =selectedTime.get(0);
           //  selectedTime.get(0) = new TimeInterval(2,3);
           //  tif1.setData("");
         }
@@ -152,7 +152,12 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long fromTime = fromDate.getTime();
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
-                        selectedTime.set(0,timeInterval);
+                        if(selectedTime.size()>0) {
+                            selectedTime.set(0, timeInterval);
+                        }else{
+                            selectedTime.add(timeInterval);
+                        }
+
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability")
                                 .child(day.toLowerCase());
                         databaseReference.setValue(selectedTime);
