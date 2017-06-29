@@ -54,6 +54,7 @@ public class DefaultTabFragment extends Fragment {
     private TwoItemField Friday = new TwoItemField("Friday", "Select");
     private TwoItemField Saturday = new TwoItemField("Saturday", "Select");
     private TwoItemField Sunday = new TwoItemField("Sunday", "Select");
+    private TwoItemField Select = new TwoItemField("Select","");
     private  ArrayAdapter<TwoItemField> adapter;
 
 
@@ -144,6 +145,7 @@ public class DefaultTabFragment extends Fragment {
                 itemList.add(Friday);
                 itemList.add(Saturday);
                 itemList.add(Sunday);
+
                 adapter.notifyDataSetChanged();
 
 
@@ -168,10 +170,63 @@ public class DefaultTabFragment extends Fragment {
         dayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), DayAvailability.class);
-                i.putExtra("nameOfDay","Monday");
-                i.putExtra("day",mondayTime.get(0));
-                startActivity(i);
+                if(position == 0) {
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Monday");
+                    i.putExtra("day", mondayTime.get(0));
+                    i.putExtra("listOfTimes", mondayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 1){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Tuesday");
+                    i.putExtra("day", tuesdayTime.get(0));
+                    i.putExtra("listOfTimes", tuesdayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 2){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Wednesday");
+                    i.putExtra("day", wednesdayTime.get(0));
+                    i.putExtra("listOfTimes", wednesdayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 3){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Thursday");
+                    i.putExtra("day", thursdayTime.get(0));
+                    i.putExtra("listOfTimes", thursdayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 4){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Friday");
+                    i.putExtra("day", fridayTime.get(0));
+                    i.putExtra("listOfTimes", fridayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 5){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Saturday");
+                    i.putExtra("day", saturdayTime.get(0));
+                    i.putExtra("listOfTimes", saturdayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+                if(position == 6){
+                    Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                    i.putExtra("nameOfDay", "Sunday");
+                    i.putExtra("day", sundayTime.get(0));
+                    i.putExtra("listOfTimes", sundayTime);
+                    i.putExtra("userInfo", userInfo);
+                    startActivity(i);
+                }
+
             }
         });
 //        registerDayClicks();

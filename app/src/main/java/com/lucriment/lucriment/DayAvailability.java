@@ -3,6 +3,9 @@ package com.lucriment.lucriment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +17,13 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DayAvailability extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
@@ -28,14 +36,19 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private TwoItemField tif1 = new TwoItemField("Day",day);
     private TwoItemField tif2 = new TwoItemField("From", "Select");
     private TwoItemField tif3 = new TwoItemField("To","Select");
+    private TwoItemField tif4 = new TwoItemField("Select","");
     private boolean settingDay = false;
     private boolean settingFrom = false;
     private boolean settingTo = false;
+    private ArrayList<TimeInterval> mondayTime = new ArrayList<>();
+    private UserInfo userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_availability);
         //GET INTENTS
+        mondayTime = getIntent().getParcelableArrayListExtra("listOfTimes");
+        userInfo = getIntent().getParcelableExtra("userInfo");
         day = getIntent().getStringExtra("nameOfDay");
         tif1 = new TwoItemField("Day",day);
         itemList.add(tif1);
@@ -46,6 +59,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         tif3 = new TwoItemField("To","Select");
         tif3.setData(time.returnToTime());
         itemList.add(tif3);
+        itemList.add(tif4);
         adapter = new DayAvailability.myListAdapter();
         ListView list = (ListView) findViewById(R.id.dayOptions);
 
@@ -56,8 +70,19 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        tif2.setData(hourOfDay+":"+minute);
-        adapter.notifyDataSetChanged();
+        if(settingFrom) {
+            tif2.setData(hourOfDay + ":" + minute);
+            adapter.notifyDataSetChanged();
+            settingFrom = false;
+            TimeInterval ti =mondayTime.get(0);
+          //  mondayTime.get(0) = new TimeInterval(2,3);
+          //  tif1.setData("");
+        }
+        if(settingTo){
+            tif3.setData(hourOfDay+":"+minute);
+            adapter.notifyDataSetChanged();
+            settingTo = false;
+        }
 
     }
 
@@ -98,11 +123,47 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private void registerEditTimeClick(){
         ListView list = (ListView) findViewById(R.id.dayOptions);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DayAvailability.CustomTimePickerDialog timePickerDialog2 = new DayAvailability.CustomTimePickerDialog(DayAvailability.this,DayAvailability.this, 9,9, true);
-                timePickerDialog2.setMessage("From");
-                timePickerDialog2.show();
+                if(position == 0){
+
+                }
+                if(position ==1) {
+                    DayAvailability.CustomTimePickerDialog timePickerDialog2 = new DayAvailability.CustomTimePickerDialog(DayAvailability.this, DayAvailability.this, 9, 9, true);
+                    timePickerDialog2.setMessage("From");
+                    timePickerDialog2.show();
+                    settingFrom = true;
+
+
+                }
+                if(position ==2){
+                    DayAvailability.CustomTimePickerDialog timePickerDialog2 = new DayAvailability.CustomTimePickerDialog(DayAvailability.this, DayAvailability.this, 9, 9, true);
+                    timePickerDialog2.setMessage("To");
+                    timePickerDialog2.show();
+                    settingTo = true;
+                }
+
+                if(position ==3){
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    try {
+                        Date fromDate = sdf.parse(tif2.getData().toString());
+                        Date toDate = sdf.parse(tif3.getData().toString());
+                        long fromTime = fromDate.getTime();
+                        long toTime = toDate.getTime();
+                        TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
+                        mondayTime.set(0,timeInterval);
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability")
+                                .child(day.toLowerCase());
+                        databaseReference.setValue(mondayTime);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+                }
             }
         });
     }
