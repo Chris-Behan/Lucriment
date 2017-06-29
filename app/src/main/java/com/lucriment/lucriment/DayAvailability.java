@@ -40,14 +40,14 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private boolean settingDay = false;
     private boolean settingFrom = false;
     private boolean settingTo = false;
-    private ArrayList<TimeInterval> mondayTime = new ArrayList<>();
+    private ArrayList<TimeInterval> selectedTime = new ArrayList<>();
     private UserInfo userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_availability);
         //GET INTENTS
-        mondayTime = getIntent().getParcelableArrayListExtra("listOfTimes");
+        selectedTime = getIntent().getParcelableArrayListExtra("listOfTimes");
         userInfo = getIntent().getParcelableExtra("userInfo");
         day = getIntent().getStringExtra("nameOfDay");
         tif1 = new TwoItemField("Day",day);
@@ -74,8 +74,8 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
             tif2.setData(hourOfDay + ":" + minute);
             adapter.notifyDataSetChanged();
             settingFrom = false;
-            TimeInterval ti =mondayTime.get(0);
-          //  mondayTime.get(0) = new TimeInterval(2,3);
+            TimeInterval ti =selectedTime.get(0);
+          //  selectedTime.get(0) = new TimeInterval(2,3);
           //  tif1.setData("");
         }
         if(settingTo){
@@ -152,10 +152,10 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long fromTime = fromDate.getTime();
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
-                        mondayTime.set(0,timeInterval);
+                        selectedTime.set(0,timeInterval);
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability")
                                 .child(day.toLowerCase());
-                        databaseReference.setValue(mondayTime);
+                        databaseReference.setValue(selectedTime);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

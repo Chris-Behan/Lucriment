@@ -89,6 +89,9 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         tuesdayTime.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Tuesday.setData(c);
                         // itemList.add(tif);
                     }
 
@@ -98,6 +101,10 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         wednesdayTime.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Wednesday.setData(c);
+
                         // itemList.add(tif);
                     }
 
@@ -107,7 +114,9 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         thursdayTime.add(tif);
-                        // itemList.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Thursday.setData(c);
                     }
 
                 }
@@ -116,7 +125,9 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         fridayTime.add(tif);
-                        // itemList.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Friday.setData(c);
                     }
 
                 }
@@ -125,7 +136,9 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         saturdayTime.add(tif);
-                        // itemList.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Saturday.setData(c);
                     }
 
                 }
@@ -134,7 +147,9 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         sundayTime.add(tif);
-                        // itemList.add(tif);
+                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+
+                        Sunday.setData(c);
                     }
 
                 }

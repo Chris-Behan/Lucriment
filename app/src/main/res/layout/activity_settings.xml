@@ -38,5 +38,15 @@
             android:layout_alignParentBottom="true"
             tools:layout_editor_absoluteY="459dp"
             tools:layout_editor_absoluteX="0dp" />
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/profileButton"
+            android:layout_alignStart="@+id/profileButton"
+            android:layout_below="@+id/profileButton"
+            android:layout_marginTop="31dp"
+            android:text="logout" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

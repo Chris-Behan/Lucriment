@@ -9,12 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button profileButton;
+    private Button profileButton, logoutButton;
     private String userType;
     private UserInfo userInfo;
     private BottomNavigationView bottomNavigationView;
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +30,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
-
+        firebaseAuth = FirebaseAuth.getInstance();
 
         //INITIALIZE BOTTOM NAVIGATION VIEW
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -41,10 +45,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         //INITIALIZE BUTTONS
         profileButton = (Button) findViewById(R.id.profileButton);
+        logoutButton = (Button) findViewById(R.id.logout);
 
 
         // SET LISTENERS
         profileButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
 
     }
 
@@ -76,6 +82,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             i.putExtra("userInfo",userInfo);
             startActivity(i);
 
+        }
+        if(v == logoutButton){
+            firebaseAuth.signOut();
+            LoginManager.getInstance().logOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 }
