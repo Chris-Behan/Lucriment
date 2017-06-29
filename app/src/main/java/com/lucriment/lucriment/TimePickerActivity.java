@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +56,14 @@ public class TimePickerActivity extends BaseActivity  {
     private Date fromdate, todate;
     private UserInfo userInfo;
     private String userType;
+    private ArrayList<TimeInterval> mondayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> tuesdayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> wednesdayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> thursdayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> fridayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> saturdayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> sundayAva = new ArrayList<>();
+    private ArrayList<TimeInterval> selection = new ArrayList<>();
     private double score;
 
     @Override
@@ -88,13 +98,85 @@ public class TimePickerActivity extends BaseActivity  {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 items.clear();
-                for(DataSnapshot avaSnapShot: dataSnapshot.getChildren()){
-                    Availability ava = avaSnapShot.getValue(Availability.class);
-                    avaList.add(ava);
+                if (dataSnapshot.hasChild("monday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("monday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        mondayAva.add(ti);
 
 
-                }
+                    }
                     myGridAdapter.notifyDataSetChanged();
+                }
+
+                if (dataSnapshot.hasChild("tuesday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("tuesday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        tuesdayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+                if (dataSnapshot.hasChild("wednesday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("wednesday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        wednesdayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+                if (dataSnapshot.hasChild("thursday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("thursday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        thursdayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+                if (dataSnapshot.hasChild("friday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("friday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        fridayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+                if (dataSnapshot.hasChild("saturday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("saturday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        saturdayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+                if (dataSnapshot.hasChild("sunday")) {
+                    for (DataSnapshot avaSnapShot : dataSnapshot.child("sunday").getChildren()) {
+                        //  Availability ava = avaSnapShot.getValue(Availability.class);
+                        //   avaList.add(ava);
+                        TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
+                        sundayAva.add(ti);
+
+
+                    }
+                    myGridAdapter.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -113,7 +195,11 @@ public class TimePickerActivity extends BaseActivity  {
             public void onSelectedDayChange(CalendarView view, int year, int month,
                                             int dayOfMonth) {
                 //Toast.makeText(getApplicationContext(), ""+dayOfMonth, 0).show();
-                getSelectedDayAva(year, dayOfMonth, month);
+                try {
+                    getSelectedDayAva(year, dayOfMonth, month);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -280,11 +366,92 @@ public class TimePickerActivity extends BaseActivity  {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void getSelectedDayAva(int year, int day, int month){
+    private void getSelectedDayAva(int year, int day, int month) throws ParseException {
         todaysAvailability.clear();
         items.clear();
         Calendar cal = Calendar.getInstance();
+        String yearS = year+"";
+        String dayS;
+        String monthS;
+        if(day<10){
+            dayS = "0"+day;
+        }else{
+            dayS = day+"";
+        }
+        if(month<10){
+            monthS = "0"+(month+1);
+        }else{
+            monthS = (month+1)+"";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyddMM");
+        Date date = sdf.parse(year+""+dayS+""+monthS);
+        Calendar c = Calendar.getInstance();
 
+
+        String dayOfWeek = (String) android.text.format.DateFormat.format("EEEE", date);
+        long dayTime = date.getTime();
+        c.setTimeInMillis(dayTime);
+
+
+        if(dayOfWeek.equals("Monday")){
+            for(TimeInterval timeInterval: mondayAva){
+                //GET FROM TIME
+                Calendar c2 = Calendar.getInstance();
+                c2.setTimeInMillis(timeInterval.getFrom());
+                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                c2.setTimeInMillis(timeInterval.getFrom());
+                int fromminute = c2.get(Calendar.MINUTE);
+                String fminuteS = "";
+                String fhourS = "";
+                if(fromminute<10){
+                     fminuteS = "0"+fromminute;
+                }else{
+                    fminuteS = fromminute+"";
+                }
+                if(fromhour<10){
+                    fhourS = "0"+fromhour;
+                }else{
+                     fhourS = fromhour+"";
+                }
+                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
+                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
+                long fromTime = finalFromDate.getTime();
+                //GET TO TIME
+                Calendar c3 = Calendar.getInstance();
+                c3.setTimeInMillis(timeInterval.getTo());
+                int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                c3.setTimeInMillis(timeInterval.getTo());
+                int tominute = c3.get(Calendar.MINUTE);
+                String tminuteS = "";
+                String thourS = "";
+                if(tominute < 10){
+                    tminuteS = "0"+tominute;
+                }else{
+                    tminuteS = tominute + "";
+                }
+                if(tohour<10){
+                    thourS = "0" + tohour;
+                }else{
+                    thourS = tohour+"";
+                }
+                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
+                long toTime = finalToDate.getTime();
+                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+
+                Availability thisAva = new Availability(finalTimeInterval,"");
+                todaysAvailability.add(thisAva);
+                processStartAvailability(thisAva);
+
+
+            }
+
+        }
+
+        
+        
+        /*
         for(Availability ava: avaList ){
 
         int rday = ava.returnDay();
@@ -298,7 +465,7 @@ public class TimePickerActivity extends BaseActivity  {
               //  items.add(ava.returnToTime());
 
             } 
-        }
+        }*/
         myGridAdapter.notifyDataSetChanged();
     }
 
