@@ -3,11 +3,13 @@ package com.lucriment.lucriment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -42,12 +44,15 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private boolean settingTo = false;
     private ArrayList<TimeInterval> selectedTime = new ArrayList<>();
     private UserInfo userInfo;
+    private String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_availability);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //GET INTENTS
         selectedTime = getIntent().getParcelableArrayListExtra("listOfTimes");
+        userType = getIntent().getStringExtra("userType");
         userInfo = getIntent().getParcelableExtra("userInfo");
         day = getIntent().getStringExtra("nameOfDay");
         tif1 = new TwoItemField("Day",day);
@@ -119,6 +124,17 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
             // return super.getView(position, convertView, parent);
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(DayAvailability.this, DefaultAvailability.class);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
+    }
+
+
 
     private void registerEditTimeClick(){
         ListView list = (ListView) findViewById(R.id.dayOptions);

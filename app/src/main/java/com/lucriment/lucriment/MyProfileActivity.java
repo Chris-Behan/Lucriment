@@ -119,6 +119,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         databaseReference2 = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
 
@@ -429,6 +430,15 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(MyProfileActivity.this, SettingsActivity.class);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
     }
 
     @Override

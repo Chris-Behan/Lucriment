@@ -38,6 +38,7 @@ public class DefaultTabFragment extends Fragment {
     private List<String> expandableListTitle;
     private HashMap<String, List<String>> expandableListDetail;
     private UserInfo userInfo;
+    private String userType;
    // private HashMap<String, ArrayList<TwoItemField>> defaultAvailability;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private ArrayList<TimeInterval> mondayTime = new ArrayList<>();
@@ -66,6 +67,7 @@ public class DefaultTabFragment extends Fragment {
         Bundle args = getArguments();
        // int index = args.getInt("index", 0);
         userInfo = args.getParcelable("userInfo");
+        userType = args.getString("userType");
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)

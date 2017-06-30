@@ -7,10 +7,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
@@ -19,6 +28,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private UserInfo userInfo;
     private BottomNavigationView bottomNavigationView;
     private FirebaseAuth firebaseAuth;
+    private ImageView imageView;
+    private ArrayList<TwoItemField> optionList = new ArrayList<>();
+    private ArrayAdapter<TwoItemField> adapter;
+    private TwoItemField option1 = new TwoItemField("Availability","");
+    private TwoItemField option2 = new TwoItemField("Settings","");
+    private TwoItemField option3 = new TwoItemField("Help & Support","");
+    private TwoItemField option4 = new TwoItemField("Share","");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +63,52 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         //INITIALIZE BUTTONS
         profileButton = (Button) findViewById(R.id.profileButton);
         logoutButton = (Button) findViewById(R.id.logout);
+        imageView = (ImageView) findViewById(R.id.settingsPic);
+        Glide.with(getApplicationContext())
+                .load(userInfo.getProfileImage())
+
+                .into(imageView);
 
 
         // SET LISTENERS
         profileButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
 
+        //FILL OPTIONS
+        optionList.add(option1);
+        optionList.add(option2);
+        optionList.add(option3);
+        optionList.add(option4);
+        populateOptionList();
+        registerOptionClicks();
+
+
+    }
+
+
+    private void populateOptionList(){
+        adapter = new SettingsActivity.myListAdapter();
+        ListView list = (ListView) findViewById(R.id.options);
+        list.setAdapter(adapter);
+
+
+    }
+
+    private void registerOptionClicks(){
+        ListView list = (ListView) findViewById(R.id.options);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position ==0){
+                    finish();
+                    Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
+                    startActivity(i);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -88,6 +145,40 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             LoginManager.getInstance().logOut();
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        }
+    }
+
+    private class myListAdapter extends ArrayAdapter<TwoItemField> {
+
+        public myListAdapter(){
+            super(SettingsActivity.this, R.layout.session_request_field, optionList);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.session_request_field, parent, false);
+            }
+            TwoItemField currentTwo = optionList.get(position);
+            //Availability currentAva = avaList.get(position);
+            // TutorInfo currentTutor = tutors.get(position);
+
+
+            // set image imageVIew.setImageResource();
+            TextView category = (TextView) itemView.findViewById(R.id.category);
+            category.setText(currentTwo.getLabel());
+
+
+            TextView dataText = (TextView) itemView.findViewById(R.id.input);
+            dataText.setText(currentTwo.getData());
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
         }
     }
 }

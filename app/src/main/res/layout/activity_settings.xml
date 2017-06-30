@@ -23,13 +23,28 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
+        <ImageView
+            android:id="@+id/settingsPic"
+            android:layout_width="1000dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/cast_expanded_controller_seekbar_thumb"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/profileButton"
+            android:layout_toStartOf="@+id/profileButton"
+            android:layout_alignBottom="@+id/profileButton" />
+
         <Button
             android:id="@+id/profileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Profile"
+            android:layout_width="300dp"
+            android:layout_height="80dp"
+            android:background="@color/cardview_light_background"
+            android:text="View and Edit Your Profile"
+            android:textAllCaps="false"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
         <include
             android:id="@+id/navigation"
             layout="@layout/activity_base"
@@ -43,10 +58,16 @@
             android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/profileButton"
-            android:layout_alignStart="@+id/profileButton"
-            android:layout_below="@+id/profileButton"
-            android:layout_marginTop="31dp"
-            android:text="logout" />
+            android:text="logout"
+            android:layout_above="@+id/navigation"
+            android:layout_centerHorizontal="true" />
+
+        <ListView
+            android:id="@+id/options"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@+id/settingsPic"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

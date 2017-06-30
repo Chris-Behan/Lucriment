@@ -1,9 +1,11 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +30,7 @@ public class DefaultAvailability extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_availability);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -58,12 +61,24 @@ public class DefaultAvailability extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(DefaultAvailability.this, SettingsActivity.class);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
+    }
+
+
     //ADDS FRAGMENTS TO VIEW
     private void setUpViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         DefaultTabFragment dft = new DefaultTabFragment();
         Bundle args = new Bundle();
         args.putParcelable("userInfo",userInfo);
+        args.putString("userType",userType);
         dft.setArguments(args);
         adapter.addFragment(new CalendarTabFragment(), "Calendar");
         adapter.addFragment(dft,"Default Availability");
