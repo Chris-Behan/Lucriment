@@ -76,11 +76,14 @@ public class DefaultAvailability extends AppCompatActivity {
     private void setUpViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         DefaultTabFragment dft = new DefaultTabFragment();
+        CalendarTabFragment ctf = new CalendarTabFragment();
         Bundle args = new Bundle();
         args.putParcelable("userInfo",userInfo);
         args.putString("userType",userType);
+        ctf.setArguments(args);
         dft.setArguments(args);
-        adapter.addFragment(new CalendarTabFragment(), "Calendar");
+
+        adapter.addFragment(ctf, "Calendar");
         adapter.addFragment(dft,"Default Availability");
 
 

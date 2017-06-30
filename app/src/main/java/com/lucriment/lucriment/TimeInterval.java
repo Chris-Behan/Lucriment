@@ -103,7 +103,12 @@ public class TimeInterval implements Parcelable{
     public String returnFromTime(){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(from);
-        String from = "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+        String min = cal.get(Calendar.MINUTE)+"";
+        if(min.length()<2){
+            min = "0"+min;
+        }
+
+        String from = "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + min;
         return from;
     }
 
@@ -111,7 +116,13 @@ public class TimeInterval implements Parcelable{
     public String returnToTime(){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(to);
-        String to = "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+
+        String min = cal.get(Calendar.MINUTE)+"";
+        if(min.length()<2){
+            min = "0"+min;
+        }
+
+        String to = "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + min;
         return to;
     }
 
