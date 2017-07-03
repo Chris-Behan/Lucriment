@@ -13,7 +13,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 import android.app.SearchManager;
 import android.widget.SearchView.OnQueryTextListener;
 
+import java.util.ArrayList;
+
 public class TutorListActivity extends BaseActivity {
 
     RecyclerView recyclerView;
@@ -41,16 +47,22 @@ public class TutorListActivity extends BaseActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
     private double tutorScore;
+    private ArrayList<TutorInfo> tutors = new ArrayList<>();
+    ArrayAdapter<TutorInfo> adapter;
+    private ArrayList<TutorInfo> searchResult = new ArrayList<>();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_layout);
+        setContentView(R.layout.activity_tutor_list);
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference("tutors");
-        recyclerView = (RecyclerView)findViewById(R.id.rView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(TutorListActivity.this));
+      //  recyclerView = (RecyclerView)findViewById(R.id.rView);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(TutorListActivity.this));
+        getTutors();
+
 
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -119,19 +131,48 @@ public class TutorListActivity extends BaseActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                /*
+                searchResult.clear();
+                for(TutorInfo ti:tutors){
+                    ArrayList<String> subjects = ti.getSubjects();
+                    if(subjects!=null){
 
+                        for(String s:subjects){
+                            s= s.toLowerCase();
+                            if(s.contains((query))){
+                                searchResult.add(ti);
+                            }
+                        }
+                    }
+
+                }
+                adapter.notifyDataSetChanged(); */
               //  mFirebaseAdapter.equals(query);
-                tutorQuery("rate");
-                return true;
+
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                tutorQuery("rate");
-             //   myRef.orderByChild("phoneNumber");
-            //    myRef.orderByChild("subjects");
-           //     mFirebaseAdapter.notifyDataSetChanged();
-                return true;
+                searchResult.clear();
+                for(TutorInfo ti:tutors){
+                    ArrayList<String> subjects = ti.getSubjects();
+                    if(subjects!=null){
+
+                        for(String s:subjects){
+                            s= s.toLowerCase();
+                            if(s.contains((newText))){
+                                if(!searchResult.contains(ti)) {
+                                    searchResult.add(ti);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+
+                return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
@@ -141,74 +182,37 @@ public class TutorListActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-//Log.d("LOGGED", "IN onStart ");
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<TutorInfo, ImageLayoutViewHolder>
-                (TutorInfo.class, R.layout.tutor_profile_layout, ImageLayoutViewHolder.class, myRef)
-        {
-
-            public void populateViewHolder(final ImageLayoutViewHolder viewHolder, final TutorInfo model, final int position) {
-                viewHolder.Image_URL(model.getProfileImage());
-                viewHolder.Image_Title(model.getFirstName());
-                viewHolder.RateText(String.valueOf(model.getRate()));
-                Rating rating = model.getRating();
-                if (rating != null) {
-                    double score = rating.getTotalScore()/rating.getNumberOfReviews();
-                    viewHolder.RatingBar((float)score);
+    }
+    private void getTutors(){
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
+                    TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
+                    tutors.add(tutor);
                 }
+                populateTutorList();
+                // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
+                //  populateTutorList(tNames);
+            }
 
-                if(model.getSubjects()!=null) {
-                    viewHolder.SubjectsText(model.getSubjects().get(0));
-                }
-
-//OnClick Item it will Delete data from Database
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(final View v) {
-                        TutorInfo selectedTutor1 = model;
-                        Rating tutorRating = selectedTutor1.getRating();
-                        if(tutorRating!=null) {
-                            tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
-
-                        }
-                        // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                        Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
-                        i.putExtra("selectedTutor", selectedTutor1);
-                        i.putExtra("tutorScore",tutorScore);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo",userInfo);
-                        startActivity(i);
-
-                        /*
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ImageLayout.this);
-                        builder.setMessage("Do you want to Delete this data ?").setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int selectedItems = position;
-                                        mFirebaseAdapter.getRef(selectedItems).removeValue();
-                                        mFirebaseAdapter.notifyItemRemoved(selectedItems);
-                                        recyclerView.invalidate();
-                                        onStart();
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        dialog.setTitle("Confirm");
-                        dialog.show(); */
-                    }
-                });
-
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        });
 
-        recyclerView.setAdapter(mFirebaseAdapter);
+    }
+
+    private void populateTutorList(){
+        //  populateTutorList();
+        adapter = new myListAdapter();
+        ListView list = (ListView) findViewById(R.id.tView);
+        list.setAdapter(adapter);
+        registerTutorClicks();
+        //adapter.getView();
+
     }
 
     private void setUp(){
@@ -240,74 +244,81 @@ public class TutorListActivity extends BaseActivity {
         return userInfo;
     }
 
-    private void tutorQuery(String query){
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<TutorInfo, ImageLayoutViewHolder>
-                (TutorInfo.class, R.layout.tutor_profile_layout, ImageLayoutViewHolder.class, myRef.startAt("rate"))
-        {
 
-            public void populateViewHolder(final ImageLayoutViewHolder viewHolder, final TutorInfo model, final int position) {
-                viewHolder.Image_URL(model.getProfileImage());
-                viewHolder.Image_Title(model.getFirstName());
-                viewHolder.RateText(String.valueOf(model.getRate()));
-                Rating rating = model.getRating();
-                if (rating != null) {
-                    double score = rating.getTotalScore()/rating.getNumberOfReviews();
-                    viewHolder.RatingBar((float)score);
+    private class myListAdapter extends ArrayAdapter<TutorInfo> {
+
+        public myListAdapter(){
+            super(TutorListActivity.this, R.layout.tutor_profile_layout, searchResult);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(int position,  View convertView,  ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.tutor_profile_layout, parent, false);
+            }
+            //Find tutor to work with
+            TutorInfo currentTutor = searchResult.get(position);
+
+            //fill the view
+            ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
+
+            Glide.with(getApplicationContext())
+                    .load(currentTutor.getProfileImage())
+                    .into(imageView);
+            // set image imageVIew.setImageResource();
+            TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
+            nameText.setText(currentTutor.getFullName());
+
+            RatingBar ratingScore = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            if(currentTutor.getRating()!=null) {
+                Rating rating = currentTutor.getRating();
+                double score = rating.getTotalScore()/rating.getNumberOfReviews();
+                ratingScore.isIndicator();
+                ratingScore.setRating((float) score);
+            }else{}
+
+            TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
+            classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));
+
+            TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
+            rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+    }
+
+    private void registerTutorClicks() {
+        ListView list = (ListView) findViewById(R.id.tView);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TutorInfo selectedTutor1 = searchResult.get(position);
+                Rating tutorRating = selectedTutor1.getRating();
+                if(tutorRating!=null) {
+                    tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
+
                 }
-
-                if(model.getSubjects()!=null) {
-                    viewHolder.SubjectsText(model.getSubjects().get(0));
-                }
-
-//OnClick Item it will Delete data from Database
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(final View v) {
-                        TutorInfo selectedTutor1 = model;
-                        Rating tutorRating = selectedTutor1.getRating();
-                        if(tutorRating!=null) {
-                            tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
-
-                        }
-                        // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                        Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
-                        i.putExtra("selectedTutor", selectedTutor1);
-                        i.putExtra("tutorScore",tutorScore);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo",userInfo);
-                        startActivity(i);
-
-                        /*
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ImageLayout.this);
-                        builder.setMessage("Do you want to Delete this data ?").setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int selectedItems = position;
-                                        mFirebaseAdapter.getRef(selectedItems).removeValue();
-                                        mFirebaseAdapter.notifyItemRemoved(selectedItems);
-                                        recyclerView.invalidate();
-                                        onStart();
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        dialog.setTitle("Confirm");
-                        dialog.show(); */
-                    }
-                });
-
+                // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
+                i.putExtra("selectedTutor", selectedTutor1);
+                i.putExtra("tutorScore",tutorScore);
+                i.putExtra("userType", userType);
+                i.putExtra("userInfo",userInfo);
+                startActivity(i);
 
             }
-        };
-        recyclerView.setAdapter(mFirebaseAdapter);
+        });
+
     }
+
+
+
 
     //View Holder For Recycler View
     public static class ImageLayoutViewHolder extends RecyclerView.ViewHolder {

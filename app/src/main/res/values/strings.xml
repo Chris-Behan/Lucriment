@@ -7,5 +7,11 @@
         <item>University of Alberta</item>
     </string-array>
 
+    <string-array name="highschoolSubjects">
+        <item>Science 10</item>
+        <item>Science 20</item>
+        <item>Science 30</item>
+    </string-array>
+
     <string name="fb_login_protocol_scheme">fb434720066875970</string>
 </resources>
