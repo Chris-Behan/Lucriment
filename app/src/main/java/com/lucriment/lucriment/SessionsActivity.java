@@ -342,7 +342,11 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            nameText.setText(session.getStudentName());
+            if(userType.equals("Student")){
+                nameText.setText(session.getTutorName());
+            }else {
+                nameText.setText(session.getStudentName());
+            }
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
@@ -382,7 +386,11 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            nameText.setText(session.getStudentName());
+            if(userType.equals("Student")){
+                nameText.setText(session.getTutorName());
+            }else {
+                nameText.setText(session.getStudentName());
+            }
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
@@ -422,7 +430,11 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            nameText.setText(session.getStudentName());
+            if(userType.equals("Student")){
+                nameText.setText(session.getTutorName());
+            }else {
+                nameText.setText(session.getStudentName());
+            }
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
@@ -565,7 +577,12 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(SessionsActivity.this, SessionDetails.class);
-                i.putExtra("name",selectedSession.getStudentName());
+
+                if(userType.equals("Tutor")) {
+                    i.putExtra("name", selectedSession.getStudentName());
+                }else{
+                    i.putExtra("name", selectedSession.getTutorName());
+                }
                 i.putExtra("time",selectedSession.getTime());
                 i.putExtra("location", selectedSession.getLocation());
                 i.putExtra("subject",selectedSession.getSubject());
@@ -585,7 +602,12 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 SessionRequest currSession = thisSession.get(position);
 
                 Intent y = new Intent(SessionsActivity.this, CurrentSession.class);
-                y.putExtra("name",currSession.getStudentName());
+
+                if(userType.equals("Tutor")) {
+                    y.putExtra("name", currSession.getStudentName());
+                }else{
+                    y.putExtra("name", currSession.getTutorName());
+                }
                 y.putExtra("time",currSession.getTime());
                 y.putExtra("location", currSession.getLocation());
                 y.putExtra("subject",currSession.getSubject());

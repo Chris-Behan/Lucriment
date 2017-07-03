@@ -127,6 +127,7 @@ public class TutorListActivity extends BaseActivity {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem item =  menu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint("Search by Class...");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -191,6 +192,7 @@ public class TutorListActivity extends BaseActivity {
                 for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
                     TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
                     tutors.add(tutor);
+                    searchResult.add(tutor);
                 }
                 populateTutorList();
                 // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
@@ -279,7 +281,9 @@ public class TutorListActivity extends BaseActivity {
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
                 ratingScore.isIndicator();
                 ratingScore.setRating((float) score);
-            }else{}
+            }else{
+                ratingScore.setRating(0);
+            }
 
             TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
             classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));

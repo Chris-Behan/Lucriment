@@ -29,7 +29,7 @@ import java.util.List;
 public class SessionDetails extends AppCompatActivity implements OnMapReadyCallback {
 
     private TimeInterval ti;
-    private TextView classLabel, nameLabel, name, timeInterval, location;
+    private TextView classLabel, nameLabel, name, timeInterval, location, nameTypeLabel;
     private String nameString;
     private String className;
     private String locationName;
@@ -46,6 +46,7 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
         location = (TextView) findViewById(R.id.location);
         classLabel = (TextView) findViewById(R.id.classtitle);
         timeInterval = (TextView) findViewById(R.id.time);
+        nameTypeLabel = (TextView) findViewById(R.id.nameTypeLabel);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
        // ActionBar actionBar = getActionBar();
        // actionBar.setDisplayHomeAsUpEnabled(true);
@@ -69,6 +70,9 @@ public class SessionDetails extends AppCompatActivity implements OnMapReadyCallb
             subject = getIntent().getStringExtra("subject");
         }
 
+        if(userType.equals("Student")){
+            nameTypeLabel.setText("Tutor");
+        }
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

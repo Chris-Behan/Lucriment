@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/menuSearch"
-        android:title="Search"
+        android:title="Search by Class"
         android:icon="@drawable/ic_search_black_24dp"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"
