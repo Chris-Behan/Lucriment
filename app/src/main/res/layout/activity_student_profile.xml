@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lucriment.lucriment.studentProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintRight_toRightOf="parent"
+
+        tools:layout_constraintLeft_creator="1"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+      >
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/cast_abc_scrubber_control_to_pressed_mtrl_000"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp" />
+
+        <TextView
+            android:id="@+id/studentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="studentName"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_below="@+id/imageView4"
+            android:layout_centerHorizontal="true" />
+        <Button
+            android:id="@+id/Edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_edit_black_24dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/aboutLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="19dp"
+            android:layout_marginStart="19dp"
+            android:text="About:"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/aboutField"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:text="Say Something About Yourself..."
+            android:layout_alignBaseline="@+id/aboutLabel"
+            android:layout_alignBottom="@+id/aboutLabel"
+            android:layout_toRightOf="@+id/aboutLabel"
+            android:layout_toEndOf="@+id/aboutLabel"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp" />
+
+        <Button
+            android:id="@+id/changePicture"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/studentName"
+            android:layout_centerHorizontal="true"
+            android:text="Upload" />
+        <EditText
+            android:visibility="invisible"
+            android:id="@+id/editAbout"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/aboutField"
+            android:layout_alignLeft="@+id/aboutField"
+            android:layout_alignStart="@+id/aboutField" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

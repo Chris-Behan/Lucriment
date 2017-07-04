@@ -134,11 +134,18 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if(v == profileButton){
-            Intent i = new Intent(SettingsActivity.this, MyProfileActivity.class);
-            i.putExtra("userType", userType);
-            i.putExtra("userInfo",userInfo);
-            startActivity(i);
+            if(userType.equals("Student")) {
+                Intent i = new Intent(SettingsActivity.this, studentProfileActivity.class);
+                i.putExtra("userType", userType);
+                i.putExtra("userInfo", userInfo);
+                startActivity(i);
+            }else{
+                Intent i = new Intent(SettingsActivity.this, MyProfileActivity.class);
+                i.putExtra("userType", userType);
+                i.putExtra("userInfo", userInfo);
+                startActivity(i);
 
+            }
         }
         if(v == logoutButton){
             firebaseAuth.signOut();
