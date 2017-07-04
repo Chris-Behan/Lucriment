@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/myTextView"
-        android:text="Hello"
+        android:id="@+id/listTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="17dp"
-        android:textColor="#004d80" />
+        android:textColor="@android:color/black"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
 </LinearLayout>

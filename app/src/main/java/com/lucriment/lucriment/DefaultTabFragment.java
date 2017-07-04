@@ -36,7 +36,7 @@ public class DefaultTabFragment extends Fragment {
     private ListView listView;
     private CustomExpandableListAdapter expandableListAdapter;
     private List<String> expandableListTitle;
-    private HashMap<String, List<String>> expandableListDetail;
+    private HashMap<String, List<TimeInterval>> expandableListDetail;
     private UserInfo userInfo;
     private String userType;
    // private HashMap<String, ArrayList<TwoItemField>> defaultAvailability;
@@ -57,6 +57,7 @@ public class DefaultTabFragment extends Fragment {
     private TwoItemField Sunday = new TwoItemField("Sunday", "Select");
     private TwoItemField Select = new TwoItemField("Select","");
     private  ArrayAdapter<TwoItemField> adapter;
+    private LinkedHashMap<String, List<TimeInterval>> dayAvailablities = new LinkedHashMap<String, List<TimeInterval>>();
 
 
 
@@ -66,8 +67,10 @@ public class DefaultTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.defaulttab, container,false);
         Bundle args = getArguments();
        // int index = args.getInt("index", 0);
+        expandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -85,6 +88,7 @@ public class DefaultTabFragment extends Fragment {
                      // itemList.add(tif);
                   }
 
+
               }
                 if(dataSnapshot.hasChild("tuesday")){
                     DataSnapshot mondaySnap = dataSnapshot.child("tuesday");
@@ -96,6 +100,7 @@ public class DefaultTabFragment extends Fragment {
                         Tuesday.setData(c);
                         // itemList.add(tif);
                     }
+
 
                 }
                 if(dataSnapshot.hasChild("wednesday")){
@@ -110,6 +115,7 @@ public class DefaultTabFragment extends Fragment {
                         // itemList.add(tif);
                     }
 
+
                 }
                 if(dataSnapshot.hasChild("thursday")){
                     DataSnapshot mondaySnap = dataSnapshot.child("thursday");
@@ -120,6 +126,7 @@ public class DefaultTabFragment extends Fragment {
 
                         Thursday.setData(c);
                     }
+
 
                 }
                 if(dataSnapshot.hasChild("friday")){
@@ -132,6 +139,7 @@ public class DefaultTabFragment extends Fragment {
                         Friday.setData(c);
                     }
 
+
                 }
                 if(dataSnapshot.hasChild("saturday")){
                     DataSnapshot mondaySnap = dataSnapshot.child("saturday");
@@ -142,6 +150,7 @@ public class DefaultTabFragment extends Fragment {
 
                         Saturday.setData(c);
                     }
+
 
                 }
                 if(dataSnapshot.hasChild("sunday")){
@@ -154,7 +163,15 @@ public class DefaultTabFragment extends Fragment {
                         Sunday.setData(c);
                     }
 
+
                 }
+                dayAvailablities.put("Monday",mondayTime);
+                dayAvailablities.put("Tuesday",tuesdayTime);
+                dayAvailablities.put("Wednesday",wednesdayTime);
+                dayAvailablities.put("Thursday",thursdayTime);
+                dayAvailablities.put("Friday",fridayTime);
+                dayAvailablities.put("Saturday",saturdayTime);
+                dayAvailablities.put("Sunday",sundayTime);
                 itemList.add(Monday);
                 itemList.add(Tuesday);
                 itemList.add(Wednesday);
@@ -165,6 +182,13 @@ public class DefaultTabFragment extends Fragment {
 
                 adapter.notifyDataSetChanged();
 
+                expandableListDetail = dayAvailablities;
+                expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
+                expandableListAdapter = new CustomExpandableListAdapter(getApplicationContext(),expandableListTitle,expandableListDetail);
+                expandableListView.setAdapter(expandableListAdapter);
+                for(int i = 0; i<expandableListAdapter.getGroupCount(); i++){
+                    expandableListView.expandGroup(i);
+                }
 
             }
 
@@ -175,14 +199,27 @@ public class DefaultTabFragment extends Fragment {
         });
 
 
-
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Intent i = new Intent(getApplicationContext(), DayAvailability.class);
+                i.putExtra("nameOfDay", expandableListTitle.get(groupPosition));
+                if(expandableListDetail.get(expandableListTitle.get(groupPosition)).size()>0) {
+                    i.putExtra("day", expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition));
+                }
+                i.putExtra("listOfTimes", mondayTime);
+                i.putExtra("userInfo", userInfo);
+                startActivity(i);
+                return false;
+            }
+        });
 
 
 
 
 
         adapter = new DaySelectAdapter(getApplicationContext(),itemList);
-        ListView dayList = (ListView) view.findViewById(R.id.dayList);
+  /*    //  ListView dayList = (ListView) view.findViewById(R.id.dayList);
         dayList.setAdapter(adapter);
         dayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -259,8 +296,10 @@ public class DefaultTabFragment extends Fragment {
                 }
 
             }
-        });
+        }); */
 //        registerDayClicks();
+
+
 
        return view;
     }
@@ -270,7 +309,7 @@ public class DefaultTabFragment extends Fragment {
        // }
     }
     private void registerDayClicks(){
-
+/*
         ListView list = (ListView) getView().findViewById(R.id.dayList);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -280,6 +319,7 @@ public class DefaultTabFragment extends Fragment {
                 startActivity(i);
             }
         });
+        */
     }
 
 
