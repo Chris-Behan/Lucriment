@@ -134,7 +134,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if(v == profileButton){
-            if(userType.equals("Student")) {
+            if(userType.equals("student")) {
                 Intent i = new Intent(SettingsActivity.this, studentProfileActivity.class);
                 i.putExtra("userType", userType);
                 i.putExtra("userInfo", userInfo);

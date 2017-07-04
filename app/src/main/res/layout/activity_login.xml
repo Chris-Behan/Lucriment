@@ -13,30 +13,32 @@
         android:layout_height="0dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="67dp"
-        android:layout_marginTop="86dp"
+        android:layout_marginStart="67dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginRight="67dp"
+        android:layout_marginEnd="67dp"
+        android:baselineAligned="true"
         android:orientation="vertical"
+        android:weightSum="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="67dp"
-        android:weightSum="1">
+        tools:layout_constraintTop_creator="1">
 
         <ImageView
             android:id="@+id/ProfileImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/banner2"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="20dp"
+            android:layout_marginTop="12dp"
             android:layout_weight="0.11"
             android:adjustViewBounds="true"
             android:maxHeight="80dp"
             android:maxWidth="80dp"
-             />
+            android:src="@drawable/banner2" />
 
 
         <EditText
@@ -62,11 +64,10 @@
             android:text="Sign In" />
 
 
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/googleButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebookButton"
@@ -74,8 +75,7 @@
             android:layout_height="wrap_content"
 
             android:layout_centerInParent="true"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_gravity="center_horizontal" />
 
 
         <TextView
@@ -87,7 +87,6 @@
             android:textAlignment="center" />
 
     </LinearLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

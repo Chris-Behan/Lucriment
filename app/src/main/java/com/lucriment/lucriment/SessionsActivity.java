@@ -157,7 +157,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         });
 
         registerSessionClicks();
-        if(userType.equals("Student")){
+        if(userType.equals("student")){
             sessionRequestLabel.setText("Pending Requests:");
         }
 

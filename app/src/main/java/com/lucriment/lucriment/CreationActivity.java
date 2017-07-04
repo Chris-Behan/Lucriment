@@ -3,10 +3,12 @@ package com.lucriment.lucriment;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,14 +31,14 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-    private Button logoutButton;
+
     private Button registerButton;
-    private RadioGroup rg;
-    private RadioButton rb;
     private Spinner schoolSelector;
+    private UserInfo UserInformation;
+    private TextInputLayout firstNameInputLayout, lastNameInputLayout;
 
     //private FirebaseUser user;
-    private EditText name;
+    private EditText firstName, lastName;
 
 
     @Override
@@ -53,13 +55,14 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         // initialize firebase user
         FirebaseUser user = firebaseAuth.getCurrentUser();
         //initialize buttons
-        logoutButton = (Button) findViewById(R.id.logoutButton2);
-        schoolSelector = (Spinner) findViewById(R.id.schoolSelect);
+        firstNameInputLayout = (TextInputLayout) findViewById(R.id.firstNameInputLayout);
+        lastNameInputLayout = (TextInputLayout) findViewById(R.id.lastNameInputLayout);
         registerButton = (Button) findViewById(R.id.createButton);
-        rg = (RadioGroup) findViewById(R.id.radioGroup);
-        name = (EditText) findViewById(R.id.Name);
+        firstName = (EditText) findViewById(R.id.firstName);
+        lastName = (EditText) findViewById(R.id.lastName);
         if(firebaseAuth.getCurrentUser().getDisplayName() == null){
-            name.setVisibility(View.VISIBLE);
+            firstName.setVisibility(View.VISIBLE);
+            lastName.setVisibility(View.VISIBLE);
         }
 
 
@@ -68,20 +71,16 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
 
 
         // set up listeners
-        logoutButton.setOnClickListener(this);
+
         registerButton.setOnClickListener(this);
 
-        //set up drop down menu
-        ArrayAdapter<String> schoolNameAdapter = new ArrayAdapter<String>(CreationActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.SchoolNames));
-        schoolNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        schoolSelector.setAdapter(schoolNameAdapter);
+
 
     }
     //save user information
     private void saveUserInformation(){
-        String accountType = rb.getText().toString().trim();
-        String school = schoolSelector.getSelectedItem().toString().trim();
+        String accountType = "student";
+
         //String school = "UofC";
         // System.out.println(school);
 
@@ -90,7 +89,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if(user.getDisplayName() == null) {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(name.getText().toString())
+                    .setDisplayName(firstName.getText().toString()+" "+lastName.getText().toString())
 
                     .build();
 
@@ -105,49 +104,88 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
                     });
         }
       //  String displayName = firebaseAuth.getCurrentUser().getDisplayName().toString();
-        String displayName = name.getText().toString();
-        if(name.getVisibility() == View.INVISIBLE){
+        String displayName = firstName.getText().toString()+" "+lastName.getText().toString();
+        if(firstName.getVisibility() == View.INVISIBLE){
             displayName = firebaseAuth.getCurrentUser().getDisplayName();
+            UserInformation = new UserInfo(displayName, displayName.substring(displayName.indexOf(' ')+1,displayName.length()),
+                    displayName.substring(0,displayName.indexOf(' ')),user.getUid(),user.getEmail(),accountType);
+        }else{
+            UserInformation = new UserInfo(displayName, lastName.getText().toString(),
+                   firstName.getText().toString(),user.getUid(),user.getEmail(),accountType);
         }
-        UserInfo UserInformation = new UserInfo(displayName, displayName.substring(displayName.indexOf(' ')+1,displayName.length()),
-                displayName.substring(0,displayName.indexOf(' ')),user.getUid(),user.getEmail(),accountType);
-        if(accountType.equals("Tutor")) {
+
+       /* if(accountType.equals("Tutor")) {
             databaseReference.child("users").child(user.getUid()).setValue(UserInformation);
             Intent i = new Intent(CreationActivity.this, TutorCreation.class);
             i.putExtra("userInfo", UserInformation);
             startActivity(i);
            // databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);
-        }else{
+        }else{ */
             databaseReference.child("users").child(user.getUid()).setValue(UserInformation);
             Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(CreationActivity.this, ProfileActivity.class);
+            Intent i = new Intent(CreationActivity.this, SettingsActivity.class);
             i.putExtra("userInfo", UserInformation);
 
             startActivity(i);
 
 
+
+
+
+
+    }
+    private boolean validateFirstName(){
+        if (firstName.getText().toString().trim().isEmpty()) {
+            firstNameInputLayout.setError(getString(R.string.err_msg_firstname));
+            requestFocus(firstName);
+            return false;
+
+        } else {
+            firstNameInputLayout.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validateLastName(){
+        if (lastName.getText().toString().trim().isEmpty()) {
+            lastNameInputLayout.setError(getString(R.string.err_msg_lastname));
+            requestFocus(lastName);
+            return false;
+
+        } else {
+            lastNameInputLayout.setErrorEnabled(false);
+        }
+        return true;
+    }
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private void submitForm() {
+        if (!validateFirstName()) {
+            return;
+        }
+
+        if (!validateLastName()) {
+            return;
         }
 
 
-
+        saveUserInformation();
+        Toast.makeText(getApplicationContext(), "Thank You!", Toast.LENGTH_SHORT).show();
     }
 
-    public void rbClick(View v){
-        int radioButtonID = rg.getCheckedRadioButtonId();
-        rb = (RadioButton) findViewById(radioButtonID);
-    }
+
 
     @Override
     public void onClick(View v) {
 
-        if(v == logoutButton){
-            firebaseAuth.signOut();
-            LoginManager.getInstance().logOut();
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
+
         if(v == registerButton){
-            saveUserInformation();
+        submitForm();
+
         }
 
 
