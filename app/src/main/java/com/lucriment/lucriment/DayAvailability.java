@@ -169,7 +169,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
                         if(selectedTime.size()>0) {
-                            selectedTime.set(0, timeInterval);
+                            selectedTime.add(timeInterval);
                         }else{
                             selectedTime.add(timeInterval);
                         }

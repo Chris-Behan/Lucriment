@@ -207,7 +207,8 @@ public class DefaultTabFragment extends Fragment {
                 if(expandableListDetail.get(expandableListTitle.get(groupPosition)).size()>0) {
                     i.putExtra("day", expandableListDetail.get(expandableListTitle.get(groupPosition)).get(childPosition));
                 }
-                i.putExtra("listOfTimes", mondayTime);
+                ArrayList<TimeInterval> selectedDayIntervals = (ArrayList<TimeInterval>) expandableListDetail.get(expandableListTitle.get(groupPosition));
+                i.putParcelableArrayListExtra("listOfTimes",selectedDayIntervals);
                 i.putExtra("userInfo", userInfo);
                 startActivity(i);
                 return false;
