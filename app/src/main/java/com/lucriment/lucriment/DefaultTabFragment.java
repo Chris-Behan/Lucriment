@@ -186,9 +186,11 @@ public class DefaultTabFragment extends Fragment {
                 expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
                 expandableListAdapter = new CustomExpandableListAdapter(getApplicationContext(),expandableListTitle,expandableListDetail);
                 expandableListView.setAdapter(expandableListAdapter);
+             /*
                 for(int i = 0; i<expandableListAdapter.getGroupCount(); i++){
                     expandableListView.expandGroup(i);
                 }
+                */
 
             }
 
