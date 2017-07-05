@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -15,6 +16,8 @@ import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -32,7 +36,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class CalendarTabFragment extends Fragment {
-    private CalendarView cv;
+    private CompactCalendarView cv;
     private ArrayList<TimeInterval> todaysAvailability = new ArrayList<>();
 
     private ArrayList<TimeInterval> mondayAva = new ArrayList<>();
@@ -45,6 +49,9 @@ public class CalendarTabFragment extends Fragment {
     private UserInfo userInfo;
     private String userType;
     private ArrayAdapter<TimeInterval> adapter;
+    private long currentDate;
+    private ArrayList<Event> listOfEvents = new ArrayList<>();
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,23 +59,52 @@ public class CalendarTabFragment extends Fragment {
         Bundle args = getArguments();
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
-        cv = (CalendarView) view.findViewById(R.id.calendarView);
+        cv = (CompactCalendarView) view.findViewById(R.id.calendarView);
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
         timeList.setAdapter(adapter);
-        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        Event ev1 = new Event(Color.BLACK, 1499234400000L, "Available this day");
+        Event ev2 = new Event(Color.BLACK, 1499407200000L,"");
+        cv.setUseThreeLetterAbbreviation(true);
+        cv.setCurrentSelectedDayBackgroundColor(Color.GREEN);
+        cv.setCurrentDayBackgroundColor(Color.TRANSPARENT);
+        cv.setCurrentSelectedDayIndicatorStyle(CompactCalendarView.FILL_LARGE_INDICATOR);
+        cv.addEvent(ev1);
+        cv.addEvent(ev2);
+        /*
+        Calendar cal = Calendar.getInstance();
+        int year  = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int date  = cal.get(Calendar.DATE);
+        cal.clear();
+        cal.set(year, month, date);
+        cal.add(Calendar.DATE,7); */
 
+
+
+
+
+
+        cv.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
-                                            int dayOfMonth) {
+            public void onDayClick(Date dateClicked) {
+                Date date = dateClicked;
+                int year = date.getYear();
+                int dayOfMonth = date.getDay();
+                int month = date.getMonth();
                 try {
                     getSelectedDayAva(year,dayOfMonth,month);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
 
             }
         });
+
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -81,8 +117,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         mondayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    cal.add(Calendar.DATE,7);
+                    long todayMillis2 = cal.getTimeInMillis();
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.BLACK, 1499234400000L, "Available this day");
                     }
 
                 }
