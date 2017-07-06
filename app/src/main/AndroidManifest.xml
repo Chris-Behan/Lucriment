@@ -88,7 +88,8 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DefaultAvailability" />
         <activity android:name=".DayAvailability" />
-        <activity android:name=".studentProfileActivity"></activity>
+        <activity android:name=".studentProfileActivity" />
+        <activity android:name=".CustomAvailabilitySelection"></activity>
     </application>
 
 </manifest>

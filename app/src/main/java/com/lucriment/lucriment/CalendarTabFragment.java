@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
@@ -7,10 +8,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
@@ -38,7 +41,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class CalendarTabFragment extends Fragment {
     private CompactCalendarView cv;
     private ArrayList<TimeInterval> todaysAvailability = new ArrayList<>();
-
+    private FloatingActionButton floatingActionButton;
     private ArrayList<TimeInterval> mondayAva = new ArrayList<>();
     private ArrayList<TimeInterval> tuesdayAva = new ArrayList<>();
     private ArrayList<TimeInterval> wednesdayAva = new ArrayList<>();
@@ -49,6 +52,7 @@ public class CalendarTabFragment extends Fragment {
     private UserInfo userInfo;
     private String userType;
     private ArrayAdapter<TimeInterval> adapter;
+    private Date currentSelectedDate;
     private long currentDate;
     private ArrayList<Event> listOfEvents = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -63,6 +67,29 @@ public class CalendarTabFragment extends Fragment {
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
         timeList.setAdapter(adapter);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.addCustomTimeButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date clickedDate = new Date();
+                long timeToPass = currentSelectedDate.getTime();
+                Intent y = new Intent(getApplicationContext(), CustomAvailabilitySelection.class);
+                y.putParcelableArrayListExtra("listOfTimes",todaysAvailability);
+                y.putExtra("selectedDay",timeToPass);
+                y.putExtra("nameOfDay","today");
+                y.putExtra("userInfo", userInfo);
+                startActivity(y);
+
+            }
+        });
+
+        timeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+            }
+        });
 
         cv.setUseThreeLetterAbbreviation(true);
         cv.setCurrentSelectedDayBackgroundColor(Color.parseColor("#55ff94"));
@@ -70,6 +97,7 @@ public class CalendarTabFragment extends Fragment {
         cv.setCurrentSelectedDayIndicatorStyle(CompactCalendarView.FILL_LARGE_INDICATOR);
         cv.setSelected(true);
         cv.setFirstDayOfWeek(Calendar.SUNDAY);
+
         /*
         Calendar cal = Calendar.getInstance();
         int year  = cal.get(Calendar.YEAR);
@@ -79,14 +107,24 @@ public class CalendarTabFragment extends Fragment {
         cal.set(year, month, date);
         cal.add(Calendar.DATE,7); */
 
-
-
-
+        Date initDate = new Date();
+        initDate.setTime(System.currentTimeMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(initDate);
+        int year = cal.get(Calendar.YEAR);
+        int dayOfMonth = cal.get(Calendar.DATE);
+        int month = cal.get(Calendar.MONTH);
+        try {
+            getSelectedDayAva(year,dayOfMonth,month);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         cv.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
+                currentSelectedDate = dateClicked;
                 Date date = dateClicked;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
