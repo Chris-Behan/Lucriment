@@ -63,14 +63,13 @@ public class CalendarTabFragment extends Fragment {
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
         timeList.setAdapter(adapter);
-        Event ev1 = new Event(Color.BLACK, 1499234400000L, "Available this day");
-        Event ev2 = new Event(Color.BLACK, 1499407200000L,"");
+
         cv.setUseThreeLetterAbbreviation(true);
-        cv.setCurrentSelectedDayBackgroundColor(Color.GREEN);
-        cv.setCurrentDayBackgroundColor(Color.TRANSPARENT);
+        cv.setCurrentSelectedDayBackgroundColor(Color.parseColor("#55ff94"));
+        cv.setCurrentDayBackgroundColor(Color.parseColor("#24e7e3"));
         cv.setCurrentSelectedDayIndicatorStyle(CompactCalendarView.FILL_LARGE_INDICATOR);
-        cv.addEvent(ev1);
-        cv.addEvent(ev2);
+        cv.setSelected(true);
+        cv.setFirstDayOfWeek(Calendar.SUNDAY);
         /*
         Calendar cal = Calendar.getInstance();
         int year  = cal.get(Calendar.YEAR);
@@ -112,22 +111,27 @@ public class CalendarTabFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChild("monday")) {
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+
                     for (DataSnapshot avaSnapShot : dataSnapshot.child("monday").getChildren()) {
                         //  Availability ava = avaSnapShot.getValue(Availability.class);
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         mondayAva.add(ti);
                     }
-                    Calendar cal=Calendar.getInstance();
-                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
-                    cal.set(Calendar.HOUR_OF_DAY,0);
-                    cal.set(Calendar.MINUTE,0);
-                    cal.set(Calendar.SECOND,0);
-                    cal.add(Calendar.DATE,7);
+
+
                     long todayMillis2 = cal.getTimeInMillis();
                     for(int i = 0; i<26;i++){
-                        Event mondayEvent = new Event(Color.BLACK, 1499234400000L, "Available this day");
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
+
 
                 }
 
@@ -140,6 +144,17 @@ public class CalendarTabFragment extends Fragment {
 
 
                     }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
+                    }
+
 
                 }
                 if (dataSnapshot.hasChild("wednesday")) {
@@ -148,8 +163,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         wednesdayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
 
                 }
@@ -159,8 +182,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         thursdayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
 
                 }
@@ -170,8 +201,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         fridayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
 
                 }
@@ -181,8 +220,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         saturdayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
 
                 }
@@ -192,8 +239,16 @@ public class CalendarTabFragment extends Fragment {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         sundayAva.add(ti);
-
-
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(tuesdayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
 
                 }
