@@ -88,9 +88,11 @@ public class CalendarTabFragment extends Fragment {
             @Override
             public void onDayClick(Date dateClicked) {
                 Date date = dateClicked;
-                int year = date.getYear();
-                int dayOfMonth = date.getDay();
-                int month = date.getMonth();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int dayOfMonth = cal.get(Calendar.DATE);
+                int month = cal.get(Calendar.MONTH);
                 try {
                     getSelectedDayAva(year,dayOfMonth,month);
                 } catch (ParseException e) {
@@ -150,7 +152,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }
@@ -170,7 +172,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }
@@ -189,7 +191,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }
@@ -208,7 +210,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }
@@ -227,7 +229,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }
@@ -246,7 +248,7 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.MINUTE,0);
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
-                        Event tuesdayEvent = new Event(Color.BLACK, cal.getTimeInMillis(), "Available this day");
+                        Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
                         cv.addEvent(tuesdayEvent,true);
                         cal.add(Calendar.DATE,7);
                     }

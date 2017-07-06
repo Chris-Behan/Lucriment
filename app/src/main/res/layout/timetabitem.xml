@@ -3,13 +3,25 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+   <ImageView
+       android:layout_width="17dp"
+       android:layout_height="17dp"
+       android:src="@drawable/greencircle"
+       android:layout_above="@+id/line4"
+       android:layout_toLeftOf="@+id/time"
+       android:layout_toStartOf="@+id/time"
+       android:padding="3dp"
+
+       />
+
     <TextView
+        android:layout_marginTop="10dp"
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="TextView" />
+        android:layout_centerHorizontal="true" />
 
     <View
         android:id="@+id/line4"
