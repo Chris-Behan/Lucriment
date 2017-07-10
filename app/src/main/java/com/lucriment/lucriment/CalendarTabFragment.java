@@ -30,7 +30,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -55,6 +57,8 @@ public class CalendarTabFragment extends Fragment {
     private Date currentSelectedDate;
     private long currentDate;
     private ArrayList<Event> listOfEvents = new ArrayList<>();
+    private ArrayList<TimeInterval> customAvailabilities = new ArrayList<>();
+    private ArrayList<String> customAvaTracker = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
@@ -64,6 +68,7 @@ public class CalendarTabFragment extends Fragment {
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
         cv = (CompactCalendarView) view.findViewById(R.id.calendarView);
+
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
         timeList.setAdapter(adapter);
@@ -114,11 +119,7 @@ public class CalendarTabFragment extends Fragment {
         int year = cal.get(Calendar.YEAR);
         int dayOfMonth = cal.get(Calendar.DATE);
         int month = cal.get(Calendar.MONTH);
-        try {
-            getSelectedDayAva(year,dayOfMonth,month);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
 
 
         cv.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -140,6 +141,29 @@ public class CalendarTabFragment extends Fragment {
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
+
+            }
+        });
+
+        final DatabaseReference customAvailability = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("customAvailability");
+        customAvailability.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<TimeInterval> test4 = new ArrayList<TimeInterval>();
+               // customAvailabilities = (HashMap<String, Map<String,TimeInterval>>) dataSnapshot.getValue();
+                for(DataSnapshot customSnap:dataSnapshot.getChildren()){
+                    for(DataSnapshot customSnap2:customSnap.getChildren()) {
+                        TimeInterval ti4 = customSnap2.getValue(TimeInterval.class);
+                        customAvailabilities.add(ti4);
+                        customAvaTracker.add(customSnap.getKey());
+                        Event customEvent = new Event(Color.GREEN, ti4.getFrom(),"Available this day");
+                        cv.addEvent(customEvent,true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -334,6 +358,13 @@ public class CalendarTabFragment extends Fragment {
         String dayOfWeek = (String) android.text.format.DateFormat.format("EEEE", date);
         long dayTime = date.getTime();
         c.setTimeInMillis(dayTime);
+        for(int i = 0; i <customAvaTracker.size(); i++){
+            if(Long.valueOf(customAvaTracker.get(i))==dayTime){
+                todaysAvailability.add(customAvailabilities.get(i));
+            }
+        }
+
+
 
 
         if (dayOfWeek.equals("Monday")) {
