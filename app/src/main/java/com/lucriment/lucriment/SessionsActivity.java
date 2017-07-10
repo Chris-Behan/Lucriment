@@ -260,6 +260,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
     public void onAcceptPositiveClick(DialogFragment dialog) {
         currentSessions.clear();
         DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(clickedSession.getStudentId()+"_"+clickedSession.getTutorId());
+        DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("bookedSessions");
         clickedSession.setConfirmed(true);
 
        // allSessions.add(clickedSession);
@@ -272,6 +273,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         }
         sessionList.remove(indexOfClickedSession);
         databaseReference2.setValue(currentSessions);
+        databaseReference3.push().setValue(clickedSession.getTime());
         adapter2.notifyDataSetChanged();
 
     }

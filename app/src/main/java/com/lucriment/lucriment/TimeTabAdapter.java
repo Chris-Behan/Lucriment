@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -29,6 +30,13 @@ public class TimeTabAdapter extends ArrayAdapter<TimeInterval> {
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.timetabitem, parent, false);
+        }
+        ImageView circle = (ImageView) convertView.findViewById(R.id.circle);
+        if(day.booked){
+            circle.setImageResource(R.drawable.redcircle);
+        }
+        else{
+            circle.setImageResource(R.drawable.greencircle);
         }
         // Lookup view for data population
 

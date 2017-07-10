@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
    <ImageView
+       android:id="@+id/circle"
        android:layout_width="17dp"
        android:layout_height="17dp"
        android:src="@drawable/greencircle"

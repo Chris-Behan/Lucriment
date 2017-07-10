@@ -59,6 +59,7 @@ public class CalendarTabFragment extends Fragment {
     private ArrayList<Event> listOfEvents = new ArrayList<>();
     private ArrayList<TimeInterval> customAvailabilities = new ArrayList<>();
     private ArrayList<String> customAvaTracker = new ArrayList<>();
+    private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
@@ -167,6 +168,28 @@ public class CalendarTabFragment extends Fragment {
 
             }
         });
+
+        DatabaseReference bookedSessionRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId().toString())
+                .child("bookedSessions");
+        bookedSessionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot bookedSnap:dataSnapshot.getChildren()){
+                    TimeInterval tiBooked = bookedSnap.getValue(TimeInterval.class);
+                    tiBooked.setBooked();
+                    bookedSessions.add(tiBooked);
+                    Event bookedEvent = new Event(Color.RED, tiBooked.getFrom(),"Available this day");
+                    cv.addEvent(bookedEvent,true);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability");
@@ -361,6 +384,12 @@ public class CalendarTabFragment extends Fragment {
         for(int i = 0; i <customAvaTracker.size(); i++){
             if(Long.valueOf(customAvaTracker.get(i))==dayTime){
                 todaysAvailability.add(customAvailabilities.get(i));
+            }
+        }
+        for(TimeInterval bookedInterval: bookedSessions){
+            cal.setTimeInMillis(bookedInterval.getFrom());
+            if(cal.get(Calendar.YEAR)== year&& cal.get(Calendar.DATE)== day&&cal.get(Calendar.MONTH)==month){
+                todaysAvailability.add(bookedInterval);
             }
         }
 
