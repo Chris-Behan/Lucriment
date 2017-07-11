@@ -32,7 +32,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<TwoItemField> optionList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> adapter;
     private TwoItemField option1 = new TwoItemField("Availability","");
-    private TwoItemField option2 = new TwoItemField("Settings","");
+    private TwoItemField option2 = new TwoItemField("Payment","");
     private TwoItemField option3 = new TwoItemField("Help & Support","");
     private TwoItemField option4 = new TwoItemField("Share","");
 
@@ -106,6 +106,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     i.putExtra("userInfo",userInfo);
                     startActivity(i);
                 }
+                if(position ==1){
+                    finish();
+                    Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
+                    startActivity(i);
+                }
+
 
             }
         });
