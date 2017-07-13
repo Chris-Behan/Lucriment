@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ChrisBehan on 5/4/2017.
@@ -21,6 +23,7 @@ public class UserInfo implements Parcelable {
     private String profileImage;
     private String userType;
     private ArrayList<String> savedTutors;
+    private String customer_id;
 
 
     public UserInfo(){
@@ -40,7 +43,7 @@ public class UserInfo implements Parcelable {
     }
 
     public UserInfo(Parcel in ){
-        String[] data = new String[9];
+        String[] data = new String[10];
         in.readStringArray(data);
         this.fullName = data[0];
         this.lastName = data[1];
@@ -51,13 +54,31 @@ public class UserInfo implements Parcelable {
         this.title = data[6];
         this.profileImage = data[7];
         this.userType = data[8];
+        this.customer_id = data[9];
 
 
 
 
     }
 
+    public Map<String,Object> toMap(){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("fullName",fullName);
+        result.put("lastName",lastName);
+        result.put("firstName",firstName);
+        result.put("id",id);
+        result.put("email",email);
+        result.put("userType",userType);
+        return result;
+    }
 
+    public String getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(String customer_id) {
+        this.customer_id = customer_id;
+    }
 
     public String getFullName() {
         return fullName;
@@ -147,7 +168,7 @@ public class UserInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.profileImage,
-        this.userType});
+        this.userType,this.customer_id});
 
     }
 

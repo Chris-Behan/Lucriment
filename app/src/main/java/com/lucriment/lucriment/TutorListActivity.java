@@ -78,17 +78,20 @@ public class TutorListActivity extends BaseActivity {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    DataSnapshot studentSnap = dataSnapshot.child("users");
+
                     DataSnapshot tutorSnap = dataSnapshot.child("tutors");
                     FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+                    DataSnapshot studentSnap = dataSnapshot.child("users").child(thisUser.getUid());
+                    if(thisUser.getDisplayName()!=null){
 
-                    if (studentSnap.hasChild(thisUser.getUid())) {
-                        for (DataSnapshot userSnapShot : studentSnap.getChildren()) {
-                            if (userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())) {
-                                userInfo = userSnapShot.getValue(UserInfo.class);
+                        
+                    }
+
+                    if (studentSnap.hasChild("firstName")) {
+
+                                userInfo = studentSnap.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
-                            }
-                        }
+
                     } else if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         userType = userInfo.getUserType();
                     } else {

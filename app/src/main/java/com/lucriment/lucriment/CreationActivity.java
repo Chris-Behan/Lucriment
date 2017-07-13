@@ -121,17 +121,12 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
             startActivity(i);
            // databaseReference.child("Tutors").child(user.getUid()).setValue(UserInformation);
         }else{ */
-            databaseReference.child("users").child(user.getUid()).setValue(UserInformation);
+            databaseReference.child("users").child(user.getUid()).updateChildren(UserInformation.toMap());
             Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(CreationActivity.this, SettingsActivity.class);
             i.putExtra("userInfo", UserInformation);
 
             startActivity(i);
-
-
-
-
-
 
     }
     private boolean validateFirstName(){
