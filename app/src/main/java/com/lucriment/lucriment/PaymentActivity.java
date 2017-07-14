@@ -32,14 +32,22 @@ public class PaymentActivity extends AppCompatActivity {
         }
 
         // INITIALIZE CARD WIDGET
-        final CardInputWidget mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
         addPaymentButton = (Button) findViewById(R.id.addPayment);
+
 
 
 
         addPaymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                AddPaymentMethodDialog addPaymentMethodDialog = new AddPaymentMethodDialog();
+                Bundle args = new Bundle();
+
+                args.putParcelable("userInfo",userInfo);
+                addPaymentMethodDialog.setArguments(args);
+                addPaymentMethodDialog.show(getFragmentManager(),"add");
+                /*
                 Card cardToSave = mCardInputWidget.getCard();
                 if (cardToSave == null) {
                     Toast.makeText(PaymentActivity.this,"Invalid Card Info",Toast.LENGTH_LONG).show();
@@ -63,26 +71,12 @@ public class PaymentActivity extends AppCompatActivity {
                 );
 
                 cardToSave.setName(userInfo.getFullName());
+                */
 
             }
         });
 
-        /*
 
-        stripe.createToken(
-                card,
-                new TokenCallback() {
-                    public void onSuccess(Token token) {
-                        DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
-                        tokenref.setValue(token);
-                        // Send token to your server
-                    }
-                    public void onError(Exception error) {
-                        // Show localized error message
-
-                    }
-                }
-        ); */
 
     }
 

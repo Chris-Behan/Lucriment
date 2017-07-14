@@ -41,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:visibility="invisible"
 
                 android:layout_alignParentTop="true"
                 android:hint="First Name:"
@@ -62,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:visibility="invisible"
 
                 android:layout_below="@+id/firstName"
                 android:hint="Last Name:"

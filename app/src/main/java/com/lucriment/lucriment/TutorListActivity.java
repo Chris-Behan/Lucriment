@@ -82,11 +82,6 @@ public class TutorListActivity extends BaseActivity {
                     DataSnapshot tutorSnap = dataSnapshot.child("tutors");
                     FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
                     DataSnapshot studentSnap = dataSnapshot.child("users").child(thisUser.getUid());
-                    if(thisUser.getDisplayName()!=null){
-
-                        
-                    }
-
                     if (studentSnap.hasChild("firstName")) {
 
                                 userInfo = studentSnap.getValue(UserInfo.class);

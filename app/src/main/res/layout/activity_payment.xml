@@ -25,20 +25,15 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp">
 
-        <com.stripe.android.view.CardInputWidget
-            android:id="@+id/card_input_widget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
 
         <Button
             android:id="@+id/addPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:text="Add"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="39dp"
-            android:text="Add" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

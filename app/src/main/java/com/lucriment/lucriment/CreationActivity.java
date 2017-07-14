@@ -51,18 +51,32 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         // initialize firebase user
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String accountType = "student";
+
         //initialize buttons
         firstNameInputLayout = (TextInputLayout) findViewById(R.id.firstNameInputLayout);
         lastNameInputLayout = (TextInputLayout) findViewById(R.id.lastNameInputLayout);
         registerButton = (Button) findViewById(R.id.createButton);
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
-        if(firebaseAuth.getCurrentUser().getDisplayName() == null){
+        String test = firebaseAuth.getCurrentUser().getDisplayName().toString();
+        if(firebaseAuth.getCurrentUser().getDisplayName().toString().length() < 1){
             firstName.setVisibility(View.VISIBLE);
             lastName.setVisibility(View.VISIBLE);
+        }
+
+        String displayName = firebaseAuth.getCurrentUser().getDisplayName();
+        if(firstName.getVisibility() == View.INVISIBLE){
+            displayName = firebaseAuth.getCurrentUser().getDisplayName();
+            UserInformation = new UserInfo(displayName, displayName.substring(displayName.indexOf(' ')+1,displayName.length()),
+                    displayName.substring(0,displayName.indexOf(' ')),user.getUid(),user.getEmail(),accountType);
+            databaseReference.child("users").child(user.getUid()).updateChildren(UserInformation.toMap());
+            finish();
+            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
         }
 
 

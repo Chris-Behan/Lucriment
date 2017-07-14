@@ -18,8 +18,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
@@ -112,6 +115,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     i.putExtra("userType", userType);
                     i.putExtra("userInfo",userInfo);
                     startActivity(i);
+                }
+                if(position == 2){
+                    DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
+                    HashMap<String,Integer> amountMap = new HashMap<String, Integer>();
+                            amountMap.put("amount",5500);
+                            dbr.push().setValue(amountMap);
                 }
 
 
