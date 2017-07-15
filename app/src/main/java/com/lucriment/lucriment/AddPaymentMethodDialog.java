@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.braintreepayments.cardform.view.CardForm;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.stripe.android.SourceCallback;
@@ -39,7 +40,12 @@ public class AddPaymentMethodDialog extends DialogFragment {
         userInfo = args.getParcelable("userInfo");
 
         View view = inflater.inflate(R.layout.addpaymentmethod,null);
-        final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
+      //  final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
+        final CardForm cardForm = (CardForm) view.findViewById(R.id.card_form);
+        cardForm.cardRequired(true)
+                .expirationRequired(true)
+                .cvvRequired(true)
+                .setup(getActivity());
         builder.setView(view)
 
                 // Add action buttons
@@ -48,36 +54,17 @@ public class AddPaymentMethodDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         Dialog dialog1  = (Dialog) dialog;
                         Context context = dialog1.getContext();
-                        Card cardToSave = mCardInputWidget.getCard();
-                        if (cardToSave == null) {
-                            Toast.makeText(context,"Invalid Card Information",Toast.LENGTH_LONG).show();
-                        }else {
+                        Stripe stripe = new Stripe(context, "pk_test_kRaU4qwEDlsbB9HL0JeAPFmP");
+                        DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
+                        HashMap<String, Object> cardMap = new HashMap<String, Object>();
+                        cardMap.put("object","card");
+
+                        cardMap.put("number",cardForm.getCardNumber());
+                        cardMap.put("exp_month",cardForm.getExpirationMonth());
+                        cardMap.put("exp_year",cardForm.getExpirationYear());
+                        tokenref.push().child("token").setValue(cardMap);
 
 
-                            Stripe stripe = new Stripe(context, "pk_test_kRaU4qwEDlsbB9HL0JeAPFmP");
-                            stripe.createToken(
-                                    cardToSave,
-                                    new TokenCallback() {
-                                        public void onSuccess(Token token) {
-                                            // Send token to your server
-                                            DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
-                                            HashMap<String, Object> cardMap = new HashMap<String, Object>();
-                                            cardMap.put("object","card");
-
-                                            cardMap.put("number","4242424242424242");
-                                            cardMap.put("exp_month",token.getCard().getExpMonth());
-                                            cardMap.put("exp_year",token.getCard().getExpYear());
-                                            tokenref.push().child("token").setValue(cardMap);
-                                        }
-
-                                        public void onError(Exception error) {
-                                            // Show localized error message
-
-                                        }
-                                    }
-                            );
-
-                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

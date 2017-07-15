@@ -11,14 +11,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_centerHorizontal="true"/>
 
-    <com.stripe.android.view.CardInputWidget
-        android:id="@+id/card_input_widget"
+    <com.braintreepayments.cardform.view.CardForm
+        android:id="@+id/card_form"
+        android:layout_below="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
-        android:padding="10dp"
-
-        />
+        android:layout_height="190dp"
+        android:padding="15dp"/>
 
 
 </RelativeLayout>
