@@ -15,7 +15,7 @@
         android:id="@+id/card_form"
         android:layout_below="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="290dp"
         android:padding="15dp"/>
 
 

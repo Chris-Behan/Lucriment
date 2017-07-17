@@ -3,27 +3,46 @@ package com.lucriment.lucriment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class PaymentActivity extends AppCompatActivity {
 
     private UserInfo userInfo;
     private String userType;
     private Button addPaymentButton;
+    private HashMap<String,String> paymentInfoMap,transactionMap;
+    private TextView cardInfo;
+    private String last4,brand;
+    private ListView transactionHistory;
+    private ArrayList<TwoItemField> transactions = new ArrayList<>();
+    private ArrayAdapter<TwoItemField> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        cardInfo = (TextView) findViewById(R.id.cardInfo);
+        addPaymentButton = (Button) findViewById(R.id.addPayment);
+        transactionHistory = (ListView) findViewById(R.id.transactionHistory);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -31,8 +50,51 @@ public class PaymentActivity extends AppCompatActivity {
             userType = getIntent().getStringExtra("userType");
         }
 
-        // INITIALIZE CARD WIDGET
-        addPaymentButton = (Button) findViewById(R.id.addPayment);
+        DatabaseReference currentPaymentMethod = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
+        currentPaymentMethod.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot card: dataSnapshot.getChildren()) {
+                    paymentInfoMap = (HashMap<String, String>) card.getValue();
+                    if(paymentInfoMap==null){
+                        addPaymentButton.setText("Add");
+                    }
+                }
+                 last4 = paymentInfoMap.get("last4");
+                brand = paymentInfoMap.get("brand");
+                cardInfo.setText(brand+"-"+last4);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
+        transactionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot transaction: dataSnapshot.getChildren()){
+                    transactionMap = (HashMap<String, String>) transaction.getValue();
+                    TwoItemField thisTransaction = new TwoItemField(String.valueOf(transactionMap.get("amount")),String.valueOf(transactionMap.get("created")));
+                    transactions.add(thisTransaction);
+                }
+                populateTransactionList();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
 
 
 
@@ -76,8 +138,47 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private void populateTransactionList(){
+        adapter = new PaymentActivity.myListAdapter();
+        ListView list = (ListView) findViewById(R.id.transactionHistory);
+        list.setAdapter(adapter);
 
 
+    }
+
+    private class myListAdapter extends ArrayAdapter<TwoItemField> {
+
+        public myListAdapter(){
+            super(PaymentActivity.this, R.layout.transactionitem, transactions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.transactionitem, parent, false);
+            }
+            TwoItemField currentTwo = transactions.get(position);
+            //Availability currentAva = avaList.get(position);
+            // TutorInfo currentTutor = tutors.get(position);
+
+
+            // set image imageVIew.setImageResource();
+            TextView category = (TextView) itemView.findViewById(R.id.amount);
+            category.setText(currentTwo.getLabel());
+
+
+            TextView dataText = (TextView) itemView.findViewById(R.id.date);
+            dataText.setText(currentTwo.getData());
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
     }
 
 }

@@ -45,11 +45,12 @@ public class AddPaymentMethodDialog extends DialogFragment {
         cardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(true)
+
                 .setup(getActivity());
         builder.setView(view)
 
                 // Add action buttons
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Select", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Dialog dialog1  = (Dialog) dialog;
@@ -58,7 +59,7 @@ public class AddPaymentMethodDialog extends DialogFragment {
                         DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
                         HashMap<String, Object> cardMap = new HashMap<String, Object>();
                         cardMap.put("object","card");
-
+                       // cardMap.put("postal_code", cardForm.getPostalCode());
                         cardMap.put("number",cardForm.getCardNumber());
                         cardMap.put("exp_month",cardForm.getExpirationMonth());
                         cardMap.put("exp_year",cardForm.getExpirationYear());
