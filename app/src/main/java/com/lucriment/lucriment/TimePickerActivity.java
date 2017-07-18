@@ -33,6 +33,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class TimePickerActivity extends BaseActivity  {
@@ -42,6 +43,7 @@ public class TimePickerActivity extends BaseActivity  {
     private TutorInfo tutor;
     private GridView gridView;
     private GridView gridView2;
+
     private final ArrayList<String> items = new ArrayList<>();
     private final ArrayList<String> items2 = new ArrayList<>();
     private final ArrayList<String> finishTimes = new ArrayList<>();
@@ -64,6 +66,7 @@ public class TimePickerActivity extends BaseActivity  {
     private ArrayList<TimeInterval> saturdayAva = new ArrayList<>();
     private ArrayList<TimeInterval> sundayAva = new ArrayList<>();
     private ArrayList<TimeInterval> selection = new ArrayList<>();
+    private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
     private double score;
 
     @Override
@@ -93,6 +96,24 @@ public class TimePickerActivity extends BaseActivity  {
 
         gridView.setAdapter(myGridAdapter);
 
+        //GET BOOKED SESSIONS
+        DatabaseReference bookedRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("bookedSessions");
+        bookedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot bookedSession:dataSnapshot.getChildren()){
+                    TimeInterval booked = bookedSession.getValue(TimeInterval.class);
+                    bookedSessions.add(booked);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("defaultAvailability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -104,9 +125,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         mondayAva.add(ti);
-
-
                     }
+                    Collections.sort(mondayAva,new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
 
@@ -116,9 +136,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         tuesdayAva.add(ti);
-
-
                     }
+                    Collections.sort(tuesdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
                 if (dataSnapshot.hasChild("wednesday")) {
@@ -127,9 +146,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         wednesdayAva.add(ti);
-
-
                     }
+                    Collections.sort(wednesdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
                 if (dataSnapshot.hasChild("thursday")) {
@@ -138,9 +156,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         thursdayAva.add(ti);
-
-
                     }
+                    Collections.sort(thursdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
                 if (dataSnapshot.hasChild("friday")) {
@@ -149,9 +166,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         fridayAva.add(ti);
-
-
                     }
+                    Collections.sort(fridayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
                 if (dataSnapshot.hasChild("saturday")) {
@@ -160,9 +176,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         saturdayAva.add(ti);
-
-
                     }
+                    Collections.sort(saturdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
                 if (dataSnapshot.hasChild("sunday")) {
@@ -171,9 +186,8 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         sundayAva.add(ti);
-
-
                     }
+                    Collections.sort(sundayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
 
@@ -265,6 +279,11 @@ public class TimePickerActivity extends BaseActivity  {
 
 
 
+    }
+    private class timeComparator implements Comparator<TimeInterval> {
+        public int compare(TimeInterval ti1, TimeInterval ti2) {
+            return (int) (ti1.getFrom() - ti2.getFrom());
+        }
     }
 
     @Override
@@ -441,8 +460,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -496,8 +514,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -551,8 +568,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -606,8 +622,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -661,8 +676,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -716,8 +730,7 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+                getAlteredAvailability(thisAva);
 
 
             }
@@ -771,8 +784,9 @@ public class TimePickerActivity extends BaseActivity  {
                 TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
 
                 Availability thisAva = new Availability(finalTimeInterval,"");
-                todaysAvailability.add(thisAva);
-                processStartAvailability(thisAva);
+               // todaysAvailability.add(thisAva);
+                getAlteredAvailability(thisAva);
+                //processStartAvailability(thisAva);
 
 
             }
@@ -797,6 +811,46 @@ public class TimePickerActivity extends BaseActivity  {
             } 
         }*/
         myGridAdapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<Availability> getAlteredAvailability(Availability ava){
+        TimeInterval ti = ava.gettime();
+        for(TimeInterval bookedTi:bookedSessions){
+            if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
+                if((bookedTi.getFrom()-ti.getFrom())>=3600000){
+                    TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
+                    Availability firstAva = new Availability(firstInterval,"");
+                    processStartAvailability(firstAva);
+                    todaysAvailability.add(firstAva);
+                }
+                if(ti.getTo()-bookedTi.getTo()>=3600000){
+                    TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
+                    Availability secondAva = new Availability(firstInterval,"");
+                    processStartAvailability(secondAva);
+                    todaysAvailability.add(secondAva);
+                }
+            }else if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getFrom()<=ti.getTo()){
+                if(ti.getFrom()-bookedTi.getFrom()>=3600000){
+                    TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
+                    Availability secondAva = new Availability(firstInterval,"");
+                    processStartAvailability(secondAva);
+                    todaysAvailability.add(secondAva);
+                }
+            }else if(bookedTi.getTo()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
+                if(ti.getTo()-bookedTi.getTo()>=3600000){
+                    TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
+                    Availability secondAva = new Availability(firstInterval,"");
+                    processStartAvailability(secondAva);
+                    todaysAvailability.add(secondAva);
+                }
+
+            }
+        }
+        if(todaysAvailability.isEmpty()){
+            processStartAvailability(ava);
+            todaysAvailability.add(ava);
+        }
+        return null;
     }
 
     private class gridAdapter extends BaseAdapter{

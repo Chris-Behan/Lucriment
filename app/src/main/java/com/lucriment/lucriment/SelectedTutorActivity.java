@@ -427,6 +427,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         } catch (IOException e) {
             e.printStackTrace();
         }
+        scrollView.scrollTo(0,0);
     }
 
     private class reviewAdapter extends ArrayAdapter<Review>  {

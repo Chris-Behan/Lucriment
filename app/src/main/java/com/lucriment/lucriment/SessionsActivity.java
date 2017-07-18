@@ -95,6 +95,9 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         backButton = (Button) findViewById(R.id.backButton);
         //SET BUTTON LISTENERS
 //        backButton.setOnClickListener(this);
+
+
+
         //GET SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -213,7 +216,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
     }
 
     private void populateSelectionList(){
-        if(userType.equals("Tutor")) {
+        if(userType.equals("tutor")) {
             adapter = new SessionsActivity.sessionListAdapter();
             ListView list = (ListView) findViewById(R.id.requestList);
             list.setAdapter(adapter);
@@ -273,7 +276,9 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         }
         sessionList.remove(indexOfClickedSession);
         databaseReference2.setValue(currentSessions);
-        databaseReference3.push().setValue(clickedSession.getTime());
+        TimeInterval clickedTime = clickedSession.getTime();
+        clickedTime.setBooked();
+        databaseReference3.push().setValue(clickedTime);
         adapter2.notifyDataSetChanged();
 
     }
@@ -344,7 +349,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            if(userType.equals("Student")){
+            if(userType.equals("student")){
                 nameText.setText(session.getTutorName());
             }else {
                 nameText.setText(session.getStudentName());
@@ -388,7 +393,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            if(userType.equals("Student")){
+            if(userType.equals("student")){
                 nameText.setText(session.getTutorName());
             }else {
                 nameText.setText(session.getStudentName());
@@ -432,7 +437,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
 
             //set inner fields
-            if(userType.equals("Student")){
+            if(userType.equals("student")){
                 nameText.setText(session.getTutorName());
             }else {
                 nameText.setText(session.getStudentName());
@@ -580,7 +585,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(SessionsActivity.this, SessionDetails.class);
 
-                if(userType.equals("Tutor")) {
+                if(userType.equals("tutor")) {
                     i.putExtra("name", selectedSession.getStudentName());
                 }else{
                     i.putExtra("name", selectedSession.getTutorName());
@@ -605,7 +610,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
 
                 Intent y = new Intent(SessionsActivity.this, CurrentSession.class);
 
-                if(userType.equals("Tutor")) {
+                if(userType.equals("tutor")) {
                     y.putExtra("name", currSession.getStudentName());
                 }else{
                     y.putExtra("name", currSession.getTutorName());
@@ -630,7 +635,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 SessionRequest pastSession = pastSessions.get(position);
 
                 Intent y = new Intent(SessionsActivity.this, PastSession.class);
-                if(userType.equals("Tutor")) {
+                if(userType.equals("tutor")) {
                     y.putExtra("name", pastSession.getStudentName());
                 }else{
                     y.putExtra("name", pastSession.getTutorName());
