@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
@@ -50,6 +51,8 @@ public class TutorListActivity extends BaseActivity {
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
     ArrayAdapter<TutorInfo> adapter;
     private ArrayList<TutorInfo> searchResult = new ArrayList<>();
+    private Menu currentMenu;
+    private ProgressDialog progressDialog;
 
 
 
@@ -57,11 +60,35 @@ public class TutorListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
+                    TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
+                    tutors.add(tutor);
+                    searchResult.add(tutor);
+                }
+                populateTutorList();
+                setMenuSearch();
+                progressDialog.dismiss();
+                // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
+                //  populateTutorList(tNames);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        progressDialog = new ProgressDialog(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference("tutors");
       //  recyclerView = (RecyclerView)findViewById(R.id.rView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(TutorListActivity.this));
         getTutors();
+        progressDialog.setMessage("Connecting...");
+        progressDialog.show();
 
 
         if(getIntent().hasExtra("userInfo")) {
@@ -110,9 +137,6 @@ public class TutorListActivity extends BaseActivity {
             BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
             BottomNavHelper.disableShiftMode(bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
-         //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //   getTutors();
-            //   registerTutorClicks();
             bottomNavigationView.setOnNavigationItemSelectedListener(this);
         }
         //  Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
@@ -121,32 +145,18 @@ public class TutorListActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        currentMenu = menu;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_search, menu);
-        MenuItem item =  menu.findItem(R.id.menuSearch);
+        inflater.inflate(R.menu.menu_search, currentMenu);
+        MenuItem item = currentMenu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQueryHint("Search by Class...");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /*
-                searchResult.clear();
-                for(TutorInfo ti:tutors){
-                    ArrayList<String> subjects = ti.getSubjects();
-                    if(subjects!=null){
 
-                        for(String s:subjects){
-                            s= s.toLowerCase();
-                            if(s.contains((query))){
-                                searchResult.add(ti);
-                            }
-                        }
-                    }
-
-                }
-                adapter.notifyDataSetChanged(); */
-              //  mFirebaseAdapter.equals(query);
 
                 return false;
             }
@@ -154,14 +164,14 @@ public class TutorListActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 searchResult.clear();
-                for(TutorInfo ti:tutors){
+                for (TutorInfo ti : tutors) {
                     ArrayList<String> subjects = ti.getSubjects();
-                    if(subjects!=null){
+                    if (subjects != null) {
 
-                        for(String s:subjects){
-                            s= s.toLowerCase();
-                            if(s.contains((newText))){
-                                if(!searchResult.contains(ti)) {
+                        for (String s : subjects) {
+                            s = s.toLowerCase();
+                            if (s.contains((newText))) {
+                                if (!searchResult.contains(ti)) {
                                     searchResult.add(ti);
                                 }
                             }
@@ -174,7 +184,21 @@ public class TutorListActivity extends BaseActivity {
                 return false;
             }
         });
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        currentMenu = menu;
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setMenuSearch(){
+
+
+
+
     }
 
     @Override
@@ -183,25 +207,7 @@ public class TutorListActivity extends BaseActivity {
 
     }
     private void getTutors(){
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
-                    TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
-                    tutors.add(tutor);
-                    searchResult.add(tutor);
-                }
-                populateTutorList();
-                // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
-                //  populateTutorList(tNames);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 

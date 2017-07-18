@@ -19,6 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/textView8"
         android:layout_toRightOf="@+id/textView8"
+        android:textColor="#1BDE88"
         android:text="$" />
 
     <TextView

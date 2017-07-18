@@ -13,17 +13,16 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="8dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
+
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
+
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="8dp"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+      >
 
 
         <Button
@@ -73,7 +72,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/textView9" />
+            android:layout_below="@+id/textView9"
+            android:layout_above="@+id/navigation" />
+        <include
+            android:id="@+id/navigation"
+            layout="@layout/activity_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="459dp" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

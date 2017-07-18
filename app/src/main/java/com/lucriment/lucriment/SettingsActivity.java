@@ -36,7 +36,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private ArrayAdapter<TwoItemField> adapter;
     private TwoItemField option1 = new TwoItemField("Availability","");
     private TwoItemField option2 = new TwoItemField("Payment","");
-    private TwoItemField option3 = new TwoItemField("Help & Support","");
+    private TwoItemField option3 = new TwoItemField("Become a Tutor","");
     private TwoItemField option4 = new TwoItemField("Share","");
 
     @Override
@@ -80,7 +80,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         //FILL OPTIONS
         optionList.add(option1);
         optionList.add(option2);
-        optionList.add(option3);
+        if(userType.equals("student")) {
+            optionList.add(option3);
+        }
         optionList.add(option4);
         populateOptionList();
         registerOptionClicks();
@@ -102,25 +104,49 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position ==0){
-                    finish();
-                    Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
-                    i.putExtra("userType", userType);
-                    i.putExtra("userInfo",userInfo);
-                    startActivity(i);
-                }
-                if(position ==1){
-                    finish();
-                    Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
-                    i.putExtra("userType", userType);
-                    i.putExtra("userInfo",userInfo);
-                    startActivity(i);
-                }
-                if(position == 2){
+                if(userType.equals("student")) {
+                    if (position == 0) {
+                        finish();
+                        Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+                    if (position == 1) {
+                        finish();
+                        Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+                    if (position == 2) {
+                        finish();
+                        Intent i = new Intent(SettingsActivity.this, TutorCreation.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    /*
                     DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
                     HashMap<String,Integer> amountMap = new HashMap<String, Integer>();
                             amountMap.put("amount",5500);
-                            dbr.push().setValue(amountMap);
+                            dbr.push().setValue(amountMap); */
+                    }
+                }else{
+                    if (position == 0) {
+                        finish();
+                        Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+                    if (position == 1) {
+                        finish();
+                        Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+
                 }
 
 

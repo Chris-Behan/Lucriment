@@ -221,10 +221,15 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         rate = Integer.parseInt(rateField.getText().toString());
         education = educationField.getText().toString();
         email = firebaseAuth.getCurrentUser().getEmail();
+        userInfo.setUserType("tutor");
         TutorInfo tutorInfo = new TutorInfo(userInfo,education,123456789,rate);
         tutorInfo.setSubjects(subjectsTaught);
+
+        tutorInfo.setProfileImage(userInfo.getProfileImage());
         databaseReference.child("tutors").child(user.getUid()).setValue(tutorInfo);
-        Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
+        databaseReference.child("users").child(user.getUid()).child("userType").setValue("tutor");
+
+        Toast.makeText(this, "You are now a Tutor!", Toast.LENGTH_SHORT).show();
         finish();
         startActivity(new Intent(TutorCreation.this, ProfileActivity.class));
 

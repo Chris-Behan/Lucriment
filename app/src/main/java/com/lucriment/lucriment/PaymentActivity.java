@@ -1,7 +1,10 @@
 package com.lucriment.lucriment;
 
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,15 +24,18 @@ import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
-public class PaymentActivity extends AppCompatActivity {
+public class PaymentActivity extends BaseActivity {
 
     private UserInfo userInfo;
     private String userType;
     private Button addPaymentButton;
-    private HashMap<String,String> paymentInfoMap,transactionMap;
+    private HashMap<String,String> paymentInfoMap;
+    private HashMap<String,Long> transactionMap;
     private TextView cardInfo;
     private String last4,brand;
     private ListView transactionHistory;
@@ -43,6 +49,17 @@ public class PaymentActivity extends AppCompatActivity {
         cardInfo = (TextView) findViewById(R.id.cardInfo);
         addPaymentButton = (Button) findViewById(R.id.addPayment);
         transactionHistory = (ListView) findViewById(R.id.transactionHistory);
+        //INITIALIZE BOTTOM NAVIGATION VIEW
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -78,8 +95,15 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot transaction: dataSnapshot.getChildren()){
-                    transactionMap = (HashMap<String, String>) transaction.getValue();
-                    TwoItemField thisTransaction = new TwoItemField(String.valueOf(transactionMap.get("amount")),String.valueOf(transactionMap.get("created")));
+                    transactionMap = (HashMap<String, Long>) transaction.getValue();
+                   // Object testamount = transactionMap.get("amount");
+                    double amount = Double.valueOf(transactionMap.get("amount"));
+                    amount = amount/100;
+                    long created = Long.valueOf(transactionMap.get("created"));
+                    created = created*1000;
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String dateString = formatter.format(new Date(created));
+                    TwoItemField thisTransaction = new TwoItemField("$"+amount,dateString);
                     transactions.add(thisTransaction);
                 }
                 populateTransactionList();
@@ -139,6 +163,27 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    int getContentViewId() {
+        return R.layout.activity_payment;
+    }
+
+    @Override
+    int getNavigationMenuItemId() {
+        return R.id.profile;
+    }
+
+    @Override
+    String getUserType() {
+        return userType;
+    }
+
+    @Override
+    UserInfo getUserInformation() {
+        return userInfo;
+    }
+
     private void populateTransactionList(){
         adapter = new PaymentActivity.myListAdapter();
         ListView list = (ListView) findViewById(R.id.transactionHistory);
