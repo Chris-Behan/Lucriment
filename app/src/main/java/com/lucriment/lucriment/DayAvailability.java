@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -222,6 +223,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         finish();
         Intent i = new Intent(DayAvailability.this, DefaultAvailability.class);
         i.putExtra("userInfo",userInfo);
+        i.putExtra("userType",userType);
         startActivity(i);
         return true;
     }
@@ -271,6 +273,16 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long fromTime = fromDate.getTime();
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
+                        for(TimeInterval existingTime:selectedTime){
+                            if(timeInterval.getFrom()>=existingTime.getFrom()&&timeInterval.getFrom()<=timeInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            else if(timeInterval.getTo()>=existingTime.getFrom()&&timeInterval.getTo()<=timeInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
 
                         selectedTime.add(timeInterval);
                         adapter2.notifyDataSetChanged();

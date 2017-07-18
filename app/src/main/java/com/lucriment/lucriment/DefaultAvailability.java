@@ -31,6 +31,9 @@ public class DefaultAvailability extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_availability);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //INITIALIZE BOTTOM NAVIGATION BAR
+
+
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }

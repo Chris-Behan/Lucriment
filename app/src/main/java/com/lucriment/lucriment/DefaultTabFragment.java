@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,6 +59,7 @@ public class DefaultTabFragment extends Fragment {
     private TwoItemField Sunday = new TwoItemField("Sunday", "Select");
     private TwoItemField Select = new TwoItemField("Select","");
     private  ArrayAdapter<TwoItemField> adapter;
+    private FloatingActionButton floatingActionButton;
     private LinkedHashMap<String, List<TimeInterval>> dayAvailablities = new LinkedHashMap<String, List<TimeInterval>>();
 
 
@@ -70,6 +73,23 @@ public class DefaultTabFragment extends Fragment {
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
+
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.addCustomTimeButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date clickedDate = new Date();
+
+                Intent y = new Intent(getApplicationContext(), DayAvailability.class);
+
+
+                y.putExtra("nameOfDay","Monday");
+                y.putExtra("userInfo", userInfo);
+                y.putExtra("userType",userType);
+                startActivity(y);
+
+            }
+        });
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -212,6 +232,7 @@ public class DefaultTabFragment extends Fragment {
                 ArrayList<TimeInterval> selectedDayIntervals = (ArrayList<TimeInterval>) expandableListDetail.get(expandableListTitle.get(groupPosition));
                 i.putParcelableArrayListExtra("listOfTimes",selectedDayIntervals);
                 i.putExtra("userInfo", userInfo);
+                i.putExtra("userType",userType);
                 startActivity(i);
                 return false;
             }

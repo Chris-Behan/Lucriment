@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class PaymentActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         cardInfo = (TextView) findViewById(R.id.cardInfo);
         addPaymentButton = (Button) findViewById(R.id.addPayment);
         transactionHistory = (ListView) findViewById(R.id.transactionHistory);
@@ -182,6 +184,15 @@ public class PaymentActivity extends BaseActivity {
     @Override
     UserInfo getUserInformation() {
         return userInfo;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(PaymentActivity.this, SettingsActivity.class);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
     }
 
     private void populateTransactionList(){

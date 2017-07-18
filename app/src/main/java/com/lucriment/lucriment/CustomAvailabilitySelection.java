@@ -260,6 +260,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
         finish();
         Intent i = new Intent(CustomAvailabilitySelection.this, DefaultAvailability.class);
         i.putExtra("userInfo",userInfo);
+        i.putExtra("userType",userType);
         startActivity(i);
         return true;
     }

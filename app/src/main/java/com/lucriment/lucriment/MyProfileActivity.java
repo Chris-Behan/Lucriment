@@ -272,7 +272,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         uploadButton.setOnClickListener(this);
         if(userInfo!= null) {
-            if(userInfo.getUserType().equals("Tutor")){
+            if(userInfo.getUserType().equals("tutor")){
                 isTutor = true;
                 getTutorInfo();
 

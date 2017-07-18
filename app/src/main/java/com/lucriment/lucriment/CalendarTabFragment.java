@@ -84,6 +84,7 @@ public class CalendarTabFragment extends Fragment {
                 y.putExtra("selectedDay",timeToPass);
                 y.putExtra("nameOfDay","today");
                 y.putExtra("userInfo", userInfo);
+                y.putExtra("userType",userType);
                 startActivity(y);
 
             }
