@@ -274,11 +274,11 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
                         for(TimeInterval existingTime:selectedTime){
-                            if(timeInterval.getFrom()>=existingTime.getFrom()&&timeInterval.getFrom()<=timeInterval.getTo()){
+                            if(timeInterval.getFrom()>=existingTime.getFrom()&&timeInterval.getFrom()<=existingTime.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            else if(timeInterval.getTo()>=existingTime.getFrom()&&timeInterval.getTo()<=timeInterval.getTo()){
+                            else if(timeInterval.getTo()>=existingTime.getFrom()&&timeInterval.getTo()<=existingTime.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
                             }

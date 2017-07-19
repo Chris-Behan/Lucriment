@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,13 +39,12 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class TimePickerActivity extends BaseActivity  {
-    private CalendarView cv;
+    private CompactCalendarView cv;
     private ArrayList<Availability> avaList = new ArrayList<>();
     private ArrayList<Availability> todaysAvailability = new ArrayList<>();
     private TutorInfo tutor;
     private GridView gridView;
     private GridView gridView2;
-
     private final ArrayList<String> items = new ArrayList<>();
     private final ArrayList<String> items2 = new ArrayList<>();
     private final ArrayList<String> finishTimes = new ArrayList<>();
@@ -89,7 +90,7 @@ public class TimePickerActivity extends BaseActivity  {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        cv = (CalendarView) findViewById(R.id.calendarViewx);
+        cv = (CompactCalendarView) findViewById(R.id.calendarView);
         tutor = getIntent().getParcelableExtra("tutor");
         gridView = (GridView) findViewById(R.id.timeGrid);
 
@@ -112,6 +113,8 @@ public class TimePickerActivity extends BaseActivity  {
 
             }
         });
+
+        DatabaseReference customAvaialability = FirebaseDatabase.getInstance().getReference().child("tutors").child("customAvailability");
 
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("defaultAvailability");
@@ -200,23 +203,36 @@ public class TimePickerActivity extends BaseActivity  {
         });
 
 
+        cv.setUseThreeLetterAbbreviation(true);
+        cv.setCurrentSelectedDayBackgroundColor(Color.parseColor("#55ff94"));
+        cv.setCurrentDayBackgroundColor(Color.parseColor("#24e7e3"));
+        cv.setCurrentSelectedDayIndicatorStyle(CompactCalendarView.FILL_LARGE_INDICATOR);
+        cv.setSelected(true);
+        cv.setFirstDayOfWeek(Calendar.SUNDAY);
 
-
-
-        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-
+        cv.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
-                                            int dayOfMonth) {
-                //Toast.makeText(getApplicationContext(), ""+dayOfMonth, 0).show();
+            public void onDayClick(Date dateClicked) {
+                Date date = dateClicked;
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int dayOfMonth = cal.get(Calendar.DATE);
+                int month = cal.get(Calendar.MONTH);
                 try {
-                    getSelectedDayAva(year, dayOfMonth, month);
+                    getSelectedDayAva(year,dayOfMonth,month);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
 
             }
         });
+
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @TargetApi(Build.VERSION_CODES.N)

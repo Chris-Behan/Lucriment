@@ -21,14 +21,22 @@
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
 
-        <CalendarView
-
-            android:id="@+id/calendarViewx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/timeGrid" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            app:compactCalendarBackgroundColor="#42C6DD"
+            app:compactCalendarCurrentDayBackgroundColor="#42C6DD"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="#07e3d2"
+            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextColor="#fff"
+            app:compactCalendarTextSize="12sp" />
 
         <GridView
             android:gravity="center"
@@ -40,7 +48,8 @@
             android:horizontalSpacing="10dp"
             android:layout_above="@+id/navigation"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/calendarView" />
 
         <include
             android:id="@+id/navigation"
