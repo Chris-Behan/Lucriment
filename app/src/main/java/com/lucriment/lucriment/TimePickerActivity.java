@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 
 public class TimePickerActivity extends BaseActivity  {
     private CompactCalendarView cv;
@@ -68,7 +69,9 @@ public class TimePickerActivity extends BaseActivity  {
     private ArrayList<TimeInterval> sundayAva = new ArrayList<>();
     private ArrayList<TimeInterval> selection = new ArrayList<>();
     private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
+    private  HashMap<String,ArrayList<TimeInterval>> customMap;
     private double score;
+    private long clickedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +117,28 @@ public class TimePickerActivity extends BaseActivity  {
             }
         });
 
-        DatabaseReference customAvaialability = FirebaseDatabase.getInstance().getReference().child("tutors").child("customAvailability");
+        DatabaseReference customAvaialability = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("customAvailability");
+        customAvaialability.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                customMap = new HashMap<String, ArrayList<TimeInterval>>();
+
+                for(DataSnapshot customTime:dataSnapshot.getChildren()){
+                    ArrayList<TimeInterval> availabilities = new ArrayList<TimeInterval>();
+                    for(DataSnapshot innerTime:customTime.getChildren()){
+                        availabilities.add(innerTime.getValue(TimeInterval.class));
+                        //customMap.put(customTime.getKey(),innerTime.getValue(TimeInterval.class));
+                    }
+                    customMap.put(customTime.getKey(),availabilities);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("defaultAvailability");
@@ -217,6 +241,7 @@ public class TimePickerActivity extends BaseActivity  {
                 Date date = dateClicked;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
+                clickedTime = cal.getTimeInMillis();
                 int year = cal.get(Calendar.YEAR);
                 int dayOfMonth = cal.get(Calendar.DATE);
                 int month = cal.get(Calendar.MONTH);
@@ -404,6 +429,15 @@ public class TimePickerActivity extends BaseActivity  {
     private void getSelectedDayAva(int year, int day, int month) throws ParseException {
         todaysAvailability.clear();
         items.clear();
+        if(customMap.containsKey(clickedTime+"")){
+
+            ArrayList<TimeInterval> customDayTimes = customMap.get(clickedTime+"");
+            for(TimeInterval cdt:customDayTimes){
+                Availability innerAva = new Availability(cdt,"");
+                getAlteredAvailability(innerAva);
+            }
+        }
+
         Calendar cal = Calendar.getInstance();
         String yearS = year+"";
         String dayS;
@@ -829,8 +863,9 @@ public class TimePickerActivity extends BaseActivity  {
         myGridAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<Availability> getAlteredAvailability(Availability ava){
+    private void getAlteredAvailability(Availability ava){
         TimeInterval ti = ava.gettime();
+
         for(TimeInterval bookedTi:bookedSessions){
             if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
                 if((bookedTi.getFrom()-ti.getFrom())>=3600000){
@@ -845,6 +880,7 @@ public class TimePickerActivity extends BaseActivity  {
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
                 }
+                return;
             }else if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getFrom()<=ti.getTo()){
                 if(ti.getFrom()-bookedTi.getFrom()>=3600000){
                     TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
@@ -852,6 +888,7 @@ public class TimePickerActivity extends BaseActivity  {
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
                 }
+                return;
             }else if(bookedTi.getTo()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
                 if(ti.getTo()-bookedTi.getTo()>=3600000){
                     TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
@@ -859,14 +896,14 @@ public class TimePickerActivity extends BaseActivity  {
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
                 }
-
+                return;
             }
         }
-        if(todaysAvailability.isEmpty()){
+
             processStartAvailability(ava);
             todaysAvailability.add(ava);
-        }
-        return null;
+
+
     }
 
     private class gridAdapter extends BaseAdapter{
