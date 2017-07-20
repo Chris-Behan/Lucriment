@@ -2,6 +2,7 @@ package com.lucriment.lucriment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -60,6 +61,7 @@ public class CalendarTabFragment extends Fragment {
     private ArrayList<TimeInterval> customAvailabilities = new ArrayList<>();
     private ArrayList<String> customAvaTracker = new ArrayList<>();
     private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
+    private String selectedDayOfWeek;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
@@ -85,6 +87,9 @@ public class CalendarTabFragment extends Fragment {
                 y.putExtra("nameOfDay","today");
                 y.putExtra("userInfo", userInfo);
                 y.putExtra("userType",userType);
+                if(selectedDayOfWeek!=null) {
+                    y.putExtra("nameOfDay",selectedDayOfWeek );
+                }
                 startActivity(y);
 
             }
@@ -131,6 +136,8 @@ public class CalendarTabFragment extends Fragment {
                 Date date = dateClicked;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
+                SimpleDateFormat getDayOfWeek = new SimpleDateFormat("EEEE");
+                selectedDayOfWeek = getDayOfWeek.format(date);
                 int year = cal.get(Calendar.YEAR);
                 int dayOfMonth = cal.get(Calendar.DATE);
                 int month = cal.get(Calendar.MONTH);

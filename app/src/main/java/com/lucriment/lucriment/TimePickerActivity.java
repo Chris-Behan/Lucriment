@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -127,6 +128,11 @@ public class TimePickerActivity extends BaseActivity  {
                     ArrayList<TimeInterval> availabilities = new ArrayList<TimeInterval>();
                     for(DataSnapshot innerTime:customTime.getChildren()){
                         availabilities.add(innerTime.getValue(TimeInterval.class));
+
+                            Event customEvent = new Event(Color.GREEN, innerTime.getValue(TimeInterval.class).getFrom(), "Available this day");
+                            cv.addEvent(customEvent,true);
+
+
                         //customMap.put(customTime.getKey(),innerTime.getValue(TimeInterval.class));
                     }
                     customMap.put(customTime.getKey(),availabilities);
@@ -143,6 +149,7 @@ public class TimePickerActivity extends BaseActivity  {
 
         DatabaseReference tutorRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("defaultAvailability");
         tutorRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 items.clear();
@@ -152,6 +159,17 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         mondayAva.add(ti);
+                    }
+
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
                     Collections.sort(mondayAva,new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
@@ -164,6 +182,16 @@ public class TimePickerActivity extends BaseActivity  {
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         tuesdayAva.add(ti);
                     }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
+                    }
                     Collections.sort(tuesdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
@@ -173,6 +201,16 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         wednesdayAva.add(ti);
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
                     Collections.sort(wednesdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
@@ -184,6 +222,16 @@ public class TimePickerActivity extends BaseActivity  {
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         thursdayAva.add(ti);
                     }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
+                    }
                     Collections.sort(thursdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
@@ -193,6 +241,16 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         fridayAva.add(ti);
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
                     Collections.sort(fridayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
@@ -204,6 +262,16 @@ public class TimePickerActivity extends BaseActivity  {
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         saturdayAva.add(ti);
                     }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
+                    }
                     Collections.sort(saturdayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
@@ -213,6 +281,16 @@ public class TimePickerActivity extends BaseActivity  {
                         //   avaList.add(ava);
                         TimeInterval ti = avaSnapShot.getValue(TimeInterval.class);
                         sundayAva.add(ti);
+                    }
+                    Calendar cal=Calendar.getInstance();
+                    cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                    cal.set(Calendar.HOUR_OF_DAY,0);
+                    cal.set(Calendar.MINUTE,0);
+                    cal.set(Calendar.SECOND,0);
+                    for(int i = 0; i<26;i++){
+                        Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
+                        cv.addEvent(mondayEvent,true);
+                        cal.add(Calendar.DATE,7);
                     }
                     Collections.sort(sundayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();

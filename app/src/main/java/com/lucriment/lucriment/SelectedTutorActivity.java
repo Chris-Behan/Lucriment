@@ -303,6 +303,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         //setup buttons and fields
       //  tutorName.setText();
 
+
     }
     //HANDLE STATE OF FAVOURITED BUTTON
     private void favouriteButtonState(){
@@ -423,7 +424,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
             googleMap.setMaxZoomPreference(23);
             googleMap.setMinZoomPreference(13);
-
+            scrollView.scrollTo(0,0);
         } catch (IOException e) {
             e.printStackTrace();
         }
