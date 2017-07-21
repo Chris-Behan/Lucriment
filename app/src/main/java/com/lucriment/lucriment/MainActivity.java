@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "Registration Succesful", Toast.LENGTH_SHORT).show();
                             finish();
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
                         }else{
                             progressDialog.dismiss();
                             Toast.makeText(MainActivity.this, "Registration Failed, please try again", Toast.LENGTH_SHORT).show();

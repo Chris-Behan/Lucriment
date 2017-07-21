@@ -340,9 +340,14 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         return userInfo;
     }
 */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void  processReviews(){
         revAdapter = new SelectedTutorActivity.reviewAdapter();
         ListView reviewList = (ListView) findViewById(R.id.reviewList);
+       // reviewList.nestedscr
+        if(revList.size()>=1) {
+            reviewList.setNestedScrollingEnabled(true);
+        }
         reviewList.setAdapter(revAdapter);
         scrollView.scrollTo(0,0);
     }

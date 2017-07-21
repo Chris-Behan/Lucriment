@@ -63,10 +63,12 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
         registerButton = (Button) findViewById(R.id.createButton);
         firstName = (EditText) findViewById(R.id.firstName);
         lastName = (EditText) findViewById(R.id.lastName);
-        String test = firebaseAuth.getCurrentUser().getDisplayName().toString();
-        if(firebaseAuth.getCurrentUser().getDisplayName().toString().length() < 1){
-            firstName.setVisibility(View.VISIBLE);
-            lastName.setVisibility(View.VISIBLE);
+        if(firebaseAuth.getCurrentUser().getDisplayName()==null) {
+          //  String test = firebaseAuth.getCurrentUser().getDisplayName().toString();
+
+                firstName.setVisibility(View.VISIBLE);
+                lastName.setVisibility(View.VISIBLE);
+
         }
 
         String displayName = firebaseAuth.getCurrentUser().getDisplayName();
@@ -139,7 +141,7 @@ public class CreationActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, "Account Created", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(CreationActivity.this, SettingsActivity.class);
             i.putExtra("userInfo", UserInformation);
-
+            i.putExtra("userType",UserInformation.getUserType());
             startActivity(i);
 
     }

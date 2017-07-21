@@ -651,7 +651,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 
                 databaseReference.child("users").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
-                if (userInfo.getUserType().equals("Tutor")) {
+                if (userInfo.getUserType().equals("tutor")) {
                     databaseReference.child("tutors").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
                 }
             }

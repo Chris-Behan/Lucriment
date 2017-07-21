@@ -65,6 +65,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
     private long selectedDay;
     private  HashMap<String,ArrayList<TimeInterval>> customMap;
     private ArrayList<TimeInterval> customAvas = new ArrayList<>();
+    private ArrayList<TimeInterval> defaultAvas = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +145,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     selectedTime.clear();
                 for(DataSnapshot timeSnap: dataSnapshot.getChildren()){
                     selectedTime.add(timeSnap.getValue(TimeInterval.class));
+                    defaultAvas.add(timeSnap.getValue(TimeInterval.class));
 
                 }
                 if(customMap.containsKey(selectedDay+"")) {
@@ -271,6 +273,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         customAvas.remove(timeslot);
                         databaseReference.child("tutors").child(userInfo.getId()).child("customAvailability").child(selectedDay+"").setValue(customAvas);
                     }else {
+                        defaultAvas.remove(timeslot);
                         databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").child(day.toLowerCase()).setValue(selectedTime);
                     }
                     adapter2.notifyDataSetChanged();
@@ -338,6 +341,13 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         Calendar cal2 = Calendar.getInstance();
                         cal2.setTime(todaysDate);
                         cal.setTime(todaysDate);
+                    if(tif2.getData().equals("Select")||tif2.getData().length()<2){
+                        Toast.makeText(getApplicationContext(),"Please enter From time",Toast.LENGTH_LONG).show();
+                        return;
+                    }else  if(tif3.getData().equals("Select")||tif2.getData().length()<2){
+                        Toast.makeText(getApplicationContext(),"Please enter To time",Toast.LENGTH_LONG).show();
+                        return;
+                    }
                         cal.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif2.getData().toString()));
                         cal2.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif3.getData().toString()));
                         TimeInterval timeInterval = new TimeInterval(cal.getTimeInMillis(),cal2.getTimeInMillis());

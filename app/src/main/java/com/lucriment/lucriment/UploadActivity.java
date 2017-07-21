@@ -106,7 +106,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     Uri downloadUri = taskSnapshot.getDownloadUrl();  //Ignore This error
-                    if(userInfo.getUserType().equals("Tutor")){
+                    if(userInfo.getUserType().equals("tutor")){
                         mRoofRef.setValue(downloadUri.toString());
                         tutorRef.setValue(downloadUri.toString());
 

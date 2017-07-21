@@ -32,6 +32,7 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class DayAvailability extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, daySelectDialog.NoticeDialogListener {
@@ -56,6 +57,9 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private  daySelectDialog daySelectDialog = new daySelectDialog();
     private DatabaseReference availabilityRoot;
+    private HashMap<String,ArrayList<TimeInterval>> customMap;
+    private ArrayList<TimeInterval> customAvas = new ArrayList<>();
+    private ArrayList<TimeInterval> defaultAvas = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +93,34 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         list.setAdapter(adapter);
         registerEditTimeClick();
 
+        DatabaseReference customAvaialability = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("customAvailability");
+        customAvaialability.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                customMap = new HashMap<String, ArrayList<TimeInterval>>();
+
+                for(DataSnapshot customTime:dataSnapshot.getChildren()){
+                    ArrayList<TimeInterval> availabilities = new ArrayList<TimeInterval>();
+                    for(DataSnapshot innerTime:customTime.getChildren()){
+                        availabilities.add(innerTime.getValue(TimeInterval.class));
+
+
+
+
+                        //customMap.put(customTime.getKey(),innerTime.getValue(TimeInterval.class));
+                    }
+                    customMap.put(customTime.getKey(),availabilities);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     private void setDayListListener(String chosenDay){
@@ -99,8 +131,10 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                 selectedTime.clear();
                 for(DataSnapshot timeSnap: dataSnapshot.getChildren()){
                     selectedTime.add(timeSnap.getValue(TimeInterval.class));
+                    defaultAvas.add(timeSnap.getValue(TimeInterval.class));
 
                 }
+
                 populateTimeList();
 
             }
@@ -267,6 +301,14 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
 
                 if(position ==3){
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    if(tif2.getData().equals("Select")||tif2.getData().length()<2){
+                        Toast.makeText(getApplicationContext(),"Please enter From time",Toast.LENGTH_LONG).show();
+                        return;
+                    }else  if(tif3.getData().equals("Select")||tif2.getData().length()<2){
+                        Toast.makeText(getApplicationContext(),"Please enter To time",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     try {
                         Date fromDate = sdf.parse(tif2.getData().toString());
                         Date toDate = sdf.parse(tif3.getData().toString());

@@ -66,12 +66,13 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         //INITIALIZE BUTTONS
         profileButton = (Button) findViewById(R.id.profileButton);
         logoutButton = (Button) findViewById(R.id.logout);
-        imageView = (ImageView) findViewById(R.id.settingsPic);
-        Glide.with(getApplicationContext())
-                .load(userInfo.getProfileImage())
+        if(userInfo.getProfileImage()!=null) {
+            imageView = (ImageView) findViewById(R.id.settingsPic);
+            Glide.with(getApplicationContext())
+                    .load(userInfo.getProfileImage())
 
-                .into(imageView);
-
+                    .into(imageView);
+        }
 
         // SET LISTENERS
         profileButton.setOnClickListener(this);
