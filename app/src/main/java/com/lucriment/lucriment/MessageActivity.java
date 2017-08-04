@@ -1,12 +1,17 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.security.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,9 +34,9 @@ import java.util.Map;
 
 public class MessageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button sendButton;
+    private ImageView sendButton;
     private EditText messageField;
-    private TextView conversation;
+
     private String userName, chatName;
     private DatabaseReference root;
     private String tempKey;
@@ -44,12 +50,16 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private FirebaseAuth firebaseAuth;
     private String userType;
     private UserInfo userInfo;
+    private RecyclerView recyclerView;
+    private ArrayList<Chat> messages = new ArrayList<>();
+    private MessageAdapter messageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.chat_converastion);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -57,9 +67,15 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             userType = getIntent().getStringExtra("userType");
         }
         firebaseAuth = FirebaseAuth.getInstance();
-        sendButton = (Button) findViewById(R.id.sentButton);
+        sendButton = (ImageView) findViewById(R.id.sendButton);
         messageField = (EditText) findViewById(R.id.messageField);
-        conversation = (TextView) findViewById(R.id.convo);
+
+        recyclerView = (RecyclerView) findViewById(R.id.fragment_chat_recycler_view);
+        messageAdapter = new MessageAdapter(messages);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(messageAdapter);
 
         UserInfo tutor = getIntent().getParcelableExtra("user");
             sender = firebaseAuth.getCurrentUser().getDisplayName();
@@ -69,7 +85,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
             getMessageFromFirebaseUser(senderID,receiverID);
            // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
-
+            actionBar.setTitle(receiver);
            //userName = getIntent().getExtras().get("userName").toString();
       //  chatName = getIntent().getExtras().get("chatName").toString();
        // DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("Chats");
@@ -138,7 +154,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             chatString = chat.text;
 
                                             displayNameString = chat.senderName;
-                                            conversation.append(displayNameString + " : " + chatString + " \n");
+                                           messages.add(chat);
+                                            messageAdapter.notifyDataSetChanged();
                                         }
 
                                         @Override
@@ -175,7 +192,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             chatString = chat.text;
 
                                             displayNameString = chat.senderName;
-                                            conversation.append(displayNameString + " : " + chatString + " \n");
+                                            messages.add(chat);
+                                            messageAdapter.notifyDataSetChanged();
                                         }
 
                                         @Override
@@ -213,10 +231,11 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private void appendChatCovnversation(DataSnapshot dataSnapshot) {
         Iterator i = dataSnapshot.getChildren().iterator();
         while(i.hasNext()){
+
                 chatString = (String) ((DataSnapshot)i.next()).getValue();
 
                 displayNameString = (String) ((DataSnapshot)i.next()).getValue();
-                conversation.append(chatString + " : " + displayNameString + " \n");
+                //messages.add(chat);
         }
     }
 

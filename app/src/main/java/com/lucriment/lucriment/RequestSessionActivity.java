@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.net.Uri;
@@ -70,6 +71,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     private String userType;
     private RatingBar ratingBar;
     private TutorInfo selectedTutor;
+    private ProgressDialog progressDialog;
     double score;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -115,6 +117,8 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
         }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -313,15 +317,18 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         try{
             Intent intent = intentBuilder.build(this);
             startActivityForResult(intent,requestcode_placepicker);
+
         } catch (Exception e){
             e.printStackTrace();
         }
+
 
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if(requestCode == requestcode_placepicker && resultCode == RESULT_OK){
             displaySelectedPlaceFromPlacePicker(data);
         }
@@ -352,7 +359,9 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
                     se.show(getFragmentManager(), "my dialog");
                 }
                 if(position ==1){
+
                     startPlacePicker();
+
 
 
                 }
