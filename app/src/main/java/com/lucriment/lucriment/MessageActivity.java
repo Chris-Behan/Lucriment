@@ -1,19 +1,28 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.fitness.data.Device;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -49,10 +58,14 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private String receiver;
     private FirebaseAuth firebaseAuth;
     private String userType;
-    private UserInfo userInfo;
+    public static UserInfo userInfo;
     private RecyclerView recyclerView;
     private ArrayList<Chat> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
+    static String Sender_Name;
+
+   // public DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
+   // public static int Device_Width = metrics.widthPixels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +79,14 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        Sender_Name = userInfo.getFullName();
         firebaseAuth = FirebaseAuth.getInstance();
         sendButton = (ImageView) findViewById(R.id.sendButton);
-        messageField = (EditText) findViewById(R.id.messageField);
+        messageField = (EditText) findViewById(R.id.messageArea);
 
         recyclerView = (RecyclerView) findViewById(R.id.fragment_chat_recycler_view);
-        messageAdapter = new MessageAdapter(messages);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        messageAdapter = new MessageAdapter(this,messages);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(messageAdapter);
@@ -294,7 +308,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.sentButton:
+            case R.id.sendButton:
                 Calendar cc = Calendar.getInstance();
                 Date date = cc.getTime();
                 // SimpleDateFormat format1 = new SimpleDateFormat("dd MMM");
@@ -325,4 +339,6 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
 
         }
     }
+
+
 }
