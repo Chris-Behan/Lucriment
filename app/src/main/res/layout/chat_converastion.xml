@@ -13,7 +13,7 @@
         android:id="@+id/fragment_chat_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="5dp"
         android:background="#ffffff"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,7 +21,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp">
+        >
 
     </android.support.v7.widget.RecyclerView>
 
@@ -82,6 +82,7 @@
             android:layout_height="35dp"
             android:layout_weight="4"
             android:padding="4dp"
+            android:layout_marginBottom="4dp"
             android:src="@drawable/ic_attach_file_black_24dp" />
 
         <EditText
@@ -91,8 +92,8 @@
             android:layout_weight="1"
             android:hint="Write a message..."
             android:maxHeight="80dp"
-            android:textColor="#CFD8DC"
-            android:textColorHint="#CFD8DC" />
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
 
         <ImageView
             android:id="@+id/sendButton"
@@ -100,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:padding="4dp"
+
             android:src="@android:drawable/ic_menu_send" />
 
 

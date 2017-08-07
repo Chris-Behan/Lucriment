@@ -2,6 +2,7 @@ package com.lucriment.lucriment;
 
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -21,6 +27,7 @@ import java.util.List;
  * Created by ChrisBehan on 8/3/2017.
  */
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class MessageAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
@@ -28,10 +35,15 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private Context mContext;
     private List<Chat> mMessageList;
+    private String convoImage;
+    private Calendar cal = Calendar.getInstance();
+    private long currentTime = cal.getTimeInMillis();
 
-    public MessageAdapter(Context context, List<Chat> messageList) {
+    public MessageAdapter(Context context, List<Chat> messageList, String imageURL) {
         mContext = context;
         mMessageList = messageList;
+        convoImage = imageURL;
+       // DatabaseReference db1 = FirebaseDatabase.getInstance().getReference().child("users").child(messageList.get(0))
     }
 
     @Override
@@ -49,6 +61,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
             // If some other user sent the message
+
             return VIEW_TYPE_MESSAGE_RECEIVED;
         }
     }
@@ -95,8 +108,11 @@ public class MessageAdapter extends RecyclerView.Adapter {
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         void bind(Chat message) {
             messageText.setText(message.text);
+            String dateString = new SimpleDateFormat("hh:mm").format(message.timestamp);
+            timeText.setText(dateString);
 
             // Format the stored timestamp into a readable String using method.
            // timeText.setText(SimpleDateFormat.formatDateTime(message.getCreatedAt()));
@@ -112,17 +128,26 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
-            nameText = (TextView) itemView.findViewById(R.id.text_message_name);
             profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
+
+
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         void bind(Chat message) {
             messageText.setText(message.text);
+            String dateString = new SimpleDateFormat("hh:mm").format(message.timestamp);
+
 
             // Format the stored timestamp into a readable String using method.
-           // timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
+            timeText.setText(dateString);
+            Glide.with(mContext)
 
-            nameText.setText(message.senderName);
+                    .load(convoImage)
+                    .apply(RequestOptions.circleCropTransform())
+
+                    .into(profileImage);
+
 
             // Insert the profile image from the URL into the ImageView.
            // Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);

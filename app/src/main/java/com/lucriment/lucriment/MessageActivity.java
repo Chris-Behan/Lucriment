@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.fitness.data.Device;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,15 +84,15 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         firebaseAuth = FirebaseAuth.getInstance();
         sendButton = (ImageView) findViewById(R.id.sendButton);
         messageField = (EditText) findViewById(R.id.messageArea);
-
+        UserInfo tutor = getIntent().getParcelableExtra("user");
         recyclerView = (RecyclerView) findViewById(R.id.fragment_chat_recycler_view);
-        messageAdapter = new MessageAdapter(this,messages);
+        messageAdapter = new MessageAdapter(this,messages,tutor.getProfileImage());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(messageAdapter);
 
-        UserInfo tutor = getIntent().getParcelableExtra("user");
+
             sender = firebaseAuth.getCurrentUser().getDisplayName();
             receiver = tutor.getFullName();
             senderID = firebaseAuth.getCurrentUser().getUid().toString();
@@ -100,6 +101,23 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
            // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
             actionBar.setTitle(receiver);
+        //IMAGE IN ACTION BAR
+        /*
+        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
+                | ActionBar.DISPLAY_SHOW_CUSTOM);
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(this)
+                .load(tutor.getProfileImage())
+                 .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+                150,
+                150, Gravity.START
+                | Gravity.CENTER_VERTICAL);
+        layoutParams.rightMargin = 40;
+        imageView.setLayoutParams(layoutParams);
+        actionBar.setCustomView(imageView); */
            //userName = getIntent().getExtras().get("userName").toString();
       //  chatName = getIntent().getExtras().get("chatName").toString();
        // DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("Chats");
@@ -170,6 +188,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             displayNameString = chat.senderName;
                                            messages.add(chat);
                                             messageAdapter.notifyDataSetChanged();
+                                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                                         }
 
                                         @Override
@@ -208,6 +227,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             displayNameString = chat.senderName;
                                             messages.add(chat);
                                             messageAdapter.notifyDataSetChanged();
+                                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                                         }
 
                                         @Override
