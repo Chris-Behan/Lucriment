@@ -1,6 +1,10 @@
 package com.lucriment.lucriment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +13,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,24 +38,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import android.widget.AdapterView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class ViewMessagesActivity extends BaseActivity implements View.OnClickListener {
 
     private ListView chats;
     private Button backButton;
-    private ArrayAdapter<String> arrayAdapter;
-    private ArrayList<String> listOfChats = new ArrayList<>();
+    private ArrayAdapter<UserInfo> arrayAdapter;
+    private ArrayList<Chat> listOfChats = new ArrayList<>();
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("chats");
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
+    private List<String> usersIds = new ArrayList<>();
     private List<Chat> chatList = new ArrayList<>();
     private UserInfo userInfo;
     private String userType;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
@@ -64,6 +78,58 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        FirebaseDatabase.getInstance().getReference().child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Chat> chats = new ArrayList<Chat>();
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+
+                    if(ds.getKey().contains(userInfo.getId())){
+
+                        String convoString = ds.getKey();
+                        Chat lastChat = new Chat();
+                        for(DataSnapshot innerSnap:ds.getChildren()){
+                            lastChat = innerSnap.getValue(Chat.class);
+                        }
+
+                        chats.add(lastChat);
+
+                        if(lastChat.receiverName.equals(userInfo.getFullName())) {
+                            listOfChats.add(lastChat);
+                            usersIds.add(lastChat.senderId);
+                        }else{
+                            listOfChats.add(lastChat);
+                            usersIds.add(lastChat.receiverId);
+                        }
+                    }
+                }
+
+                FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(String id:usersIds){
+                            users.add(dataSnapshot.child(id).getValue(UserInfo.class));
+                        }
+                        registerChatSelect();
+                        progressDialog.dismiss();
+                        arrayAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+/*
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("users")
@@ -94,7 +160,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                     public void onCancelled(DatabaseError databaseError) {
                         // Unable to retrieve the users.
                     }
-                });
+                }); */
 
 
         tutorId = getIntent().getParcelableExtra("tutorID");
@@ -104,7 +170,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         if(getIntent().hasExtra("tutorID"))
             tutorId = getIntent().getExtras().get("tutorID").toString();
 
-        arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfChats);
+        arrayAdapter = new ViewMessagesActivity.myListAdapter();
 
 
         chats.setAdapter(arrayAdapter);
@@ -147,8 +213,50 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
             }
         }); */
-        registerChatSelect();
 
+    }
+
+    private class myListAdapter extends ArrayAdapter<UserInfo> {
+
+        public myListAdapter(){
+            super(ViewMessagesActivity.this, R.layout.tutor_profile_layout, users);
+        }
+
+
+        // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getLayoutInflater().inflate(R.layout.message_preview_item, parent, false);
+            }
+            //Find tutor to work with
+            UserInfo currentTutor = users.get(position);
+            Chat currentChat = listOfChats.get(position);
+            //fill the view
+            final ImageView imageView = (ImageView)itemView.findViewById(R.id.imageView5);
+            Glide.with(getApplicationContext())
+                    .load(currentTutor.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imageView);
+            // set image imageVIew.setImageResource();
+            TextView nameText = (TextView) itemView.findViewById(R.id.nameText);
+
+            nameText.setText(currentTutor.getFullName());
+
+           TextView messageText = (TextView) itemView.findViewById(R.id.messageText);
+            messageText.setText(currentChat.text);
+
+            TextView timeText = (TextView) itemView.findViewById(R.id.timeText);
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, h:mm a");
+            timeText.setText(sdf.format(currentChat.timestamp));
+           // timeText.setText(sdf.format(1503554400000l));
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
     }
 
     @Override
@@ -205,12 +313,8 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
                 UserInfo selectedUser = new UserInfo();
-                String s = ((TextView)view).getText().toString();
-                for(UserInfo currentUser: users){
-                    if(currentUser.getFullName().equals(s)){
-                        selectedUser = currentUser;
-                    }
-                }
+
+                selectedUser = users.get(position);
                 // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
                 //       myID = tutorId;
                 //  }
@@ -242,7 +346,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                             if (currentChat.senderId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
                                     currentChat.receiverId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 users.add(user);
-                                listOfChats.add(user.getFullName());
+                               // listOfChats.add(user.getFullName());
                             }
                         }
                         // All users are retrieved except the one who is currently logged
