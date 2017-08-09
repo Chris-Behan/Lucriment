@@ -3,6 +3,8 @@ package com.lucriment.lucriment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +38,9 @@ import com.google.firebase.database.ValueEventListener;
 import android.app.SearchManager;
 import android.widget.SearchView.OnQueryTextListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TutorListActivity extends BaseActivity {
 
@@ -269,28 +274,37 @@ public class TutorListActivity extends BaseActivity {
             //Find tutor to work with
             TutorInfo currentTutor = searchResult.get(position);
 
+            TextView city = (TextView) itemView.findViewById(R.id.cityText);
+
+            Geocoder gc = new Geocoder(getContext());
+            try {
+                List<Address> addresses = gc.getFromLocationName(currentTutor.getPostalCode(),1);
+                city.setText(addresses.get(0).getLocality()+", "+addresses.get(0).getAdminArea());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //fill the view
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
             Glide.with(getApplicationContext())
                     .load(currentTutor.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
 
-            RatingBar ratingScore = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            TextView ratingScore = (TextView) itemView.findViewById(R.id.rating);
             if(currentTutor.getRating()!=null) {
                 Rating rating = currentTutor.getRating();
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
-                ratingScore.isIndicator();
-                ratingScore.setRating((float) score);
+                ratingScore.setText(score+"");
             }else{
-                ratingScore.setRating(0);
+                ratingScore.setText("  "+0);
             }
 
-            TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
-            classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));
+            TextView titleText = (TextView) itemView.findViewById(R.id.title);
+            titleText.setText(currentTutor.getAbout());
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
@@ -332,9 +346,9 @@ public class TutorListActivity extends BaseActivity {
     public static class ImageLayoutViewHolder extends RecyclerView.ViewHolder {
         private final TextView tutorName;
         private final ImageView image_url;
-        private final TextView subjectsText;
+
         private final TextView rateText;
-        private final RatingBar ratingBar;
+        private final TextView ratingBar;
 
 
 
@@ -342,20 +356,18 @@ public class TutorListActivity extends BaseActivity {
             super(itemView);
             image_url = (ImageView) itemView.findViewById(R.id.ProfileImage);
             tutorName = (TextView) itemView.findViewById(R.id.browseDisplayName);
-            subjectsText = (TextView) itemView.findViewById(R.id.browseClasses);
+
             rateText = (TextView) itemView.findViewById(R.id.browseRate);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            ratingBar = (TextView) itemView.findViewById(R.id.rating);
         }
 
-        private void SubjectsText(String subjects){
-            subjectsText.setText(subjects);
-        }
+
         private void RateText(String rate){
             rateText.setText("$"+rate+"/hr");
         }
 
         private void RatingBar(Float rating){
-            ratingBar.setRating(rating);
+            ratingBar.setText(rating+"");
         }
 
 

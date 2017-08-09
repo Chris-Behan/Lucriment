@@ -123,9 +123,7 @@ public class ImageLayout extends BaseActivity {
                     viewHolder.RatingBar((float)score);
                 }
 
-                if(model.getSubjects()!=null) {
-                    viewHolder.SubjectsText(model.getSubjects().get(0));
-                }
+
 
 //OnClick Item it will Delete data from Database
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -211,9 +209,8 @@ public class ImageLayout extends BaseActivity {
     public static class ImageLayoutViewHolder extends RecyclerView.ViewHolder {
         private final TextView tutorName;
         private final ImageView image_url;
-        private final TextView subjectsText;
         private final TextView rateText;
-        private final RatingBar ratingBar;
+        private final TextView rating;
 
 
 
@@ -221,20 +218,18 @@ public class ImageLayout extends BaseActivity {
             super(itemView);
             image_url = (ImageView) itemView.findViewById(R.id.ProfileImage);
             tutorName = (TextView) itemView.findViewById(R.id.browseDisplayName);
-            subjectsText = (TextView) itemView.findViewById(R.id.browseClasses);
+
             rateText = (TextView) itemView.findViewById(R.id.browseRate);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            rating = (TextView) itemView.findViewById(R.id.rating);
         }
 
-        private void SubjectsText(String subjects){
-            subjectsText.setText(subjects);
-        }
+
         private void RateText(String rate){
             rateText.setText("$"+rate+"/hr");
         }
 
         private void RatingBar(Float rating){
-            ratingBar.setRating(rating);
+            this.rating.setText(rating+"");
         }
 
 

@@ -152,16 +152,13 @@ public class Favourites extends BaseActivity {
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
 
-            RatingBar ratingScore = (RatingBar) itemView.findViewById(R.id.ratingBar2);
+            TextView ratingScore = (TextView) itemView.findViewById(R.id.rating);
             if(currentTutor.getRating()!=null) {
                 Rating rating = currentTutor.getRating();
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
-                ratingScore.isIndicator();
-                ratingScore.setRating((float) score);
+
             }else{}
 
-            TextView classText = (TextView) itemView.findViewById(R.id.browseClasses);
-            classText.setText(currentTutor.arrToString(currentTutor.getSubjects()));
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );

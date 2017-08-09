@@ -101,6 +101,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
            // chatID = getIntent().getExtras().get("chatID").toString();
             userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().toString();
             actionBar.setTitle(receiver);
+
         //IMAGE IN ACTION BAR
         /*
         actionBar.setDisplayOptions(actionBar.getDisplayOptions()
