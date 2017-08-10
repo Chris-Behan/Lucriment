@@ -58,7 +58,7 @@ public class TutorListActivity extends BaseActivity {
     private ArrayList<TutorInfo> searchResult = new ArrayList<>();
     private Menu currentMenu;
     private ProgressDialog progressDialog;
-    private ArrayList<String> tutorAddresses = new ArrayList<>();
+    private ArrayList<String> tutorAddresses;
 
 
 
@@ -66,6 +66,7 @@ public class TutorListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
+        tutorAddresses = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();

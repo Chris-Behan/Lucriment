@@ -2,6 +2,8 @@ package com.lucriment.lucriment;
 
 import android.content.Intent;
 import android.graphics.LightingColorFilter;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +18,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +42,7 @@ public class Favourites extends BaseActivity {
     private UserInfo userInfo;
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
     private double tutorScore;
+    private ArrayList<String> favouritesLocations = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +123,7 @@ public class Favourites extends BaseActivity {
                     }
 
                 }
+                getTutorLocations();
                 populateTutorList();
             }
 
@@ -125,6 +132,18 @@ public class Favourites extends BaseActivity {
 
             }
         });
+    }
+
+    private void getTutorLocations(){
+        Geocoder gc = new Geocoder(this);
+        try {
+            for(TutorInfo ti:tutors) {
+                List<Address> addresses = gc.getFromLocationName(ti.getPostalCode(), 1);
+                favouritesLocations.add(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class myListAdapter extends ArrayAdapter<TutorInfo> {
@@ -150,6 +169,7 @@ public class Favourites extends BaseActivity {
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
             Glide.with(getApplicationContext())
                     .load(currentTutor.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
@@ -159,12 +179,28 @@ public class Favourites extends BaseActivity {
             if(currentTutor.getRating()!=null) {
                 Rating rating = currentTutor.getRating();
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
+                ratingScore.setText(score+"");
 
-            }else{}
+            }else{
+                ratingScore.setText("  0");
+            }
+            TextView city = (TextView) itemView.findViewById(R.id.cityText);
+            city.setText(favouritesLocations.get(position));
+
+            TextView titleText = (TextView) itemView.findViewById(R.id.title);
+            titleText.setText(currentTutor.getAbout());
 
             Button bookMark = (Button) itemView.findViewById(R.id.fbookMark);
             bookMark.setSelected(true);
             bookMark.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
+
+            bookMark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(Favourites.this, "it worked!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
 
@@ -174,7 +210,7 @@ public class Favourites extends BaseActivity {
         }
     }
     //REGISTER CLICKS
-    private void registerFacouriteClicks(){
+    private void registerFavouriteClicks(){
         ListView favList = (ListView) findViewById(R.id.tView);
         favList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -200,7 +236,7 @@ public class Favourites extends BaseActivity {
         ArrayAdapter<TutorInfo> adapter = new Favourites.myListAdapter();
         ListView list = (ListView) findViewById(R.id.tView);
         list.setAdapter(adapter);
-        registerFacouriteClicks();
+        registerFavouriteClicks();
 
 
     }

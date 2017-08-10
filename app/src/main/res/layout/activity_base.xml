@@ -6,7 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/windowBackground"
-    app:menu="@menu/bottom_navigation_menu"
-    />
+    app:menu="@menu/bottom_navigation_menu">
+
+    <View
+        android:id="@+id/line1"
+
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_weight="1"
+        android:layout_centerHorizontal="true"
+        android:background="#c9c9c9"
+        android:padding="2dip" />
+
+</android.support.design.widget.BottomNavigationView>
+
+
 
 
