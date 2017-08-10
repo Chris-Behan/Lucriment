@@ -58,6 +58,7 @@ public class TutorListActivity extends BaseActivity {
     private ArrayList<TutorInfo> searchResult = new ArrayList<>();
     private Menu currentMenu;
     private ProgressDialog progressDialog;
+    private ArrayList<String> tutorAddresses = new ArrayList<>();
 
 
 
@@ -65,6 +66,9 @@ public class TutorListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -74,6 +78,7 @@ public class TutorListActivity extends BaseActivity {
                     tutors.add(tutor);
                     searchResult.add(tutor);
                 }
+                getTutorAddresses();
                 populateTutorList();
                 setMenuSearch();
                 progressDialog.dismiss();
@@ -86,14 +91,13 @@ public class TutorListActivity extends BaseActivity {
 
             }
         });
-        progressDialog = new ProgressDialog(this);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference("tutors");
       //  recyclerView = (RecyclerView)findViewById(R.id.rView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(TutorListActivity.this));
         getTutors();
-        progressDialog.setMessage("Connecting...");
-        progressDialog.show();
+
 
 
         if(getIntent().hasExtra("userInfo")) {
@@ -215,6 +219,17 @@ public class TutorListActivity extends BaseActivity {
 
 
     }
+    private void getTutorAddresses(){
+        Geocoder gc = new Geocoder(this);
+        try {
+            for(TutorInfo ti:tutors) {
+                List<Address> addresses = gc.getFromLocationName(ti.getPostalCode(), 1);
+                tutorAddresses.add(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void populateTutorList(){
         //  populateTutorList();
@@ -275,15 +290,16 @@ public class TutorListActivity extends BaseActivity {
             TutorInfo currentTutor = searchResult.get(position);
 
             TextView city = (TextView) itemView.findViewById(R.id.cityText);
-
+            /*
             Geocoder gc = new Geocoder(getContext());
             try {
                 List<Address> addresses = gc.getFromLocationName(currentTutor.getPostalCode(),1);
                 city.setText(addresses.get(0).getLocality()+", "+addresses.get(0).getAdminArea());
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            } */
             //fill the view
+            city.setText(tutorAddresses.get(position));
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
             Glide.with(getApplicationContext())

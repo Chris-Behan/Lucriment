@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.graphics.LightingColorFilter;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -128,7 +130,7 @@ public class Favourites extends BaseActivity {
     private class myListAdapter extends ArrayAdapter<TutorInfo> {
 
         public myListAdapter(){
-            super(Favourites.this, R.layout.tutor_profile_layout, tutors);
+            super(Favourites.this, R.layout.favourite_profile_layout, tutors);
         }
 
 
@@ -138,10 +140,11 @@ public class Favourites extends BaseActivity {
             View itemView = convertView;
             // make sure we have a view to work with
             if(itemView == null){
-                itemView = getLayoutInflater().inflate(R.layout.tutor_profile_layout, parent, false);
+                itemView = getLayoutInflater().inflate(R.layout.favourite_profile_layout, parent, false);
             }
             //Find tutor to work with
             TutorInfo currentTutor = tutors.get(position);
+
 
             //fill the view
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
@@ -159,7 +162,9 @@ public class Favourites extends BaseActivity {
 
             }else{}
 
-
+            Button bookMark = (Button) itemView.findViewById(R.id.fbookMark);
+            bookMark.setSelected(true);
+            bookMark.getBackground().setColorFilter(new LightingColorFilter(0xFFFFFFFF, 0x00009FFF));
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );
 
