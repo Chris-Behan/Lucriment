@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,6 +49,9 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
 
             int itemId = item.getItemId();
             if (itemId == R.id.search) {
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
                 Intent y = new Intent(this, TutorListActivity.class);
                 y.putExtra("userType", getUserType());
                 y.putExtra("userInfo",getUserInformation());

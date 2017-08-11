@@ -30,111 +30,120 @@
                 >
 
                 <RelativeLayout>
-
                     <Button
-                        android:id="@+id/scheduleButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="37dp"
-                        android:text="Schedule"
-                        android:layout_below="@+id/tutorRateField"
-                        android:layout_alignRight="@+id/line1"
-                        android:layout_alignEnd="@+id/line1" />
+                        android:id="@+id/editButton"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:text="Edit"
+                        android:textAllCaps="false"
+                        android:background="@drawable/rounded_button"
+                        android:textColor="#ffffff"
+                        android:layout_alignBottom="@+id/browseDisplayName"
+                        android:layout_alignRight="@+id/cityText"
+                        android:layout_alignEnd="@+id/cityText" />
+
 
                     <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
+                        android:id="@+id/ProfileImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="3dp"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="60dp"
+                        android:maxWidth="60dp"
+                        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait"
                         android:layout_alignParentTop="true"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="13dp"
-                        app:srcCompat="@drawable/com_facebook_profile_picture_blank_portrait" />
-
-                    <EditText
-                        android:id="@+id/editRateField"
-                        android:layout_width="50dp"
-                        android:layout_height="39dp"
-                        android:layout_alignTop="@+id/editRate"
-                        android:layout_alignLeft="@+id/ratingBar3"
-                        android:layout_alignStart="@+id/ratingBar3"
-                        android:visibility="invisible"/>
-
-                    <RatingBar
-                        android:id="@+id/ratingBar3"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/tutorName"
-                        android:layout_alignStart="@+id/tutorName"
-                        android:layout_below="@+id/tutorName" />
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
-                        android:id="@+id/tutorName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/imageView3"
-                        android:layout_marginLeft="22dp"
-                        android:layout_marginStart="22dp"
-                        android:layout_toEndOf="@+id/imageView3"
-                        android:layout_toRightOf="@+id/imageView3"
-                        android:text="Name"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                    <TextView
-                        android:id="@+id/tutorRateField"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/ratingBar3"
-                        android:layout_alignStart="@+id/ratingBar3"
-                        android:layout_below="@+id/ratingBar3"
-                        android:text="Rate Per Hour"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <View
-                        android:id="@+id/line1"
-                        android:layout_width="350dp"
-                        android:layout_height="1dip"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="#c9c9c9"
-                        android:padding="2dip" />
-
-                    <Button
-                        android:id="@+id/Edit"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/ic_edit_black_24dp"
-                        android:layout_alignBaseline="@+id/tutorName"
-                        android:layout_alignBottom="@+id/tutorName"
-                        android:layout_toRightOf="@+id/tutorName"
-                        android:layout_toEndOf="@+id/tutorName" />
-
-                    <Button
-                        android:id="@+id/uploadPhoto"
                         android:layout_width="wrap_content"
-                        android:layout_height="37dp"
-                        android:text="Change"
-                        android:visibility="invisible"
-                        android:textAllCaps="false"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignLeft="@+id/line1"
-                        android:layout_alignStart="@+id/line1" />
-                    <Button
-                        android:id="@+id/editRate"
-                        android:visibility="invisible"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Name"
+                        android:id="@+id/browseDisplayName"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_toRightOf="@+id/ProfileImage"
+                        android:layout_toEndOf="@+id/ProfileImage"
+                        android:layout_alignTop="@+id/ProfileImage" />
+
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="37dp"
-                        android:textAllCaps="false"
-                        android:text="Edit"
-                        android:layout_alignBaseline="@+id/tutorRateField"
-                        android:layout_alignBottom="@+id/tutorRateField"
-                        android:layout_toRightOf="@+id/tutorRateField"
-                        android:layout_toEndOf="@+id/tutorRateField" />
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Rate"
+                        android:id="@+id/browseRate"
+
+                        android:layout_gravity="center_horizontal"
+                        android:layout_alignBottom="@+id/imageView6"
+                        android:layout_toRightOf="@+id/imageView6"
+                        android:layout_toEndOf="@+id/imageView6"
+                        android:layout_marginLeft="44dp"
+                        android:layout_marginStart="44dp" />
+
+                    <TextView
+                        android:id="@+id/rating"
+                        android:layout_width="31dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textAlignment="center"
+                        android:maxHeight="30dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                        android:layout_below="@+id/ProfileImage"
+                        android:layout_alignLeft="@+id/ProfileImage"
+                        android:layout_alignStart="@+id/ProfileImage" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_star_rate_black_18dp"
+                        android:layout_below="@+id/ProfileImage"
+
+                        android:layout_toRightOf="@+id/rating"
+                        android:layout_toEndOf="@+id/rating" />
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/browseDisplayName"
+                        android:layout_toEndOf="@+id/imageView6"
+                        android:layout_toRightOf="@+id/imageView6"
+                        android:layout_alignLeft="@id/browseDisplayName"
+                        android:layout_above="@+id/browseRate"
+                        android:text="TextView" />
+
+                    <TextView
+                        android:id="@+id/cityText"
+                        android:maxWidth="150dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_alignBottom="@+id/browseRate"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <ImageView
+                        android:id="@+id/location"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_toRightOf="@+id/browseRate"
+                        android:tint="@color/colorPrimary"
+                        app:srcCompat="@drawable/ic_location_on_black_24dp"
+
+
+                        android:layout_alignTop="@+id/browseRate"
+                        android:layout_toLeftOf="@+id/cityText"
+                        android:layout_toStartOf="@+id/cityText" />
+
 
                 </RelativeLayout>
             </TableRow>
@@ -361,7 +370,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:nestedScrollingEnabled="false"
-                        android:layout_alignParentBottom="true"
+                        android:layout_below="@+id/reviewText"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
                 </RelativeLayout>
@@ -399,7 +408,6 @@
         android:layout_alignParentBottom="true"
         tools:layout_editor_absoluteY="459dp"
         tools:layout_editor_absoluteX="0dp" />
-
 
 
 

@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.LightingColorFilter;
 import android.location.Address;
@@ -43,6 +44,7 @@ public class Favourites extends BaseActivity {
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
     private double tutorScore;
     private ArrayList<String> favouritesLocations = new ArrayList<>();
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,9 @@ public class Favourites extends BaseActivity {
             item.setChecked(false);
         }
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         getFavourites();
 
 
@@ -125,6 +129,7 @@ public class Favourites extends BaseActivity {
                 }
                 getTutorLocations();
                 populateTutorList();
+                progressDialog.dismiss();
             }
 
             @Override
@@ -221,6 +226,9 @@ public class Favourites extends BaseActivity {
                     tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
 
                 }
+                ProgressDialog progressDialog = new ProgressDialog(Favourites.this);
+                progressDialog.setMessage("Loading");
+                progressDialog.show();
                 Intent i = new Intent(Favourites.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", clickedTutor);
                 i.putExtra("tutorScore",tutorScore);

@@ -67,7 +67,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private TextView personalName;
     private TutorListActivity tutorListActivity;
     private Button backButton;
-    private Button editButton;
+
     private TextView educationField;
     private TextView bioField;
     private boolean editing;
@@ -77,7 +77,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private UserInfo userInfo;
     private EditText editBioText;
     private FirebaseUser user;
-    private Button uploadButton, logoutButton, scheduleButton, aboutButton;
+    private Button logoutButton, aboutButton, editButton;
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> classes = new ArrayList<>();
     private StorageReference storageReference;
@@ -100,13 +100,12 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private boolean editingBio = false;
     private boolean editingRate = false;
     private TextView hourlyRate;
-    private Button rateButton;
-    private EditText editRate;
+
     private ArrayList<Review> revList = new ArrayList<>();
     private ArrayAdapter<Review> revAdapter;
     private ScrollView scrollView;
-    private Button ScheduleButton;
-    private RatingBar ratingBar;
+
+    private TextView ratingBar;
     private float score;
 
     @Override
@@ -235,26 +234,25 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         });
 
         // initialize buttons and fields
-        personalName = (TextView) findViewById(R.id.tutorName);
+        personalName = (TextView) findViewById(R.id.browseDisplayName);
 
         educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
         bioField = (TextView) findViewById(R.id.tutorAboutField);
         editBioText = (EditText) findViewById(R.id.editBioField);
-        editButton = (Button) findViewById(R.id.Edit);
-        uploadButton = (Button) findViewById(R.id.uploadPhoto);
-        imageView = (ImageView) findViewById(R.id.imageView3);
+
+
+        imageView = (ImageView) findViewById(R.id.ProfileImage);
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
         classSelector = (Spinner) findViewById(R.id.classSpinner);
         addClassButton = (Button) findViewById(R.id.addClassButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
-        scheduleButton = (Button) findViewById(R.id.scheduleButton);
+        editButton = (Button) findViewById(R.id.editButton);
         aboutButton = (Button) findViewById(R.id.editAbout);
-        hourlyRate = (TextView) findViewById(R.id.tutorRateField);
-        rateButton = (Button) findViewById(R.id.editRate);
-        editRate = (EditText) findViewById(R.id.editRateField);
-        ScheduleButton = (Button) findViewById(R.id.scheduleButton);
+        hourlyRate = (TextView) findViewById(R.id.browseRate);
+
+
         picUploadDialog = new ProgressDialog(this);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
+        ratingBar = (TextView) findViewById(R.id.rating);
         String[] testarr = new String[]{"hello","goodbye"};
 
 
@@ -264,13 +262,14 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 //        scheduleButton.setOnClickListener(this);
         addClassButton.setOnClickListener(this);
-        editButton.setOnClickListener(this);
+
         logoutButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
-        rateButton.setOnClickListener(this);
-        scheduleButton.setOnClickListener(this);
+        editButton.setOnClickListener(this);
 
-        uploadButton.setOnClickListener(this);
+
+
+
         if(userInfo!= null) {
             if(userInfo.getUserType().equals("tutor")){
                 isTutor = true;
@@ -339,7 +338,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 if(tutorInfo.getRating()!=null) {
                     Rating rating = tutorInfo.getRating();
                     score = (float) (rating.getTotalScore() / rating.getNumberOfReviews());
-                    ratingBar.setRating(score);
+                    ratingBar.setText(score+"");
 
                 }
                 setUpMap();
@@ -589,42 +588,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             startActivity(i);
 
         }
-        if(v == editButton){
-            if(editing){
-                editing = false;
-                addingClass = false;
-                addClassButton.setVisibility(View.INVISIBLE);
-                aboutButton.setVisibility(View.INVISIBLE);
-                uploadButton.setVisibility(View.INVISIBLE);
-
-            }else{
-                editing = true;
-                addClassButton.setVisibility(View.VISIBLE);
-                aboutButton.setVisibility(View.VISIBLE);
-                uploadButton.setVisibility(View.VISIBLE);
-            }
-            if(editing) {
-                rateButton.setVisibility(View.VISIBLE);
-             //   bioField.setVisibility(View.INVISIBLE);
-            //    editBioText.setVisibility(View.VISIBLE);
-            }else{
-                rateButton.setVisibility(View.INVISIBLE);
-                subjectSelector.setVisibility(View.INVISIBLE);
-                classSelector.setVisibility(View.INVISIBLE);
-                bioField.setVisibility(View.VISIBLE);
-             //   editBioText.setVisibility(View.INVISIBLE);
-              //  bioField.setText(editBioText.getText());
-                // userInfo.setTitle(editBioText.getText().toString());
-             //   tutorInfo.setAbout(editBioText.getText().toString());
-             /*   databaseReference.child("users").child(user.getUid()).setValue(userInfo);
-                if(userInfo.getUserType().equals("Tutor")){
-                    databaseReference.child("tutors").child(user.getUid()).child("about").setValue(tutorInfo.getAbout());
-                }
-                */
-
-            }
-
-        }
 
         if(v == aboutButton){
 
@@ -677,44 +640,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 classSelector.setVisibility(View.INVISIBLE);
             }
         }
-        if(v== rateButton){
-            if(editingRate){
-                editingRate = false;
-            }else{
-                editingRate = true;
-            }
-            if(editingRate) {
-                editRate.setVisibility(View.VISIBLE);
-                hourlyRate.setVisibility(View.INVISIBLE);
-            }
-            else{
-                 tutorInfo.setRate(Integer.valueOf(editRate.getText().toString()));
-                hourlyRate.setText("$"+editRate.getText()+"/hr");
-                databaseReference.child("tutors").child(user.getUid()).child("rate").setValue(Integer.valueOf(editRate.getText().toString()));
-                editRate.setVisibility(View.INVISIBLE);
-                hourlyRate.setVisibility(View.VISIBLE);
 
-            }
-        }
 
-        if(v == uploadButton){
-            Intent i = new Intent(MyProfileActivity.this, UploadActivity.class);
-            i.putExtra("userType", userType);
-            i.putExtra("userInfo",userInfo);
-            startActivity(i);
-            //   Intent intent = new Intent(Intent.ACTION_PICK);
 
-            //     intent.setType("image/*");
-            // intent.putExtra("userInfo", userInfo);
-            //  startActivityForResult(intent, GALLERYINTENT);
-        }
 
-        if(v == scheduleButton){
-            finish();
-            Intent i = new Intent(MyProfileActivity.this, DefaultAvailability.class);
-            i.putExtra("userType", userType);
-            i.putExtra("userInfo",userInfo);
-            startActivity(i);
-        }
     }
 }

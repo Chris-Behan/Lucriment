@@ -82,7 +82,7 @@ public class TutorListActivity extends BaseActivity {
                 getTutorAddresses();
                 populateTutorList();
                 setMenuSearch();
-                progressDialog.dismiss();
+
                 // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
                 //  populateTutorList(tNames);
             }
@@ -225,8 +225,12 @@ public class TutorListActivity extends BaseActivity {
         try {
             for(TutorInfo ti:tutors) {
                 List<Address> addresses = gc.getFromLocationName(ti.getPostalCode(), 1);
-                tutorAddresses.add(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
+                if(!addresses.isEmpty()) {
+
+                    tutorAddresses.add(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
+                }
             }
+            progressDialog.dismiss();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -343,6 +347,10 @@ public class TutorListActivity extends BaseActivity {
                     tutorScore = tutorRating.getTotalScore() / tutorRating.getNumberOfReviews();
 
                 }
+                ProgressDialog progressDialog = new ProgressDialog(TutorListActivity.this);
+
+                progressDialog.setMessage("Loading...");
+                progressDialog.show();
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", selectedTutor1);

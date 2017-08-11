@@ -37,6 +37,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Rate"
         android:id="@+id/browseRate"
+
         android:layout_gravity="center_horizontal"
         android:layout_alignBottom="@+id/imageView6"
         android:layout_toRightOf="@+id/imageView6"
@@ -80,6 +81,7 @@
 
     <TextView
         android:id="@+id/cityText"
+        android:maxWidth="150dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -93,6 +95,7 @@
         android:id="@+id/location"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_toRightOf="@+id/browseRate"
         android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_location_on_black_24dp"
 

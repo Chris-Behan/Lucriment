@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -66,7 +68,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView aboutField;
     private TextView rateField;
     private TextView classesField;
-    private RatingBar ratingBar;
+    private TextView ratingText;
     private ImageView imageView;
     private StorageReference storageReference;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
@@ -111,16 +113,16 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             userType = getIntent().getStringExtra("userType");
         }
         // initialize buttons and fields
-        tutorName = (TextView) findViewById(R.id.tutorName);
+        tutorName = (TextView) findViewById(R.id.browseDisplayName);
         // backButton = (Button) findViewById(R.id.backButton);
         // educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
         aboutField = (TextView) findViewById(R.id.tutorAboutField);
-        rateField = (TextView) findViewById(R.id.tutorRateField);
+        rateField = (TextView) findViewById(R.id.browseRate);
         contactButton = (Button) findViewById(R.id.contactButton);
-        imageView = (ImageView) findViewById(R.id.imageView3);
+        imageView = (ImageView) findViewById(R.id.ProfileImage);
         classesField = (TextView) findViewById(R.id.classesField);
         requestButton = (Button) findViewById(R.id.requestButton);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar3);
+        ratingText = (TextView) findViewById(R.id.rating);
         bookMarkButton = (Button) findViewById(R.id.bookMark);
 
         // selectedTutor = TutorListActivity.getTutor();
@@ -129,8 +131,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 //        educationField.setText(selectedTutor.getTitle());
         aboutField.setText(selectedTutor.getAbout());
         rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
-        ratingBar.isIndicator();
-        ratingBar.setRating((float) score);
+
+        ratingText.setText(score +"");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -144,6 +146,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         bookMarkButton.setOnClickListener(this);
         Glide.with(getApplicationContext())
                 .load(selectedTutor.getProfileImage())
+                .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
 
 
@@ -355,6 +358,9 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
         Intent i = new Intent(SelectedTutorActivity.this, TutorListActivity.class);
         i.putExtra("tutor", selectedTutor);
         i.putExtra("userType", userType);
