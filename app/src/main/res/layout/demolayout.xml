@@ -140,8 +140,8 @@
 
                 android:focusable="false"
                 android:layout_alignTop="@+id/browseDisplayName"
-                android:layout_toRightOf="@+id/location"
-                android:layout_toEndOf="@+id/location" />
+                android:layout_alignRight="@+id/cityText"
+                android:layout_alignEnd="@+id/cityText" />
 
 
         </RelativeLayout>

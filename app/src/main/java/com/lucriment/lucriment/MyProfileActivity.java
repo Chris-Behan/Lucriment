@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -278,6 +279,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             }
             Glide.with(getApplicationContext())
                     .load(userInfo.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
         }
 
@@ -463,6 +465,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                     }
                     Glide.with(getApplicationContext())
                             .load(downloadUri.toString())
+                            .apply(RequestOptions.circleCropTransform())
                             .into(imageView);
 
 
@@ -639,6 +642,14 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 subjectSelector.setVisibility(View.INVISIBLE);
                 classSelector.setVisibility(View.INVISIBLE);
             }
+        }
+
+        if(v == editButton){
+            Intent i = new Intent(MyProfileActivity.this, EditTutorProfile.class);
+            i.putExtra("userInfo", userInfo);
+            i.putExtra("userType",userType);
+
+            startActivity(i);
         }
 
 

@@ -45,6 +45,7 @@ public class Favourites extends BaseActivity {
     private double tutorScore;
     private ArrayList<String> favouritesLocations = new ArrayList<>();
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -234,6 +235,7 @@ public class Favourites extends BaseActivity {
                 i.putExtra("tutorScore",tutorScore);
                 i.putExtra("userType", userType);
                 i.putExtra("userInfo",userInfo);
+                i.putExtra("location",favouritesLocations.get(position));
                 startActivity(i);
             }
         });

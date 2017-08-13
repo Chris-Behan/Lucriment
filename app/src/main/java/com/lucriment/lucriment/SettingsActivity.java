@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -70,6 +71,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             imageView = (ImageView) findViewById(R.id.settingsPic);
             Glide.with(getApplicationContext())
                     .load(userInfo.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
 
                     .into(imageView);
         }

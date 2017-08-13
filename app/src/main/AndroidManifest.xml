@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.lucriment.lucriment">
 
+    <uses-sdk tools:overrideLibrary="com.braintreepayments.cardform" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-sdk tools:overrideLibrary="com.braintreepayments.cardform" />
 
     <application
         android:allowBackup="true"
@@ -91,8 +92,8 @@
         <activity android:name=".DayAvailability" />
         <activity android:name=".studentProfileActivity" />
         <activity android:name=".CustomAvailabilitySelection" />
-        <activity android:name=".PaymentActivity"></activity>
-
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".EditTutorProfile"></activity>
     </application>
 
 </manifest>

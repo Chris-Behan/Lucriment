@@ -68,7 +68,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView aboutField;
     private TextView rateField;
     private TextView classesField;
-    private TextView ratingText;
+    private TextView ratingText, locationText;
     private ImageView imageView;
     private StorageReference storageReference;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
@@ -91,6 +91,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private Button bookMarkButton;
     private ArrayList<String> favourites = new ArrayList<>();
     private boolean favourited = false;
+    private String location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,9 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
        scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.scrollTo(0,0);
+        if(getIntent().hasExtra("location")){
+            location = getIntent().getStringExtra("location");
+        }
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
@@ -124,6 +128,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         requestButton = (Button) findViewById(R.id.requestButton);
         ratingText = (TextView) findViewById(R.id.rating);
         bookMarkButton = (Button) findViewById(R.id.bookMark);
+        locationText = (TextView) findViewById(R.id.cityText);
+
 
         // selectedTutor = TutorListActivity.getTutor();
 
@@ -133,6 +139,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
 
         ratingText.setText(score +"");
+        locationText.setText(location);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
