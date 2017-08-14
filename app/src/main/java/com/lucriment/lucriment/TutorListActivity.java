@@ -325,7 +325,7 @@ public class TutorListActivity extends BaseActivity {
             }
 
             TextView titleText = (TextView) itemView.findViewById(R.id.title);
-            titleText.setText(currentTutor.getAbout());
+            titleText.setText(currentTutor.getHeadline());
 
             TextView rateText = (TextView) itemView.findViewById(R.id.browseRate);
             rateText.setText( "$"+String.valueOf(currentTutor.getRate())+"/hr" );

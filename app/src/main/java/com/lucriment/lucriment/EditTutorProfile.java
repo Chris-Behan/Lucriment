@@ -14,36 +14,47 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-public class EditTutorProfile extends AppCompatActivity {
+public class EditTutorProfile extends AppCompatActivity implements View.OnClickListener {
 
     public static final int READ_EXTERNAL_STORAGE = 0;
     private static final int GALLERY_INTENT = 2;
 
     private UserInfo userInfo;
     private String userType;
+    private TutorInfo tutorInfo;
 
     private BottomNavigationView bottomNavigationView;
     private ImageView profileImage;
     private Uri mImageUri = null;
     private ProgressDialog progressDialog;
-    private TextView changePicText;
+    private TextView changePicText,about,subjects, nameLabel;
+    private EditText headline, postalCode,hourlyRate, firstName, lastName,enterFirstName,enterLastName;
+    private Button editButton;
+    private TableRow aboutRow, subjectsRow;
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, firstNameRef, lastNameRef,postalCodeRef,rateRef,fullNameRef,headlineRef;
     private DatabaseReference mdatabaseRef, tutorRef,mRoofRef;
     private StorageReference mStorage;
+    private boolean editing = false;
 
 
     @Override
@@ -58,19 +69,68 @@ public class EditTutorProfile extends AppCompatActivity {
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //SET UP BOTTOM NAVIGATION VIEW
+        //GET TUTOR INFO
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId());
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    tutorInfo = dataSnapshot.getValue(TutorInfo.class);
+                setTutorFields();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //CREATE WIDGETS
+        firstName = (EditText) findViewById(R.id.enterFirstName);
+        lastName = (EditText) findViewById(R.id.enterLastName);
+         headline = (EditText) findViewById(R.id.headlineField);
+         postalCode = (EditText) findViewById(R.id.postalCode);
+         hourlyRate = (EditText) findViewById(R.id.hourlyRate);
+        enterFirstName = (EditText) findViewById(R.id.editFirstName);
+        enterLastName = (EditText) findViewById(R.id.editLastName);
+         about = (TextView) findViewById(R.id.aboutField);
+        subjects = (TextView) findViewById(R.id.subjectsText);
+        nameLabel = (TextView) findViewById(R.id.textView12);
+        aboutRow = (TableRow) findViewById(R.id.aboutRow);
+        subjectsRow = (TableRow) findViewById(R.id.subjectsRow);
 
         //INITIALIZE WIDGETS
         profileImage = (ImageView) findViewById(R.id.profilePicture);
         progressDialog = new ProgressDialog(this);
         changePicText = (TextView) findViewById(R.id.changeText);
+        editButton = (Button) findViewById(R.id.editButton);
         //SET DATABASE REFERENCES
         mdatabaseRef = FirebaseDatabase.getInstance().getReference();
         mRoofRef = mdatabaseRef.child("users").child(userInfo.getId()).child("profileImage");
         mStorage = FirebaseStorage.getInstance().getReference();
         tutorRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("profileImage");
         mStorage = FirebaseStorage.getInstance().getReference();
+        firstNameRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("firstName");
+        lastNameRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("lastName");
+        postalCodeRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("postalCode");
+        rateRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("rate");
+        fullNameRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("fullName");
+        headlineRef = mdatabaseRef.child("tutors").child(userInfo.getId()).child("headline");
+        //SET FIELDS
+        firstName.setText(userInfo.getFirstName());
+        lastName.setText(userInfo.getLastName());
+
+        postalCode.setFocusable(false);
+        postalCode.setClickable(false);
+        hourlyRate.setFocusable(false);
+        hourlyRate.setClickable(false);
+        headline.setFocusable(false);
+        headline.setClickable(false);
+
+        editButton.setOnClickListener(this);
+        aboutRow.setOnClickListener(this);
+        subjectsRow.setOnClickListener(this);
 
 
 
@@ -100,6 +160,20 @@ public class EditTutorProfile extends AppCompatActivity {
         });
 
     }
+
+    private void setTutorFields(){
+        about.setText(tutorInfo.getAbout());
+        postalCode.setText(tutorInfo.getPostalCode());
+        postalCode.setTextColor(nameLabel.getTextColors());
+        hourlyRate.setText(tutorInfo.getRate()+"");
+        hourlyRate.setTextColor(nameLabel.getTextColors());
+        subjects.setText(tutorInfo.returnSubjectString());
+        headline.setText(tutorInfo.getHeadline());
+        headline.setTextColor(nameLabel.getTextColors());
+
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -157,5 +231,80 @@ public class EditTutorProfile extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(EditTutorProfile.this, MyProfileActivity.class);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
+    }
 
+    @Override
+    public void onClick(View v) {
+        if(v== editButton){
+            if(editing){
+                editing = false;
+                editButton.setText("Edit");
+                firstNameRef.setValue(enterFirstName.getText().toString().trim());
+                lastNameRef.setValue(enterLastName.getText().toString().trim());
+                fullNameRef.setValue(enterFirstName.getText().toString().trim()+" " +enterLastName.getText().toString().trim());
+                postalCodeRef.setValue(postalCode.getText().toString().trim());
+                rateRef.setValue(Integer.valueOf(hourlyRate.getText().toString().trim()));
+                firstName.setText(enterFirstName.getText().toString().trim());
+                lastName.setText(enterLastName.getText().toString().trim());
+                headlineRef.setValue(headline.getText().toString().trim());
+                enterFirstName.setVisibility(View.INVISIBLE);
+                enterLastName.setVisibility(View.INVISIBLE);
+                firstName.setVisibility(View.VISIBLE);
+                lastName.setVisibility(View.VISIBLE);
+                postalCode.setFocusable(false);
+                postalCode.setFocusableInTouchMode(false);
+                postalCode.setClickable(false);
+
+                hourlyRate.setFocusable(false);
+                hourlyRate.setFocusableInTouchMode(false);
+                hourlyRate.setClickable(false);
+
+                headline.setFocusable(false);
+                headline.setFocusableInTouchMode(false);
+                headline.setClickable(false);
+
+
+            }else{
+                editing = true;
+                editButton.setText("Finish");
+
+            }
+
+            if(editing){
+                firstName.setVisibility(View.INVISIBLE);
+                enterFirstName.setVisibility(View.VISIBLE);
+                enterFirstName.setText(tutorInfo.getFirstName());
+
+
+
+                lastName.setVisibility(View.INVISIBLE);
+                enterLastName.setVisibility(View.VISIBLE);
+                enterLastName.setText(tutorInfo.getLastName());
+                enterLastName.setFocusable(true);
+
+                postalCode.setFocusable(true);
+                postalCode.setFocusableInTouchMode(true);
+                postalCode.setClickable(true);
+
+                hourlyRate.setFocusable(true);
+                hourlyRate.setFocusableInTouchMode(true);
+                hourlyRate.setClickable(true);
+
+                headline.setFocusable(true);
+                headline.setFocusableInTouchMode(true);
+                headline.setClickable(true);
+            }
+
+
+
+        }
+    }
 }

@@ -17,7 +17,7 @@ public class TutorInfo implements Parcelable {
     private String id;
     private String chatsWith;
     private String email;
-    private String title;
+    private String headline;
     private String profileImage;
     private String userType;
     private ArrayList<String> savedTutors;
@@ -44,7 +44,7 @@ public class TutorInfo implements Parcelable {
         this.id = user.getId();
         this.chatsWith = user.getChatsWith();
         this.email = user.getEmail();
-        this.title = user.getTitle();
+        this.headline = user.getHeadline();
         this.userType = user.getUserType();
         this.subjects = subjects;
         this.postalCode = postalCode;
@@ -62,7 +62,7 @@ public class TutorInfo implements Parcelable {
         this.id = user.getId();
         this.chatsWith = user.getChatsWith();
         this.email = user.getEmail();
-        this.title = user.getTitle();
+        this.headline = user.getHeadline();
         this.userType = user.getUserType();
 
         this.postalCode = postalCode;
@@ -82,7 +82,7 @@ public class TutorInfo implements Parcelable {
         this.id = data[3];
         this.chatsWith = data[4];
         this.email = data[5];
-        this.title = data[6];
+        this.headline = data[6];
         this.userType = data[7];
         this.postalCode = data[8];
         this.about = data[9];
@@ -169,12 +169,13 @@ public class TutorInfo implements Parcelable {
         this.email = email;
     }
 
-    public String getTitle() {
-        return title;
+    public String getHeadline() {
+        return headline;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+
+    public void setHeadline(String headline) {
+        this.headline = headline;
     }
 
     public String getProfileImage() {
@@ -258,10 +259,10 @@ public class TutorInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         if (subjects == null) {
-            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
+            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.userType,
                     this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, this.subjectString});
         }else{
-            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.userType,
+            dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.userType,
                     this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, arrToString(this.subjects)});
         }
 

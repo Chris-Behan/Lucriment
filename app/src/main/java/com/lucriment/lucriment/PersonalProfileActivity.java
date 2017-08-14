@@ -229,7 +229,7 @@ public class PersonalProfileActivity extends BaseActivity implements View.OnClic
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
         if(userInfo!=null) {
-            educationField.setText(userInfo.getTitle());
+            educationField.setText(userInfo.getHeadline());
         }
 
    //     if(userInfo.getProfileImage()!= null) {

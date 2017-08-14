@@ -610,7 +610,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
                 bioField.setVisibility(View.VISIBLE);
                 tutorInfo.setAbout(editBioText.getText().toString());
-                userInfo.setTitle(editBioText.getText().toString());
+                userInfo.setHeadline(editBioText.getText().toString());
                 bioField.setText(editBioText.getText());
                 editBioText.setVisibility(View.INVISIBLE);
 
@@ -646,6 +646,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         if(v == editButton){
             Intent i = new Intent(MyProfileActivity.this, EditTutorProfile.class);
+            overridePendingTransition(R.anim.bottom_up,R.anim.top_down);
             i.putExtra("userInfo", userInfo);
             i.putExtra("userType",userType);
 

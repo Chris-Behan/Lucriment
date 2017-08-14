@@ -5,6 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lucriment.lucriment.EditTutorProfile">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:text="Edit"
+        android:textAllCaps="false"
+        android:background="@drawable/rounded_button"
+        android:textColor="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:id="@+id/profilePicture"
@@ -29,8 +44,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/navigation"
-        android:layout_below="@id/changeText"
+        android:layout_below="@+id/changeText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
     <TableLayout
@@ -68,6 +82,16 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/textView10"
                 android:layout_toEndOf="@+id/textView10" />
+                <EditText
+                    android:id="@+id/editFirstName"
+                    android:text="First Name"
+                    android:visibility="invisible"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/textView10"
+                    android:layout_toEndOf="@+id/textView10" />
                 <View
                     android:id="@+id/line2"
                     android:layout_width="350dp"
@@ -109,6 +133,16 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/textView12"
                 android:layout_toEndOf="@+id/textView12" />
+                <EditText
+                    android:id="@+id/editLastName"
+                    android:text="Last Name"
+                    android:visibility="invisible"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/textView12"
+                    android:layout_toEndOf="@+id/textView12" />
                 <View
                     android:id="@+id/line3"
                     android:layout_width="350dp"
@@ -132,6 +166,52 @@
             <RelativeLayout>
 
                 <TextView
+                    android:id="@+id/headlinelabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Headline"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                <EditText
+                    android:id="@+id/headlineField"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="35dp"
+                    android:background="@null"
+                    android:text=" "
+                    android:textStyle="normal"
+                    android:textSize="15sp"
+
+                    android:layout_below="@+id/headlinelabel"
+                    android:layout_alignLeft="@+id/headlinelabel"
+                    android:layout_alignStart="@+id/headlinelabel" />
+                <View
+                    android:id="@+id/line8"
+                    android:layout_width="350dp"
+                    android:layout_height="1dip"
+                    android:layout_weight="1"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/headlineField"
+                    android:background="#c9c9c9"
+                    android:padding="2dip" />
+
+
+            </RelativeLayout>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:id="@+id/aboutRow">
+
+            <RelativeLayout>
+
+                <TextView
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,7 +222,7 @@
                     android:id="@+id/aboutField"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:minHeight="80dp"
+                    android:minHeight="60dp"
                     android:layout_below="@+id/textView13"
                     android:layout_alignLeft="@+id/textView13"
                     android:layout_alignStart="@+id/textView13" />
@@ -167,7 +247,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:id="@+id/subjectsRow">
 
             <RelativeLayout>
             <TextView
@@ -180,10 +261,10 @@
 
                 <TextView
                     android:id="@+id/subjectsText"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text=""
-                    android:minHeight="80dp"
+                    android:minHeight="50dp"
                     android:layout_alignParentBottom="true"
                     android:layout_below="@+id/textView14"
                     android:layout_alignLeft="@+id/textView14"
@@ -223,6 +304,8 @@
                     android:layout_height="30dp"
                     android:background="@null"
                     android:text=""
+
+                    android:id="@+id/postalCode"
                     android:layout_alignParentTop="true"
                     android:layout_toRightOf="@+id/textView16"
                     android:layout_toEndOf="@+id/textView16"
@@ -258,12 +341,18 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:minWidth="20dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="200dp"
+                android:layout_marginLeft="99dp"
                 android:background="@null"
+                android:inputType="number"
                 android:text=" "
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/rateLabel" />
+                android:id="@+id/hourlyRate"
+                android:layout_alignBaseline="@+id/rateLabel"
+                android:layout_alignBottom="@+id/rateLabel"
+                android:layout_toRightOf="@+id/rateLabel"
+                android:layout_toEndOf="@+id/rateLabel"
+                android:layout_marginStart="99dp" />
                 <View
                     android:id="@+id/line7"
                     android:layout_width="350dp"
@@ -280,4 +369,5 @@
 
     </TableLayout>
     </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>

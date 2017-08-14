@@ -48,7 +48,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
         Glide.with(getApplicationContext())
                 .load(userInfo.getProfileImage())
                 .into(imageView);
-        about.setText(userInfo.getTitle());
+        about.setText(userInfo.getHeadline());
 
         editButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);

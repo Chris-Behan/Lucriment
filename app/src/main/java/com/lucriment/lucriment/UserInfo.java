@@ -19,7 +19,7 @@ public class UserInfo implements Parcelable {
     private String id;
     private String chatsWith;
     private String email;
-    private String title;
+    private String headline;
     private String profileImage;
     private String userType;
     private ArrayList<String> savedTutors;
@@ -51,7 +51,7 @@ public class UserInfo implements Parcelable {
         this.id = data[3];
         this.chatsWith = data[4];
         this.email = data[5];
-        this.title = data[6];
+        this.headline = data[6];
         this.profileImage = data[7];
         this.userType = data[8];
         this.customer_id = data[9];
@@ -128,12 +128,12 @@ public class UserInfo implements Parcelable {
         this.email = email;
     }
 
-    public String getTitle() {
-        return title;
+    public String getHeadline() {
+        return headline;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setHeadline(String headline) {
+        this.headline = headline;
     }
 
     public String getProfileImage() {
@@ -167,7 +167,7 @@ public class UserInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.title,this.profileImage,
+        dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.profileImage,
         this.userType,this.customer_id});
 
     }
@@ -183,4 +183,6 @@ public class UserInfo implements Parcelable {
             return new UserInfo[size];
         }
     };
+
+    
 }
