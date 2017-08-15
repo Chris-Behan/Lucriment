@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="30dip"
+
+        android:layout_centerHorizontal="true"
+        android:background="#E4E4E4"
+        />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="22dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Category"
+
+        android:layout_centerVertical="true"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        />
+    <View
+        android:id="@+id/line4"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_centerHorizontal="true"
+        android:background="#c9c9c9"
+        android:layout_below="@id/line3"
+         />
+
+</RelativeLayout>

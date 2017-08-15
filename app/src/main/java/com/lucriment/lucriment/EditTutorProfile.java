@@ -309,12 +309,19 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
         if(v== aboutRow){
             aboutRow.setBackgroundColor(0x6644B0F2);
             Intent i = new Intent(EditTutorProfile.this, AboutActivity.class);
-
             i.putExtra("userInfo", userInfo);
             i.putExtra("userType",userType);
             i.putExtra("tutorInfo",tutorInfo);
-
             startActivity(i);
+        }
+        if(v == subjectsRow){
+            subjectsRow.setBackgroundColor(0x6644B0F2);
+            Intent i = new Intent(EditTutorProfile.this, SearchForSubjects.class);
+            i.putExtra("userInfo", userInfo);
+            i.putExtra("userType",userType);
+            i.putExtra("tutorInfo",tutorInfo);
+            startActivity(i);
+
         }
     }
 }

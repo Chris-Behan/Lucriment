@@ -94,7 +94,8 @@
         <activity android:name=".CustomAvailabilitySelection" />
         <activity android:name=".PaymentActivity" />
         <activity android:name=".EditTutorProfile" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".SearchForSubjects"></activity>
     </application>
 
 </manifest>
