@@ -93,7 +93,8 @@
         <activity android:name=".studentProfileActivity" />
         <activity android:name=".CustomAvailabilitySelection" />
         <activity android:name=".PaymentActivity" />
-        <activity android:name=".EditTutorProfile"></activity>
+        <activity android:name=".EditTutorProfile" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>
