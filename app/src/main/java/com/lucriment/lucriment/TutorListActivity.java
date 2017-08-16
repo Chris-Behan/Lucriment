@@ -233,6 +233,7 @@ public class TutorListActivity extends BaseActivity {
             progressDialog.dismiss();
         } catch (IOException e) {
             e.printStackTrace();
+            progressDialog.dismiss();
         }
     }
 
@@ -304,7 +305,9 @@ public class TutorListActivity extends BaseActivity {
                 e.printStackTrace();
             } */
             //fill the view
-            city.setText(tutorAddresses.get(position));
+            if(!tutorAddresses.isEmpty()) {
+                city.setText(tutorAddresses.get(position));
+            }
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
             Glide.with(getApplicationContext())

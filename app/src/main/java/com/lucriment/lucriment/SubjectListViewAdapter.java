@@ -1,9 +1,14 @@
 package com.lucriment.lucriment;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -44,6 +49,15 @@ public class SubjectListViewAdapter extends BaseAdapter {
             return  SUBJECT_SPECIFIC;
         }
     }
+    @Override
+    public int getItemViewType(int position) {
+        String item = allItems.get(position);
+        if(categoryList.contains(item)){
+            return SUBJECT_CATEGORY;
+        }else{
+            return  SUBJECT_SPECIFIC;
+        }
+    }
 
     @Override
     public long getItemId(int position) {
@@ -52,7 +66,50 @@ public class SubjectListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        View v = convertView;
+
+        int type = getItemViewType(position);
+        if (type == SUBJECT_CATEGORY) {
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.subject_category_layout, parent, false);
+            TextView category = (TextView) convertView.findViewById(R.id.category);
+            category.setText(allItems.get(position));
+           // return new SubjectListAdapter.categoryHolder(view);
+        } else if (type == SUBJECT_SPECIFIC) {
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.subject_specific_layout, parent, false);
+            TextView subject = (TextView) convertView.findViewById(R.id.subject);
+            subject.setText(allItems.get(position));
+           // return new SubjectListAdapter.subjectHolder(view);
+        }
+
+
+
+        return convertView;
+    }
+
+    private class categoryHolder extends RecyclerView.ViewHolder{
+        TextView category;
+        categoryHolder(View itemView){
+            super(itemView);
+            category = (TextView) itemView.findViewById(R.id.category);
+        }
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        void bind(String c) {
+            category.setText(c);
+        }
+    }
+
+    private class subjectHolder extends RecyclerView.ViewHolder{
+        TextView subject;
+        subjectHolder(View itemView){
+            super(itemView);
+            subject = (TextView) itemView.findViewById(R.id.subject);
+        }
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        void bind(String s) {
+            subject.setText(s);
+        }
     }
 }
 
