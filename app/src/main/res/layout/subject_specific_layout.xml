@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,4 +27,17 @@
         android:layout_centerHorizontal="true"
         android:background="#c9c9c9"
         android:padding="2dip" />
+
+    <ImageView
+        android:id="@+id/checkMark"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line3"
+        android:visibility="invisible"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_check_black_24dp" />
 </RelativeLayout>

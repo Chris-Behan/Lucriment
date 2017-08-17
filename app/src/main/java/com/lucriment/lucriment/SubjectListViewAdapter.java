@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,19 +26,20 @@ public class SubjectListViewAdapter extends BaseAdapter {
     private static final int SUBJECT_SPECIFIC = 2;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private Context mContext;
-    private List<String> categoryList,subjectList,allItems;
+    private List<String> categoryList,subjectList,allItems, currentSubjects;
 
-    public SubjectListViewAdapter(Context context, List<String> cList,List<String> sList, List<String> all) {
+    public SubjectListViewAdapter(Context context, List<String> cList,List<String> sList, List<String> all, List<String> subjects) {
         mContext = context;
         categoryList = cList;
         subjectList = sList;
         allItems = all;
+        currentSubjects = subjects;
         // DatabaseReference db1 = FirebaseDatabase.getInstance().getReference().child("users").child(messageList.get(0))
     }
 
     @Override
     public int getCount() {
-        return categoryList.size()+subjectList.size();
+        return allItems.size();
     }
 
     @Override
@@ -51,6 +53,7 @@ public class SubjectListViewAdapter extends BaseAdapter {
     }
     @Override
     public int getItemViewType(int position) {
+
         String item = allItems.get(position);
         if(categoryList.contains(item)){
             return SUBJECT_CATEGORY;
@@ -69,6 +72,8 @@ public class SubjectListViewAdapter extends BaseAdapter {
         View v = convertView;
 
         int type = getItemViewType(position);
+
+
         if (type == SUBJECT_CATEGORY) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.subject_category_layout, parent, false);
@@ -78,10 +83,16 @@ public class SubjectListViewAdapter extends BaseAdapter {
         } else if (type == SUBJECT_SPECIFIC) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.subject_specific_layout, parent, false);
+            if(currentSubjects.contains(allItems.get(position))){
+                ImageView check = (ImageView) convertView.findViewById(R.id.checkMark);
+                check.setVisibility(View.VISIBLE);
+            }
             TextView subject = (TextView) convertView.findViewById(R.id.subject);
             subject.setText(allItems.get(position));
            // return new SubjectListAdapter.subjectHolder(view);
         }
+
+
 
 
 

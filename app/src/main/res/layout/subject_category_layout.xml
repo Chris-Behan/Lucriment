@@ -5,7 +5,7 @@
     <View
         android:id="@+id/line3"
         android:layout_width="match_parent"
-        android:layout_height="30dip"
+        android:layout_height="35dip"
 
         android:layout_centerHorizontal="true"
         android:background="#E4E4E4"
@@ -16,11 +16,12 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/category"
         android:layout_width="wrap_content"
-        android:layout_height="22dip"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Category"
+        android:layout_marginBottom="5dp"
 
         android:layout_centerVertical="true"
         android:textSize="18sp"
