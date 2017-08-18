@@ -158,9 +158,13 @@ public class SearchForSubjects extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 all.clear();
-                all.add("Science");
-                all.add("Math");
-                all.add("Calculus 1");
+                for(String s:subjects){
+                    String sL = s.toLowerCase();
+                    String newL = newText.toLowerCase();
+                    if(sL.contains(newL)){
+                        all.add(s);
+                    }
+                }
                 subjectListAdapter.notifyDataSetChanged();
 
                 return false;

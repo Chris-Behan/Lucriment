@@ -191,7 +191,9 @@ public class Favourites extends BaseActivity {
                 ratingScore.setText("  0");
             }
             TextView city = (TextView) itemView.findViewById(R.id.cityText);
-            city.setText(favouritesLocations.get(position));
+            if(!favouritesLocations.isEmpty()) {
+                city.setText(favouritesLocations.get(position));
+            }
 
             TextView titleText = (TextView) itemView.findViewById(R.id.title);
             titleText.setText(currentTutor.getAbout());
@@ -235,7 +237,9 @@ public class Favourites extends BaseActivity {
                 i.putExtra("tutorScore",tutorScore);
                 i.putExtra("userType", userType);
                 i.putExtra("userInfo",userInfo);
-                i.putExtra("location",favouritesLocations.get(position));
+                if(!favouritesLocations.isEmpty()) {
+                    i.putExtra("location", favouritesLocations.get(position));
+                }
                 startActivity(i);
             }
         });

@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -68,7 +69,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView aboutField;
     private TextView rateField;
     private TextView classesField;
-    private TextView ratingText, locationText;
+    private TextView ratingText, locationText, headlineText;
     private ImageView imageView;
     private StorageReference storageReference;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
@@ -129,10 +130,11 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         ratingText = (TextView) findViewById(R.id.rating);
         bookMarkButton = (Button) findViewById(R.id.bookMark);
         locationText = (TextView) findViewById(R.id.cityText);
+        headlineText = (TextView) findViewById(R.id.title);
 
 
         // selectedTutor = TutorListActivity.getTutor();
-
+        headlineText.setText(selectedTutor.getHeadline());
         tutorName.setText(selectedTutor.getFullName());
 //        educationField.setText(selectedTutor.getTitle());
         aboutField.setText(selectedTutor.getAbout());
@@ -148,7 +150,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
 
         //     backButton.setOnClickListener(this);
-        contactButton.setOnClickListener(this);
+
         requestButton.setOnClickListener(this);
         bookMarkButton.setOnClickListener(this);
         Glide.with(getApplicationContext())
@@ -245,6 +247,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         reviewRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot revSnap: dataSnapshot.getChildren()){
                     Review rev = revSnap.getValue(Review.class);
                     revList.add(rev);
@@ -350,16 +353,21 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         return userInfo;
     }
 */
+    @TargetApi(Build.VERSION_CODES.N)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void  processReviews(){
-        revAdapter = new SelectedTutorActivity.reviewAdapter();
-        ListView reviewList = (ListView) findViewById(R.id.reviewList);
-       // reviewList.nestedscr
-        if(revList.size()>=1) {
-            reviewList.setNestedScrollingEnabled(true);
-        }
-        reviewList.setAdapter(revAdapter);
-        scrollView.scrollTo(0,0);
+        TextView rName = (TextView) findViewById(R.id.reviewerName);
+        TextView rScore = (TextView) findViewById(R.id.reviewScore);
+        TextView rDate = (TextView) findViewById(R.id.reviewDate);
+        TextView rText = (TextView) findViewById(R.id.reviewText2);
+        Review recentReview = revList.get(revList.size()-1);
+        rName.setText(recentReview.getAuthor());
+        rScore.setText(recentReview.getRating()+"");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+        rDate.setText(sdf.format(recentReview.getTimeStamp()));
+        rText.setText(recentReview.getText());
+
+
     }
 
     @Override

@@ -360,7 +360,9 @@ public class TutorListActivity extends BaseActivity {
                 i.putExtra("tutorScore",tutorScore);
                 i.putExtra("userType", userType);
                 i.putExtra("userInfo",userInfo);
-                i.putExtra("location", tutorAddresses.get(position));
+                if(!tutorAddresses.isEmpty()) {
+                    i.putExtra("location", tutorAddresses.get(position));
+                }
                 startActivity(i);
 
             }

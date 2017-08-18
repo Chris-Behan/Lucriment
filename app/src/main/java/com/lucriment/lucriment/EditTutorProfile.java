@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
     private TextView changePicText,about,subjects, nameLabel;
     private EditText headline, postalCode,hourlyRate, firstName, lastName,enterFirstName,enterLastName;
     private Button editButton;
-    private TableRow aboutRow, subjectsRow;
+    private RelativeLayout aboutRow, subjectsRow;
 
     private DatabaseReference databaseReference, firstNameRef, lastNameRef,postalCodeRef,rateRef,fullNameRef,headlineRef;
     private DatabaseReference mdatabaseRef, tutorRef,mRoofRef;
@@ -97,8 +98,8 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
          about = (TextView) findViewById(R.id.aboutField);
         subjects = (TextView) findViewById(R.id.subjectsText);
         nameLabel = (TextView) findViewById(R.id.textView12);
-        aboutRow = (TableRow) findViewById(R.id.aboutRow);
-        subjectsRow = (TableRow) findViewById(R.id.subjectsRow);
+        aboutRow = (RelativeLayout) findViewById(R.id.aboutRow);
+        subjectsRow = (RelativeLayout) findViewById(R.id.subjectsRow);
 
         //INITIALIZE WIDGETS
         profileImage = (ImageView) findViewById(R.id.profilePicture);
@@ -167,7 +168,7 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
         postalCode.setTextColor(nameLabel.getTextColors());
         hourlyRate.setText(tutorInfo.getRate()+"");
         hourlyRate.setTextColor(nameLabel.getTextColors());
-        subjects.setText(tutorInfo.returnSubjectString());
+        subjects.setText(tutorInfo.getSubjects().toString());
         headline.setText(tutorInfo.getHeadline());
         headline.setTextColor(nameLabel.getTextColors());
 

@@ -100,7 +100,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private BottomNavigationView bottomNavigationView;
     private boolean editingBio = false;
     private boolean editingRate = false;
-    private TextView hourlyRate;
+    private TextView hourlyRate, headline;
 
     private ArrayList<Review> revList = new ArrayList<>();
     private ArrayAdapter<Review> revAdapter;
@@ -241,7 +241,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         bioField = (TextView) findViewById(R.id.tutorAboutField);
         editBioText = (EditText) findViewById(R.id.editBioField);
 
-
+        headline = (TextView) findViewById(R.id.title);
         imageView = (ImageView) findViewById(R.id.ProfileImage);
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
         classSelector = (Spinner) findViewById(R.id.classSpinner);
@@ -255,6 +255,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         picUploadDialog = new ProgressDialog(this);
         ratingBar = (TextView) findViewById(R.id.rating);
         String[] testarr = new String[]{"hello","goodbye"};
+
 
 
         // String dURI = "https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=78db062a-a4c8-4221-893f-6510243d590b";
@@ -337,10 +338,12 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 tutorInfo = dataSnapshot.getValue(TutorInfo.class);
                 bioField.setText(tutorInfo.getAbout());
                 hourlyRate.setText("$"+tutorInfo.getRate()+"/hr");
+                headline.setText(tutorInfo.getHeadline());
                 if(tutorInfo.getRating()!=null) {
                     Rating rating = tutorInfo.getRating();
                     score = (float) (rating.getTotalScore() / rating.getNumberOfReviews());
                     ratingBar.setText(score+"");
+
 
                 }
                 setUpMap();
@@ -364,9 +367,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         scrollView.scrollTo(0,0);
     }
     private void populateTaughtList() {
-        adapter = new MyProfileActivity.taughtClassAdapter();
-        ListView list = (ListView) findViewById(R.id.taughtlist);
-        list.setAdapter(adapter);
+      //  adapter = new MyProfileActivity.taughtClassAdapter();
+        TextView subjectList = (TextView) findViewById(R.id.taughtlist);
+        subjectList.setText(subjectsTaught.toString());
     }
 
     private void setUpMap(){
