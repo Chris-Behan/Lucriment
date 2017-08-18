@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/search"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="Search"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/favourites"
+            android:icon="@drawable/ic_bookmark_border_black_24dp"
+            android:title="Favourites"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/sessions"
+            android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
+            android:title="Sessions"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/inbox"
+            android:icon="@drawable/ic_inbox_black_24dp"
+            android:title="Inbox"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="Profile"
+            android:checkable="true"
+            />
+
+
+    </menu>
+

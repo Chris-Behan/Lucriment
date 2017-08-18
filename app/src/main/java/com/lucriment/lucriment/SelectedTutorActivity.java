@@ -71,6 +71,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private TextView classesField;
     private TextView ratingText, locationText, headlineText;
     private ImageView imageView;
+    private ListView optionsList;
     private StorageReference storageReference;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
    // private
@@ -93,6 +94,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
     private ArrayList<String> favourites = new ArrayList<>();
     private boolean favourited = false;
     private String location;
+    private ArrayList<String> options = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +133,13 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         bookMarkButton = (Button) findViewById(R.id.bookMark);
         locationText = (TextView) findViewById(R.id.cityText);
         headlineText = (TextView) findViewById(R.id.title);
+        optionsList = (ListView) findViewById(R.id.optionsList);
+
+        options.add("Read all Reviews");
+        options.add("Availability Calendar");
+        options.add("Report this profile");
+        ArrayAdapter<String> optionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,options);
+        optionsList.setAdapter(optionAdapter);
 
 
         // selectedTutor = TutorListActivity.getTutor();
@@ -366,6 +375,22 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
         rDate.setText(sdf.format(recentReview.getTimeStamp()));
         rText.setText(recentReview.getText());
+
+        optionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position==0){
+                    Intent i = new Intent(SelectedTutorActivity.this, AllReviewsActivity.class);
+                    i.putExtra("tutorInfo", selectedTutor);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
+                    i.putExtra("Score",score);
+                    i.putParcelableArrayListExtra("reviews",revList);
+                    startActivity(i);
+                }
+
+            }
+        });
 
 
     }

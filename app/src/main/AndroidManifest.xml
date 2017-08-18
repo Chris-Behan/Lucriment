@@ -95,7 +95,9 @@
         <activity android:name=".PaymentActivity" />
         <activity android:name=".EditTutorProfile" />
         <activity android:name=".AboutActivity" />
-        <activity android:name=".SearchForSubjects"></activity>
+        <activity android:name=".SearchForSubjects" />
+        <activity android:name=".AllReviewsActivity" />
+        <activity android:name=".TutorSessionsActivity"></activity>
     </application>
 
 </manifest>

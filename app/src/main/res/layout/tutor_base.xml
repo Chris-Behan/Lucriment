@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/windowBackground"
-    app:menu="@menu/bottom_navigation_menu">
+    app:menu="@menu/tutor_nav_menu">
 
     <View
         android:id="@+id/line1"
@@ -20,8 +20,3 @@
 
 
 </android.support.design.widget.BottomNavigationView>
-
-
-
-
-
