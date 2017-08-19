@@ -90,6 +90,7 @@ public class DefaultAvailability extends AppCompatActivity {
         adapter.addFragment(dft,"Default Availability");
 
 
+
         viewPager.setAdapter(adapter);
 
     }

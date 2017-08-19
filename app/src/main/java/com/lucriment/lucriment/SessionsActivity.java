@@ -480,36 +480,14 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
             final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
-            Button acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
-            Button declineButton = (Button) itemView.findViewById(R.id.declineButton);
-            TextView paymentText = (TextView) itemView.findViewById(R.id.payment);
+
 
             //set inner fields
             nameText.setText(session.getStudentName());
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
-            paymentText.setText("$"+String.valueOf(session.getPrice()));
 
-            acceptButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickedSession = session;
-                    indexOfClickedSession = position;
-                    AcceptDialogFragment acceptDialog = new AcceptDialogFragment();
-                   acceptDialog.show(getFragmentManager(), "accept");
-                }
-            });
-
-            declineButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clickedSession = session;
-                    indexOfClickedSession = position;
-                   DeclineDialogFragment declineDialog = new DeclineDialogFragment();
-                    declineDialog.show(getFragmentManager(), "decline");
-                }
-            });
 
 
 
@@ -541,7 +519,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
             final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
-            Button acceptButton = (Button) itemView.findViewById(R.id.acceptButton);
+
             Button declineButton = (Button) itemView.findViewById(R.id.declineButton);
             TextView paymentText = (TextView) itemView.findViewById(R.id.payment);
 

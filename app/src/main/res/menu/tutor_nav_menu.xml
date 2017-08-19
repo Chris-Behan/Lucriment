@@ -2,21 +2,21 @@
     <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item
-            android:id="@+id/search"
-            android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="Search"
+            android:id="@+id/sessions"
+            android:icon="@drawable/icons8_meeting_96"
+            android:title="Sessions"
             android:checkable="true"
             />
         <item
             android:id="@+id/favourites"
-            android:icon="@drawable/ic_bookmark_border_black_24dp"
-            android:title="Favourites"
+            android:icon="@drawable/icons8_today_96"
+            android:title="Avaialbility"
             android:checkable="true"
             />
         <item
-            android:id="@+id/sessions"
-            android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
-            android:title="Sessions"
+            android:id="@+id/stats"
+            android:icon="@drawable/ic_timeline_black_24dp"
+            android:title="Stats"
             android:checkable="true"
             />
         <item

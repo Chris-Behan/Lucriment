@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Parcel;
@@ -114,6 +115,17 @@ public class TimeInterval implements Parcelable{
 
         String from = "" + cal.get(Calendar.HOUR_OF_DAY) + ":" + min;
         return from;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public String returnSessionTime(){
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM \n h:mm a");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("h:mm a");
+        String from = sdf1.format(getFrom());
+        String to = sdf2.format(getTo());
+        String fString = from+" - "+to;
+        return fString;
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
