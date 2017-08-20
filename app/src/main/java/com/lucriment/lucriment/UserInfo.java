@@ -30,6 +30,16 @@ public class UserInfo implements Parcelable {
 
     }
 
+    public UserInfo(String fullName, String lastName, String firstName, String id, String email,  String userType, String headline) {
+        this.fullName = fullName;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.id = id;
+        this.email = email;
+        this.userType = userType;
+        this.headline = headline;
+    }
+
     public UserInfo(String fullName, String lastName, String firstName, String id, String email,  String userType) {
         this.fullName = fullName;
         this.lastName = lastName;
@@ -41,6 +51,8 @@ public class UserInfo implements Parcelable {
 
         this.userType = userType;
     }
+
+
 
     public UserInfo(Parcel in ){
         String[] data = new String[10];

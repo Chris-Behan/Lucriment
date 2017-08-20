@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/sessionRequestLabel"
-        android:layout_width="500dp"
+        android:layout_width="match_parent"
 
         android:layout_height="30dp"
         android:layout_above="@+id/requestList"
@@ -25,6 +25,24 @@
         android:id="@+id/requestList3">
 
     </ListView>
+    <TextView
+        android:id="@+id/confirmedSessionLabel"
+        android:layout_width="match_parent"
+
+        android:layout_height="30dp"
+        android:layout_below="@+id/requestList3"
+        android:textAlignment="center"
+        android:layout_weight="1"
+        android:background="#e5e5e0"
+        android:gravity="center_vertical"
+        android:text="Confirmed Sessions:" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/confirmedSessionLabel"
+        android:id="@+id/confirmedList">
+    </ListView>
+
 
 
 

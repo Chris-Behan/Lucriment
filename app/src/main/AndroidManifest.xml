@@ -97,7 +97,8 @@
         <activity android:name=".AboutActivity" />
         <activity android:name=".SearchForSubjects" />
         <activity android:name=".AllReviewsActivity" />
-        <activity android:name=".TutorSessionsActivity"></activity>
+        <activity android:name=".TutorSessionsActivity" />
+        <activity android:name=".RequestDetailsActivity"></activity>
     </application>
 
 </manifest>

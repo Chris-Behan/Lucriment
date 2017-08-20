@@ -369,12 +369,15 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         TextView rScore = (TextView) findViewById(R.id.reviewScore);
         TextView rDate = (TextView) findViewById(R.id.reviewDate);
         TextView rText = (TextView) findViewById(R.id.reviewText2);
-        Review recentReview = revList.get(revList.size()-1);
-        rName.setText(recentReview.getAuthor());
-        rScore.setText(recentReview.getRating()+"");
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-        rDate.setText(sdf.format(recentReview.getTimeStamp()));
-        rText.setText(recentReview.getText());
+        if(!revList.isEmpty()) {
+            Review recentReview = revList.get(revList.size() - 1);
+
+            rName.setText(recentReview.getAuthor());
+            rScore.setText(recentReview.getRating() + "");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+            rDate.setText(sdf.format(recentReview.getTimeStamp()));
+            rText.setText(recentReview.getText());
+        }
 
         optionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

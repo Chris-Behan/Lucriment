@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -46,7 +47,8 @@ public class UpcomingSessionFragment extends Fragment {
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     ArrayList<String> strings = new ArrayList<>();
-    private ArrayAdapter<SessionRequest> adapter;
+    private ArrayAdapter<SessionRequest> adapter, adapter2;
+    private ListView requestListView;
 
     @Nullable
     @Override
@@ -91,6 +93,7 @@ public class UpcomingSessionFragment extends Fragment {
                             }
                         }
                         populateRequestList();
+                        populateBookedList();
                         
                     }
                     
@@ -110,15 +113,54 @@ public class UpcomingSessionFragment extends Fragment {
     private void populateRequestList(){
         if(userType.equals("tutor")) {
             adapter = new UpcomingSessionFragment.sessionListAdapter();
-            ListView list = (ListView) getView().findViewById(R.id.requestList3);
-            list.setAdapter(adapter);
+            requestListView = (ListView) getView().findViewById(R.id.requestList3);
+            requestListView.setAdapter(adapter);
         }else{
             adapter = new UpcomingSessionFragment.studentReqAdapter();
-            ListView list = (ListView) getView().findViewById(R.id.requestList3);
-            list.setAdapter(adapter);
+            requestListView = (ListView) getView().findViewById(R.id.requestList3);
+            requestListView.setAdapter(adapter);
         }
 
+        requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SessionRequest selectedSession = requestList.get(position);
+                // TutorInfo selectedTutor1 = tutors.get(position);
+                // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(getApplicationContext(), RequestDetailsActivity.class);
+
+                if(userType.equals("tutor")) {
+                    i.putExtra("name", selectedSession.getStudentName());
+                }else{
+                    i.putExtra("name", selectedSession.getTutorName());
+                }
+                i.putExtra("time",selectedSession.getTime());
+                i.putExtra("location", selectedSession.getLocation());
+                i.putExtra("subject",selectedSession.getSubject());
+                i.putExtra("userType",userType);
+                i.putExtra("userInfo",userInfo);
+                i.putExtra("requestId",selectedSession.getStudentId());
+                //  i.putExtra("selectedTutor", selectedTutor1);
+
+                startActivity(i);
+
+
+            }
+        });
+
+
         ArrayList<String> t23 = strings;
+    }
+
+    private void populateBookedList(){
+
+
+        adapter2 = new UpcomingSessionFragment.bookedListAdapter();
+        ListView list = (ListView) getView().findViewById(R.id.confirmedList);
+        list.setAdapter(adapter2);
+
+
+
     }
 
     private class sessionListAdapter extends ArrayAdapter<SessionRequest>  {
@@ -232,6 +274,50 @@ public class UpcomingSessionFragment extends Fragment {
         }
 
 
+
+
+    }
+
+    private class bookedListAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public bookedListAdapter(){
+            super(getApplicationContext(), R.layout.bookedsessionlayout, bookedSessions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getActivity().getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
+            }
+            final SessionRequest session = bookedSessions.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+            TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
+
+
+            //set inner fields
+            if(userType.equals("student")){
+                nameText.setText(session.getTutorName());
+            }else {
+                nameText.setText(session.getStudentName());
+            }
+            subjectText.setText(session.getSubject());
+            timeText.setText(session.getTime().returnFormattedDate());
+            locationText.setText(session.getLocation());
+            paymentText.setText("$"+session.getPrice());
+
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
 
 
     }
