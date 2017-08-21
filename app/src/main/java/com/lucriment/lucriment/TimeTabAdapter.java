@@ -32,7 +32,7 @@ public class TimeTabAdapter extends ArrayAdapter<TimeInterval> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.timetabitem, parent, false);
         }
         ImageView circle = (ImageView) convertView.findViewById(R.id.circle);
-        if(day.booked){
+        if(day.bookedStatus()){
             circle.setImageResource(R.drawable.redcircle);
         }
         else{

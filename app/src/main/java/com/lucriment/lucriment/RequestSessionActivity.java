@@ -241,7 +241,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
-        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getId()).setValue(sessionReqList);
+        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getId()).push().setValue(sessionRequest);
             Toast.makeText(RequestSessionActivity.this, "Request Sent.",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);

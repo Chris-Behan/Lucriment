@@ -184,7 +184,7 @@ public class CalendarTabFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot bookedSnap:dataSnapshot.getChildren()){
                     TimeInterval tiBooked = bookedSnap.getValue(TimeInterval.class);
-                    tiBooked.setBooked();
+                    tiBooked.setSessionBooked();
                     bookedSessions.add(tiBooked);
                     Event bookedEvent = new Event(Color.RED, tiBooked.getFrom(),"Available this day");
                     cv.addEvent(bookedEvent,true);

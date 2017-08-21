@@ -16,7 +16,7 @@ public class TimeInterval implements Parcelable{
     private long to;
     private String[] monthNames = new String[]{"January","February","March","April","May","June","July",
             "August","September","October","November","December"};
-    public boolean booked = false;
+    private boolean booked;
     public TimeInterval(){
 
     }
@@ -32,9 +32,11 @@ public class TimeInterval implements Parcelable{
         this.from = from;
         this.to = to;
     }
-    public void setBooked(){
+    public void setSessionBooked(){
         booked = true;
     }
+
+    public void setBookedFalse(){booked = false;}
 
     public long getFrom() {
         return from;
@@ -47,6 +49,8 @@ public class TimeInterval implements Parcelable{
     public String returnTime(){
         return getFrom() + " - " + getTo();
     }
+
+    public boolean bookedStatus(){return booked;}
 
     public double returnTimeInHours(){
         double timeInHours = to-from;

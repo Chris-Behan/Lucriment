@@ -277,7 +277,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         sessionList.remove(indexOfClickedSession);
         databaseReference2.setValue(currentSessions);
         TimeInterval clickedTime = clickedSession.getTime();
-        clickedTime.setBooked();
+        clickedTime.setSessionBooked();
         databaseReference3.push().setValue(clickedTime);
         adapter2.notifyDataSetChanged();
 

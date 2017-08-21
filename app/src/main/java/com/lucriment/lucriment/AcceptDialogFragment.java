@@ -36,7 +36,7 @@ public class AcceptDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("By accepting this session request it will be added to your booked sessions, do you wish to accept?")
+        builder.setMessage("By accepting this session you agree to the requested meeting terms, do you wish to accept?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                        mListener.onAcceptPositiveClick(AcceptDialogFragment.this);

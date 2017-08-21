@@ -1,25 +1,41 @@
 package com.lucriment.lucriment;
 
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class RequestDetailsActivity extends AppCompatActivity {
+public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
     private UserInfo userInfo, requesteeInfo;
     private String userType;
     private TimeInterval ti;
@@ -31,6 +47,8 @@ public class RequestDetailsActivity extends AppCompatActivity {
     private ListView optionsList;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> optionsAdapter;
+    private Button acceptButton, declineButton;
+    private String key;
 
 
 
@@ -39,12 +57,12 @@ public class RequestDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Session Request");
         TwoItemField field1 = new TwoItemField("Subject", "Select");
         TwoItemField field3 = new TwoItemField("Location", "Select");
         TwoItemField field2 = new TwoItemField("Time", "Select");
-        itemList.add(field1);
-        itemList.add(field2);
-        itemList.add(field3);
+
 
 
         // GET INTENTS
@@ -69,6 +87,16 @@ public class RequestDetailsActivity extends AppCompatActivity {
         if(getIntent().hasExtra("subject")){
             subject = getIntent().getStringExtra("subject");
         }
+        if(getIntent().hasExtra("requestKey")){
+            key = getIntent().getStringExtra("requestKey");
+        }
+        field1.setData(subject);
+        field2.setData(ti.returnSessionTime());
+        field3.setData(locationName);
+
+        itemList.add(field1);
+        itemList.add(field2);
+        itemList.add(field3);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,9 +118,18 @@ public class RequestDetailsActivity extends AppCompatActivity {
         ratingText = (TextView) findViewById(R.id.studentScore);
         imageView = (ImageView) findViewById(R.id.requestPic);
         optionsList = (ListView) findViewById(R.id.requestOptions);
+        acceptButton = (Button) findViewById(R.id.acceptButton);
+        declineButton = (Button) findViewById(R.id.declineButton);
+        acceptButton.setOnClickListener(this);
+        declineButton.setOnClickListener(this);
 
         //SET TEXT
         nameText.setText(requesteeName);
+
+        //SET UP MAP
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
 
     }
@@ -115,9 +152,98 @@ public class RequestDetailsActivity extends AppCompatActivity {
         list.setFocusableInTouchMode(false);
 
 
+
     }
 
-        //OPTIONS ADAPTER
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Geocoder gc = new Geocoder(this);
+        try {
+            List<Address> list = gc.getFromLocationName(locationName,1);
+            android.location.Address add = list.get(0);
+            double lat = add.getLatitude();
+            double lng = add.getLongitude();
+            LatLng sydney = new LatLng(lat, lng);
+            googleMap.addMarker(new MarkerOptions().position(sydney)
+                    .title(locationName));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            googleMap.setMaxZoomPreference(23);
+            googleMap.setMinZoomPreference(15);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == acceptButton){
+            AcceptDialogFragment acceptDialogFragment = new AcceptDialogFragment();
+            acceptDialogFragment.show(getFragmentManager(),"Accept");
+
+        }
+        if (v == declineButton){
+            DeclineDialogFragment declineDialogFragment = new DeclineDialogFragment();
+            declineDialogFragment.show(getFragmentManager(), "Decline");
+
+        }
+
+    }
+
+    @Override
+    public void onAcceptPositiveClick(DialogFragment dialog) {
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
+        databaseReference2.setValue(true);
+        Toast.makeText(RequestDetailsActivity.this, "Session Booked",
+                Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+
+       // clickedSession.setConfirmed(true);
+
+    }
+
+    @Override
+    public void onAcceptNegativeClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDeclinePositiveClick(DialogFragment dialog) {
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key);
+        databaseReference2.removeValue();
+        Toast.makeText(RequestDetailsActivity.this, "Session Declined",
+                Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+    }
+
+    @Override
+    public void onDeclineNegativeClick(DialogFragment dialog) {
+
+    }
+
+    //OPTIONS ADAPTER
     private class myListAdapter extends ArrayAdapter<TwoItemField> {
 
         public myListAdapter(){

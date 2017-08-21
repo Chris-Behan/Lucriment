@@ -18,6 +18,8 @@
         android:background="#e5e5e0"
         android:gravity="center_vertical"
         android:text="Session Requests:" />
+
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

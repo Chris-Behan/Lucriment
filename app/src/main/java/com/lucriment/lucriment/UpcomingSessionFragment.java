@@ -49,6 +49,8 @@ public class UpcomingSessionFragment extends Fragment {
     ArrayList<String> strings = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter, adapter2;
     private ListView requestListView;
+    private ArrayList<String> requestSessionKeys = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -57,6 +59,7 @@ public class UpcomingSessionFragment extends Fragment {
         Bundle args = getArguments();
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
+
 
         //GET SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {
@@ -90,7 +93,12 @@ public class UpcomingSessionFragment extends Fragment {
 
                             }else {
                                 requestList.add(currentIteratedSession);
+                                requestSessionKeys.add(innerSnap.getKey());
                             }
+                        }
+                        if(requestList.isEmpty()){
+                            SessionRequest sq = new SessionRequest();
+                            requestList.add(sq);
                         }
                         populateRequestList();
                         populateBookedList();
@@ -113,12 +121,16 @@ public class UpcomingSessionFragment extends Fragment {
     private void populateRequestList(){
         if(userType.equals("tutor")) {
             adapter = new UpcomingSessionFragment.sessionListAdapter();
-            requestListView = (ListView) getView().findViewById(R.id.requestList3);
-            requestListView.setAdapter(adapter);
+            if(getView()!=null) {
+                requestListView = (ListView) getView().findViewById(R.id.requestList3);
+                requestListView.setAdapter(adapter);
+            }
         }else{
             adapter = new UpcomingSessionFragment.studentReqAdapter();
-            requestListView = (ListView) getView().findViewById(R.id.requestList3);
-            requestListView.setAdapter(adapter);
+            if(getView()!=null) {
+                requestListView = (ListView) getView().findViewById(R.id.requestList3);
+                requestListView.setAdapter(adapter);
+            }
         }
 
         requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -128,6 +140,7 @@ public class UpcomingSessionFragment extends Fragment {
                 // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(getApplicationContext(), RequestDetailsActivity.class);
+                String key = requestSessionKeys.get(position);
 
                 if(userType.equals("tutor")) {
                     i.putExtra("name", selectedSession.getStudentName());
@@ -140,6 +153,8 @@ public class UpcomingSessionFragment extends Fragment {
                 i.putExtra("userType",userType);
                 i.putExtra("userInfo",userInfo);
                 i.putExtra("requestId",selectedSession.getStudentId());
+                i.putExtra("requestKey",key);
+
                 //  i.putExtra("selectedTutor", selectedTutor1);
 
                 startActivity(i);
@@ -188,12 +203,19 @@ public class UpcomingSessionFragment extends Fragment {
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
 
             //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM \n ");
+            if(session.getLocation()==null){
+                nameText.setText("No Session Requests");
+                subjectText.setText("");
+                timeText.setText("");
+                locationText.setText("");
+            }else {
 
-            //set inner fields
-            nameText.setText(session.getStudentName());
-            subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().returnSessionTime());
-            locationText.setText(session.getLocation());
+                //set inner fields
+                nameText.setText(session.getStudentName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+            }
 
             /*
             acceptButton.setOnClickListener(new View.OnClickListener() {
