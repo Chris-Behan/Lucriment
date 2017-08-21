@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
+public class PastDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener{
     private UserInfo userInfo, requesteeInfo;
     private String userType;
     private TimeInterval ti;
@@ -56,7 +56,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_details);
+        setContentView(R.layout.activity_booked_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Session Request");
         TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -143,7 +143,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     }
 
     private void populateOptionsList(){
-        optionsAdapter = new RequestDetailsActivity.myListAdapter();
+        optionsAdapter = new PastDetailsActivity.myListAdapter();
         ListView list = (ListView) findViewById(R.id.requestOptions);
         list.setAdapter(optionsAdapter);
         list.setOnItemClickListener(null);
@@ -161,7 +161,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+        Intent i = new Intent(PastDetailsActivity.this, TutorSessionsActivity.class);
         i.putExtra("userType", userType);
         i.putExtra("userInfo",userInfo);
         startActivity(i);
@@ -192,54 +192,27 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onClick(View v) {
         if(v == acceptButton){
-            AcceptDialogFragment acceptDialogFragment = new AcceptDialogFragment();
-            acceptDialogFragment.show(getFragmentManager(),"Accept");
+            Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+            UserInfo selectedUser;
+
+            selectedUser = requesteeInfo;
+            // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
+            //       myID = tutorId;
+            //  }
+            intent.putExtra("user", selectedUser);
+            intent.putExtra("userType", userType);
+            intent.putExtra("userInfo",userInfo);
+            // intent.putExtra("userName", userName);
+            startActivity(intent);
+
 
         }
         if (v == declineButton){
-            DeclineDialogFragment declineDialogFragment = new DeclineDialogFragment();
+            CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
             declineDialogFragment.show(getFragmentManager(), "Decline");
 
+
         }
-
-    }
-
-    @Override
-    public void onAcceptPositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
-        databaseReference2.setValue(true);
-        Toast.makeText(RequestDetailsActivity.this, "Session Booked",
-                Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
-
-        i.putExtra("userType", userType);
-        i.putExtra("userInfo",userInfo);
-        startActivity(i);
-
-        // clickedSession.setConfirmed(true);
-
-    }
-
-    @Override
-    public void onAcceptNegativeClick(DialogFragment dialog) {
-
-    }
-
-    @Override
-    public void onDeclinePositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key);
-        databaseReference2.removeValue();
-        Toast.makeText(RequestDetailsActivity.this, "Session Declined",
-                Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
-
-        i.putExtra("userType", userType);
-        i.putExtra("userInfo",userInfo);
-        startActivity(i);
-    }
-
-    @Override
-    public void onDeclineNegativeClick(DialogFragment dialog) {
 
     }
 
@@ -247,7 +220,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private class myListAdapter extends ArrayAdapter<TwoItemField> {
 
         public myListAdapter(){
-            super(RequestDetailsActivity.this, R.layout.session_request_field, itemList);
+            super(PastDetailsActivity.this, R.layout.session_request_field, itemList);
         }
 
 
@@ -279,4 +252,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             // return super.getView(position, convertView, parent);
         }
     }
+
+
+
 }

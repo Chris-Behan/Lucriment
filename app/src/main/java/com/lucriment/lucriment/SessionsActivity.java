@@ -341,23 +341,27 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             final SessionRequest session = thisSession.get(position);
 
             //initialize inner fields
+            /*
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
             final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
             TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
+            */
 
-
+            /*
             //set inner fields
             if(userType.equals("student")){
                 nameText.setText(session.getTutorName());
             }else {
                 nameText.setText(session.getStudentName());
-            }
+            } */
+            /*
             subjectText.setText(session.getSubject());
             timeText.setText(session.getTime().returnFormattedDate());
             locationText.setText(session.getLocation());
             paymentText.setText("$"+session.getPrice());
+            */
 
 
             return itemView;
@@ -383,7 +387,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 itemView = getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
             }
             final SessionRequest session = bookedSessions.get(position);
-
+            /*
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
@@ -403,7 +407,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             locationText.setText(session.getLocation());
             paymentText.setText("$"+session.getPrice());
 
-
+            */
             return itemView;
             // return super.getView(position, convertView, parent);
         }
@@ -427,7 +431,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
                 itemView = getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
             }
             final SessionRequest session = pastSessions.get(position);
-
+            /*
             //initialize inner fields
             TextView nameText = (TextView) itemView.findViewById(R.id.name);
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
@@ -448,7 +452,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
             paymentText.setText("$"+session.getPrice());
             clickedSession = session;
             sessionID = clickedSession.getStudentId()+"_"+clickedSession.getTutorId();
-
+            */
             return itemView;
             // return super.getView(position, convertView, parent);
         }

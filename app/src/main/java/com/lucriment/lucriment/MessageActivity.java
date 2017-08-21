@@ -64,6 +64,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<Chat> messages = new ArrayList<>();
     private MessageAdapter messageAdapter;
     static String Sender_Name;
+    private boolean existingConvo = false;
 
    // public DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
    // public static int Device_Width = metrics.widthPixels;
@@ -190,6 +191,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                            messages.add(chat);
                                             messageAdapter.notifyDataSetChanged();
                                             recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                                            existingConvo = true;
                                         }
 
                                         @Override
@@ -229,6 +231,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             messages.add(chat);
                                             messageAdapter.notifyDataSetChanged();
                                             recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                                            existingConvo = true;
                                         }
 
                                         @Override
@@ -294,18 +297,31 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                     .child(room_type_1)
                                     .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
+                            if(!existingConvo){
+                                messages.add(chat);
+                                messageAdapter.notifyDataSetChanged();
+                                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                            }
                         } else if (dataSnapshot.hasChild(room_type_2)) {
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
                             databaseReference.child("chats")
                                     .child(room_type_2)
                                     .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
+                            if(!existingConvo){
+                                messages.add(chat);
+                                messageAdapter.notifyDataSetChanged();
+                                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                            }
                         } else {
                             // Log.e(TAG, "sendMessageToFirebaseUser: success");
                             databaseReference.child("chats")
                                     .child(room_type_1)
                                     .child(FirebaseDatabase.getInstance().getReference().push().getKey())
                                     .setValue(chat);
+                            messages.add(chat);
+                            messageAdapter.notifyDataSetChanged();
+                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                         }
                     }
 

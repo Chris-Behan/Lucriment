@@ -48,8 +48,9 @@ public class UpcomingSessionFragment extends Fragment {
     private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     ArrayList<String> strings = new ArrayList<>();
     private ArrayAdapter<SessionRequest> adapter, adapter2;
-    private ListView requestListView;
+    private ListView requestListView, bookedListView;
     private ArrayList<String> requestSessionKeys = new ArrayList<>();
+    private ArrayList<String> bookedSessionKeys = new ArrayList<>();
 
 
     @Nullable
@@ -83,6 +84,7 @@ public class UpcomingSessionFragment extends Fragment {
                             if(currentIteratedSession.isConfirmed()){
                                 if(currentTime< currentIteratedSession.getTime().getFrom()){
                                     bookedSessions.add(currentIteratedSession);
+                                    bookedSessionKeys.add(innerSnap.getKey());
                                 }
 
                                 if(currentTime > currentIteratedSession.getTime().getFrom()  && currentTime < currentIteratedSession.getTime().getTo()){
@@ -96,10 +98,7 @@ public class UpcomingSessionFragment extends Fragment {
                                 requestSessionKeys.add(innerSnap.getKey());
                             }
                         }
-                        if(requestList.isEmpty()){
-                            SessionRequest sq = new SessionRequest();
-                            requestList.add(sq);
-                        }
+
                         populateRequestList();
                         populateBookedList();
                         
@@ -119,6 +118,12 @@ public class UpcomingSessionFragment extends Fragment {
     }
 
     private void populateRequestList(){
+        if(requestList.isEmpty()){
+
+            SessionRequest sq = new SessionRequest();
+            requestList.add(sq);
+        }
+
         if(userType.equals("tutor")) {
             adapter = new UpcomingSessionFragment.sessionListAdapter();
             if(getView()!=null) {
@@ -140,26 +145,30 @@ public class UpcomingSessionFragment extends Fragment {
                 // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(getApplicationContext(), RequestDetailsActivity.class);
-                String key = requestSessionKeys.get(position);
 
-                if(userType.equals("tutor")) {
-                    i.putExtra("name", selectedSession.getStudentName());
-                }else{
-                    i.putExtra("name", selectedSession.getTutorName());
+
+                if(selectedSession.getLocation()==null){
+
+                }else {
+                    String key = requestSessionKeys.get(position);
+                    if (userType.equals("tutor")) {
+                        i.putExtra("name", selectedSession.getStudentName());
+                    } else {
+                        i.putExtra("name", selectedSession.getTutorName());
+                    }
+                    i.putExtra("time", selectedSession.getTime());
+                    i.putExtra("location", selectedSession.getLocation());
+                    i.putExtra("subject", selectedSession.getSubject());
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo", userInfo);
+                    i.putExtra("requestId", selectedSession.getStudentId());
+                    i.putExtra("requestKey", key);
+
+                    //  i.putExtra("selectedTutor", selectedTutor1);
+
+                    startActivity(i);
+
                 }
-                i.putExtra("time",selectedSession.getTime());
-                i.putExtra("location", selectedSession.getLocation());
-                i.putExtra("subject",selectedSession.getSubject());
-                i.putExtra("userType",userType);
-                i.putExtra("userInfo",userInfo);
-                i.putExtra("requestId",selectedSession.getStudentId());
-                i.putExtra("requestKey",key);
-
-                //  i.putExtra("selectedTutor", selectedTutor1);
-
-                startActivity(i);
-
-
             }
         });
 
@@ -171,8 +180,44 @@ public class UpcomingSessionFragment extends Fragment {
 
 
         adapter2 = new UpcomingSessionFragment.bookedListAdapter();
-        ListView list = (ListView) getView().findViewById(R.id.confirmedList);
-        list.setAdapter(adapter2);
+        if(getView()!=null) {
+            bookedListView = (ListView) getView().findViewById(R.id.confirmedList);
+            bookedListView.setAdapter(adapter2);
+        }
+        bookedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SessionRequest selectedSession = bookedSessions.get(position);
+                // TutorInfo selectedTutor1 = tutors.get(position);
+                // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                Intent i = new Intent(getApplicationContext(), BookedDetailsActivity.class);
+
+
+                if(selectedSession.getLocation()==null){
+
+                }else {
+                    String key = bookedSessionKeys.get(position);
+                    if (userType.equals("tutor")) {
+                        i.putExtra("name", selectedSession.getStudentName());
+                    } else {
+                        i.putExtra("name", selectedSession.getTutorName());
+                    }
+                    i.putExtra("time", selectedSession.getTime());
+                    i.putExtra("location", selectedSession.getLocation());
+                    i.putExtra("subject", selectedSession.getSubject());
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo", userInfo);
+                    i.putExtra("requestId", selectedSession.getStudentId());
+                    i.putExtra("requestKey", key);
+
+                    //  i.putExtra("selectedTutor", selectedTutor1);
+
+                    startActivity(i);
+
+                }
+
+            }
+        });
 
 
 
@@ -322,19 +367,43 @@ public class UpcomingSessionFragment extends Fragment {
             TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
             final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
             TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
-            TextView paymentText = (TextView) itemView.findViewById(R.id.paymentText);
 
-
-            //set inner fields
-            if(userType.equals("student")){
-                nameText.setText(session.getTutorName());
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM \n ");
+            if(session.getLocation()==null){
+                nameText.setText("No Session Requests");
+                subjectText.setText("");
+                timeText.setText("");
+                locationText.setText("");
             }else {
+
+                //set inner fields
                 nameText.setText(session.getStudentName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
             }
-            subjectText.setText(session.getSubject());
-            timeText.setText(session.getTime().returnFormattedDate());
-            locationText.setText(session.getLocation());
-            paymentText.setText("$"+session.getPrice());
+
+            /*
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickedSession = session;
+                    indexOfClickedSession = position;
+                    AcceptDialogFragment acceptDialog = new AcceptDialogFragment();
+                    acceptDialog.show(getFragmentManager(), "accept");
+                }
+            });
+
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickedSession = session;
+                    indexOfClickedSession = position;
+                    DeclineDialogFragment declineDialog = new DeclineDialogFragment();
+                    declineDialog.show(getFragmentManager(), "decline");
+                }
+            }); */
+
 
 
             return itemView;

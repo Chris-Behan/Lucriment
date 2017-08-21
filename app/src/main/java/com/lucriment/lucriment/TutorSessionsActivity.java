@@ -53,16 +53,16 @@ public class TutorSessionsActivity extends BaseActivity {
     //ADDS FRAGMENTS TO VIEW
     private void setUpViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        DefaultTabFragment dft = new DefaultTabFragment();
+        PastSessionFragment psf = new PastSessionFragment();
         UpcomingSessionFragment USF = new UpcomingSessionFragment();
         Bundle args = new Bundle();
         args.putParcelable("userInfo",userInfo);
         args.putString("userType",userType);
         USF.setArguments(args);
-        dft.setArguments(args);
+        psf.setArguments(args);
 
         adapter.addFragment(USF, "Upcoming");
-        adapter.addFragment(dft,"Default Availability");
+        adapter.addFragment(psf,"Past");
 
 
 
