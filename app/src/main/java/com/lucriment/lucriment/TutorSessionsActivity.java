@@ -26,7 +26,7 @@ public class TutorSessionsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_sessions);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       getSupportActionBar().setTitle("Sessions");
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);

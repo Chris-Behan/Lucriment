@@ -3,8 +3,12 @@ package com.lucriment.lucriment;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +53,10 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     private ListView optionsList;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> optionsAdapter;
-    private Button acceptButton, declineButton;
+    private Button acceptButton, reviewButton;
     private String key;
+    private DatabaseReference reviewRef;
+    private RelativeLayout revLayout;
 
 
 
@@ -56,7 +64,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_booked_details);
+        setContentView(R.layout.activity_past_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Session Request");
         TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -98,13 +106,14 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
         itemList.add(field2);
         itemList.add(field3);
 
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 requesteeInfo = dataSnapshot.getValue(UserInfo.class);
-                initializeFields();
-                populateOptionsList();
+                checkReviewStatus();
+
             }
 
             @Override
@@ -119,9 +128,9 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
         imageView = (ImageView) findViewById(R.id.requestPic);
         optionsList = (ListView) findViewById(R.id.requestOptions);
         acceptButton = (Button) findViewById(R.id.acceptButton);
-        declineButton = (Button) findViewById(R.id.declineButton);
-        acceptButton.setOnClickListener(this);
-        declineButton.setOnClickListener(this);
+        reviewButton = (Button) findViewById(R.id.reviewButton);
+        revLayout = (RelativeLayout) findViewById(R.id.reviewLayout);
+
 
         //SET TEXT
         nameText.setText(requesteeName);
@@ -140,6 +149,8 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 .load(requesteeInfo.getProfileImage())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
+        acceptButton.setOnClickListener(this);
+        reviewButton.setOnClickListener(this);
     }
 
     private void populateOptionsList(){
@@ -150,9 +161,70 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
         list.setFocusable(false);
         list.setClickable(false);
         list.setFocusableInTouchMode(false);
+    }
+
+    private void checkReviewStatus(){
+        if(userType.equals("tutor")){
+            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeInfo.getId()+"_"+userInfo.getId())
+                    .child(key);
+        }else {
+            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+"_"+requesteeInfo.getId())
+                    .child(key);
+        }
+        reviewRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(userType.equals("tutor")){
+                    if(dataSnapshot.hasChild("studentReview")){
+                        Review studentReview = dataSnapshot.child("studentReview").getValue(Review.class);
+                        TextView rName = (TextView) findViewById(R.id.reviewerName);
+                        TextView rScore = (TextView) findViewById(R.id.reviewScore);
+                        TextView rDate = (TextView) findViewById(R.id.reviewDate);
+                        TextView rText = (TextView) findViewById(R.id.reviewText2);
+
+                            Review recentReview = studentReview;
+
+                            rName.setText(recentReview.getAuthor());
+                            rScore.setText(recentReview.getRating() + "");
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+                            rDate.setText(sdf.format(recentReview.getTimeStamp()));
+                            rText.setText(recentReview.getText());
 
 
+                    }else{
+                        reviewButton.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    if(dataSnapshot.hasChild("tutorReview")){
+                        Review studentReview = dataSnapshot.child("tutorReview").getValue(Review.class);
+                        TextView rName = (TextView) findViewById(R.id.reviewerName);
+                        TextView rScore = (TextView) findViewById(R.id.reviewScore);
+                        TextView rDate = (TextView) findViewById(R.id.reviewDate);
+                        TextView rText = (TextView) findViewById(R.id.reviewText2);
 
+                            Review recentReview = studentReview;
+
+                            rName.setText(recentReview.getAuthor());
+                            rScore.setText(recentReview.getRating() + "");
+                            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+                            rDate.setText(sdf.format(recentReview.getTimeStamp()));
+                            rText.setText(recentReview.getText());
+
+                    }else{
+                        reviewButton.setVisibility(View.VISIBLE);
+                    }
+                }
+                initializeFields();
+                populateOptionsList();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -207,9 +279,24 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
 
 
         }
-        if (v == declineButton){
-            CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
-            declineDialogFragment.show(getFragmentManager(), "Decline");
+        if (v == reviewButton){
+            String sessionId;
+            if(userType.equals("tutor")){
+                sessionId = requesteeInfo.getId()+"_"+userInfo.getId();
+            }else {
+                sessionId = userInfo.getId()+"_"+requesteeInfo.getId();
+            }
+
+           ReviewDialog reviewDialog = new ReviewDialog();
+            Bundle args = new Bundle();
+            args.putParcelable("receiver",requesteeInfo);
+            args.putParcelable("userInfo",userInfo);
+            args.putString("userType",userType);
+            args.putString("sessionId",sessionId);
+            args.putString("sessionKey",key);
+            reviewDialog.setArguments(args);
+            reviewDialog.show(getFragmentManager(),"Review");
+
 
 
         }

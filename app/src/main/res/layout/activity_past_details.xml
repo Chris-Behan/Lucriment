@@ -4,6 +4,217 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lucriment.lucriment.PastDetailsActivity">
+    tools:context="com.lucriment.lucriment.RequestDetailsActivity">
 
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintRight_toRightOf="parent"
+
+        tools:layout_constraintLeft_creator="1"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/requestPic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:textColor="#000000"
+            android:id="@+id/requestName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="20sp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignTop="@+id/requestPic"
+            android:layout_toRightOf="@+id/requestPic"
+            android:layout_toEndOf="@+id/requestPic" />
+
+        <TextView
+            android:id="@+id/requestTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_below="@+id/requestName"
+            android:layout_alignLeft="@+id/requestName"
+            android:layout_alignStart="@+id/requestName" />
+
+        <TextView
+            android:id="@+id/studentScore"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="4.9"
+            android:textSize="20sp"
+            android:layout_below="@+id/requestPic"
+            android:layout_alignLeft="@+id/requestPic"
+            android:layout_alignStart="@+id/requestPic" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_below="@id/requestPic"
+            android:layout_marginTop="2dp"
+            android:layout_centerVertical="true"
+            android:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_star_rate_black_18dp"
+            android:layout_toRightOf="@+id/studentScore"
+            android:layout_alignBottom="@+id/studentScore"/>
+
+        <ListView
+            android:id="@+id/requestOptions"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:clickable="false"
+            android:listSelector="@android:color/transparent"
+            android:layout_alignLeft="@+id/requestPic"
+            android:layout_alignStart="@+id/requestPic"
+            android:layout_below="@+id/studentScore" />
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_weight="1"
+            android:layout_alignLeft="@+id/requestOptions"
+            android:layout_below="@id/studentScore"
+
+            android:background="#c9c9c9"
+            android:padding="2dip" />
+        <fragment
+            android:layout_below="@id/requestOptions"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+
+        <View
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_weight="1"
+            android:layout_alignLeft="@+id/requestOptions"
+            android:layout_below="@id/acceptButton"
+
+            android:background="#c9c9c9"
+            android:padding="2dip" />
+        <Button
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/acceptButton"
+            android:id="@+id/reviewButton"
+            android:background="@color/cardview_light_background"
+            android:textAllCaps="false"
+            android:text="Rate Session"
+            android:textColor="#FF0000"
+            />
+        <RelativeLayout
+            android:id="@+id/reviewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/acceptButton"
+            android:background="#ffffff"
+            >
+
+            <TextView
+                android:id="@+id/reviewText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="13dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp"
+                android:text="Review"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/reviewerName"
+                android:layout_width="wrap_content"
+                android:text="Name"
+                android:textSize="17sp"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:textColor="#000000"
+                android:layout_below="@+id/reviewText"
+                android:layout_alignLeft="@+id/reviewText"
+                android:layout_alignStart="@+id/reviewText" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviewScore"
+                android:textSize="15sp"
+                android:layout_marginTop="2dp"
+                android:layout_below="@+id/reviewerName"
+                android:layout_alignLeft="@+id/reviewerName"
+                android:layout_alignStart="@+id/reviewerName" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviewDate"
+                android:layout_alignTop="@+id/reviewScore"
+                android:layout_toRightOf="@+id/imageView3"
+                android:layout_toEndOf="@+id/imageView3" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/reviewScore"
+                android:layout_alignLeft="@+id/reviewScore"
+                android:layout_alignStart="@+id/reviewScore"
+                android:id="@+id/reviewText2" />
+
+            <ImageView
+                android:tint="@color/colorPrimary"
+                android:id="@+id/imageView3"
+
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:srcCompat="@drawable/ic_star_rate_black_18dp"
+                android:layout_below="@+id/reviewerName"
+                android:layout_toRightOf="@+id/reviewScore"
+                android:layout_toEndOf="@+id/reviewScore" />
+
+
+
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/acceptButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:background="@color/cardview_light_background"
+            android:textAllCaps="false"
+            android:text="Contact Student"
+            android:layout_alignParentBottom="true"
+            android:textColor="#005eff"/>
+
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

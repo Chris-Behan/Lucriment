@@ -123,7 +123,7 @@ public class PastSessionFragment extends Fragment {
                 SessionRequest selectedSession = pastSessions.get(position);
                 // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                Intent i = new Intent(getApplicationContext(), BookedDetailsActivity.class);
+                Intent i = new Intent(getApplicationContext(), PastDetailsActivity.class);
 
 
                 if(selectedSession.getLocation()==null){
