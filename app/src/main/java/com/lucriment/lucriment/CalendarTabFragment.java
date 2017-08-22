@@ -103,6 +103,8 @@ public class CalendarTabFragment extends Fragment {
             }
         });
 
+
+
         cv.setUseThreeLetterAbbreviation(true);
         cv.setCurrentSelectedDayBackgroundColor(Color.parseColor("#55ff94"));
         cv.setCurrentDayBackgroundColor(Color.parseColor("#24e7e3"));
@@ -119,13 +121,6 @@ public class CalendarTabFragment extends Fragment {
         cal.set(year, month, date);
         cal.add(Calendar.DATE,7); */
 
-        Date initDate = new Date();
-        initDate.setTime(System.currentTimeMillis());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(initDate);
-        int year = cal.get(Calendar.YEAR);
-        int dayOfMonth = cal.get(Calendar.DATE);
-        int month = cal.get(Calendar.MONTH);
 
 
 
@@ -348,6 +343,22 @@ public class CalendarTabFragment extends Fragment {
 
                 }
 
+                Date initDate = new Date();
+                initDate.setTime(System.currentTimeMillis());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(initDate);
+                int year = cal.get(Calendar.YEAR);
+                int dayOfMonth = cal.get(Calendar.DATE);
+                int month = cal.get(Calendar.MONTH);
+                currentSelectedDate = initDate;
+                SimpleDateFormat getDayOfWeek = new SimpleDateFormat("EEEE");
+                selectedDayOfWeek = getDayOfWeek.format(currentSelectedDate);
+                try {
+                    getSelectedDayAva(year,dayOfMonth,month);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -355,6 +366,7 @@ public class CalendarTabFragment extends Fragment {
 
             }
         });
+
 
 
 

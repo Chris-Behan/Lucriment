@@ -137,41 +137,41 @@ public class UpcomingSessionFragment extends Fragment {
                 requestListView.setAdapter(adapter);
             }
         }
+        if(requestListView!=null) {
+            requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    SessionRequest selectedSession = requestList.get(position);
+                    // TutorInfo selectedTutor1 = tutors.get(position);
+                    // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                    Intent i = new Intent(getApplicationContext(), RequestDetailsActivity.class);
 
-        requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SessionRequest selectedSession = requestList.get(position);
-                // TutorInfo selectedTutor1 = tutors.get(position);
-                // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                Intent i = new Intent(getApplicationContext(), RequestDetailsActivity.class);
 
+                    if (selectedSession.getLocation() == null) {
 
-                if(selectedSession.getLocation()==null){
-
-                }else {
-                    String key = requestSessionKeys.get(position);
-                    if (userType.equals("tutor")) {
-                        i.putExtra("name", selectedSession.getStudentName());
                     } else {
-                        i.putExtra("name", selectedSession.getTutorName());
+                        String key = requestSessionKeys.get(position);
+                        if (userType.equals("tutor")) {
+                            i.putExtra("name", selectedSession.getStudentName());
+                        } else {
+                            i.putExtra("name", selectedSession.getTutorName());
+                        }
+                        i.putExtra("time", selectedSession.getTime());
+                        i.putExtra("location", selectedSession.getLocation());
+                        i.putExtra("subject", selectedSession.getSubject());
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        i.putExtra("requestId", selectedSession.getStudentId());
+                        i.putExtra("requestKey", key);
+
+                        //  i.putExtra("selectedTutor", selectedTutor1);
+
+                        startActivity(i);
+
                     }
-                    i.putExtra("time", selectedSession.getTime());
-                    i.putExtra("location", selectedSession.getLocation());
-                    i.putExtra("subject", selectedSession.getSubject());
-                    i.putExtra("userType", userType);
-                    i.putExtra("userInfo", userInfo);
-                    i.putExtra("requestId", selectedSession.getStudentId());
-                    i.putExtra("requestKey", key);
-
-                    //  i.putExtra("selectedTutor", selectedTutor1);
-
-                    startActivity(i);
-
                 }
-            }
-        });
-
+            });
+        }
 
         ArrayList<String> t23 = strings;
     }

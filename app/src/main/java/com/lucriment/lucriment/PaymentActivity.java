@@ -80,9 +80,11 @@ public class PaymentActivity extends BaseActivity {
                         addPaymentButton.setText("Add");
                     }
                 }
-                 last4 = paymentInfoMap.get("last4");
-                brand = paymentInfoMap.get("brand");
-                cardInfo.setText(brand+"-"+last4);
+                if(paymentInfoMap!=null) {
+                    last4 = paymentInfoMap.get("last4");
+                    brand = paymentInfoMap.get("brand");
+                    cardInfo.setText(brand + "-" + last4);
+                }
 
             }
 

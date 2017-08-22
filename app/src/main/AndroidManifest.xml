@@ -100,7 +100,9 @@
         <activity android:name=".TutorSessionsActivity" />
         <activity android:name=".RequestDetailsActivity" />
         <activity android:name=".BookedDetailsActivity" />
-        <activity android:name=".PastDetailsActivity"></activity>
+        <activity android:name=".PastDetailsActivity" />
+        <activity android:name=".TutorAvailabilityActivity" />
+        <activity android:name=".StatsActivity"></activity>
     </application>
 
 </manifest>

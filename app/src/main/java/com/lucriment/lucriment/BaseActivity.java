@@ -65,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         }
 
         if (itemId == R.id.sessions) {
-            Intent y = new Intent(this, SessionsActivity.class);
+            Intent y = new Intent(this, TutorSessionsActivity.class);
             y.putExtra("userType", getUserType());
             y.putExtra("userInfo",getUserInformation());
             startActivity(y);
@@ -78,11 +78,42 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
             startActivity(y);
         }
         if(itemId == R.id.favourites){
-            Intent y = new Intent(this, Favourites.class);
+            if(getUserType().equals("tutor")){
+                finish();
+                Intent i = new Intent(this, DefaultAvailability.class);
+                i.putExtra("userType", getUserType());
+                i.putExtra("userInfo", getUserInformation());
+                startActivity(i);
+            }else {
+                Intent y = new Intent(this, Favourites.class);
+                y.putExtra("userType", getUserType());
+                y.putExtra("userInfo", getUserInformation());
+                startActivity(y);
+            }
+
+        }
+
+        if (itemId == R.id.tutorSessions) {
+            Intent y = new Intent(this, TutorSessionsActivity.class);
             y.putExtra("userType", getUserType());
             y.putExtra("userInfo",getUserInformation());
             startActivity(y);
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+        }
 
+        if (itemId == R.id.tutorAvailability) {
+            Intent y = new Intent(this, DefaultAvailability.class);
+            y.putExtra("userType", getUserType());
+            y.putExtra("userInfo",getUserInformation());
+            startActivity(y);
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+        }
+        if (itemId == R.id.stats) {
+            Intent y = new Intent(this, StatsActivity.class);
+            y.putExtra("userType", getUserType());
+            y.putExtra("userInfo",getUserInformation());
+            startActivity(y);
+            //this.overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
         }
 
 

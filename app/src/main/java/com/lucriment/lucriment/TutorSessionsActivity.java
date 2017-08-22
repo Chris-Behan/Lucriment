@@ -76,7 +76,7 @@ public class TutorSessionsActivity extends BaseActivity {
 
     @Override
     int getNavigationMenuItemId() {
-        return R.id.search;
+        return R.id.tutorSessions;
     }
 
     @Override
