@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -100,7 +103,8 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private BottomNavigationView bottomNavigationView;
     private boolean editingBio = false;
     private boolean editingRate = false;
-    private TextView hourlyRate, headline;
+    private TextView hourlyRate, headline, cityText;
+    private ListView optionsList;
 
     private ArrayList<Review> revList = new ArrayList<>();
     private ArrayAdapter<Review> revAdapter;
@@ -108,6 +112,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
     private TextView ratingBar;
     private float score;
+    private ArrayList<String> options = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +126,8 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+
+
 
 
 
@@ -141,7 +148,15 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        /*
+        optionsList = (ListView) findViewById(R.id.optionsList);
 
+        options.add("Read all Reviews");
+        options.add("Availability Calendar");
+        options.add("Report this profile");
+        ArrayAdapter<String> optionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,options);
+        optionsList.setAdapter(optionAdapter);
+        */
         DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();
         databaseReference3.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -250,6 +265,8 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         editButton = (Button) findViewById(R.id.editButton);
         aboutButton = (Button) findViewById(R.id.editAbout);
         hourlyRate = (TextView) findViewById(R.id.browseRate);
+        cityText = (TextView) findViewById(R.id.cityText);
+
 
 
         picUploadDialog = new ProgressDialog(this);
@@ -339,12 +356,22 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 bioField.setText(tutorInfo.getAbout());
                 hourlyRate.setText("$"+tutorInfo.getRate()+"/hr");
                 headline.setText(tutorInfo.getHeadline());
+                try {
+                    Geocoder gc = new Geocoder(getApplicationContext());
+                    List<Address> addresses = gc.getFromLocationName(tutorInfo.getPostalCode(), 1);
+                    cityText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
                 if(tutorInfo.getRating()!=null) {
                     Rating rating = tutorInfo.getRating();
                     score = (float) (rating.getTotalScore() / rating.getNumberOfReviews());
                     ratingBar.setText(score+"");
 
 
+                }else{
+                    ratingBar.setText("0");
                 }
                 setUpMap();
 
@@ -360,11 +387,28 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void  processReviews(){
-        revAdapter = new MyProfileActivity.reviewAdapter();
-        ListView reviewList = (ListView) findViewById(R.id.reviewList);
-        reviewList.setAdapter(revAdapter);
-        scrollView.scrollTo(0,0);
+        TextView rName = (TextView) findViewById(R.id.reviewerName);
+        TextView rScore = (TextView) findViewById(R.id.reviewScore);
+        TextView rDate = (TextView) findViewById(R.id.reviewDate);
+        TextView rText = (TextView) findViewById(R.id.reviewText2);
+        ImageView star = (ImageView) findViewById(R.id.imageView3);
+        if(!revList.isEmpty()) {
+            Review recentReview = revList.get(revList.size() - 1);
+
+            rName.setText(recentReview.getAuthor());
+            rScore.setText(recentReview.getRating() + "");
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+            rDate.setText(sdf.format(recentReview.getTimeStamp()));
+            rText.setText(recentReview.getText());
+        }else{
+            rName.setText("No Recent Reviews");
+            star.setVisibility(View.INVISIBLE);
+            rScore.setVisibility(View.INVISIBLE);
+            rDate.setVisibility(View.INVISIBLE);
+            rText.setVisibility(View.INVISIBLE);
+        }
     }
     private void populateTaughtList() {
       //  adapter = new MyProfileActivity.taughtClassAdapter();

@@ -55,15 +55,28 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
     private UserInfo userInfo;
     private String userType;
     private ProgressDialog progressDialog;
+    private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_messages);
+        if(getIntent().hasExtra("userInfo")) {
+            userInfo = getIntent().getParcelableExtra("userInfo");
+        }
+        if(getIntent().hasExtra("userType")){
+            userType = getIntent().getStringExtra("userType");
+        }
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        if(userType.equals("tutor")) {
+             bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+                bottomNavigationView.setVisibility(View.VISIBLE);
+        }else{
+             bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation2);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         Menu menu = bottomNavigationView.getMenu();
@@ -72,12 +85,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
             item.setChecked(false);
         }
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
-        if(getIntent().hasExtra("userInfo")) {
-            userInfo = getIntent().getParcelableExtra("userInfo");
-        }
-        if(getIntent().hasExtra("userType")){
-            userType = getIntent().getStringExtra("userType");
-        }
+
         FirebaseDatabase.getInstance().getReference().child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

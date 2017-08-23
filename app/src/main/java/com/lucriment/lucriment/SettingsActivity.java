@@ -35,9 +35,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private ImageView imageView;
     private ArrayList<TwoItemField> optionList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> adapter;
-    private TwoItemField option1 = new TwoItemField("Availability","");
-    private TwoItemField option2 = new TwoItemField("Payment","");
-    private TwoItemField option3 = new TwoItemField("Become a Tutor","");
+    private TwoItemField option1 = new TwoItemField("Notifications","");
+    private TwoItemField option2 = new TwoItemField("Payout","");
+    private TwoItemField option3 = new TwoItemField("Switch to Student","");
     private TwoItemField option4 = new TwoItemField("Share","");
 
     @Override
@@ -54,7 +54,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         firebaseAuth = FirebaseAuth.getInstance();
 
         //INITIALIZE BOTTOM NAVIGATION VIEW
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        if(userType.equals("tutor")) {
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }else{
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation2);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
+
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         Menu menu = bottomNavigationView.getMenu();
@@ -83,9 +90,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         //FILL OPTIONS
         optionList.add(option1);
         optionList.add(option2);
-        if(userType.equals("student")) {
-            optionList.add(option3);
-        }
+        optionList.add(option3);
+
         optionList.add(option4);
         populateOptionList();
         registerOptionClicks();
@@ -145,6 +151,17 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     if (position == 1) {
                         finish();
                         Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+                    if(position == 2){
+                        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference()
+                                .child("users").child(userInfo.getId()).child("userType");
+                        myRef.setValue("student");
+                        Intent i = new Intent(SettingsActivity.this, TutorListActivity.class);
+                        userInfo.setUserType("student");
+                        userType = "student";
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         startActivity(i);

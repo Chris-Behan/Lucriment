@@ -93,13 +93,13 @@ public class AllReviewsActivity extends AppCompatActivity {
             TextView name = (TextView) itemView.findViewById(R.id.revItemName);
             TextView date = (TextView) itemView.findViewById(R.id.date);
             TextView review = (TextView) itemView.findViewById(R.id.reviewText);
-            RatingBar rating = (RatingBar) itemView.findViewById(R.id.reviewScore);
+            TextView rating = (TextView) itemView.findViewById(R.id.textView17);
 
             name.setText(currentRev.getAuthor());
 
             review.setText(currentRev.getText());
 
-            rating.setRating((float) currentRev.getRating());
+            rating.setText(""+currentRev.getRating());
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Calendar calendar = Calendar.getInstance();

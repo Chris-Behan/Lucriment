@@ -29,9 +29,20 @@
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_alignParentTop="true"
-            android:layout_above="@+id/navigation" />
+            android:layout_above="@+id/navigation"
+            />
         <include
             android:id="@+id/navigation"
+            layout="@layout/tutor_base"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:layout_editor_absoluteY="459dp"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="0dp" />
+        <include
+            android:id="@+id/navigation2"
+            android:visibility="invisible"
             layout="@layout/activity_base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
