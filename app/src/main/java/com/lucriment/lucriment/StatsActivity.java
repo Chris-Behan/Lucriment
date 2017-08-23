@@ -61,16 +61,16 @@ public class StatsActivity extends BaseActivity {
     //ADDS FRAGMENTS TO VIEW
     private void setUpViewPager(ViewPager viewPager){
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        PastSessionFragment psf = new PastSessionFragment();
+        FeedbackFragment FF = new FeedbackFragment();
         EarningsFragment EF = new EarningsFragment();
         Bundle args = new Bundle();
         args.putParcelable("userInfo",userInfo);
         args.putString("userType",userType);
         EF.setArguments(args);
-        psf.setArguments(args);
+        FF.setArguments(args);
 
         adapter.addFragment(EF, "Earnings");
-        adapter.addFragment(psf,"Past");
+        adapter.addFragment(FF,"Feedback");
 
 
 
