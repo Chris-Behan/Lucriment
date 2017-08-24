@@ -141,7 +141,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
         scrollView = (ScrollView) findViewById(R.id.scrollView);
         scrollView.scrollTo(0,0);
-
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }

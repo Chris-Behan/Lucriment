@@ -189,11 +189,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     }
                 }else{
                     if (position == 0) {
-                        finish();
-                        Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo", userInfo);
-                        startActivity(i);
+
                     }
                     if (position == 1) {
                         finish();

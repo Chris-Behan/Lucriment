@@ -1,92 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lucriment.lucriment.studentProfileActivity">
-
+    tools:context="com.lucriment.lucriment.EditTutorProfile">
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintRight_toRightOf="parent"
-
-        tools:layout_constraintLeft_creator="1"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-      >
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:srcCompat="@drawable/cast_abc_scrubber_control_to_pressed_mtrl_000"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="34dp" />
-
-        <TextView
-            android:id="@+id/studentName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="studentName"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_below="@+id/imageView4"
-            android:layout_centerHorizontal="true" />
         <Button
-            android:id="@+id/Edit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/ic_edit_black_24dp"
+            android:id="@+id/editButton"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="Edit"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_button"
+            android:textColor="#ffffff"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <TextView
-            android:id="@+id/aboutLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="19dp"
-            android:layout_marginStart="19dp"
-            android:text="About:"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            android:id="@+id/aboutField"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:text="Say Something About Yourself..."
-            android:layout_alignBaseline="@+id/aboutLabel"
-            android:layout_alignBottom="@+id/aboutLabel"
-            android:layout_toRightOf="@+id/aboutLabel"
-            android:layout_toEndOf="@+id/aboutLabel"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-
-        <Button
-            android:id="@+id/changePicture"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/studentName"
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_marginTop="20dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Upload" />
-        <EditText
-            android:visibility="invisible"
-            android:id="@+id/editAbout"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_alignTop="@+id/aboutField"
-            android:layout_alignLeft="@+id/aboutField"
-            android:layout_alignStart="@+id/aboutField" />
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+
+        <TextView
+            android:id="@+id/changeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilePicture"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:text="Change Profile Photo" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/changeText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_above="@+id/navigation"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/changeText"
+
+                >
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/textView10"
+                        android:layout_width="90dp"
+                        android:text="First Name"
+                        android:textSize="17sp"
+                        android:textColor="#808080"
+                        android:layout_height="wrap_content" />
+
+                    <EditText
+                        android:id="@+id/enterFirstName"
+                        android:text="First Name"
+                        android:editable="false"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/textView10"
+                        android:layout_toEndOf="@+id/textView10" />
+                    <EditText
+                        android:id="@+id/editFirstName"
+                        android:text="First Name"
+                        android:visibility="invisible"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/textView10"
+                        android:layout_toEndOf="@+id/textView10" />
+                    <View
+                        android:id="@+id/line2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/enterFirstName"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+                </RelativeLayout>
+
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/textView12"
+                        android:layout_width="90dp"
+                        android:text="Last Name"
+                        android:textSize="17sp"
+                        android:textColor="#808080"
+                        android:layout_height="wrap_content"  />
+
+                    <EditText
+                        android:id="@+id/enterLastName"
+                        android:text="Last Name"
+                        android:editable="false"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/textView12"
+                        android:layout_toEndOf="@+id/textView12" />
+                    <EditText
+                        android:id="@+id/editLastName"
+                        android:text="Last Name"
+                        android:visibility="invisible"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/textView12"
+                        android:layout_toEndOf="@+id/textView12" />
+                    <View
+                        android:id="@+id/line3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/enterLastName"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+                </RelativeLayout>
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/headlinelabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Headline"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    <EditText
+                        android:id="@+id/headlineField"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="35dp"
+                        android:background="@null"
+                        android:text=" "
+                        android:textStyle="normal"
+                        android:textSize="15sp"
+
+                        android:layout_below="@+id/headlinelabel"
+                        android:layout_alignLeft="@+id/headlinelabel"
+                        android:layout_alignStart="@+id/headlinelabel" />
+                    <View
+                        android:id="@+id/line8"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_weight="1"
+
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/headlineField"
+                        android:background="#c9c9c9"
+                        android:padding="2dip" />
+
+
+                </RelativeLayout>
+
+
+            </TableLayout>
+        </ScrollView>
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
