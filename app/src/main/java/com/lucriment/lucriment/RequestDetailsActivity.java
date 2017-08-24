@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener {
+public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, CancelSessionDialogFragment.NoticeDialogListener {
     private UserInfo userInfo, requesteeInfo;
     private String userType;
     private TimeInterval ti;
@@ -123,6 +123,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         acceptButton.setOnClickListener(this);
         declineButton.setOnClickListener(this);
 
+        if(userType.equals("student")){
+            acceptButton.setVisibility(View.INVISIBLE);
+            declineButton.setText("Cancel Request");
+        }
+
         //SET TEXT
         nameText.setText(requesteeName);
 
@@ -197,8 +202,13 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
         }
         if (v == declineButton){
-            DeclineDialogFragment declineDialogFragment = new DeclineDialogFragment();
-            declineDialogFragment.show(getFragmentManager(), "Decline");
+            if(userType.equals("tutor")) {
+                DeclineDialogFragment declineDialogFragment = new DeclineDialogFragment();
+                declineDialogFragment.show(getFragmentManager(), "Decline");
+            }else{
+                CancelSessionDialogFragment cancelSessionDialogFragment = new CancelSessionDialogFragment();
+                cancelSessionDialogFragment.show(getFragmentManager(), "Cancel");
+            }
 
         }
 
@@ -227,15 +237,28 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key);
-        databaseReference2.removeValue();
-        Toast.makeText(RequestDetailsActivity.this, "Session Declined",
-                Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+        if(userType.equals("tutor")) {
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key);
+            databaseReference2.removeValue();
+            Toast.makeText(RequestDetailsActivity.this, "Session Declined",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
 
-        i.putExtra("userType", userType);
-        i.putExtra("userInfo",userInfo);
-        startActivity(i);
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo", userInfo);
+            startActivity(i);
+        }else{
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key);
+            databaseReference2.removeValue();
+            Toast.makeText(RequestDetailsActivity.this, "Session Declined",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo", userInfo);
+            startActivity(i);
+
+        }
     }
 
     @Override

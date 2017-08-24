@@ -122,7 +122,7 @@
             android:layout_weight="1"
             android:layout_alignLeft="@+id/requestOptions"
             android:layout_below="@id/acceptButton"
-
+            android:visibility="invisible"
             android:background="#c9c9c9"
             android:padding="2dip" />
         <Button

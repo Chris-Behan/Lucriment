@@ -24,6 +24,7 @@ public class UserInfo implements Parcelable {
     private String userType;
     private ArrayList<String> savedTutors;
     private String customer_id;
+    private Rating rating;
 
 
     public UserInfo(){
@@ -82,6 +83,14 @@ public class UserInfo implements Parcelable {
         result.put("email",email);
         result.put("userType",userType);
         return result;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     public String getCustomer_id() {

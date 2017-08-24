@@ -123,6 +123,10 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         acceptButton.setOnClickListener(this);
         declineButton.setOnClickListener(this);
 
+        if(userType.equals("student")){
+            acceptButton.setText("Contact Tutor");
+        }
+
         //SET TEXT
         nameText.setText(requesteeName);
 
@@ -209,6 +213,8 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         }
         if (v == declineButton){
             CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
+            declineDialogFragment.dialogMessage("By cancelling this session it will be removed from your booked sessions," +
+                    " the tutor will be notified, and you will not be charged. Are you sure you wish to cancel the session?");
             declineDialogFragment.show(getFragmentManager(), "Decline");
 
 
@@ -220,15 +226,28 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key);
-        databaseReference2.removeValue();
-        Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
-                Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
+        if(userType.equals("tutor")) {
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key);
+            databaseReference2.removeValue();
+            Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
 
-        i.putExtra("userType", userType);
-        i.putExtra("userInfo",userInfo);
-        startActivity(i);
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo", userInfo);
+            startActivity(i);
+        }else{
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key);
+            databaseReference2.removeValue();
+            Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
+
+            i.putExtra("userType", userType);
+            i.putExtra("userInfo", userInfo);
+            startActivity(i);
+
+        }
     }
 
     @Override

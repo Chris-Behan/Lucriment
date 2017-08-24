@@ -67,24 +67,26 @@ public class PastSessionFragment extends Fragment {
                     String thisKey = sSnapShot.getKey();
                     if(thisKey.contains(ID)){
                         strings.add(thisKey);
-                        for(DataSnapshot innerSnap:sSnapShot.getChildren()){
+                        for(DataSnapshot innerSnap:sSnapShot.getChildren()) {
                             SessionRequest currentIteratedSession = innerSnap.getValue(SessionRequest.class);
-
-                            if(currentIteratedSession.isConfirmed()){
-                                if(currentTime< currentIteratedSession.getTime().getFrom()){
+                            if(currentIteratedSession.getTutorId().equals(userInfo.getId())&&userType.equals("tutor")
+                                    || userType.equals("student")&&currentIteratedSession.getStudentId().equals(userInfo.getId())){
+                            if (currentIteratedSession.isConfirmed()) {
+                                if (currentTime < currentIteratedSession.getTime().getFrom()) {
 
                                 }
 
-                                if(currentTime > currentIteratedSession.getTime().getFrom()  && currentTime < currentIteratedSession.getTime().getTo()){
+                                if (currentTime > currentIteratedSession.getTime().getFrom() && currentTime < currentIteratedSession.getTime().getTo()) {
 
-                                }else if(currentTime > currentIteratedSession.getTime().getTo()){
+                                } else if (currentTime > currentIteratedSession.getTime().getTo()) {
                                     pastSessions.add(currentIteratedSession);
                                     pastSessionKeys.add(innerSnap.getKey());
                                 }
 
-                            }else {
+                            } else {
 
                             }
+                        }
                         }
 
 
@@ -132,15 +134,17 @@ public class PastSessionFragment extends Fragment {
                     String key = pastSessionKeys.get(position);
                     if (userType.equals("tutor")) {
                         i.putExtra("name", selectedSession.getStudentName());
+                        i.putExtra("requestId", selectedSession.getStudentId());
                     } else {
                         i.putExtra("name", selectedSession.getTutorName());
+                        i.putExtra("requestId", selectedSession.getTutorId());
                     }
                     i.putExtra("time", selectedSession.getTime());
                     i.putExtra("location", selectedSession.getLocation());
                     i.putExtra("subject", selectedSession.getSubject());
                     i.putExtra("userType", userType);
                     i.putExtra("userInfo", userInfo);
-                    i.putExtra("requestId", selectedSession.getStudentId());
+
                     i.putExtra("requestKey", key);
 
                     //  i.putExtra("selectedTutor", selectedTutor1);
@@ -186,13 +190,19 @@ public class PastSessionFragment extends Fragment {
                 subjectText.setText("");
                 timeText.setText("");
                 locationText.setText("");
-            }else {
+            }else if(userType.equals("tutor")) {
 
                 //set inner fields
                 nameText.setText(session.getStudentName());
                 subjectText.setText(session.getSubject());
                 timeText.setText(session.getTime().returnSessionTime());
                 locationText.setText(session.getLocation());
+            }else{
+                nameText.setText(session.getTutorName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+
             }
 
             return itemView;

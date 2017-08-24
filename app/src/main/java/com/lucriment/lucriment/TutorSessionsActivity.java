@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -20,17 +22,14 @@ public class TutorSessionsActivity extends BaseActivity {
     private ArrayList<TimeInterval> defaults = new ArrayList<>();
     private Map<String, ArrayList<TimeInterval>> td;
     HashMap<String, ArrayList<String>> defaultAvailability;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_sessions);
 
-       getSupportActionBar().setTitle("Sessions");
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavHelper.disableShiftMode(bottomNavigationView);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         //INITIALIZE BOTTOM NAVIGATION BAR
 
 
@@ -40,6 +39,23 @@ public class TutorSessionsActivity extends BaseActivity {
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        getSupportActionBar().setTitle("Sessions");
+        if(userType.equals("tutor")) {
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }else{
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation2);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }
+        BottomNavHelper.disableShiftMode(bottomNavigationView);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0, size = menu.size(); i < size; i++) {
+            MenuItem item = menu.getItem(i);
+            item.setChecked(false);
+        }
+        menu.findItem(getNavigationMenuItemId()).setChecked(true);
 
         sectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.container);
@@ -76,7 +92,15 @@ public class TutorSessionsActivity extends BaseActivity {
 
     @Override
     int getNavigationMenuItemId() {
-        return R.id.tutorSessions;
+        if(userType!=null) {
+            if (userType.equals("tutor")) {
+                return R.id.tutorSessions;
+            } else {
+                return R.id.sessions;
+            }
+        }else{
+            return R.id.tutorSessions;
+        }
     }
 
     @Override

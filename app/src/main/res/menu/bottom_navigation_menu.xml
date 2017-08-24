@@ -15,7 +15,7 @@
         />
     <item
         android:id="@+id/sessions"
-        android:icon="@drawable/ic_sentiment_very_satisfied_black_24dp"
+        android:icon="@drawable/icons8_meeting_96"
         android:title="Sessions"
         android:checkable="true"
         />

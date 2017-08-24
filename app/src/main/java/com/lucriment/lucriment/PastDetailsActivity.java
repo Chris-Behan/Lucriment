@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.DecimalFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.location.Address;
@@ -57,6 +58,8 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     private String key;
     private DatabaseReference reviewRef;
     private RelativeLayout revLayout;
+    private TutorInfo tutorInfo;
+   // private DatabaseReference databaseReference;
 
 
 
@@ -114,6 +117,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 requesteeInfo = dataSnapshot.getValue(UserInfo.class);
                 checkReviewStatus();
 
+
             }
 
             @Override
@@ -121,6 +125,24 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
 
             }
         });
+
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid);
+            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    tutorInfo = dataSnapshot.getValue(TutorInfo.class);
+
+                    setRatings();
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         //INITIALIZE WIDGETS
         nameText = (TextView) findViewById(R.id.requestName);
         titleText = (TextView) findViewById(R.id.requestTitle);
@@ -130,6 +152,10 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
         acceptButton = (Button) findViewById(R.id.acceptButton);
         reviewButton = (Button) findViewById(R.id.reviewButton);
         revLayout = (RelativeLayout) findViewById(R.id.reviewLayout);
+
+        if(userType.equals("student")){
+            acceptButton.setText("Contact Tutor");
+        }
 
 
         //SET TEXT
@@ -144,13 +170,32 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     }
     private void initializeFields(){
         titleText.setText(requesteeInfo.getHeadline());
-        ratingText.setText("4.5");
+
         Glide.with(getApplicationContext())
                 .load(requesteeInfo.getProfileImage())
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
         acceptButton.setOnClickListener(this);
         reviewButton.setOnClickListener(this);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setRatings(){
+        if(userType.equals("tutor")){
+            Rating rating = (requesteeInfo.getRating());
+            double ratingAvg = (rating.getTotalScore()/rating.getNumberOfReviews());
+            DecimalFormat df = new DecimalFormat("#.#");
+            ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+            ratingText.setText(ratingAvg+"");
+        }else{
+            Rating rating = (tutorInfo.getRating());
+            double ratingAvg = (rating.getTotalScore()/rating.getNumberOfReviews());
+            DecimalFormat df = new DecimalFormat("#.#");
+            ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+            ratingText.setText(ratingAvg+"");
+        }
+
     }
 
     private void populateOptionsList(){
@@ -177,6 +222,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(userType.equals("tutor")){
                     if(dataSnapshot.hasChild("studentReview")){
+                        revLayout.setVisibility(View.VISIBLE);
                         Review studentReview = dataSnapshot.child("studentReview").getValue(Review.class);
                         TextView rName = (TextView) findViewById(R.id.reviewerName);
                         TextView rScore = (TextView) findViewById(R.id.reviewScore);
@@ -197,6 +243,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                     }
                 }else{
                     if(dataSnapshot.hasChild("tutorReview")){
+                        revLayout.setVisibility(View.VISIBLE);
                         Review studentReview = dataSnapshot.child("tutorReview").getValue(Review.class);
                         TextView rName = (TextView) findViewById(R.id.reviewerName);
                         TextView rScore = (TextView) findViewById(R.id.reviewScore);

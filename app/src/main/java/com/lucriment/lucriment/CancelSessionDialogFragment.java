@@ -12,6 +12,8 @@ import android.os.Bundle;
  */
 
 public class CancelSessionDialogFragment extends DialogFragment {
+    private String dialogMessage = "By cancelling this session request it will be removed from your requested sessions and the tutors session requests, do you still wish to cancel the session request?";
+    private boolean customDialog = false;
     public interface NoticeDialogListener {
         public void onDeclinePositiveClick(DialogFragment dialog);
         public void onDeclineNegativeClick(DialogFragment dialog);
@@ -34,20 +36,43 @@ public class CancelSessionDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("By cancelling this session it will be removed from your confirmed sessions and the sender will be notified, do you still wish to decline?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDeclinePositiveClick(CancelSessionDialogFragment.this);
+        if(!customDialog) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(dialogMessage)
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mListener.onDeclinePositiveClick(CancelSessionDialogFragment.this);
 
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDeclineNegativeClick(CancelSessionDialogFragment.this);
-                    }
-                });
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mListener.onDeclineNegativeClick(CancelSessionDialogFragment.this);
+                        }
+                    });
+            return builder.create();
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(dialogMessage)
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mListener.onDeclinePositiveClick(CancelSessionDialogFragment.this);
+
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mListener.onDeclineNegativeClick(CancelSessionDialogFragment.this);
+                        }
+                    });
+            return builder.create();
+        }
         // Create the AlertDialog object and return it
-        return builder.create();
+
+    }
+
+    public void dialogMessage(String message){
+        dialogMessage = message;
+        customDialog = true;
     }
 }

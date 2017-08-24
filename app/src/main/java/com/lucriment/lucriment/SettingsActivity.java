@@ -19,8 +19,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +42,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private TwoItemField option2 = new TwoItemField("Payout","");
     private TwoItemField option3 = new TwoItemField("Switch to Student","");
     private TwoItemField option4 = new TwoItemField("Share","");
+    private TwoItemField sOption1 = new TwoItemField("Notifications","");
+    private TwoItemField sOption2 = new TwoItemField("Payment","");
+    private TwoItemField sOption3 = new TwoItemField("Switch to Tutor","");
+    private TwoItemField sOption4 = new TwoItemField("Share","");
+    private boolean isTutor = false;
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,46 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             userType = getIntent().getStringExtra("userType");
         }
         firebaseAuth = FirebaseAuth.getInstance();
+
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("userType");
+
+        DatabaseReference checkT = FirebaseDatabase.getInstance().getReference().child("tutors");
+        checkT.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(userInfo.getId())){
+                    isTutor = true;
+                }
+
+                if(userType.equals("tutor")) {
+                    optionList.add(option1);
+                    optionList.add(option2);
+                    optionList.add(option3);
+                    optionList.add(option4);
+                    populateOptionList();
+                    registerOptionClicks();
+                }else{
+                    optionList.add(sOption1);
+                    optionList.add(sOption2);
+                    if(isTutor){
+
+                    }else {
+                        sOption3.setLabel("Become a Tutor");
+                    }
+                    optionList.add(sOption3);
+                    optionList.add(sOption4);
+                    populateOptionList();
+                    registerOptionClicks();
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         //INITIALIZE BOTTOM NAVIGATION VIEW
         if(userType.equals("tutor")) {
@@ -88,13 +137,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         logoutButton.setOnClickListener(this);
 
         //FILL OPTIONS
-        optionList.add(option1);
-        optionList.add(option2);
-        optionList.add(option3);
 
-        optionList.add(option4);
-        populateOptionList();
-        registerOptionClicks();
 
 
     }
@@ -114,13 +157,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(userType.equals("student")) {
-                    if (position == 0) {
-                        finish();
-                        Intent i = new Intent(SettingsActivity.this, DefaultAvailability.class);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo", userInfo);
-                        startActivity(i);
-                    }
+
                     if (position == 1) {
                         finish();
                         Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
@@ -130,10 +167,20 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     }
                     if (position == 2) {
                         finish();
-                        Intent i = new Intent(SettingsActivity.this, TutorCreation.class);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo", userInfo);
-                        startActivity(i);
+                        if(!isTutor) {
+                            Intent i = new Intent(SettingsActivity.this, TutorCreation.class);
+                            i.putExtra("userType", userType);
+                            i.putExtra("userInfo", userInfo);
+                            startActivity(i);
+                        }else{
+                            Intent i = new Intent(SettingsActivity.this, TutorSessionsActivity.class);
+                            userInfo.setUserType("tutor");
+                            userType = "tutor";
+                            myRef.setValue(userType);
+                            i.putExtra("userType", userType);
+                            i.putExtra("userInfo", userInfo);
+                            startActivity(i);
+                        }
                     /*
                     DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
                     HashMap<String,Integer> amountMap = new HashMap<String, Integer>();

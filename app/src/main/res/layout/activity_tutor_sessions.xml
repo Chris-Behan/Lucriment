@@ -48,6 +48,17 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="459dp"
+            android:visibility="invisible"/>
+        <include
+            android:id="@+id/navigation2"
+            layout="@layout/activity_base"
+            android:visibility="invisible"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="459dp" />
     </RelativeLayout>
 
