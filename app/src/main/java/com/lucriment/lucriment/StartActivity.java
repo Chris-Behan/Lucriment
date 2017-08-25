@@ -50,6 +50,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         viewFlipper.setFlipInterval(5000);
         viewFlipper.startFlipping();
 
+
         viewFlipper.setOnTouchListener(new OnSwipeTouchListener(StartActivity.this){
             public void onSwipeTop() {
                 //Toast.makeText(StartActivity.this,"swiped right",Toast.LENGTH_SHORT).show();
@@ -95,6 +96,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         if(v== loginButton){
             finish();
             Intent y = new Intent(this, LoginActivity.class);
+            startActivity(y);
+        }
+        if(v == createAccountButton){
+            finish();
+            Intent y = new Intent(this, MainActivity.class);
             startActivity(y);
         }
 

@@ -6,59 +6,163 @@
     android:layout_height="match_parent"
     tools:context="com.lucriment.lucriment.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
 
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="67dp"
-        android:layout_marginTop="120dp"
-        android:orientation="vertical"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1">
-        // email field
-
-        <EditText
-            android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email:"
-            android:inputType="textEmailAddress"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
-        //password field
-
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password:"
-            android:inputType="textPassword"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
-        //sign in button
 
         <Button
-            android:id="@+id/RegisterButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign up"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:id="@+id/facebookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:text="Sign up with facebook"
+            android:textColor="#ffffff" />
 
         <TextView
+            android:id="@+id/orText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/facebookButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="or" />
 
-            android:id="@+id/textViewSignIn"
+        <Button
+            android:id="@+id/googleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/orText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/white_button"
+            android:backgroundTint="#ffff"
+            android:text="Sign up with google"
+            android:textColor="#808080" />
+
+        <TextView
+            android:id="@+id/glabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/googleButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="or with email" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/firstNameInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Already a user? Sign in here"
-            android:textAlignment="center"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="0dp" />
+            android:layout_below="@id/glabel">
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentTop="true"
+                android:hint="First Name:"
+                android:inputType="textEmailAddress" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lastNameInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firstNameInputLayout">
+
+            <EditText
+                android:id="@+id/lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentTop="true"
+                android:hint="Last Name:"
+                android:inputType="textEmailAddress" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/emailInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lastNameInputLayout">
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                android:layout_alignParentTop="true"
+                android:hint="Email:"
+                android:inputType="textEmailAddress" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emailInputLayout">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:hint="Password:"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/signInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/passwordLayout"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_button"
+            android:text="sign up" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/signInButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:maxLines="3"
+            android:textAlignment="center"
+            android:text="By signing up you agree to Lucriments terms and \n conditions of use and privacy policy." />
+
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>

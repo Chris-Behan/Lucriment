@@ -119,16 +119,27 @@ public class TutorListActivity extends BaseActivity {
                     DataSnapshot tutorSnap = dataSnapshot.child("tutors");
                     FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
                     DataSnapshot studentSnap = dataSnapshot.child("users").child(thisUser.getUid());
+
                     if (studentSnap.hasChild("firstName")) {
 
                                 userInfo = studentSnap.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
 
+
                     } else if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         userType = userInfo.getUserType();
+                        finish();
+                        startActivity(new Intent(TutorListActivity.this, TutorSessionsActivity.class));
                     } else {
                         finish();
                         startActivity(new Intent(TutorListActivity.this, CreationActivity.class));
+                    }
+
+                    if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        Intent y = new Intent(TutorListActivity.this, TutorSessionsActivity.class);
+                        y.putExtra("userType", userType);
+                        y.putExtra("userInfo",userInfo);
+                        startActivity(y);
                     }
                     // finish();
                     //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));

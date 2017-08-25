@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
-    private SignInButton googleButton;
+    private Button googleButton;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth.AuthStateListener testListener;
     private CallbackManager mCallbackManager;
@@ -116,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         };
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -138,50 +140,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // initizlie buttons
 
         signInButton = (Button)  findViewById(R.id.signInButton);
-        signInEmail = (EditText) findViewById(R.id.signInEmail);
-        signInpassword = (EditText) findViewById(R.id.signInPassword);
-        signUpTextView = (TextView) findViewById(R.id.textViewSignUp);
-        googleButton = (SignInButton) findViewById(R.id.googleButton);
+        signInEmail = (EditText) findViewById(R.id.email);
+        signInpassword = (EditText) findViewById(R.id.password);
+
+        googleButton = (Button) findViewById(R.id.googleButton);
         progressDialog = new ProgressDialog(this);
 
 
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        final LoginButton FacebookLoginButton = (LoginButton) findViewById(R.id.facebookButton);
-        FacebookLoginButton.setReadPermissions("email", "public_profile");
-        FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                Toast.makeText(LoginActivity.this, "Login Success.",
-                        Toast.LENGTH_SHORT).show();
-
-                handleFacebookAccessToken(loginResult.getAccessToken());
-
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                Toast.makeText(LoginActivity.this, "Login failed.",
-                        Toast.LENGTH_SHORT).show();
-                // ...
-            }
-        });
-
-
+        final Button FacebookLoginButton = (Button) findViewById(R.id.facebookButton);
 
         // add listiners
         signInButton.setOnClickListener(this);
-        signUpTextView.setOnClickListener(this);
+//        signUpTextView.setOnClickListener(this);
         googleButton.setOnClickListener(this);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(LoginActivity.this, StartActivity.class);
+        startActivity(i);
+        return true;
     }
 
     private String getDisplayName(){
@@ -260,10 +241,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.signInButton:
                 userLogin();
                 break;
-            case R.id.textViewSignUp:
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-                break;
+
             case R.id.googleButton:
                 signIn();
                 break;
