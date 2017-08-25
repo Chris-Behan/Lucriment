@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/searchIcon"
+        android:src="@mipmap/piggy_bank_large"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Clients Easily"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_below="@+id/searchIcon"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/searchSlogan" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gain access to a marketplace of knowledge hungry students."
+        android:textAlignment="center"
+        android:maxWidth="250dp"
+        android:layout_below="@+id/searchSlogan"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

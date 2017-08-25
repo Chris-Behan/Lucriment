@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 ProgressDialog progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage("Loading...");
                 progressDialog.show();
-                Intent y = new Intent(this, TutorListActivity.class);
+                Intent y = new Intent(this, StartActivity.class);
                 y.putExtra("userType", getUserType());
                 y.putExtra("userInfo",getUserInformation());
                 startActivity(y);

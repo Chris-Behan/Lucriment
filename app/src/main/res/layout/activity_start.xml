@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lucriment.lucriment.StartActivity">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintRight_toRightOf="parent"
+
+        tools:layout_constraintLeft_creator="1"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/banner2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ViewFlipper
+            android:layout_below="@id/logo"
+            android:id="@+id/viewFlipper"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" >
+            <RelativeLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/Aplus"
+                    android:src="@mipmap/a_plus_icon_large"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Better Grades"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_below="@+id/Aplus"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/betterGradeSLogan" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get expert assistance on assignments and exam preparation."
+                    android:textAlignment="center"
+                    android:maxWidth="250dp"
+                    android:layout_below="@+id/betterGradeSLogan"
+                    android:layout_centerHorizontal="true" />
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/layout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/saveTime"
+                    android:src="@mipmap/save_time_icon_large"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save Time"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_below="@+id/saveTime"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/saveTimeSlogan" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Finding the perfect tutor is quick and easy."
+                    android:textAlignment="center"
+                    android:maxWidth="250dp"
+                    android:layout_below="@+id/saveTimeSlogan"
+                    android:layout_centerHorizontal="true" />
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/layout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/saveMoney"
+                    android:src="@mipmap/piggy_bank_large"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Save Money"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_below="@+id/saveMoney"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/saveMoneySlogan" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Find a tutor within your budget."
+                    android:textAlignment="center"
+                    android:maxWidth="250dp"
+                    android:layout_below="@+id/saveMoneySlogan"
+                    android:layout_centerHorizontal="true" />
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/searchIcon"
+                    android:src="@mipmap/search_icon_large"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Find Clients Easily"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_below="@+id/searchIcon"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/searchSlogan" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gain access to a marketplace of knowledge hungry students."
+                    android:textAlignment="center"
+                    android:maxWidth="250dp"
+                    android:layout_below="@+id/searchSlogan"
+                    android:layout_centerHorizontal="true" />
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <ImageView
+                    android:id="@+id/scheduleIcon"
+                    android:src="@mipmap/your_calendar_icon_large"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teach on Your Schedule"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:layout_below="@+id/scheduleIcon"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/scheduleSlogan" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set an availability that works for you."
+                    android:textAlignment="center"
+                    android:maxWidth="250dp"
+                    android:layout_below="@+id/scheduleSlogan"
+                    android:layout_centerHorizontal="true" />
+
+
+
+            </RelativeLayout>
+
+        </ViewFlipper>
+
+        <com.rd.PageIndicatorView
+
+            android:layout_marginTop="10dp"
+            android:id="@+id/pageIndicatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewFlipper"
+            android:layout_centerHorizontal="true"
+            app:piv_animationType="slide"
+            app:piv_selectedColor="@color/colorPrimary"
+            app:piv_unselectedColor="#808080"
+            />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
