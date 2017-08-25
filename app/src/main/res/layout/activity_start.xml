@@ -52,7 +52,7 @@
 
                 <ImageView
                     android:id="@+id/Aplus"
-                    android:src="@mipmap/a_plus_icon_large"
+                    android:src="@drawable/a_plus_icon"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
 
@@ -89,7 +89,7 @@
 
                 <ImageView
                     android:id="@+id/saveTime"
-                    android:src="@mipmap/save_time_icon_large"
+                    android:src="@drawable/time_icon"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
 
@@ -126,7 +126,7 @@
 
                 <ImageView
                     android:id="@+id/saveMoney"
-                    android:src="@mipmap/piggy_bank_large"
+                    android:src="@drawable/piggybank_icon"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
 
@@ -164,7 +164,7 @@
 
                 <ImageView
                     android:id="@+id/searchIcon"
-                    android:src="@mipmap/search_icon_large"
+                    android:src="@drawable/search_icon"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
 
@@ -202,7 +202,7 @@
 
                 <ImageView
                     android:id="@+id/scheduleIcon"
-                    android:src="@mipmap/your_calendar_icon_large"
+                    android:src="@drawable/calendar_icon"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
 
@@ -243,5 +243,39 @@
             app:piv_selectedColor="@color/colorPrimary"
             app:piv_unselectedColor="#808080"
             />
+
+        <Button
+            android:id="@+id/createAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Create Account"
+            android:layout_marginBottom="10dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/rounded_button"
+            android:layout_above="@+id/already"
+            android:layout_alignLeft="@+id/logInButton"
+            android:layout_alignStart="@+id/logInButton" />
+
+        <Button
+            android:id="@+id/logInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:textColor="#808080"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="27dp"
+            android:background="@drawable/white_button"
+            android:text="Log In" />
+
+        <TextView
+            android:id="@+id/already"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already a user?"
+            android:layout_above="@+id/logInButton"
+            android:layout_centerHorizontal="true" />
+
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
