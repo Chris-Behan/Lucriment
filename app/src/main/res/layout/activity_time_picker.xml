@@ -11,7 +11,7 @@
         android:layout_height="0dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,8 @@
         <com.github.sundeepk.compactcalendarview.CompactCalendarView
             android:id="@+id/calendarView"
             android:layout_width="fill_parent"
-            android:layout_height="250dp"
+            android:layout_height="210dp"
+
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -38,25 +39,60 @@
             app:compactCalendarTextColor="#fff"
             app:compactCalendarTextSize="12sp" />
 
+        <TextView
+            android:id="@+id/selectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/calendarView"
+            android:background="#e5e5e5"
+            android:text="Set Session Start Time"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
         <GridView
-            android:gravity="center"
             android:id="@+id/timeGrid"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:numColumns="3"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
             android:layout_above="@+id/navigation"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/calendarView" />
+            android:layout_below="@+id/selectionLabel"
+            android:background="#e5e5e5"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="3"
+            android:verticalSpacing="5dp" />
 
-        <include
+        <RelativeLayout
             android:id="@+id/navigation"
-            layout="@layout/activity_base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            />
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimum session\n length is 1 hour."
+                android:textSize="17sp"
+                android:padding="5dp"
+                android:id="@+id/botLabel"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@+id/botLabel"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:id="@+id/nextButton"
+                android:layout_centerVertical="true"
+                android:textColor="#ffffff"
+                android:background="@drawable/red_rounde_button"
+                android:text="next"/>
+
+
+        </RelativeLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

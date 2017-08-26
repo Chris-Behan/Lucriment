@@ -369,6 +369,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         TextView rScore = (TextView) findViewById(R.id.reviewScore);
         TextView rDate = (TextView) findViewById(R.id.reviewDate);
         TextView rText = (TextView) findViewById(R.id.reviewText2);
+        ImageView imageView = (ImageView) findViewById(R.id.imageView3);
         if(!revList.isEmpty()) {
             Review recentReview = revList.get(revList.size() - 1);
 
@@ -377,6 +378,13 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
             rDate.setText(sdf.format(recentReview.getTimeStamp()));
             rText.setText(recentReview.getText());
+        }
+        else{
+            rName.setText("This tutor has not yet received any reviews.");
+            rScore.setVisibility(View.INVISIBLE);
+            rDate.setVisibility(View.INVISIBLE);
+            rText.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
         }
 
         optionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -389,6 +397,14 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     i.putExtra("userInfo",userInfo);
                     i.putExtra("Score",score);
                     i.putParcelableArrayListExtra("reviews",revList);
+                    startActivity(i);
+                }
+                if(position==1){
+                    Intent i = new Intent(SelectedTutorActivity.this, TimePickerActivity.class);
+                    i.putExtra("tutor", selectedTutor);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
+                    i.putExtra("tutorScore",score);
                     startActivity(i);
                 }
 

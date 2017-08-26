@@ -132,11 +132,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bookmaryselector"
+                android:layout_marginRight="10dp"
 
                 android:focusable="false"
                 android:layout_alignTop="@+id/browseDisplayName"
-                android:layout_alignRight="@+id/cityText"
-                android:layout_alignEnd="@+id/cityText" />
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
 
         </RelativeLayout>

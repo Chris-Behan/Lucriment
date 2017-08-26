@@ -8,16 +8,19 @@ import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -40,7 +43,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
-public class TimePickerActivity extends BaseActivity  {
+public class TimePickerActivity extends AppCompatActivity  {
     private CompactCalendarView cv;
     private ArrayList<Availability> avaList = new ArrayList<>();
     private ArrayList<Availability> todaysAvailability = new ArrayList<>();
@@ -71,9 +74,13 @@ public class TimePickerActivity extends BaseActivity  {
     private ArrayList<TimeInterval> selection = new ArrayList<>();
     private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
     private  HashMap<String,ArrayList<TimeInterval>> customMap;
+    private Button nextButton;
     private double score;
     private long clickedTime;
+    private int selectedPostision = 999;
+    private TextView selectionOrder;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +98,68 @@ public class TimePickerActivity extends BaseActivity  {
         }
         if(getIntent().hasExtra("location"))
             selectedLocation = getIntent().getStringExtra("location");
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        BottomNavHelper.disableShiftMode(bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
         cv = (CompactCalendarView) findViewById(R.id.calendarView);
         tutor = getIntent().getParcelableExtra("tutor");
+
+        selectionOrder = (TextView) findViewById(R.id.selectionLabel);
+
         gridView = (GridView) findViewById(R.id.timeGrid);
+        nextButton = (Button) findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(timeState) {
+                    gridView.setAdapter(myGridAdapter2);
+                    myGridAdapter.notifyDataSetChanged();
+                    timeState = false;
+                    selectionOrder.setText("Set Session End Time");
+                    selectedPostision = 888;
+                }else{
+
+                    Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
+                    Date mDate = null;
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
+                    String rMonth = "";
+                    String rDay = "";
+                    if(today.returnMonth()<10){
+                        rMonth = "0"+ (today.returnMonth()+1);
+                    }else{
+                        rMonth = ""+(today.returnMonth()+1);
+                    }
+                    if(today.returnDay()<10){
+                        rDay = "0" + today.returnDay();
+                    }else{
+                        rDay = ""+today.returnDay();
+                    }
+                    String fromTimeString = ""+today.returnYear()+rMonth+rDay+selectedFromTime;
+                    String toTimeString = ""+today.returnYear()+rMonth+rDay+selectedToTime;
+                    fromdate = null;
+                    todate = null;
+                    try {
+                        fromdate = sdf.parse(fromTimeString);
+                        todate = sdf.parse(toTimeString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long fromTimeInMilis = fromdate.getTime();
+                    long toTimeInMilis = todate.getTime();
+
+                    TimeInterval selectedTI = new TimeInterval(fromTimeInMilis,toTimeInMilis);
+                    Availability requestedAva = new Availability();
+                    i.putExtra("requestedTime", selectedTI);
+                    i.putExtra("tutor",tutor);
+                    i.putExtra("location", selectedLocation);
+                    i.putExtra("subject",selectedSubject);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo",userInfo);
+                    i.putExtra("tutorScore",score);
+                    startActivity(i);
+
+
+                }
+            }
+        });
 
 
         gridView.setAdapter(myGridAdapter);
@@ -137,6 +200,8 @@ public class TimePickerActivity extends BaseActivity  {
                     }
                     customMap.put(customTime.getKey(),availabilities);
                 }
+
+
 
             }
 
@@ -295,6 +360,7 @@ public class TimePickerActivity extends BaseActivity  {
                     Collections.sort(sundayAva, new timeComparator());
                     myGridAdapter.notifyDataSetChanged();
                 }
+                initializeGrid();
 
             }
 
@@ -303,6 +369,7 @@ public class TimePickerActivity extends BaseActivity  {
 
             }
         });
+
 
 
         cv.setUseThreeLetterAbbreviation(true);
@@ -343,54 +410,20 @@ public class TimePickerActivity extends BaseActivity  {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //Toast.makeText(getApplicationContext(), items.get(position), 0).show();
                     if(timeState) {
+
                         selectedFromTime = items.get(position);
                         getToTimes(items.get(position));
-
-                        gridView.setAdapter(myGridAdapter2);
+                        selectedPostision = position;
                         myGridAdapter.notifyDataSetChanged();
-                        timeState= false;
+                      //  gridView.setAdapter(myGridAdapter2);
+                    //    myGridAdapter.notifyDataSetChanged();
+                     //   timeState= false;
                     }else{
 
                         selectedToTime = items2.get(position);
+                        selectedPostision = position;
+                        myGridAdapter2.notifyDataSetChanged();
 
-                        Intent i = new Intent(TimePickerActivity.this, RequestSessionActivity.class);
-                        Date mDate = null;
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
-                        String rMonth = "";
-                        String rDay = "";
-                        if(today.returnMonth()<10){
-                            rMonth = "0"+ (today.returnMonth()+1);
-                        }else{
-                            rMonth = ""+(today.returnMonth()+1);
-                        }
-                        if(today.returnDay()<10){
-                            rDay = "0" + today.returnDay();
-                        }else{
-                            rDay = ""+today.returnDay();
-                        }
-                        String fromTimeString = ""+today.returnYear()+rMonth+rDay+selectedFromTime;
-                        String toTimeString = ""+today.returnYear()+rMonth+rDay+selectedToTime;
-                        fromdate = null;
-                        todate = null;
-                        try {
-                            fromdate = sdf.parse(fromTimeString);
-                            todate = sdf.parse(toTimeString);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        long fromTimeInMilis = fromdate.getTime();
-                        long toTimeInMilis = todate.getTime();
-
-                        TimeInterval selectedTI = new TimeInterval(fromTimeInMilis,toTimeInMilis);
-                        Availability requestedAva = new Availability();
-                        i.putExtra("requestedTime", selectedTI);
-                        i.putExtra("tutor",tutor);
-                        i.putExtra("location", selectedLocation);
-                        i.putExtra("subject",selectedSubject);
-                        i.putExtra("userType", userType);
-                        i.putExtra("userInfo",userInfo);
-                        i.putExtra("tutorScore",score);
-                        startActivity(i);
 
                     }
                 }
@@ -405,28 +438,11 @@ public class TimePickerActivity extends BaseActivity  {
         }
     }
 
-    @Override
-    int getContentViewId() {
-        return R.layout.activity_time_picker;
-    }
 
-    @Override
-    int getNavigationMenuItemId() {
-        return R.id.search;
-    }
-
-    @Override
-    String getUserType() {
-        return userType;
-    }
-
-    @Override
-    UserInfo getUserInformation() {
-        return userInfo;
-    }
 
     @TargetApi(Build.VERSION_CODES.N)
     private void getToTimes(String selectedTime) {
+        items2.clear();
         String starttime = selectedTime;
         String hour = starttime.substring(0,starttime.indexOf(':'));
         String minute = starttime.substring(starttime.indexOf(':')+1,starttime.length());
@@ -984,6 +1000,24 @@ public class TimePickerActivity extends BaseActivity  {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initializeGrid(){
+        Date initDate = new Date();
+        initDate.setTime(System.currentTimeMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(initDate);
+        int year = cal.get(Calendar.YEAR);
+        int dayOfMonth = cal.get(Calendar.DATE);
+        int month = cal.get(Calendar.MONTH);
+
+        try {
+            getSelectedDayAva(year,dayOfMonth,month);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private class gridAdapter extends BaseAdapter{
         ArrayList<String> items;
 
@@ -1014,13 +1048,19 @@ public class TimePickerActivity extends BaseActivity  {
 
             if (view == null) {
                 view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+
             }
 
+
             TextView text = (TextView) view.findViewById(android.R.id.text1);
+            text.setBackgroundColor(Color.WHITE);
+            if(position==selectedPostision){
+                text.setBackgroundColor(Color.parseColor("#1DB7F6"));
+            }
 
             text.setText(items.get(position));
             text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            text.setGravity(view.TEXT_ALIGNMENT_CENTER);
+            text.setGravity(Gravity.CENTER);
             text.setTextSize(20);
             return view;
         }

@@ -3,6 +3,7 @@ package com.lucriment.lucriment;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,14 +67,14 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     private String selectedLocation;
     private ArrayAdapter<TwoItemField> adapter;
     private TextView cost;
-    private Button backButton;
     private double sessioncost;
     private String selectedTimeInterval;
     private UserInfo userInfo;
     private String userType;
-    private RatingBar ratingBar;
+    private TextView ratingBar;
     private TutorInfo selectedTutor;
     private ProgressDialog progressDialog;
+    private TextView headline;
     double score;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -82,6 +85,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_session);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -105,14 +109,16 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         if(getIntent().hasExtra("Availability"))
         selectedAvailability = getIntent().getParcelableExtra("Availability");
         tutor = getIntent().getParcelableExtra("tutor");
-        nameView = (TextView) findViewById(R.id.textView5);
-        rateView = (TextView) findViewById(R.id.textView6);
-        imageView = (ImageView) findViewById(R.id.imageView2);
+        nameView = (TextView) findViewById(R.id.browseDisplayName);
+        rateView = (TextView) findViewById(R.id.browseRate);
+        imageView = (ImageView) findViewById(R.id.ProfileImage);
         requestButton = (Button) findViewById(R.id.requestButton);
         cost = (TextView) findViewById(R.id.costView);
-        backButton = (Button) findViewById(R.id.backButton);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar4);
-        ratingBar.setRating((float) score);
+        headline = (TextView) findViewById(R.id.title);
+
+        headline.setText(selectedTutor.getHeadline());
+        ratingBar = (TextView) findViewById(R.id.rating);
+        ratingBar.setText(""+ score);
         if(getIntent().hasExtra("requestedTime")){
             requestedTime = getIntent().getParcelableExtra("requestedTime");
 
@@ -126,6 +132,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         rateView.setText("$"+String.valueOf(tutor.getRate())+"/hr");
         Glide.with(getApplicationContext())
                 .load(selectedTutor.getProfileImage())
+                .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
 
 
@@ -157,12 +164,13 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             int fromMinute = cal.get(Calendar.MINUTE);
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
-
+            SimpleDateFormat sdf1 = new SimpleDateFormat("MMM dd, h:mm a");
+            SimpleDateFormat sdf2 = new SimpleDateFormat(" - h:mm a");
             cal.setTimeInMillis(requestedTime.getTo());
             int toHour = cal.get(Calendar.HOUR_OF_DAY);
             int toMinute = cal.get(Calendar.MINUTE);
 
-            selectedTimeInterval = fromHour+":"+fromMinute+" - "+toHour+":"+toMinute;
+            selectedTimeInterval = sdf1.format(requestedTime.getFrom())+sdf2.format(requestedTime.getTo());
         }
 
         populateItemList();
@@ -170,7 +178,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         registerFieldClicks();
 
         requestButton.setOnClickListener(this);
-        backButton.setOnClickListener(this);
+
 
     }
 
@@ -252,17 +260,20 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             i.putExtra("tutorScore",score);
             startActivity(i);
         }
-        if(v== backButton){
-          //  finish();
-           // startActivity(new Intent(this, ProfileActivity.class));
-            Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
 
-            i.putExtra("userType", userType);
-            i.putExtra("userInfo",userInfo);
-            i.putExtra("selectedTutor", tutor);
-            i.putExtra("tutorScore",score);
-            startActivity(i);
-        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);
+
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        i.putExtra("selectedTutor", tutor);
+        i.putExtra("tutorScore",score);
+        startActivity(i);
+        return true;
     }
 
     @Override
