@@ -181,14 +181,14 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     startActivity(y);
                 }
                 if (itemId == R.id.profile) {
-                    Intent y = new Intent(SelectedTutorActivity.this, MyProfileActivity.class);
+                    Intent y = new Intent(SelectedTutorActivity.this, SettingsActivity.class);
                     y.putExtra("userType", userType);
                     y.putExtra("userInfo",userInfo);
                     startActivity(y);
                 }
 
                 if (itemId == R.id.sessions) {
-                    Intent y = new Intent(SelectedTutorActivity.this, SessionsActivity.class);
+                    Intent y = new Intent(SelectedTutorActivity.this, TutorSessionsActivity.class);
                     y.putExtra("userType", userType);
                     y.putExtra("userInfo",userInfo);
                     startActivity(y);
@@ -288,27 +288,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             }
         });
 
-        userRoot.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                HashSet<String> set = new HashSet<String>();
-                Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
-                        .iterator();
-                users = new ArrayList<>();
-                while (dataSnapshots.hasNext()) {
-                    DataSnapshot dataSnapshotChild = dataSnapshots.next();
-                    UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                    if(user.getId().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()))
-                   myChats= user.getChatsWith();
-                }
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         //registerScheduleClicks();
 
@@ -544,69 +524,5 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
     }
 
-/*
-    private class myListAdapter extends ArrayAdapter<Availability> {
 
-        public myListAdapter(){
-            super(SelectedTutorActivity.this, R.layout.timecardlayout, avaList);
-        }
-
-
-        // @NonNull
-        @Override
-        public View getView(int position,  View convertView,  ViewGroup parent) {
-            View itemView = convertView;
-            // make sure we have a view to work with
-            if(itemView == null){
-                itemView = getLayoutInflater().inflate(R.layout.timecardlayout, parent, false);
-            }
-
-            Availability currentAva = avaList.get(position);
-            // TutorInfo currentTutor = tutors.get(position);
-
-
-            // set image imageVIew.setImageResource();
-            TextView fromText = (TextView) itemView.findViewById(R.id.fromView);
-         //   fromText.setText(currentAva.getFromhour() + ":" + currentAva.getFromminute() + " - " + currentAva.getTohour() + ":"+ currentAva.getTominute());
-
-
-
-            TextView dateText = (TextView) itemView.findViewById(R.id.dateView);
-          //  dateText.setText(currentAva.getMonth()+", "+currentAva.getDay()+", "+currentAva.getYear());
-
-
-            return itemView;
-            // return super.getView(position, convertView, parent);
-        }
-    }
-/*
-    private void populateScheduleList(){
-        //  populateTutorList();
-        ArrayAdapter<Availability> adapter = new SelectedTutorActivity.myListAdapter();
-        // ArrayAdapter<TutorInfo> adapter = new TutorListActivity.myListAdapter();
-        ListView list = (ListView) findViewById(R.id.tutorAList);
-        list.setAdapter(adapter);
-        //adapter.getView();
-
-    }
-    */
-    /*
-    private void registerScheduleClicks() {
-        ListView list = (ListView) findViewById(R.id.tutorAList);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Availability selectedAvailability = avaList.get(position);
-                Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
-                i.putExtra("Availability", selectedAvailability);
-                i.putExtra("tutor", selectedTutor);
-
-                startActivity(i);
-
-            }
-        });
-
-
-    }
-    */
 }

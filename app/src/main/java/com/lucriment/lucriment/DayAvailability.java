@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,8 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     private HashMap<String,ArrayList<TimeInterval>> customMap;
     private ArrayList<TimeInterval> customAvas = new ArrayList<>();
     private ArrayList<TimeInterval> defaultAvas = new ArrayList<>();
+    private int firstSelectionHour, firstSelectionMinute;
+    private boolean firstTimeSet = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +137,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                     defaultAvas.add(timeSnap.getValue(TimeInterval.class));
 
                 }
-
+                sortTimes();
                 populateTimeList();
 
             }
@@ -167,7 +170,11 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        daySelection = daySelectDialog.getSelection();
+        if(daySelectDialog==null){
+            daySelection = "Monday";
+        }else {
+            daySelection = daySelectDialog.getSelection();
+        }
         day = daySelection.toLowerCase();
         setDayListListener(day);
         tif1 = new TwoItemField("Day",daySelection);
@@ -289,11 +296,13 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                     timePickerDialog2.setMessage("From");
                     timePickerDialog2.show();
                     settingFrom = true;
+                    firstTimeSet = false;
 
 
                 }
                 if(position ==2){
-                    DayAvailability.CustomTimePickerDialog timePickerDialog2 = new DayAvailability.CustomTimePickerDialog(DayAvailability.this, DayAvailability.this, 9, 9, true);
+                    DayAvailability.CustomTimePickerDialog timePickerDialog2 = new DayAvailability.CustomTimePickerDialog(DayAvailability.this, DayAvailability.this,firstSelectionHour+1,
+                            firstSelectionMinute, true);
                     timePickerDialog2.setMessage("To");
                     timePickerDialog2.show();
                     settingTo = true;
@@ -316,13 +325,18 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);
                         for(TimeInterval existingTime:selectedTime){
-                            if(timeInterval.getFrom()>=existingTime.getFrom()&&timeInterval.getFrom()<=existingTime.getTo()){
+                            if(timeInterval.getFrom()>existingTime.getFrom()&&timeInterval.getFrom()<existingTime.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            else if(timeInterval.getTo()>=existingTime.getFrom()&&timeInterval.getTo()<=existingTime.getTo()){
+                            else if(timeInterval.getTo()>existingTime.getFrom()&&timeInterval.getTo()<existingTime.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
+                            }
+                            else if(timeInterval.getFrom()<=existingTime.getFrom()&&timeInterval.getTo()>=existingTime.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+
                             }
                         }
 
@@ -342,6 +356,10 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                 }
             }
         });
+    }
+    private void sortTimes(){
+        Collections.sort(selectedTime, new TimeComparator());
+
     }
 
     private class CustomTimePickerDialog extends TimePickerDialog {
@@ -367,15 +385,35 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case BUTTON_POSITIVE:
+                    if(firstTimeSet) {
+                        double firstSelectionString = hoursAndMinutesToMinutes(firstSelectionHour + ":" + firstSelectionMinute);
+                        double secondSelectionString = hoursAndMinutesToMinutes(mTimePicker.getCurrentHour() + ":" + mTimePicker.getCurrentMinute());
+                        if (secondSelectionString < firstSelectionString + 60) {
+                            Toast.makeText(DayAvailability.this, "Invalid Time Selection", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }
                     if (mTimeSetListener != null) {
                         mTimeSetListener.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
                                 mTimePicker.getCurrentMinute() * TIME_PICKER_INTERVAL);
+                        if(!firstTimeSet) {
+                            firstSelectionHour = mTimePicker.getCurrentHour();
+                            firstSelectionMinute = mTimePicker.getCurrentMinute();
+                            firstTimeSet = true;
+                        }
+
                     }
                     break;
                 case BUTTON_NEGATIVE:
                     cancel();
                     break;
             }
+        }
+        private int hoursAndMinutesToMinutes(String timeString){
+            int value1 = Integer.valueOf(timeString.substring(0,timeString.indexOf(':')));
+            int value2 = Integer.valueOf(timeString.substring(timeString.indexOf(':')+1,timeString.length()));
+            value1 = value1*60;
+            return value1+value2;
         }
 
         @Override

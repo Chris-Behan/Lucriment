@@ -35,6 +35,7 @@ import java.lang.reflect.Field;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +67,9 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
     private  HashMap<String,ArrayList<TimeInterval>> customMap;
     private ArrayList<TimeInterval> customAvas = new ArrayList<>();
     private ArrayList<TimeInterval> defaultAvas = new ArrayList<>();
+    private CustomAvailabilitySelection.CustomTimePickerDialog timePickerDialog1, timePickerDialog2;
+    private int firstSelectionHour, firstSelectionMinute;
+    private boolean firstTimeSet = false;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +159,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     }
                 }
                 populateTimeList();
-
+                sortTimes();
             }
 
             @Override
@@ -241,6 +245,13 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
         }
     }
 
+    private void sortTimes(){
+        Collections.sort(selectedTime, new TimeComparator());
+        adapter.notifyDataSetChanged();
+        adapter2.notifyDataSetChanged();
+    }
+
+
     private class dayTimesAdapter extends ArrayAdapter<TimeInterval> {
 
         public dayTimesAdapter(){
@@ -267,6 +278,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
 
                     selectedTime.remove(position);
                     if (customAvas.contains(timeslot)) {
@@ -318,15 +330,17 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
                 }
                 if(position ==1) {
-                    CustomAvailabilitySelection.CustomTimePickerDialog timePickerDialog2 = new CustomAvailabilitySelection.CustomTimePickerDialog(CustomAvailabilitySelection.this, CustomAvailabilitySelection.this, 9, 9, true);
-                    timePickerDialog2.setMessage("From");
-                    timePickerDialog2.show();
+                    timePickerDialog1 = new CustomAvailabilitySelection.CustomTimePickerDialog(CustomAvailabilitySelection.this, CustomAvailabilitySelection.this, 9, 9, true);
+                    timePickerDialog1.setMessage("From");
+                    timePickerDialog1.show();
+                    firstTimeSet = false;
                     settingFrom = true;
 
 
                 }
                 if(position ==2){
-                    CustomAvailabilitySelection.CustomTimePickerDialog timePickerDialog2 = new CustomAvailabilitySelection.CustomTimePickerDialog(CustomAvailabilitySelection.this, CustomAvailabilitySelection.this, 9, 9, true);
+                    timePickerDialog2 = new CustomAvailabilitySelection.CustomTimePickerDialog(CustomAvailabilitySelection.this, CustomAvailabilitySelection.this, firstSelectionHour+1,
+                            firstSelectionMinute, true);
                     timePickerDialog2.setMessage("To");
                     timePickerDialog2.show();
                     settingTo = true;
@@ -359,24 +373,42 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     String hourAndMin1 = sdf.format(cal);
                     String hourAndMin2 = sdf.format(cal2);
                     try {
+
                         Date fromDate = sdf.parse(hourAndMin1);
                         Date toDate = sdf.parse(hourAndMin2);
+                        cal.add(Calendar.MILLISECOND, (int) fromDate.getTime());
+                        long testr = cal.getTimeInMillis();
                         TimeInterval testInterval = new TimeInterval(fromDate.getTime(),toDate.getTime());
 
                         for(TimeInterval ti: selectedTime) {
 
 
 
-                            cal3.setTimeInMillis((int) ti.getFrom());
-                            cal4.setTimeInMillis((int) ti.getTo());
+                            cal3.setTimeInMillis( ti.getFrom());
+                            cal4.setTimeInMillis( ti.getTo());
                             TimeInterval defaultInterval = new TimeInterval(cal3.getTimeInMillis(),cal4.getTimeInMillis());
-                            if(testInterval.getFrom()>=defaultInterval.getFrom()&&testInterval.getFrom()<=defaultInterval.getTo()){
+                            //COMPARE WITH DEFUALT AVAS
+                            if(testInterval.getFrom()>defaultInterval.getFrom()&&testInterval.getFrom()<defaultInterval.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
-                            }else if(testInterval.getTo()>=defaultInterval.getFrom()&&testInterval.getTo()<=defaultInterval.getTo()){
+                            }else if(testInterval.getTo()>defaultInterval.getFrom()&&testInterval.getTo()<defaultInterval.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
                             }
+                            //COMPARE WITH CUSTOM AVAS
+                            if(timeInterval.getFrom()>defaultInterval.getFrom()&&timeInterval.getFrom()<defaultInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+                            }else if(timeInterval.getTo()>defaultInterval.getFrom()&&timeInterval.getTo()<defaultInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+                            }else if(timeInterval.getFrom()<=defaultInterval.getFrom()&&timeInterval.getTo()>=defaultInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+
+                            }
+
+
                         }
 
                     } catch (ParseException e) {
@@ -425,6 +457,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
         private TimePicker mTimePicker;
         private final OnTimeSetListener mTimeSetListener;
 
+
         public CustomTimePickerDialog(Context context, OnTimeSetListener listener,
                                       int hourOfDay, int minute, boolean is24HourView) {
             super(context, TimePickerDialog.THEME_HOLO_LIGHT, null, hourOfDay,
@@ -442,9 +475,24 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case BUTTON_POSITIVE:
+                if(firstTimeSet) {
+                    double firstSelectionString = hoursAndMinutesToMinutes(firstSelectionHour + ":" + firstSelectionMinute);
+                    double secondSelectionString = hoursAndMinutesToMinutes(mTimePicker.getCurrentHour() + ":" + mTimePicker.getCurrentMinute());
+                    if (secondSelectionString < firstSelectionString + 60) {
+                        Toast.makeText(CustomAvailabilitySelection.this, "Invalid Time Selection", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+                }
+
                     if (mTimeSetListener != null) {
                         mTimeSetListener.onTimeSet(mTimePicker, mTimePicker.getCurrentHour(),
                                 mTimePicker.getCurrentMinute() * TIME_PICKER_INTERVAL);
+                        if(!firstTimeSet) {
+                            firstSelectionHour = mTimePicker.getCurrentHour();
+                            firstSelectionMinute = mTimePicker.getCurrentMinute();
+                            firstTimeSet = true;
+                        }
+
                     }
                     break;
                 case BUTTON_NEGATIVE:
@@ -460,6 +508,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                 Class<?> classForid = Class.forName("com.android.internal.R$id");
                 Field timePickerField = classForid.getField("timePicker");
                 mTimePicker = (TimePicker) findViewById(timePickerField.getInt(null));
+
                 Field field = classForid.getField("minute");
 
                 NumberPicker minuteSpinner = (NumberPicker) mTimePicker

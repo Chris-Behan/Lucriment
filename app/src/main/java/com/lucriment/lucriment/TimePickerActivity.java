@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -85,6 +87,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_picker);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         score = getIntent().getDoubleExtra("tutorScore",0);
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -431,6 +434,21 @@ public class TimePickerActivity extends AppCompatActivity  {
 
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+
+        Intent i = new Intent(this, RequestSessionActivity.class);
+        i.putExtra("tutor",tutor);
+        i.putExtra("location", selectedLocation);
+        i.putExtra("subject",selectedSubject);
+        i.putExtra("userType", userType);
+        i.putExtra("userInfo",userInfo);
+        i.putExtra("tutorScore",score);
+        startActivity(i);
+        return true;
     }
     private class timeComparator implements Comparator<TimeInterval> {
         public int compare(TimeInterval ti1, TimeInterval ti2) {
