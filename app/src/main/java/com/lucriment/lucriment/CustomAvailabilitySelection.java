@@ -70,6 +70,9 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
     private CustomAvailabilitySelection.CustomTimePickerDialog timePickerDialog1, timePickerDialog2;
     private int firstSelectionHour, firstSelectionMinute;
     private boolean firstTimeSet = false;
+    private HashMap<String, TimeInterval> innerMap;
+    private HashMap<TimeInterval, String> keyMap;
+    private ArrayList<String> keys = new ArrayList<>();
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,21 +108,36 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
         customAvaialability.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                selectedTime.clear();
                 customMap = new HashMap<String, ArrayList<TimeInterval>>();
-
+                innerMap = new HashMap<String, TimeInterval>();
+                keyMap = new HashMap<TimeInterval, String>();
                 for(DataSnapshot customTime:dataSnapshot.getChildren()){
                     ArrayList<TimeInterval> availabilities = new ArrayList<TimeInterval>();
                     for(DataSnapshot innerTime:customTime.getChildren()){
                         availabilities.add(innerTime.getValue(TimeInterval.class));
-
-
-
-
                         //customMap.put(customTime.getKey(),innerTime.getValue(TimeInterval.class));
+                        innerMap.put(innerTime.getKey(),innerTime.getValue(TimeInterval.class));
+                        keyMap.put(innerTime.getValue(TimeInterval.class),innerTime.getKey());
+                        keys.add(innerTime.getKey());
                     }
+
                     customMap.put(customTime.getKey(),availabilities);
+
                 }
 
+                if(!customMap.containsKey(selectedDay+"")){
+                    setDayListListener(day.toLowerCase());
+                }else{
+                    if(customMap.containsKey(selectedDay+"")) {
+                        for (TimeInterval ti : customMap.get(selectedDay + "")) {
+                            selectedTime.add(ti);
+                            customAvas.add(ti);
+                        }
+                    }
+                    sortTimes();
+                    populateTimeList();
+                }
             }
 
             @Override
@@ -128,7 +146,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             }
         });
 
-        setDayListListener(day.toLowerCase());
+
 
 
         adapter = new CustomAvailabilitySelection.myListAdapter();
@@ -143,7 +161,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
     private void setDayListListener(String chosenDay){
         availabilityRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("defaultAvailability").child(chosenDay);
-        availabilityRoot.addValueEventListener(new ValueEventListener() {
+        availabilityRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     selectedTime.clear();
@@ -158,8 +176,9 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         customAvas.add(ti);
                     }
                 }
-                populateTimeList();
                 sortTimes();
+                populateTimeList();
+
             }
 
             @Override
@@ -175,7 +194,6 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
 
     }
-
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -247,8 +265,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
     private void sortTimes(){
         Collections.sort(selectedTime, new TimeComparator());
-        adapter.notifyDataSetChanged();
-        adapter2.notifyDataSetChanged();
+
     }
 
 
@@ -278,16 +295,22 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+            String keyToDelete = "";
+                    for(String key:keys){
+                        TimeInterval currentTi = innerMap.get(key);
+                        long from1 = currentTi.getFrom();
+                        long from2 = timeslot.getFrom();
+                        if(currentTi.getFrom()==timeslot.getFrom()){
+                            keyToDelete = key;
 
+                        }
+                    }
 
                     selectedTime.remove(position);
-                    if (customAvas.contains(timeslot)) {
+
                         customAvas.remove(timeslot);
-                        databaseReference.child("tutors").child(userInfo.getId()).child("customAvailability").child(selectedDay+"").setValue(customAvas);
-                    }else {
-                        defaultAvas.remove(timeslot);
-                        databaseReference.child("tutors").child(userInfo.getId()).child("defaultAvailability").child(day.toLowerCase()).setValue(selectedTime);
-                    }
+                        databaseReference.child("tutors").child(userInfo.getId()).child("customAvailability").child(selectedDay + "").child(keyToDelete).removeValue();
+
                     adapter2.notifyDataSetChanged();
                 }
             });
@@ -414,14 +437,36 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("customAvailability")
+                            .child(""+selectedDay);
 
+                    if(!defaultAvas.isEmpty()){
+
+                        Calendar re1 = Calendar.getInstance();
+                        Calendar re2 = Calendar.getInstance();
+
+                        re1.setTimeInMillis(selectedDay);
+                        re2.setTimeInMillis(selectedDay);
+
+                        for(TimeInterval ti: defaultAvas){
+                            SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
+                            String fromString = sdf3.format(ti.getFrom());
+                            String toString = sdf3.format(ti.getTo());
+                            re1.add(Calendar.MINUTE,hoursAndMinutesToMinutes(fromString));
+                            re2.add(Calendar.MINUTE,hoursAndMinutesToMinutes(toString));
+                            long fromLong = re1.getTimeInMillis();
+                            long toLong =re2.getTimeInMillis();
+                            TimeInterval defaultToCustom = new TimeInterval(fromLong, toLong);
+                            databaseReference.push().setValue(defaultToCustom);
+                        }
+
+                    }
 
 
                         selectedTime.add(timeInterval);
                         adapter2.notifyDataSetChanged();
 
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("customAvailability")
-                                .child(""+selectedDay);
+
                         databaseReference.push().setValue(timeInterval);
                     Toast.makeText(CustomAvailabilitySelection.this,"Availability added for:" +timeInterval.returnFormattedDate()+" "
                             ,Toast.LENGTH_LONG).show();

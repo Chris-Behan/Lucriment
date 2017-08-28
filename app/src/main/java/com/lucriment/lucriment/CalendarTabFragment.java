@@ -60,7 +60,7 @@ public class CalendarTabFragment extends Fragment {
     private ArrayList<Event> listOfEvents = new ArrayList<>();
     private ArrayList<TimeInterval> customAvailabilities = new ArrayList<>();
     private ArrayList<String> customAvaTracker = new ArrayList<>();
-    private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
+    private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private String selectedDayOfWeek;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
@@ -172,17 +172,24 @@ public class CalendarTabFragment extends Fragment {
             }
         });
 
-        DatabaseReference bookedSessionRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId().toString())
-                .child("bookedSessions");
+        final DatabaseReference bookedSessionRef = FirebaseDatabase.getInstance().getReference().child("sessions");
+
         bookedSessionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot bookedSnap:dataSnapshot.getChildren()){
-                    TimeInterval tiBooked = bookedSnap.getValue(TimeInterval.class);
-                    tiBooked.setSessionBooked();
-                    bookedSessions.add(tiBooked);
-                    Event bookedEvent = new Event(Color.RED, tiBooked.getFrom(),"Available this day");
-                    cv.addEvent(bookedEvent,true);
+                    if(bookedSnap.getKey().contains(userInfo.getId())) {
+                        for(DataSnapshot sr: bookedSnap.getChildren()){
+                            SessionRequest sessionRequest = sr.getValue(SessionRequest.class);
+                            if(sessionRequest.isConfirmed()){
+                                bookedSessions.add(sessionRequest);
+                                Event bookedEvent = new Event(Color.RED, sessionRequest.getTime().getFrom(), "Available this day");
+                                cv.addEvent(bookedEvent, true);
+                            }
+                        }
+
+
+                    }
                 }
 
             }
@@ -218,7 +225,10 @@ public class CalendarTabFragment extends Fragment {
                     long todayMillis2 = cal.getTimeInMillis();
                     for(int i = 0; i<26;i++){
                         Event mondayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(mondayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(mondayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -241,7 +251,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -261,7 +274,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -280,7 +296,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -299,7 +318,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -318,7 +340,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -337,7 +362,10 @@ public class CalendarTabFragment extends Fragment {
                     cal.set(Calendar.SECOND,0);
                     for(int i = 0; i<26;i++){
                         Event tuesdayEvent = new Event(Color.GREEN, cal.getTimeInMillis(), "Available this day");
-                        cv.addEvent(tuesdayEvent,true);
+                        List<Event> testEvent=  cv.getEvents(cal.getTimeInMillis());
+                        if(testEvent.isEmpty()) {
+                            cv.addEvent(tuesdayEvent, true);
+                        }
                         cal.add(Calendar.DATE,7);
                     }
 
@@ -406,16 +434,17 @@ public class CalendarTabFragment extends Fragment {
                 todaysAvailability.add(customAvailabilities.get(i));
             }
         }
-        for(TimeInterval bookedInterval: bookedSessions){
-            cal.setTimeInMillis(bookedInterval.getFrom());
+        for(SessionRequest bookedInterval: bookedSessions){
+            cal.setTimeInMillis(bookedInterval.getTime().getFrom());
             if(cal.get(Calendar.YEAR)== year&& cal.get(Calendar.DATE)== day&&cal.get(Calendar.MONTH)==month){
-                todaysAvailability.add(bookedInterval);
+                //bookedInterval.setConfirmed(true);
+                TimeInterval timeInterval = bookedInterval.getTime();
+                timeInterval.setSessionBooked();
+                todaysAvailability.add(timeInterval);
             }
         }
 
-
-
-
+        if(customAvailabilities.isEmpty()){
         if (dayOfWeek.equals("Monday")) {
             for (TimeInterval timeInterval : mondayAva) {
                 //GET FROM TIME
@@ -789,7 +818,7 @@ public class CalendarTabFragment extends Fragment {
 
 
             }
-
+        }
         }
         adapter.notifyDataSetChanged();
 

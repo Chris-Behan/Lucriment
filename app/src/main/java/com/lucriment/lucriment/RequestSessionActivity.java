@@ -245,7 +245,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
 
         if(v == requestButton){
 
-            SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getId(),tutor.getFullName(),user.getUid(),user.getDisplayName(), field1.getData(),sessioncost,requestedTime );
+            SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getId(),tutor.getFullName(),user.getUid(),userInfo.getFullName(), field1.getData(),sessioncost,requestedTime );
             sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
