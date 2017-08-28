@@ -168,13 +168,22 @@ public class TimePickerActivity extends AppCompatActivity  {
         gridView.setAdapter(myGridAdapter);
 
         //GET BOOKED SESSIONS
-        DatabaseReference bookedRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutor.getId()).child("bookedSessions");
+        DatabaseReference bookedRef = FirebaseDatabase.getInstance().getReference().child("sessions");
         bookedRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot bookedSession:dataSnapshot.getChildren()){
-                    TimeInterval booked = bookedSession.getValue(TimeInterval.class);
-                    bookedSessions.add(booked);
+                for(DataSnapshot bookedSnap:dataSnapshot.getChildren()){
+                    if(bookedSnap.getKey().contains(userInfo.getId())) {
+                        for(DataSnapshot sr: bookedSnap.getChildren()){
+                            SessionRequest sessionRequest = sr.getValue(SessionRequest.class);
+                            if(sessionRequest.isConfirmed()){
+                                bookedSessions.add(sessionRequest.getTime());
+
+                            }
+                        }
+
+
+                    }
                 }
             }
 
@@ -536,6 +545,10 @@ public class TimePickerActivity extends AppCompatActivity  {
 
     }
 
+    private void sortItems(){
+        Collections.sort(items, new TimeStringComparator());
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void getSelectedDayAva(int year, int day, int month) throws ParseException {
@@ -573,405 +586,389 @@ public class TimePickerActivity extends AppCompatActivity  {
         long dayTime = date.getTime();
         c.setTimeInMillis(dayTime);
 
+        if(todaysAvailability.isEmpty()) {
+            if (dayOfWeek.equals("Monday")) {
+                for (TimeInterval timeInterval : mondayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        if(dayOfWeek.equals("Monday")){
-            for(TimeInterval timeInterval: mondayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                     fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                     fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Tuesday")) {
+                for (TimeInterval timeInterval : tuesdayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Tuesday")){
-            for(TimeInterval timeInterval: tuesdayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Wednesday")) {
+                for (TimeInterval timeInterval : wednesdayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Wednesday")){
-            for(TimeInterval timeInterval: wednesdayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Thursday")) {
+                for (TimeInterval timeInterval : thursdayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Thursday")){
-            for(TimeInterval timeInterval: thursdayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Friday")) {
+                for (TimeInterval timeInterval : fridayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Friday")){
-            for(TimeInterval timeInterval: fridayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Saturday")) {
+                for (TimeInterval timeInterval : saturdayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Saturday")){
-            for(TimeInterval timeInterval: saturdayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    getAlteredAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-                getAlteredAvailability(thisAva);
 
+                }
 
             }
+            if (dayOfWeek.equals("Sunday")) {
+                for (TimeInterval timeInterval : sundayAva) {
+                    //GET FROM TIME
+                    Calendar c2 = Calendar.getInstance();
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromhour = c2.get(Calendar.HOUR_OF_DAY);
+                    c2.setTimeInMillis(timeInterval.getFrom());
+                    int fromminute = c2.get(Calendar.MINUTE);
+                    String fminuteS = "";
+                    String fhourS = "";
+                    if (fromminute < 10) {
+                        fminuteS = "0" + fromminute;
+                    } else {
+                        fminuteS = fromminute + "";
+                    }
+                    if (fromhour < 10) {
+                        fhourS = "0" + fromhour;
+                    } else {
+                        fhourS = fromhour + "";
+                    }
+                    TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(), timeInterval.getTo());
+                    SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
+                    long fromTime = finalFromDate.getTime();
+                    //GET TO TIME
+                    Calendar c3 = Calendar.getInstance();
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tohour = c3.get(Calendar.HOUR_OF_DAY);
+                    c3.setTimeInMillis(timeInterval.getTo());
+                    int tominute = c3.get(Calendar.MINUTE);
+                    String tminuteS = "";
+                    String thourS = "";
+                    if (tominute < 10) {
+                        tminuteS = "0" + tominute;
+                    } else {
+                        tminuteS = tominute + "";
+                    }
+                    if (tohour < 10) {
+                        thourS = "0" + tohour;
+                    } else {
+                        thourS = tohour + "";
+                    }
+                    SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
+                    Date finalToDate = fsdf2.parse(year + "" + dayS + "" + monthS + "" + thourS + "" + tminuteS);
+                    long toTime = finalToDate.getTime();
+                    TimeInterval finalTimeInterval = new TimeInterval(fromTime, toTime);
 
-        }
-        if(dayOfWeek.equals("Sunday")){
-            for(TimeInterval timeInterval: sundayAva){
-                //GET FROM TIME
-                Calendar c2 = Calendar.getInstance();
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromhour = c2.get(Calendar.HOUR_OF_DAY);
-                c2.setTimeInMillis(timeInterval.getFrom());
-                int fromminute = c2.get(Calendar.MINUTE);
-                String fminuteS = "";
-                String fhourS = "";
-                if(fromminute<10){
-                    fminuteS = "0"+fromminute;
-                }else{
-                    fminuteS = fromminute+"";
-                }
-                if(fromhour<10){
-                    fhourS = "0"+fromhour;
-                }else{
-                    fhourS = fromhour+"";
-                }
-                TimeInterval todaysInterval = new TimeInterval(timeInterval.getFrom(),timeInterval.getTo());
-                SimpleDateFormat fsdf = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalFromDate = fsdf.parse(year+""+dayS+""+monthS+""+fhourS+""+fminuteS);
-                long fromTime = finalFromDate.getTime();
-                //GET TO TIME
-                Calendar c3 = Calendar.getInstance();
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tohour = c3.get(Calendar.HOUR_OF_DAY);
-                c3.setTimeInMillis(timeInterval.getTo());
-                int tominute = c3.get(Calendar.MINUTE);
-                String tminuteS = "";
-                String thourS = "";
-                if(tominute < 10){
-                    tminuteS = "0"+tominute;
-                }else{
-                    tminuteS = tominute + "";
-                }
-                if(tohour<10){
-                    thourS = "0" + tohour;
-                }else{
-                    thourS = tohour+"";
-                }
-                SimpleDateFormat fsdf2 = new SimpleDateFormat("yyyyddMMHHmm");
-                Date finalToDate = fsdf2.parse(year+""+dayS+""+monthS+""+thourS+""+tminuteS);
-                long toTime = finalToDate.getTime();
-                TimeInterval finalTimeInterval = new TimeInterval(fromTime,toTime);
+                    Availability thisAva = new Availability(finalTimeInterval, "");
+                    // todaysAvailability.add(thisAva);
+                    getAlteredAvailability(thisAva);
+                    //processStartAvailability(thisAva);
 
-                Availability thisAva = new Availability(finalTimeInterval,"");
-               // todaysAvailability.add(thisAva);
-                getAlteredAvailability(thisAva);
-                //processStartAvailability(thisAva);
 
+                }
 
             }
-
         }
 
-        
-        
-        /*
-        for(Availability ava: avaList ){
-
-        int rday = ava.returnDay();
-            int rmonth = ava.returnMonth();
-            int ryear = ava.returnYear();
-           // int montha = month +1;
-           if(ava.returnDay()== day && ava.returnMonth() == month && ava.returnYear() == year){
-                todaysAvailability.add(ava);
-                processStartAvailability(ava);
-                finishTimes.add(ava.returnToTime());
-              //  items.add(ava.returnToTime());
-
-            } 
-        }*/
         myGridAdapter.notifyDataSetChanged();
     }
 
@@ -1014,6 +1011,7 @@ public class TimePickerActivity extends AppCompatActivity  {
 
             processStartAvailability(ava);
             todaysAvailability.add(ava);
+            sortItems();
 
 
     }
