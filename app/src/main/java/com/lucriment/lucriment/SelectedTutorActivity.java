@@ -162,10 +162,12 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
         requestButton.setOnClickListener(this);
         bookMarkButton.setOnClickListener(this);
-        Glide.with(getApplicationContext())
-                .load(selectedTutor.getProfileImage())
-                .apply(RequestOptions.circleCropTransform())
-                .into(imageView);
+        if(selectedTutor.getProfileImage()!=null) {
+            Glide.with(getApplicationContext())
+                    .load(selectedTutor.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imageView);
+        }
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);

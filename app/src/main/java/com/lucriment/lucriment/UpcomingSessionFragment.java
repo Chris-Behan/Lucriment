@@ -344,13 +344,6 @@ public class UpcomingSessionFragment extends Fragment {
             }
             locationText.setText(session.getLocation());
 
-
-
-
-
-
-
-
             return itemView;
             // return super.getView(position, convertView, parent);
         }

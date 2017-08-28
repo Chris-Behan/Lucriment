@@ -307,24 +307,17 @@ public class TutorListActivity extends BaseActivity {
             TutorInfo currentTutor = searchResult.get(position);
 
             TextView city = (TextView) itemView.findViewById(R.id.cityText);
-            /*
-            Geocoder gc = new Geocoder(getContext());
-            try {
-                List<Address> addresses = gc.getFromLocationName(currentTutor.getPostalCode(),1);
-                city.setText(addresses.get(0).getLocality()+", "+addresses.get(0).getAdminArea());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } */
-            //fill the view
+
             if(!tutorAddresses.isEmpty()) {
                 city.setText(tutorAddresses.get(position));
             }
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
-            Glide.with(getApplicationContext())
-                    .load(currentTutor.getProfileImage())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(imageView);
+                Glide.with(getApplicationContext())
+                        .load(currentTutor.getProfileImage())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageView);
+
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());

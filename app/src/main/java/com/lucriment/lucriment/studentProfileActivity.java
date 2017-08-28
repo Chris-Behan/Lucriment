@@ -82,9 +82,11 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
         lastName.setText(userInfo.getLastName());
         fNameLabel.setText(userInfo.getFirstName());
         lNameLabel.setText(userInfo.getLastName());
-        Glide.with(getApplicationContext())
-                .load(userInfo.getProfileImage())
-                .into(profileImage);
+        if(userInfo.getProfileImage()!=null) {
+            Glide.with(getApplicationContext())
+                    .load(userInfo.getProfileImage())
+                    .into(profileImage);
+        }
         editAbout.setText(userInfo.getHeadline());
 
         editButton.setOnClickListener(this);

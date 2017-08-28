@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.graphics.Color;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -28,7 +29,7 @@ public class TutorSessionsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_sessions);
-
+        this.getSupportActionBar().setElevation(0);
 
         //INITIALIZE BOTTOM NAVIGATION BAR
 
@@ -62,6 +63,7 @@ public class TutorSessionsActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabTextColors(Color.WHITE,Color.WHITE);
         setUpViewPager(viewPager);
 
     }

@@ -294,10 +294,12 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 getTutorInfo();
 
             }
-            Glide.with(getApplicationContext())
-                    .load(userInfo.getProfileImage())
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(imageView);
+            if(userInfo.getProfileImage()!=null) {
+                Glide.with(getApplicationContext())
+                        .load(userInfo.getProfileImage())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageView);
+            }
         }
 
         personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());

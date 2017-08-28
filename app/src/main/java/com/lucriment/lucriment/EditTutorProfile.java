@@ -136,10 +136,12 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
 
 
         //LOAD PICTURE
-        Glide.with(getApplicationContext())
-                .load(userInfo.getProfileImage())
-                .apply(RequestOptions.circleCropTransform())
-                .into(profileImage);
+        if(userInfo.getProfileImage()!=null) {
+            Glide.with(getApplicationContext())
+                    .load(userInfo.getProfileImage())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(profileImage);
+        }
 
         changePicText.setOnClickListener(new View.OnClickListener() {
             @Override

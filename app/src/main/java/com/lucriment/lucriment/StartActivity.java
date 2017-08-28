@@ -20,6 +20,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private Animation in, out, inR, outR;
     private  PageIndicatorView pageIndicatorView;
     private Button createAccountButton, loginButton;
+    private boolean flipping = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         viewFlipper.setInAnimation(in);
         viewFlipper.setOutAnimation(out);
        // viewFlipper.setAutoStart(true);
-        viewFlipper.setFlipInterval(5000);
+        viewFlipper.setFlipInterval(3000);
         viewFlipper.startFlipping();
 
 
@@ -57,33 +58,64 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             }
             public void onSwipeRight() {
                // viewFlipper.setFlipInterval(100000);
-                viewFlipper.setInAnimation(inR);
-                viewFlipper.setOutAnimation(outR);
-                viewFlipper.showPrevious();
-                viewFlipper.setFlipInterval(9000);
-                if(pageIndicatorView.getSelection()>0) {
-                    pageIndicatorView.setSelection(pageIndicatorView.getSelection() - 1);
-                }else{
-                    pageIndicatorView.setSelection(4);
-                }
+
+                    viewFlipper.setInAnimation(inR);
+                    viewFlipper.setOutAnimation(outR);
+                    viewFlipper.showPrevious();
+                    viewFlipper.setFlipInterval(5000);
+                    if (pageIndicatorView.getSelection() > 0) {
+                        pageIndicatorView.setSelection(pageIndicatorView.getSelection() - 1);
+                    } else {
+                        pageIndicatorView.setSelection(4);
+                    }
+                viewFlipper.setInAnimation(in);
+                viewFlipper.setOutAnimation(out);
+
 
             }
             public void onSwipeLeft() {
-                viewFlipper.setInAnimation(in);
-                viewFlipper.setOutAnimation(out);
-                viewFlipper.showNext();
-                viewFlipper.setFlipInterval(9000);
-                if(pageIndicatorView.getSelection()<pageIndicatorView.getCount()-1) {
-                    pageIndicatorView.setSelection(pageIndicatorView.getSelection() + 1);
-                }else{
-                    pageIndicatorView.setSelection(0);
-                }
+
+
+                    viewFlipper.setInAnimation(in);
+                    viewFlipper.setOutAnimation(out);
+                    viewFlipper.showNext();
+                    viewFlipper.setFlipInterval(5000);
+
+
             }
             public void onSwipeBottom() {
 
             }
 
         });
+
+        viewFlipper.getInAnimation().setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+               if(animation == in){
+                    if(pageIndicatorView.getSelection()<pageIndicatorView.getCount()-1) {
+                        pageIndicatorView.setSelection(pageIndicatorView.getSelection() + 1);
+                    }else{
+                        pageIndicatorView.setSelection(0);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+
 
 
 
