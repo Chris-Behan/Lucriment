@@ -81,6 +81,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     private long clickedTime;
     private int selectedPostision = 999;
     private TextView selectionOrder;
+    private ArrayList<String> deletedTimes = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -173,7 +174,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot bookedSnap:dataSnapshot.getChildren()){
-                    if(bookedSnap.getKey().contains(userInfo.getId())) {
+                    if(bookedSnap.getKey().contains(tutor.getId())||bookedSnap.getKey().contains(userInfo.getId())) {
                         for(DataSnapshot sr: bookedSnap.getChildren()){
                             SessionRequest sessionRequest = sr.getValue(SessionRequest.class);
                             if(sessionRequest.isConfirmed()){
@@ -214,7 +215,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                 }
 
 
-
+                initializeGrid();
             }
 
             @Override
@@ -395,6 +396,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDayClick(Date dateClicked) {
+                deletedTimes.clear();
                 Date date = dateClicked;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
@@ -404,6 +406,13 @@ public class TimePickerActivity extends AppCompatActivity  {
                 int month = cal.get(Calendar.MONTH);
                 try {
                     getSelectedDayAva(year,dayOfMonth,month);
+                    for(String s:deletedTimes){
+                        if(items.contains(s)){
+                            items.remove(s);
+                        }
+                      //  int value1 = Integer.valueOf(timeString.substring(0,timeString.indexOf(':')));
+
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -545,6 +554,40 @@ public class TimePickerActivity extends AppCompatActivity  {
 
     }
 
+    private void processDeletedAvailability(Availability ava){
+        int startHour = ava.returnFromHour()-1;
+        int startMinute = ava.returnFromMinute();
+        int endHour = ava.returnToHour();
+        int endMinute = ava.returnToMinute();
+
+        int startTotal = startHour*60 + startMinute;
+        int endTotal = endHour*60 + endMinute;
+        int timeDiff = endTotal-startTotal;
+        int increment = (timeDiff)/15;
+
+        while(increment>=0){
+            String processedTime;
+            if(startMinute<45) {
+                if(startMinute==0){
+                    processedTime = startHour + ":00";
+                }else {
+                    processedTime = startHour + ":" + startMinute;
+                }
+                deletedTimes.add(processedTime);
+                startMinute+= 15;
+            }else{
+                processedTime = startHour + ":" + startMinute;
+                deletedTimes.add(processedTime);
+                startMinute =0;
+                startHour+= 1;
+            }
+            //  items.add(startHour + ":" + startMinute);
+            increment--;
+        }
+
+
+    }
+
     private void sortItems(){
         Collections.sort(items, new TimeStringComparator());
     }
@@ -586,7 +629,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         long dayTime = date.getTime();
         c.setTimeInMillis(dayTime);
 
-        if(todaysAvailability.isEmpty()) {
+        if(customMap.get(clickedTime+"")==null) {
             if (dayOfWeek.equals("Monday")) {
                 for (TimeInterval timeInterval : mondayAva) {
                     //GET FROM TIME
@@ -969,51 +1012,95 @@ public class TimePickerActivity extends AppCompatActivity  {
             }
         }
 
+
         myGridAdapter.notifyDataSetChanged();
     }
 
     private void getAlteredAvailability(Availability ava){
         TimeInterval ti = ava.gettime();
-
+        boolean changed = false;
+        boolean split = true;
         for(TimeInterval bookedTi:bookedSessions){
             if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
                 if((bookedTi.getFrom()-ti.getFrom())>=3600000){
                     TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
+
                     Availability firstAva = new Availability(firstInterval,"");
                     processStartAvailability(firstAva);
                     todaysAvailability.add(firstAva);
+                    split = false;
+
                 }
+
                 if(ti.getTo()-bookedTi.getTo()>=3600000){
                     TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
+
                     Availability secondAva = new Availability(firstInterval,"");
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
+                    split = false;
+
                 }
-                return;
+                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
+                Availability deletedAva = new Availability(deleted,"");
+                processDeletedAvailability(deletedAva);
+                if(split){
+                    processStartAvailability(ava);
+                    todaysAvailability.add(ava);
+                }
+                changed = true;
             }else if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getFrom()<=ti.getTo()){
                 if(ti.getFrom()-bookedTi.getFrom()>=3600000){
                     TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
                     Availability secondAva = new Availability(firstInterval,"");
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
+                    split = false;
+
                 }
-                return;
+                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
+                Availability deletedAva = new Availability(deleted,"");
+                processDeletedAvailability(deletedAva);
+                if(split){
+                    processStartAvailability(ava);
+                    todaysAvailability.add(ava);
+                }
+                changed = true;
             }else if(bookedTi.getTo()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
                 if(ti.getTo()-bookedTi.getTo()>=3600000){
                     TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
                     Availability secondAva = new Availability(firstInterval,"");
                     processStartAvailability(secondAva);
                     todaysAvailability.add(secondAva);
+                    split = false;
+
                 }
-                return;
+                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
+                Availability deletedAva = new Availability(deleted,"");
+                processDeletedAvailability(deletedAva);
+                if(split){
+                    processStartAvailability(ava);
+                    todaysAvailability.add(ava);
+                }
+                changed = true;
             }
+
         }
 
-            processStartAvailability(ava);
-            todaysAvailability.add(ava);
+            if(!changed) {
+                processStartAvailability(ava);
+                todaysAvailability.add(ava);
+            }
             sortItems();
 
 
+    }
+
+    private int hoursAndMinutesToMinutes(String timeString){
+        int value1 = Integer.valueOf(timeString.substring(0,timeString.indexOf(':')));
+        int value2 = Integer.valueOf(timeString.substring(timeString.indexOf(':')+1,timeString.length()));
+        value1 = value1*60;
+        return value1+value2;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -1028,6 +1115,8 @@ public class TimePickerActivity extends AppCompatActivity  {
 
         try {
             getSelectedDayAva(year,dayOfMonth,month);
+            myGridAdapter2.notifyDataSetChanged();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

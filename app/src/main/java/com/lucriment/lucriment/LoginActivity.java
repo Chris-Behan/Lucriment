@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private Button signInButton;
     private EditText signInEmail;
     private EditText signInpassword;
-    private TextView signUpTextView;
+    private TextView signUpTextView, forgotPassword;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     //private GoogleSignInOptions gso;
@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton = (Button)  findViewById(R.id.signInButton);
         signInEmail = (EditText) findViewById(R.id.email);
         signInpassword = (EditText) findViewById(R.id.password);
-
+        forgotPassword = (TextView) findViewById(R.id.forgotPassword);
         googleButton = (Button) findViewById(R.id.googleButton);
         progressDialog = new ProgressDialog(this);
 
@@ -156,6 +156,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton.setOnClickListener(this);
 //        signUpTextView.setOnClickListener(this);
         googleButton.setOnClickListener(this);
+        forgotPassword.setOnClickListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -229,7 +230,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
                         }else{
                             progressDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "There is no account associated with the email you entered, please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Invalid email or password. Please try again.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -245,6 +246,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.googleButton:
                 signIn();
                 break;
+            case R.id.forgotPassword:
+                finish();
+                startActivity(new Intent(getApplicationContext(), ResetPasswordActivity.class));
+
         }
 
 

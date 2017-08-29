@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -33,7 +34,8 @@ public class DefaultAvailability extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default_availability);
-        getSupportActionBar().setTitle("Sessions");
+        getSupportActionBar().setTitle("Availability");
+        this.getSupportActionBar().setElevation(0);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -72,6 +74,7 @@ public class DefaultAvailability extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.container);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setTabTextColors(Color.WHITE,Color.WHITE);
         tabLayout.setupWithViewPager(viewPager);
 
 

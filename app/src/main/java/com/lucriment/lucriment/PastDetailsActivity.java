@@ -182,11 +182,13 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     private void setRatings(){
         if(userType.equals("tutor")){
             Rating rating = (requesteeInfo.getRating());
-            double ratingAvg = (rating.getTotalScore()/rating.getNumberOfReviews());
-            DecimalFormat df = new DecimalFormat("#.#");
-            ratingAvg = Double.valueOf(df.format(ratingAvg));
+            if(rating!=null) {
+                double ratingAvg = (rating.getTotalScore() / rating.getNumberOfReviews());
+                DecimalFormat df = new DecimalFormat("#.#");
+                ratingAvg = Double.valueOf(df.format(ratingAvg));
 
-            ratingText.setText(ratingAvg+"");
+                ratingText.setText(ratingAvg + "");
+            }
         }else{
             Rating rating = (tutorInfo.getRating());
             double ratingAvg = (rating.getTotalScore()/rating.getNumberOfReviews());

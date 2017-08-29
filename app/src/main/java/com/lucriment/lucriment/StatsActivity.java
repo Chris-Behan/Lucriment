@@ -1,5 +1,6 @@
 package com.lucriment.lucriment;
 
+import android.graphics.Color;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,7 @@ public class StatsActivity extends BaseActivity {
         setContentView(R.layout.activity_stats);
 
         getSupportActionBar().setTitle("Stats");
+        this.getSupportActionBar().setElevation(0);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -54,6 +56,7 @@ public class StatsActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabTextColors(Color.WHITE,Color.WHITE);
         setUpViewPager(viewPager);
 
     }

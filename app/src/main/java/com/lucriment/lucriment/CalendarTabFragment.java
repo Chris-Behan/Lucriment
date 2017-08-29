@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -820,6 +821,7 @@ public class CalendarTabFragment extends Fragment {
             }
         }
         }
+        Collections.sort(todaysAvailability, new TimeComparator());
         adapter.notifyDataSetChanged();
 
 
