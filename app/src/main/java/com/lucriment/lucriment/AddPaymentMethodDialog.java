@@ -39,6 +39,7 @@ public class AddPaymentMethodDialog extends DialogFragment {
         Bundle args = getArguments();
         userInfo = args.getParcelable("userInfo");
 
+
         View view = inflater.inflate(R.layout.addpaymentmethod,null);
       //  final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
         final CardForm cardForm = (CardForm) view.findViewById(R.id.card_form);
@@ -63,7 +64,14 @@ public class AddPaymentMethodDialog extends DialogFragment {
                         cardMap.put("number",cardForm.getCardNumber());
                         cardMap.put("exp_month",cardForm.getExpirationMonth());
                         cardMap.put("exp_year",cardForm.getExpirationYear());
-                        tokenref.push().child("token").setValue(cardMap);
+                        Card card = new Card(cardForm.getCardNumber(), Integer.valueOf(cardForm.getExpirationMonth()),
+                                Integer.valueOf(cardForm.getExpirationYear()), cardForm.getCvv());
+                        if(card.validateCVC()&&card.validateCard()) {
+                            tokenref.removeValue();
+                            tokenref.push().child("token").setValue(cardMap);
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(),"Invalid Card Information",Toast.LENGTH_SHORT).show();
+                        }
 
 
                     }

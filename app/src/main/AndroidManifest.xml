@@ -104,7 +104,8 @@
         <activity android:name=".PastDetailsActivity" />
         <activity android:name=".TutorAvailabilityActivity" />
         <activity android:name=".StatsActivity" />
-        <activity android:name=".ResetPasswordActivity"></activity>
+        <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".TutorPayoutActivity"></activity>
     </application>
 
 </manifest>

@@ -1,13 +1,21 @@
 package com.lucriment.lucriment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -23,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TutorCreation extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth firebaseAuth;
@@ -41,21 +50,30 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private UserInfo userInfo;
     private Spinner subjectSelector;
     private Spinner classSelector;
+    private String phoneRegex ="\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";
+    private String postalRegex = "^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$";
+    private String rateRegex = "^([1-9][0-9]{0,2}|1000)$";
+    private int tutorYear, tutorMonth, tutorDay;
 
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> subjectsTaught = new ArrayList<>();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private  ArrayAdapter<String> adapter;
     private String[] subjectArray;
-    private String subjectPath;
+    private String subjectPath, phoneNumberString;
     private boolean addingClass = false;
     private Button addClassButton;
+    private int year, month, day;
+    private EditText dateOfBirth, phoneNumber;
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_creation);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         userInfo = getIntent().getParcelableExtra("userInfo");
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
         classSelector = (Spinner) findViewById(R.id.classSpinner);
@@ -63,11 +81,34 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         rateField = (EditText) findViewById(R.id.rateField);
         educationField = (EditText) findViewById(R.id.educationField);
         becomeTutor = (Button) findViewById(R.id.becomeTutor);
-
+        dateOfBirth = (EditText) findViewById(R.id.dateOfBirth);
+        phoneNumber = (EditText) findViewById(R.id.phoneNumber);
        // subjectSelector.setVisibility(View.VISIBLE);
     //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
         addClassButton.setOnClickListener(this);
+        dateOfBirth.setOnClickListener(this);
+
+        dateOfBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    Calendar calendar = Calendar.getInstance();
+                    year = calendar.get(Calendar.YEAR);
+                    month = calendar.get(Calendar.MONTH);
+                    day = calendar.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(TutorCreation.this,android.R.style.Theme_Holo_Light_Dialog,myDateListener, year, month, day);
+                    datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+                    // datePickerDialog.getDatePicker().setMinDate(calendar.get(Calendar.MILLISECOND));
+                    Window window = datePickerDialog.getWindow();
+                   // window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    window.setGravity(Gravity.CENTER);
+
+
+                    datePickerDialog.show();
+                }
+            }
+        });
 
         adapter = new TutorCreation.taughtClassAdapter();
         ListView list = (ListView) findViewById(R.id.taughtlist);
@@ -89,9 +130,30 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
 
             }
         });
+       // DatePickerDialog birthPicker = new DatePickerDialog()
+
+
 
     }
 
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0,
+                                      int arg1, int arg2, int arg3) {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    //showDate(arg1, arg2+1, arg3);
+                    tutorDay = arg3;
+                    tutorMonth = arg2;
+                    tutorYear = arg1;
+
+                    dateOfBirth.setText(arg3+"/"+arg2+"/"+arg1);
+                }
+            };
 
     private class taughtClassAdapter extends ArrayAdapter<String> {
 
@@ -187,11 +249,22 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         if(v == becomeTutor){
             createTutorProfile();
         }
+        if(v== dateOfBirth){
+            Calendar calendar = Calendar.getInstance();
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(TutorCreation.this,android.R.style.Theme_Holo_Light_Dialog,myDateListener, year, month, day);
+            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+            // datePickerDialog.getDatePicker().setMinDate(calendar.get(Calendar.MILLISECOND));
+
+            datePickerDialog.show();
+        }
 
         if(v == addClassButton){
             if(addingClass){
                 subjectsTaught.add(classSelector.getSelectedItem().toString());
-                databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                //databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
                 addingClass = false;
 
             }else{
@@ -212,26 +285,78 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
 
     private void createTutorProfile(){
         firebaseAuth = FirebaseAuth.getInstance();
+
+        if(TextUtils.isEmpty(rateField.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter rate",Toast.LENGTH_SHORT).show();
+            rateField.requestFocus();
+            return;
+        }else if(TextUtils.isEmpty(educationField.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter postal code",Toast.LENGTH_SHORT).show();
+            educationField.requestFocus();
+            return;
+        }else if (TextUtils.isEmpty(phoneNumber.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter your phone number",Toast.LENGTH_SHORT).show();
+            phoneNumber.requestFocus();
+            return;
+        }
+
+        rate = Integer.parseInt(rateField.getText().toString());
+        education = educationField.getText().toString();
+        email = firebaseAuth.getCurrentUser().getEmail();
+        phoneNumberString = phoneNumber.getText().toString();
+        userInfo.setUserType("tutor");
+
+        if(dateOfBirth.getText().length()<3){
+            Toast.makeText(TutorCreation.this,"Please enter date of birth",Toast.LENGTH_SHORT).show();
+            dateOfBirth.requestFocus();
+            return;
+        }else if(!(rate+"").matches(rateRegex)){
+            Toast.makeText(TutorCreation.this,"Invalid rate",Toast.LENGTH_SHORT).show();
+            rateField.requestFocus();
+            return;
+        }else if(!education.matches(postalRegex)){
+            Toast.makeText(TutorCreation.this,"Invalid postal code",Toast.LENGTH_SHORT).show();
+            educationField.requestFocus();
+            return;
+        }else if(!phoneNumberString.matches(phoneRegex)){
+            Toast.makeText(TutorCreation.this,"Please enter a valid phone number",Toast.LENGTH_SHORT).show();
+            phoneNumber.requestFocus();
+            return;
+        }else if(subjectsTaught.isEmpty()){
+            Toast.makeText(TutorCreation.this,"You must select at least one class to teach",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
+
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         id = firebaseAuth.getCurrentUser().getUid();
         displayName = firebaseAuth.getCurrentUser().getDisplayName();
        //
         //classes = classField.getText().toString();
-        rate = Integer.parseInt(rateField.getText().toString());
-        education = educationField.getText().toString();
-        email = firebaseAuth.getCurrentUser().getEmail();
-        userInfo.setUserType("tutor");
-        TutorInfo tutorInfo = new TutorInfo(userInfo,education,123456789,rate);
+
+        TutorInfo tutorInfo = new TutorInfo(userInfo,education,Long.valueOf(phoneNumberString),rate);
+
         tutorInfo.setSubjects(subjectsTaught);
 
         tutorInfo.setProfileImage(userInfo.getProfileImage());
-        databaseReference.child("tutors").child(user.getUid()).setValue(tutorInfo);
+        databaseReference.child("tutors").child(user.getUid()).updateChildren(tutorInfo.toMap());
         databaseReference.child("users").child(user.getUid()).child("userType").setValue("tutor");
+        String userType = "tutor";
 
         Toast.makeText(this, "You are now a Tutor!", Toast.LENGTH_SHORT).show();
         finish();
-        startActivity(new Intent(TutorCreation.this, ProfileActivity.class));
+        Intent y =new Intent(TutorCreation.this, SettingsActivity.class);
+        y.putExtra("day", day);
+        y.putExtra("month",month);
+        y.putExtra("year", year);
+        y.putExtra("userInfo",userInfo);
+        y.putExtra("userType",userType);
+        startActivity(y);
+
 
     }
 }

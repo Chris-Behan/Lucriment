@@ -45,6 +45,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class TimePickerActivity extends AppCompatActivity  {
     private CompactCalendarView cv;
     private ArrayList<Availability> avaList = new ArrayList<>();
@@ -75,6 +76,7 @@ public class TimePickerActivity extends AppCompatActivity  {
     private ArrayList<TimeInterval> sundayAva = new ArrayList<>();
     private ArrayList<TimeInterval> selection = new ArrayList<>();
     private ArrayList<TimeInterval> bookedSessions = new ArrayList<>();
+    private ArrayList<TimeInterval> relevantBookedSessions = new ArrayList<>();
     private  HashMap<String,ArrayList<TimeInterval>> customMap;
     private Button nextButton;
     private double score;
@@ -82,6 +84,9 @@ public class TimePickerActivity extends AppCompatActivity  {
     private int selectedPostision = 999;
     private TextView selectionOrder;
     private ArrayList<String> deletedTimes = new ArrayList<>();
+    private ArrayList<String> deletedToTimes = new ArrayList<>();
+    private TimeInterval selectedDay = new TimeInterval();
+    private Calendar todaysDate = Calendar.getInstance();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -186,6 +191,7 @@ public class TimePickerActivity extends AppCompatActivity  {
 
                     }
                 }
+
             }
 
             @Override
@@ -400,19 +406,21 @@ public class TimePickerActivity extends AppCompatActivity  {
                 Date date = dateClicked;
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
+                todaysDate.setTime(date);
+                getRelevantBookedTimes(bookedSessions);
                 clickedTime = cal.getTimeInMillis();
                 int year = cal.get(Calendar.YEAR);
                 int dayOfMonth = cal.get(Calendar.DATE);
                 int month = cal.get(Calendar.MONTH);
                 try {
+
                     getSelectedDayAva(year,dayOfMonth,month);
                     for(String s:deletedTimes){
                         if(items.contains(s)){
                             items.remove(s);
                         }
-                      //  int value1 = Integer.valueOf(timeString.substring(0,timeString.indexOf(':')));
-
                     }
+                    sortItems();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -515,8 +523,11 @@ public class TimePickerActivity extends AppCompatActivity  {
 
         }
         Collections.reverse(items2);
-
-
+        for(String s:deletedToTimes){
+            if(items2.contains(s)){
+                items2.remove(s);
+            }
+        }
 
     }
 
@@ -553,38 +564,88 @@ public class TimePickerActivity extends AppCompatActivity  {
 
 
     }
+    private void getDeletedToTimes(ArrayList<TimeInterval> bookedList){
 
-    private void processDeletedAvailability(Availability ava){
-        int startHour = ava.returnFromHour()-1;
-        int startMinute = ava.returnFromMinute();
-        int endHour = ava.returnToHour();
-        int endMinute = ava.returnToMinute();
+        for(TimeInterval ti:bookedList) {
+            Availability ava = new Availability(ti,"");
+            int startHour = ava.returnFromHour();
+            int startMinute = ava.returnFromMinute();
+            int endHour = ava.returnToHour();
+            int endMinute = ava.returnToMinute();
+            if(startMinute!=45){
 
-        int startTotal = startHour*60 + startMinute;
-        int endTotal = endHour*60 + endMinute;
-        int timeDiff = endTotal-startTotal;
-        int increment = (timeDiff)/15;
-
-        while(increment>=0){
-            String processedTime;
-            if(startMinute<45) {
-                if(startMinute==0){
-                    processedTime = startHour + ":00";
-                }else {
-                    processedTime = startHour + ":" + startMinute;
-                }
-                deletedTimes.add(processedTime);
-                startMinute+= 15;
+                startMinute = startMinute +15;
             }else{
-                processedTime = startHour + ":" + startMinute;
-                deletedTimes.add(processedTime);
-                startMinute =0;
-                startHour+= 1;
+                startMinute = 0;
+                startHour = startHour+1;
             }
-            //  items.add(startHour + ":" + startMinute);
-            increment--;
-        }
 
+            int startTotal = startHour * 60 + startMinute;
+            int endTotal = endHour * 60 + endMinute;
+            int timeDiff = endTotal - startTotal;
+            int increment = (timeDiff) / 15;
+
+            while (increment >= 0) {
+                String processedTime;
+                if (startMinute < 45) {
+                    if (startMinute == 0) {
+                        processedTime = startHour + ":00";
+                    } else {
+                        processedTime = startHour + ":" + startMinute;
+                    }
+                    deletedToTimes.add(processedTime);
+                    startMinute += 15;
+                } else {
+                    processedTime = startHour + ":" + startMinute;
+                    deletedToTimes.add(processedTime);
+                    startMinute = 0;
+                    startHour += 1;
+                }
+                //  items.add(startHour + ":" + startMinute);
+                increment--;
+            }
+        }
+    }
+
+    private void processDeletedTimeIntervals(ArrayList<TimeInterval> bookedList){
+        for(TimeInterval ti:bookedList) {
+            Availability ava = new Availability(ti,"");
+            int startHour = ava.returnFromHour();
+            int startMinute = ava.returnFromMinute();
+            int endHour = ava.returnToHour();
+            int endMinute = ava.returnToMinute();
+            if(startMinute!=45){
+                startHour = startHour-1;
+                startMinute = startMinute +15;
+            }else{
+                startMinute = 0;
+            }
+
+            int startTotal = startHour * 60 + startMinute;
+            int endTotal = endHour * 60 + endMinute;
+            int timeDiff = endTotal - startTotal;
+            int increment = (timeDiff) / 15;
+
+            while (increment >= 0) {
+                String processedTime;
+                if (startMinute < 45) {
+                    if (startMinute == 0) {
+                        processedTime = startHour + ":00";
+                    } else {
+                        processedTime = startHour + ":" + startMinute;
+                    }
+                    deletedTimes.add(processedTime);
+                    startMinute += 15;
+                } else {
+                    processedTime = startHour + ":" + startMinute;
+                    deletedTimes.add(processedTime);
+                    startMinute = 0;
+                    startHour += 1;
+                }
+                //  items.add(startHour + ":" + startMinute);
+                increment--;
+            }
+        }
 
     }
 
@@ -1017,6 +1078,10 @@ public class TimePickerActivity extends AppCompatActivity  {
     }
 
     private void getAlteredAvailability(Availability ava){
+        processStartAvailability(ava);
+        todaysAvailability.add(ava);
+
+        /*
         TimeInterval ti = ava.gettime();
         boolean changed = false;
         boolean split = true;
@@ -1093,7 +1158,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             }
             sortItems();
 
-
+            */
     }
 
     private int hoursAndMinutesToMinutes(String timeString){
@@ -1120,6 +1185,26 @@ public class TimePickerActivity extends AppCompatActivity  {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getRelevantBookedTimes(ArrayList<TimeInterval> bSessions){
+            int year = todaysDate.get(Calendar.YEAR);
+            int month = todaysDate.get(Calendar.MONTH);
+            int dayOfMonth = todaysDate.get(Calendar.DATE);
+            Calendar tempCal = Calendar.getInstance();
+            for(TimeInterval ti:bSessions){
+                tempCal.setTimeInMillis(ti.getFrom());
+                int tempYear = tempCal.get(Calendar.YEAR);
+                int tempMonth = tempCal.get(Calendar.MONTH);
+                int tempDay = tempCal.get(Calendar.DATE);
+                if(tempYear == year && tempMonth==month&& tempDay==dayOfMonth){
+                    relevantBookedSessions.add(ti);
+                }
+            }
+        processDeletedTimeIntervals(relevantBookedSessions);
+        getDeletedToTimes(relevantBookedSessions);
 
     }
 

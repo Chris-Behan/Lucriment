@@ -137,31 +137,7 @@ public class PaymentActivity extends BaseActivity {
                 args.putParcelable("userInfo",userInfo);
                 addPaymentMethodDialog.setArguments(args);
                 addPaymentMethodDialog.show(getFragmentManager(),"add");
-                /*
-                Card cardToSave = mCardInputWidget.getCard();
-                if (cardToSave == null) {
-                    Toast.makeText(PaymentActivity.this,"Invalid Card Info",Toast.LENGTH_LONG).show();
-                }
 
-
-                Stripe stripe = new Stripe(PaymentActivity.this, "pk_test_kRaU4qwEDlsbB9HL0JeAPFmP");
-                stripe.createToken(
-                        cardToSave,
-                        new TokenCallback() {
-                            public void onSuccess(Token token) {
-                                // Send token to your server
-                                DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
-                                tokenref.setValue(token);
-                            }
-                            public void onError(Exception error) {
-                                // Show localized error message
-
-                            }
-                        }
-                );
-
-                cardToSave.setName(userInfo.getFullName());
-                */
 
             }
         });

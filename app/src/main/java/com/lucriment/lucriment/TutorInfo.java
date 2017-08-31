@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ChrisBehan on 5/9/2017.
@@ -53,6 +55,20 @@ public class TutorInfo implements Parcelable {
         this.phoneNumber = phoneNumber;
         this.rate = rate;
 
+    }
+    public Map<String,Object> toMap(){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("fullName",fullName);
+        result.put("lastName",lastName);
+        result.put("firstName",firstName);
+        result.put("id",id);
+        result.put("email",email);
+        result.put("userType",userType);
+        result.put("phoneNumber",phoneNumber);
+        result.put("postalCode",postalCode);
+        result.put("rate",rate);
+        result.put("subjects",subjects);
+        return result;
     }
 
     public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate) {

@@ -34,36 +34,35 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:hint="Postal Code"
-            android:inputType="textEmailAddress" />
+            android:inputType="textPostalAddress" />
 
         <TextView
             android:id="@+id/subjectsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/subjectSpinner"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:text="Subjects Taught:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_above="@+id/taughtlist"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <Spinner
             android:id="@+id/subjectSpinner"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/classSpinner"
-            android:layout_alignStart="@+id/classSpinner"
-            android:layout_below="@+id/addClassButton"
-            android:layout_marginTop="27dp"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_above="@+id/classSpinner"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <Spinner
             android:id="@+id/classSpinner"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:layout_below="@+id/subjectSpinner"
-            android:layout_toRightOf="@+id/taughtlist"
-            android:layout_toEndOf="@+id/taughtlist" />
+            android:layout_above="@+id/taughtlist"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <Button
             android:id="@+id/addClassButton"
@@ -72,7 +71,7 @@
 
             android:text="Add Class"
             android:visibility="visible"
-            android:layout_below="@+id/educationField"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -81,21 +80,36 @@
             android:layout_width="170dp"
             android:layout_height="100dp"
 
+            android:layout_above="@+id/becomeTutor"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/subjectsLabel" />
+            android:layout_alignParentStart="true" />
 
         <EditText
 
             android:id="@+id/rateField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/becomeTutor"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="91dp"
             android:hint="Hourly Rate"
-            android:inputType="textEmailAddress" />
+            android:inputType="number"
+            android:layout_below="@+id/educationField"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rateField"
+            android:inputType="none"
+            android:id="@+id/dateOfBirth"
+            android:hint="Date of Birth"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dateOfBirth"
+            android:inputType="phone"
+            android:hint="Phone Number"
+            android:id="@+id/phoneNumber"
+            />
+
 
         <Button
             android:id="@+id/becomeTutor"

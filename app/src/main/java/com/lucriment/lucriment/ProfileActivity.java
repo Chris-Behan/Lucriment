@@ -43,10 +43,12 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     private String userType;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
 
 
         Animation animFadein;
@@ -119,47 +121,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
 
 
-        //FirebaseUser user = firebaseAuth.getCurrentUser();
-
-
-
-        /*
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch(item.getItemId()){
-
-                    case R.id.search:
-                        finish();
-                        Intent a =(new Intent(ProfileActivity.this, TutorListActivity.class));
-                        a.putExtra("userType", userType);
-                        a.putExtra("userInfo", userInfo);
-                        ProfileActivity.this.overridePendingTransition(R.anim.fade_in,0);
-                        break;
-                    case R.id.sessions:
-                        Intent y = new Intent(ProfileActivity.this, SessionsActivity.class);
-                        y.putExtra("userType", userType);
-                        startActivity(y);
-                        ProfileActivity.this.overridePendingTransition(0,0);
-                        break;
-                    case R.id.inbox:
-                        finish();
-                        startActivity(new Intent(ProfileActivity.this, ViewMessagesActivity.class));
-                        ProfileActivity.this.overridePendingTransition(0,0);
-                        break;
-                    case R.id.profile:
-                        Intent i = new Intent(ProfileActivity.this, PersonalProfileActivity.class);
-                        i.putExtra("userInfo", userInfo);
-                        startActivity(i);
-                        ProfileActivity.this.overridePendingTransition(0,0);
-                        break;
-
-
-                }
-                return false;
-            }
-
-        }); */
     }
     private void initializeButtons(){
         profileName = (TextView) findViewById(R.id.profileLabel);
