@@ -313,10 +313,14 @@ public class TutorListActivity extends BaseActivity {
             }
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
-                Glide.with(getApplicationContext())
-                        .load(currentTutor.getProfileImage())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(imageView);
+                        Glide.with(getApplicationContext())
+
+                                .load(currentTutor.getProfileImage())
+                               .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
+                                .apply(RequestOptions.circleCropTransform())
+
+                                .into(imageView);
+
 
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);

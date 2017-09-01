@@ -24,6 +24,39 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp">
 
+    <EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/accountNumber"
+    android:hint="Account Number"
+    />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/accountNumber"
+            android:id="@+id/transitNumber"
+            android:hint="Transit Number"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/transitNumber"
+            android:hint="Institution Number"
+            android:id="@+id/institutionNumber"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/institutionNumber"
+            android:hint="Social Insurance Number"
+            android:id="@+id/SIN"/>
+
+        <Button
+            android:id="@+id/addAccountButton"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Add Bank Account"
+            android:background="@drawable/rounded_button"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

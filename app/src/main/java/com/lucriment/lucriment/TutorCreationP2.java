@@ -1,15 +1,22 @@
 package com.lucriment.lucriment;
 
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.Formatter;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.stripe.android.Stripe;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -23,6 +30,10 @@ public class TutorCreationP2 extends AppCompatActivity {
     private String userType;
     private DatabaseReference myRef, baseRef;
     private String address, city, province,postalCode;
+    private String accountNumber, transitNumber, institutionNumber,SIN;
+    private EditText accountNumField, transitNumField, institutionNumField, SINfield;
+    private Button addAccountButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +57,51 @@ public class TutorCreationP2 extends AppCompatActivity {
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+
+        //  INITIALIZE WIDGETS
+        accountNumField = (EditText) findViewById(R.id.accountNumber);
+        transitNumField = (EditText) findViewById(R.id.transitNumber);
+        institutionNumField = (EditText) findViewById(R.id.institutionNumber);
+        addAccountButton = (Button) findViewById(R.id.addAccountButton);
+        SINfield = (EditText) findViewById(R.id.SIN);
+
+        addAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(accountNumField.getText().toString())){
+                    Toast.makeText(TutorCreationP2.this,"Please enter account number",Toast.LENGTH_SHORT).show();
+                    accountNumField.requestFocus();
+                    return;
+                }else if(TextUtils.isEmpty(transitNumField.getText().toString())){
+                    Toast.makeText(TutorCreationP2.this,"Please enter transit number",Toast.LENGTH_SHORT).show();
+                    transitNumField.requestFocus();
+                    return;
+                }else if (TextUtils.isEmpty(institutionNumField.getText().toString())){
+                    Toast.makeText(TutorCreationP2.this,"Please enter institution number",Toast.LENGTH_SHORT).show();
+                    institutionNumField.requestFocus();
+                    return;
+                }
+                else if (TextUtils.isEmpty(SINfield.getText().toString())){
+                    Toast.makeText(TutorCreationP2.this,"Please enter SIN number",Toast.LENGTH_SHORT).show();
+                    SINfield.requestFocus();
+                    return;
+                }
+
+                accountNumber = accountNumField.getText().toString();
+                transitNumber = transitNumField.getText().toString();
+                institutionNumber = institutionNumField.getText().toString();
+                SIN = SINfield.getText().toString();
+                initializeBankAccount();
+                finish();
+                Intent y =new Intent(TutorCreationP2.this, SettingsActivity.class);
+                y.putExtra("userType",userType);
+                y.putExtra("userInfo",userInfo);
+                startActivity(y);
+
+            }
+        });
+
+
         baseRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("stripe_connected").child("update");
 
 
@@ -73,15 +129,9 @@ public class TutorCreationP2 extends AppCompatActivity {
                             legalMap.put("first_name",userInfo.getFirstName());
                             legalMap.put("last_name",userInfo.getLastName());
                             legalMap.put("type","individual");
-                            legalMap.put("personal_id_number","123456789");
+                           // legalMap.put("personal_id_number","123456789");
                             entireMap.put("legal_entity",legalMap);
-                            HashMap<String,Object> bankAcct = new HashMap<String, Object>();
-                            bankAcct.put("object","bank_account");
-                            bankAcct.put("account_number","000123456789");
-                            bankAcct.put("country","CA");
-                            bankAcct.put("currency","CAD");
-                            bankAcct.put("routing_number","11000-000");
-                            baseRef.child("external_account").setValue(bankAcct);
+
 
                             Calendar cal = Calendar.getInstance();
                             long date = cal.getTimeInMillis()/1000;
@@ -105,6 +155,19 @@ public class TutorCreationP2 extends AppCompatActivity {
                 }
             });
         }
+
+    }
+
+    private void initializeBankAccount(){
+        HashMap<String,Object> bankAcct = new HashMap<String, Object>();
+        bankAcct.put("object","bank_account");
+        bankAcct.put("account_number",accountNumber);
+        bankAcct.put("country","CA");
+        bankAcct.put("currency","CAD");
+        bankAcct.put("routing_number",transitNumber+"-"+institutionNumber);
+        baseRef.child("external_account").setValue(bankAcct);
+        baseRef.child("legal_entity").child("personal_id_number").setValue(SIN);
+        Toast.makeText(TutorCreationP2.this,"Bank account added.",Toast.LENGTH_SHORT).show();
 
     }
 }
