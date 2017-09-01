@@ -165,6 +165,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         if(selectedTutor.getProfileImage()!=null) {
             Glide.with(getApplicationContext())
                     .load(selectedTutor.getProfileImage())
+                    .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
         }

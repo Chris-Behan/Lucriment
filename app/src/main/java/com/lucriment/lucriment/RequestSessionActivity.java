@@ -132,6 +132,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         rateView.setText("$"+String.valueOf(tutor.getRate())+"/hr");
         Glide.with(getApplicationContext())
                 .load(selectedTutor.getProfileImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
 

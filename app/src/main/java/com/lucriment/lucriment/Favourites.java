@@ -175,6 +175,7 @@ public class Favourites extends BaseActivity {
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
             Glide.with(getApplicationContext())
                     .load(currentTutor.getProfileImage())
+                    .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
             // set image imageVIew.setImageResource();

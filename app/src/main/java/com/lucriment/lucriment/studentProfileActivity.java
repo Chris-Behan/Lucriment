@@ -128,6 +128,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
                 editAbout.setClickable(false);
                 editAbout.setFocusable(false);
                 editAbout.setFocusableInTouchMode(false);
+                userInfo.setHeadline(editAbout.getText().toString());
 
 
             } else {

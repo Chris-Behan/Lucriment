@@ -12,17 +12,145 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="8dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="8dp"
+
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
+
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="8dp"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
+    >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="  Bank Information"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:id="@+id/bankInformationLabel"
+            android:background="@color/colorPrimary"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/accountNumberLayout"
+            android:layout_below="@+id/bankInformationLabel">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Number"
+                android:id="@+id/accountNumberLabel"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Required"
+                android:id="@+id/accountNumber"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignRight="@+id/line2"
+                android:layout_alignEnd="@+id/line2" />
+            <View
+                android:id="@+id/line2"
+                android:layout_below="@id/accountNumberLabel"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:background="#c9c9c9"
+                android:padding="2dip" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/transitNumberLayout"
+            android:layout_below="@+id/accountNumberLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transit Number"
+                android:id="@+id/transitNumberLabel"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Required"
+                android:id="@+id/transitNumber"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:id="@+id/line3"
+                android:layout_below="@id/transitNumberLabel"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:background="#c9c9c9"
+                android:padding="2dip" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/institutionNumberLayout"
+            android:layout_below="@+id/transitNumberLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Institution Number"
+                android:id="@+id/institutionNumberLabel"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Required"
+                android:id="@+id/institutionNumber"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
+            <View
+                android:id="@+id/line4"
+                android:layout_below="@id/institutionNumberLabel"
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:background="#c9c9c9"
+                android:padding="2dip" />
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

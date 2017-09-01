@@ -95,10 +95,10 @@ public class PaymentActivity extends BaseActivity {
         });
 
         DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
-        HashMap<String,Object> charge = new HashMap<>();
+       /* HashMap<String,Object> charge = new HashMap<>();
         charge.put("amount",5000);
         charge.put("destination","acct_1Ax1b9Fng0ouUOMP");
-        transactionRef.push().setValue(charge);
+        transactionRef.push().setValue(charge); */
         transactionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
