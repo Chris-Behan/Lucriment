@@ -30,10 +30,9 @@
             android:id="@+id/educationField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
+
             android:hint="Postal Code"
+            android:layout_below="@+id/province"
             android:inputType="textPostalAddress" />
 
         <TextView
@@ -51,7 +50,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:layout_above="@+id/classSpinner"
+            android:layout_alignTop="@+id/taughtlist"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -60,9 +59,10 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:layout_above="@+id/taughtlist"
+            android:layout_alignTop="@+id/taughtlist"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="26dp" />
 
         <Button
             android:id="@+id/addClassButton"
@@ -71,7 +71,7 @@
 
             android:text="Add Class"
             android:visibility="visible"
-            android:layout_centerVertical="true"
+            android:layout_below="@+id/educationField"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:hint="Hourly Rate"
             android:inputType="number"
-            android:layout_below="@+id/educationField"
+
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
         <EditText
@@ -109,16 +109,35 @@
             android:hint="Phone Number"
             android:id="@+id/phoneNumber"
             />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/addressLine"
+            android:layout_below="@id/phoneNumber"
+            android:hint="Address"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addressLine"
+            android:id="@+id/city"
+            android:hint="City"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/province"
+            android:layout_below="@id/city"
+            android:hint="Province"/>
 
 
         <Button
             android:id="@+id/becomeTutor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Become a Tutor"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="21dp"
-            android:text="Become a Tutor" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

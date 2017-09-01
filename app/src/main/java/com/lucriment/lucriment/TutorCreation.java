@@ -64,9 +64,8 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private boolean addingClass = false;
     private Button addClassButton;
     private int year, month, day;
-    private EditText dateOfBirth, phoneNumber;
-
-
+    private EditText dateOfBirth, phoneNumber, address, city, province;
+    private String addressString, cityString, provinceString;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -83,6 +82,9 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         becomeTutor = (Button) findViewById(R.id.becomeTutor);
         dateOfBirth = (EditText) findViewById(R.id.dateOfBirth);
         phoneNumber = (EditText) findViewById(R.id.phoneNumber);
+        address = (EditText) findViewById(R.id.addressLine);
+        city = (EditText) findViewById(R.id.city);
+        province = (EditText) findViewById(R.id.province);
        // subjectSelector.setVisibility(View.VISIBLE);
     //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
@@ -298,6 +300,18 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             Toast.makeText(TutorCreation.this,"Please enter your phone number",Toast.LENGTH_SHORT).show();
             phoneNumber.requestFocus();
             return;
+        }else if (TextUtils.isEmpty(address.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter your address",Toast.LENGTH_SHORT).show();
+            address.requestFocus();
+            return;
+        }else if (TextUtils.isEmpty(city.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter your city",Toast.LENGTH_SHORT).show();
+            city.requestFocus();
+            return;
+        }else if (TextUtils.isEmpty(province.getText().toString())){
+            Toast.makeText(TutorCreation.this,"Please enter your province",Toast.LENGTH_SHORT).show();
+            province.requestFocus();
+            return;
         }
 
         rate = Integer.parseInt(rateField.getText().toString());
@@ -305,6 +319,9 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         email = firebaseAuth.getCurrentUser().getEmail();
         phoneNumberString = phoneNumber.getText().toString();
         userInfo.setUserType("tutor");
+        addressString = address.getText().toString();
+        cityString = city.getText().toString();
+        provinceString = province.getText().toString();
 
         if(dateOfBirth.getText().length()<3){
             Toast.makeText(TutorCreation.this,"Please enter date of birth",Toast.LENGTH_SHORT).show();
@@ -349,12 +366,16 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
 
         Toast.makeText(this, "You are now a Tutor!", Toast.LENGTH_SHORT).show();
         finish();
-        Intent y =new Intent(TutorCreation.this, SettingsActivity.class);
+        Intent y =new Intent(TutorCreation.this, TutorCreationP2.class);
         y.putExtra("day", day);
         y.putExtra("month",month);
         y.putExtra("year", year);
         y.putExtra("userInfo",userInfo);
         y.putExtra("userType",userType);
+        y.putExtra("address",addressString);
+        y.putExtra("city",cityString);
+        y.putExtra("province",provinceString);
+        y.putExtra("postalCode",tutorInfo.getPostalCode());
         startActivity(y);
 
 

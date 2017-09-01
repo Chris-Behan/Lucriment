@@ -48,8 +48,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private TwoItemField sOption4 = new TwoItemField("Share","");
     private boolean isTutor = false;
     private DatabaseReference myRef, baseRef;
-    private int year, month, day;
-    private boolean pushed = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,40 +61,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
-        if(getIntent().hasExtra("day")){
-            day = getIntent().getIntExtra("day",0);
-            month = getIntent().getIntExtra("month",0);
-            year = getIntent().getIntExtra("year",0);
-        }
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         baseRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("stripe_connected").child("update");
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("userType");
-        if(year!=0) {
-            DatabaseReference additionalInfoRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId());
-
-            additionalInfoRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild("stripe_connected")) {
-                        if(!pushed) {
-                            baseRef.child("legal_entity").child("dob").child("day").setValue(day);
-                            baseRef.child("legal_entity").child("dob").child("month").setValue(month);
-                            baseRef.child("legal_entity").child("dob").child("year").setValue(year);
-                            baseRef.child("legal_entity").child("first_name").setValue(userInfo.getFirstName());
-                            baseRef.child("legal_entity").child("last_name").setValue(userInfo.getLastName());
-                            baseRef.child("legal_entity").child("type").setValue("individual");
-                            pushed = true;
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
 
         DatabaseReference checkT = FirebaseDatabase.getInstance().getReference().child("tutors");
         checkT.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -193,7 +163,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
                     if (position == 1) {
                         finish();
-                        Intent i = new Intent(SettingsActivity.this, TutorPayoutActivity.class);
+                        Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         startActivity(i);
@@ -226,7 +196,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     }
                     if (position == 1) {
                         finish();
-                        Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
+                        Intent i = new Intent(SettingsActivity.this, TutorPayoutActivity.class);
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         startActivity(i);
