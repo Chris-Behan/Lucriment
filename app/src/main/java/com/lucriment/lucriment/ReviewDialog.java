@@ -87,6 +87,7 @@ public class ReviewDialog extends DialogFragment{
         //  final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
         final EditText reviewField = (EditText) view.findViewById(R.id.editText);
         final RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar2);
+        ratingBar.setStepSize(1);
         builder.setView(view)
 
                 // Add action buttons

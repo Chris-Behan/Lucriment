@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.icu.util.TimeZone;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -292,6 +293,9 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
             TextView timeSlotText = (TextView) itemView.findViewById(R.id.taughtLabel);
             timeSlotText.setText(timeslot.returnFromTime()+" - " +timeslot.returnToTime());
+            if(customAvas.isEmpty()){
+                deleteButton.setVisibility(View.INVISIBLE);
+            }
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -374,8 +378,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
                         Date todaysDate = new Date();
                         todaysDate.setTime(selectedDay);
-                        Calendar cal = Calendar.getInstance();
-                        Calendar cal2 = Calendar.getInstance();
+                        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         cal2.setTime(todaysDate);
                         cal.setTime(todaysDate);
                     if(tif2.getData().equals("Select")||tif2.getData().length()<2){
@@ -388,8 +392,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         cal.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif2.getData().toString()));
                         cal2.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif3.getData().toString()));
                         TimeInterval timeInterval = new TimeInterval(cal.getTimeInMillis(),cal2.getTimeInMillis());
-                        Calendar cal3 = Calendar.getInstance();
-                        Calendar cal4 = Calendar.getInstance();
+                        Calendar cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        Calendar cal4 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                        // cal4.setTime(todaysDate);
                         //cal3.setTime(todaysDate);
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -417,6 +421,10 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                             }else if(testInterval.getTo()>defaultInterval.getFrom()&&testInterval.getTo()<defaultInterval.getTo()){
                                 Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
                                 return;
+                            }else if(testInterval.getFrom()<=defaultInterval.getFrom()&&testInterval.getTo()>=defaultInterval.getTo()){
+                                Toast.makeText(getApplicationContext(),"The time interval you have entered conflicts with an existing time interval",Toast.LENGTH_LONG).show();
+                                return;
+
                             }
                             //COMPARE WITH CUSTOM AVAS
                             if(timeInterval.getFrom()>defaultInterval.getFrom()&&timeInterval.getFrom()<defaultInterval.getTo()){
@@ -442,8 +450,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
                     if(!defaultAvas.isEmpty()){
 
-                        Calendar re1 = Calendar.getInstance();
-                        Calendar re2 = Calendar.getInstance();
+                        Calendar re1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        Calendar re2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
                         re1.setTimeInMillis(selectedDay);
                         re2.setTimeInMillis(selectedDay);

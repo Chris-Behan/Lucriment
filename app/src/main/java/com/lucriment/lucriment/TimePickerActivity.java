@@ -676,7 +676,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         }else{
             dayS = day+"";
         }
-        if(month<10){
+        if(month<9){
             monthS = "0"+(month+1);
         }else{
             monthS = (month+1)+"";
@@ -1081,84 +1081,7 @@ public class TimePickerActivity extends AppCompatActivity  {
         processStartAvailability(ava);
         todaysAvailability.add(ava);
 
-        /*
-        TimeInterval ti = ava.gettime();
-        boolean changed = false;
-        boolean split = true;
-        for(TimeInterval bookedTi:bookedSessions){
-            if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
-                if((bookedTi.getFrom()-ti.getFrom())>=3600000){
-                    TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
 
-                    Availability firstAva = new Availability(firstInterval,"");
-                    processStartAvailability(firstAva);
-                    todaysAvailability.add(firstAva);
-                    split = false;
-
-                }
-
-                if(ti.getTo()-bookedTi.getTo()>=3600000){
-                    TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
-
-                    Availability secondAva = new Availability(firstInterval,"");
-                    processStartAvailability(secondAva);
-                    todaysAvailability.add(secondAva);
-                    split = false;
-
-                }
-                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
-                Availability deletedAva = new Availability(deleted,"");
-                processDeletedAvailability(deletedAva);
-                if(split){
-                    processStartAvailability(ava);
-                    todaysAvailability.add(ava);
-                }
-                changed = true;
-            }else if(bookedTi.getFrom()>=ti.getFrom()&&bookedTi.getFrom()<=ti.getTo()){
-                if(ti.getFrom()-bookedTi.getFrom()>=3600000){
-                    TimeInterval firstInterval = new TimeInterval(ti.getFrom(),bookedTi.getFrom());
-                    Availability secondAva = new Availability(firstInterval,"");
-                    processStartAvailability(secondAva);
-                    todaysAvailability.add(secondAva);
-                    split = false;
-
-                }
-                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
-                Availability deletedAva = new Availability(deleted,"");
-                processDeletedAvailability(deletedAva);
-                if(split){
-                    processStartAvailability(ava);
-                    todaysAvailability.add(ava);
-                }
-                changed = true;
-            }else if(bookedTi.getTo()>=ti.getFrom()&&bookedTi.getTo()<=ti.getTo()){
-                if(ti.getTo()-bookedTi.getTo()>=3600000){
-                    TimeInterval firstInterval = new TimeInterval(bookedTi.getTo(),ti.getTo());
-                    Availability secondAva = new Availability(firstInterval,"");
-                    processStartAvailability(secondAva);
-                    todaysAvailability.add(secondAva);
-                    split = false;
-
-                }
-                TimeInterval deleted = new TimeInterval(bookedTi.getFrom(),bookedTi.getTo());
-                Availability deletedAva = new Availability(deleted,"");
-                processDeletedAvailability(deletedAva);
-                if(split){
-                    processStartAvailability(ava);
-                    todaysAvailability.add(ava);
-                }
-                changed = true;
-            }
-
-        }
-
-            if(!changed) {
-                processStartAvailability(ava);
-                todaysAvailability.add(ava);
-            }
-            sortItems();
-
-            */
     }
 
     private int hoursAndMinutesToMinutes(String timeString){

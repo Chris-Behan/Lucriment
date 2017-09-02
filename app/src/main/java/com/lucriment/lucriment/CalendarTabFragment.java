@@ -63,6 +63,8 @@ public class CalendarTabFragment extends Fragment {
     private ArrayList<String> customAvaTracker = new ArrayList<>();
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private String selectedDayOfWeek;
+    private long clickedTime;
+    private HashMap<String, ArrayList<TimeInterval>> customMap;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
@@ -130,8 +132,10 @@ public class CalendarTabFragment extends Fragment {
             public void onDayClick(Date dateClicked) {
                 currentSelectedDate = dateClicked;
                 Date date = dateClicked;
+
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
+                clickedTime = cal.getTimeInMillis();
                 SimpleDateFormat getDayOfWeek = new SimpleDateFormat("EEEE");
                 selectedDayOfWeek = getDayOfWeek.format(date);
                 int year = cal.get(Calendar.YEAR);
@@ -154,16 +158,20 @@ public class CalendarTabFragment extends Fragment {
         customAvailability.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                customMap = new HashMap<String, ArrayList<TimeInterval>>();
                 ArrayList<TimeInterval> test4 = new ArrayList<TimeInterval>();
                // customAvailabilities = (HashMap<String, Map<String,TimeInterval>>) dataSnapshot.getValue();
                 for(DataSnapshot customSnap:dataSnapshot.getChildren()){
+                    ArrayList<TimeInterval> availabilities = new ArrayList<TimeInterval>();
                     for(DataSnapshot customSnap2:customSnap.getChildren()) {
                         TimeInterval ti4 = customSnap2.getValue(TimeInterval.class);
+                        availabilities.add(customSnap2.getValue(TimeInterval.class));
                         customAvailabilities.add(ti4);
                         customAvaTracker.add(customSnap.getKey());
                         Event customEvent = new Event(Color.GREEN, ti4.getFrom(),"Available this day");
                         cv.addEvent(customEvent,true);
                     }
+                    customMap.put(customSnap.getKey(),availabilities);
                 }
             }
 
@@ -417,7 +425,7 @@ public class CalendarTabFragment extends Fragment {
         } else {
             dayS = day + "";
         }
-        if (month < 10) {
+        if (month < 9) {
             monthS = "0" + (month + 1);
         } else {
             monthS = (month + 1) + "";
@@ -445,7 +453,7 @@ public class CalendarTabFragment extends Fragment {
             }
         }
 
-        if(customAvailabilities.isEmpty()){
+        if(customMap.get(clickedTime+"")==null){
         if (dayOfWeek.equals("Monday")) {
             for (TimeInterval timeInterval : mondayAva) {
                 //GET FROM TIME

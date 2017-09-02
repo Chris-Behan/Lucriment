@@ -79,12 +79,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
-    private Button googleButton;
+    private Button googleButton, fakeButton;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseAuth.AuthStateListener testListener;
     private CallbackManager mCallbackManager;
     private DatabaseReference databaseReference;
     private InputMethodManager imm;
+    private LoginButton FacebookLoginButton;
+
 
 
 
@@ -100,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //initialize database
         //   databaseReference = FirebaseDatabase.getInstance().getReference();
         //  databaseReference.child()
-
+       // LoginManager.getInstance().logOut();
 
         // String userEmail = "Chris Behan";
         authStateListener = new FirebaseAuth.AuthStateListener(){
@@ -144,19 +146,46 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInpassword = (EditText) findViewById(R.id.password);
         forgotPassword = (TextView) findViewById(R.id.forgotPassword);
         googleButton = (Button) findViewById(R.id.googleButton);
+        fakeButton = (Button) findViewById(R.id.fakeButton);
         progressDialog = new ProgressDialog(this);
 
 
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        final Button FacebookLoginButton = (Button) findViewById(R.id.facebookButton);
+        FacebookLoginButton = (LoginButton) findViewById(R.id.facebookButton);
+        FacebookLoginButton.setText("sign in with facebook");
 
+      //  FacebookLoginButton.setOnClickListener(this);
+        FacebookLoginButton.setReadPermissions("email", "public_profile");
+        FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+                Toast.makeText(LoginActivity.this,"Success",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(LoginActivity.this,"Login Failure",Toast.LENGTH_SHORT);
+                // ...
+            }
+        });
         // add listiners
         signInButton.setOnClickListener(this);
 //        signUpTextView.setOnClickListener(this);
         googleButton.setOnClickListener(this);
         forgotPassword.setOnClickListener(this);
+        fakeButton.setOnClickListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -184,12 +213,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            Toast.makeText(LoginActivity.this, "Success",
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "The email associated with this facebook account is already registered.",
                                     Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
+
                             //updateUI(null);
                         }
 
@@ -249,6 +284,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             case R.id.forgotPassword:
                 finish();
                 startActivity(new Intent(getApplicationContext(), ResetPasswordActivity.class));
+                break;
+            case R.id.fakeButton:
+                FacebookLoginButton.performClick();
 
         }
 
@@ -258,6 +296,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        progressDialog.setMessage("Signing in...");
+        progressDialog.show();
     }
     private void callthis(){
         Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -278,6 +318,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
@@ -310,12 +351,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            finish();
+                            progressDialog.dismiss();
+                            startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
+
                             //  updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
+
+
+
                             //updateUI(null);
                         }
 

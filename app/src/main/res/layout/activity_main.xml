@@ -28,21 +28,33 @@
         tools:layout_constraintTop_creator="1">
 
         <Button
-            android:id="@+id/facebookButton"
-            android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
             android:background="@drawable/rounded_button"
             android:backgroundTint="@color/com_facebook_blue"
             android:text="Sign up with facebook"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:id="@+id/fakeButton"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:text="Sign in with facebook"
+            android:textColor="#ffffff"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/orText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/facebookButton"
+            android:layout_below="@id/fakeButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:text="or" />

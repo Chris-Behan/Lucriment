@@ -18,7 +18,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -29,7 +35,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -46,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseAuth firebaseAuth;
     private InputMethodManager imm;
     private DatabaseReference Ref;
-    private Button googleButton;
+    private Button googleButton, fakeButton;
+    private LoginButton FacebookLoginButton;
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -96,11 +107,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastNameInputLayout = (TextInputLayout) findViewById(R.id.lastNameInputLayout);
         emailInputLayout = (TextInputLayout) findViewById(R.id.emailInputLayout);
         passwordInputLayout = (TextInputLayout) findViewById(R.id.passwordLayout);
+        fakeButton = (Button) findViewById(R.id.fakeButton);
+        FacebookLoginButton = (LoginButton) findViewById(R.id.facebookButton);
+        FacebookLoginButton.setText("sign in with facebook");
+
+        //  FacebookLoginButton.setOnClickListener(this);
+        mCallbackManager = CallbackManager.Factory.create();
+        FacebookLoginButton.setReadPermissions("email", "public_profile");
+        FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+                Toast.makeText(MainActivity.this,"Success",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(MainActivity.this,"Login Failure",Toast.LENGTH_SHORT);
+                // ...
+            }
+        });
+
 
         Ref = FirebaseDatabase.getInstance().getReference().child("users");
         // add listener to sign up button and sign in button
         signUpButton.setOnClickListener(this);
         googleButton.setOnClickListener(this);
+        fakeButton.setOnClickListener(this);
 
     }
 
@@ -112,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(v == googleButton){
             signIn();
+        }
+        if(v == fakeButton) {
+            FacebookLoginButton.performClick();
         }
 
 
@@ -191,7 +236,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
                         }else{
                             progressDialog.dismiss();
-                            Toast.makeText(MainActivity.this, "Registration Failed, please try again", Toast.LENGTH_SHORT).show();
+                            String a = task.getException().toString();
+                            if(!task.isSuccessful()) {
+                                try {
+                                    throw task.getException();
+                                } catch(FirebaseAuthWeakPasswordException e) {
+                                   // mTxtPassword.setError(getString(R.string.error_weak_password));
+                                 //   mTxtPassword.requestFocus();
+                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                 //   mTxtEmail.setError(getString(R.string.error_invalid_email));
+                                 //   mTxtEmail.requestFocus();
+                                } catch(FirebaseAuthUserCollisionException e) {
+                                    Toast.makeText(MainActivity.this, "The email you have entered is already in use.", Toast.LENGTH_LONG).show();
+
+                                    //   mTxtEmail.setError(getString(R.string.error_user_exists));
+                                 //   mTxtEmail.requestFocus();
+                                } catch(Exception e) {
+                                    Log.e(TAG, e.getMessage());
+                                }
+                            }
                         }
                     }
                 });
@@ -221,6 +284,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void signIn(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
+        progressDialog.setMessage("Signing up...");
+        progressDialog.show();
     }
 
     @Override
@@ -245,6 +310,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+    //handle facebook login
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            Toast.makeText(MainActivity.this, "Success",
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(new Intent(MainActivity.this, TutorListActivity.class));
+                            // updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "The email associated with this facebook account is already registered.",
+                                    Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
+
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
@@ -258,6 +355,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            finish();
+                            startActivity(new Intent(MainActivity.this, TutorListActivity.class));
+                            progressDialog.dismiss();
+
                             //  updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

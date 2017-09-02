@@ -54,11 +54,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 progressDialog.dismiss();
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(ResetPasswordActivity.this,"Reset email send.",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ResetPasswordActivity.this,"Reset email sent.",Toast.LENGTH_LONG).show();
                                     finish();
                                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 }else{
-                                    Toast.makeText(ResetPasswordActivity.this,"The email you have entered is not in our system",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ResetPasswordActivity.this,"The email you have entered is not in our system",Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

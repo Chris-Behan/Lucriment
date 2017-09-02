@@ -190,12 +190,15 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 ratingText.setText(ratingAvg + "");
             }
         }else{
-            Rating rating = (tutorInfo.getRating());
-            double ratingAvg = (rating.getTotalScore()/rating.getNumberOfReviews());
-            DecimalFormat df = new DecimalFormat("#.#");
-            ratingAvg = Double.valueOf(df.format(ratingAvg));
 
-            ratingText.setText(ratingAvg+"");
+            Rating rating = (tutorInfo.getRating());
+            if(rating!=null) {
+                double ratingAvg = (rating.getTotalScore() / rating.getNumberOfReviews());
+                DecimalFormat df = new DecimalFormat("#.#");
+                ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+                ratingText.setText(ratingAvg + "");
+            }
         }
 
     }
