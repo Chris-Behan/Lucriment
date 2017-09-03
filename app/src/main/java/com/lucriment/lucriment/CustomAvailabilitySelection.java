@@ -198,16 +198,28 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
         if(settingFrom) {
-            tif2.setData(hourOfDay + ":" + minute);
+            if(minute<10){
+                String min = "0"+minute;
+                tif2.setData(hourOfDay + ":" + min);
+            }else {
+                tif2.setData(hourOfDay + ":" + minute);
+            }
             adapter.notifyDataSetChanged();
+            tif3.setData("");
             settingFrom = false;
 //            TimeInterval ti =selectedTime.get(0);
             //  selectedTime.get(0) = new TimeInterval(2,3);
             //  tif1.setData("");
         }
         if(settingTo){
-            tif3.setData(hourOfDay+":"+minute);
+            if(minute<10){
+                String min = "0"+minute;
+                tif3.setData(hourOfDay + ":" + min);
+            }else {
+                tif3.setData(hourOfDay + ":" + minute);
+            }
             adapter.notifyDataSetChanged();
             settingTo = false;
         }
@@ -278,6 +290,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
 
         // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
@@ -295,6 +308,9 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             timeSlotText.setText(timeslot.returnFromTime()+" - " +timeslot.returnToTime());
             if(customAvas.isEmpty()){
                 deleteButton.setVisibility(View.INVISIBLE);
+                SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                timeSlotText.setText(sdf.format(timeslot.getFrom())+" - "+sdf.format(timeslot.getTo()));
             }
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -385,7 +401,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     if(tif2.getData().equals("Select")||tif2.getData().length()<2){
                         Toast.makeText(getApplicationContext(),"Please enter From time",Toast.LENGTH_LONG).show();
                         return;
-                    }else  if(tif3.getData().equals("Select")||tif2.getData().length()<2){
+                    }else  if(tif3.getData().equals("Select")||tif3.getData().length()<2){
                         Toast.makeText(getApplicationContext(),"Please enter To time",Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -458,6 +474,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
 
                         for(TimeInterval ti: defaultAvas){
                             SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
+                            sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String fromString = sdf3.format(ti.getFrom());
                             String toString = sdf3.format(ti.getTo());
                             re1.add(Calendar.MINUTE,hoursAndMinutesToMinutes(fromString));

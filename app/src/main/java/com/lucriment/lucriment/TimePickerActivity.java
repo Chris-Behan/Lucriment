@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.icu.util.TimeZone;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.RequiresApi;
@@ -694,7 +695,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Monday")) {
                 for (TimeInterval timeInterval : mondayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -716,7 +717,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -748,7 +749,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Tuesday")) {
                 for (TimeInterval timeInterval : tuesdayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -770,7 +771,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -802,7 +803,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Wednesday")) {
                 for (TimeInterval timeInterval : wednesdayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -824,7 +825,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -856,7 +857,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Thursday")) {
                 for (TimeInterval timeInterval : thursdayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -878,7 +879,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -910,7 +911,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Friday")) {
                 for (TimeInterval timeInterval : fridayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -932,7 +933,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -964,7 +965,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Saturday")) {
                 for (TimeInterval timeInterval : saturdayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -986,7 +987,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());
@@ -1018,7 +1019,7 @@ public class TimePickerActivity extends AppCompatActivity  {
             if (dayOfWeek.equals("Sunday")) {
                 for (TimeInterval timeInterval : sundayAva) {
                     //GET FROM TIME
-                    Calendar c2 = Calendar.getInstance();
+                    Calendar c2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c2.setTimeInMillis(timeInterval.getFrom());
                     int fromhour = c2.get(Calendar.HOUR_OF_DAY);
                     c2.setTimeInMillis(timeInterval.getFrom());
@@ -1040,7 +1041,7 @@ public class TimePickerActivity extends AppCompatActivity  {
                     Date finalFromDate = fsdf.parse(year + "" + dayS + "" + monthS + "" + fhourS + "" + fminuteS);
                     long fromTime = finalFromDate.getTime();
                     //GET TO TIME
-                    Calendar c3 = Calendar.getInstance();
+                    Calendar c3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     c3.setTimeInMillis(timeInterval.getTo());
                     int tohour = c3.get(Calendar.HOUR_OF_DAY);
                     c3.setTimeInMillis(timeInterval.getTo());

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -80,8 +81,8 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
         itemList.add(tif1);
         if(getIntent().hasExtra("day")) {
             time = getIntent().getParcelableExtra("day");
-            tif2.setData(time.returnFromTime());
-            tif3.setData(time.returnToTime());
+           // tif2.setData(time.returnFromTime());
+           // tif3.setData(time.returnToTime());
         }
         itemList.add(tif2);
         itemList.add(tif3);
@@ -153,15 +154,26 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         if(settingFrom) {
-            tif2.setData(hourOfDay + ":" + minute);
+            if(minute<10){
+                String min = "0"+minute;
+                tif2.setData(hourOfDay + ":" + min);
+            }else {
+                tif2.setData(hourOfDay + ":" + minute);
+            }
             adapter.notifyDataSetChanged();
+            tif3.setData("");
             settingFrom = false;
 //            TimeInterval ti =selectedTime.get(0);
-          //  selectedTime.get(0) = new TimeInterval(2,3);
-          //  tif1.setData("");
+            //  selectedTime.get(0) = new TimeInterval(2,3);
+            //  tif1.setData("");
         }
         if(settingTo){
-            tif3.setData(hourOfDay+":"+minute);
+            if(minute<10){
+                String min = "0"+minute;
+                tif3.setData(hourOfDay + ":" + min);
+            }else {
+                tif3.setData(hourOfDay + ":" + minute);
+            }
             adapter.notifyDataSetChanged();
             settingTo = false;
         }
@@ -230,6 +242,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
 
 
         // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
@@ -244,7 +257,10 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
             //fill the view
 
             TextView timeSlotText = (TextView) itemView.findViewById(R.id.taughtLabel);
-            timeSlotText.setText(timeslot.returnFromTime()+" - " +timeslot.returnToTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String c =(sdf.format(timeslot.getFrom())+" - "+sdf.format(timeslot.getTo()));
+            timeSlotText.setText(c);
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -310,6 +326,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
 
                 if(position ==3){
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                     if(tif2.getData().equals("Select")||tif2.getData().length()<2){
                         Toast.makeText(getApplicationContext(),"Please enter From time",Toast.LENGTH_LONG).show();
                         return;
@@ -321,6 +338,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
                     try {
                         Date fromDate = sdf.parse(tif2.getData().toString());
                         Date toDate = sdf.parse(tif3.getData().toString());
+
                         long fromTime = fromDate.getTime();
                         long toTime = toDate.getTime();
                         TimeInterval timeInterval = new TimeInterval(fromTime,toTime);

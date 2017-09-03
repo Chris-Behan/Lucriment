@@ -1,7 +1,9 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.icu.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -103,7 +105,10 @@ public class DefaultTabFragment extends Fragment {
                           mondayTime.add(tif);
                             Calendar time = Calendar.getInstance();
                             TimeInterval t1 = mondayTime.get(0);
-                            String c = t1.returnFromTime()+"-"+t1.returnToTime();
+                      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                      sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                      String c =(sdf.format(t1.getFrom())+" - "+sdf.format(t1.getTo()));
+                           // String c = t1.returnFromTime()+"-"+t1.returnToTime();
                             Monday.setData(c);
                      // itemList.add(tif);
                   }
