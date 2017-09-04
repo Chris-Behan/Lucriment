@@ -69,7 +69,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Messages");
         if(userType.equals("tutor")) {
              bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
                 bottomNavigationView.setVisibility(View.VISIBLE);
@@ -366,12 +366,6 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                         // Unable to retrieve the users.
                     }
                 });
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
-        startActivity(new Intent(ViewMessagesActivity.this, ProfileActivity.class));
-        return true;
     }
 
 

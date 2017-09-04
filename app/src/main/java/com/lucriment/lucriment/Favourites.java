@@ -197,7 +197,7 @@ public class Favourites extends BaseActivity {
             }
 
             TextView titleText = (TextView) itemView.findViewById(R.id.title);
-            titleText.setText(currentTutor.getAbout());
+            titleText.setText(currentTutor.getHeadline());
 
             Button bookMark = (Button) itemView.findViewById(R.id.fbookMark);
             bookMark.setSelected(true);

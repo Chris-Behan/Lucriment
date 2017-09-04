@@ -130,6 +130,12 @@ public class TutorInfo implements Parcelable {
         String[] arr = text.split(",");
         return arr;
     }
+
+    public UserInfo generateUserInfo(){
+        UserInfo gU = new UserInfo(getFullName(),getLastName(),getFirstName(),getId(),getEmail(),getUserType(),getHeadline());
+       return gU;
+    }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }

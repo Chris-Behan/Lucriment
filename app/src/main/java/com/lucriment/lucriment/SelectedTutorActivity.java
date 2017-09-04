@@ -125,15 +125,16 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         // educationField = (TextView) findViewById(R.id.tutorEducationFIeld);
         aboutField = (TextView) findViewById(R.id.tutorAboutField);
         rateField = (TextView) findViewById(R.id.browseRate);
-        contactButton = (Button) findViewById(R.id.contactButton);
+        contactButton = (Button) findViewById(R.id.leftButton);
         imageView = (ImageView) findViewById(R.id.ProfileImage);
         classesField = (TextView) findViewById(R.id.classesField);
-        requestButton = (Button) findViewById(R.id.requestButton);
+        requestButton = (Button) findViewById(R.id.rightButton);
         ratingText = (TextView) findViewById(R.id.rating);
         bookMarkButton = (Button) findViewById(R.id.bookMark);
         locationText = (TextView) findViewById(R.id.cityText);
         headlineText = (TextView) findViewById(R.id.title);
         optionsList = (ListView) findViewById(R.id.optionsList);
+
 
         options.add("Read all Reviews");
         options.add("Availability Calendar");
@@ -162,6 +163,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
         requestButton.setOnClickListener(this);
         bookMarkButton.setOnClickListener(this);
+        contactButton.setOnClickListener(this);
         if(selectedTutor.getProfileImage()!=null) {
             Glide.with(getApplicationContext())
                     .load(selectedTutor.getProfileImage())
@@ -324,27 +326,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         }
 
     }
-/*
-    @Override
-    int getContentViewId() {
-        return R.layout.demolayout;
-    }
 
-    @Override
-    int getNavigationMenuItemId() {
-        return R.id.search;
-    }
-
-    @Override
-    String getUserType() {
-        return userType;
-    }
-
-    @Override
-    UserInfo getUserInformation() {
-        return userInfo;
-    }
-*/
     @TargetApi(Build.VERSION_CODES.N)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void  processReviews(){
@@ -418,17 +400,21 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             startActivity(new Intent(SelectedTutorActivity.this, TutorListActivity.class));
         }
         if(v == contactButton){
-            DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId());
-            myChats = (myChats + selectedTutor.getId().toString());
-            chatRoot.child("chatsWith").setValue(myChats);
-            DatabaseReference chatRoot2 = FirebaseDatabase.getInstance().getReference().child("users").child(selectedTutor.getId());
-            myChats2 = (myChats2 + FirebaseAuth.getInstance().getCurrentUser().getUid().toString());
-            chatRoot2.child("chatsWith").setValue(myChats2);
-            Intent i = new Intent(SelectedTutorActivity.this, ViewMessagesActivity.class);
-            i.putExtra("tutorID", selectedTutor.getId());
-            i.putExtra("userType", userType);
-            i.putExtra("userInfo",userInfo);
-            startActivity(i);
+
+
+            Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
+            UserInfo selectedUser;
+
+            selectedUser = selectedTutor.generateUserInfo();
+            // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
+            //       myID = tutorId;
+            //  }
+            intent.putExtra("user", selectedUser);
+            intent.putExtra("userType", userType);
+            intent.putExtra("userInfo",userInfo);
+            // intent.putExtra("userName", userName);
+            startActivity(intent);
+
         }
         if(v == requestButton) {
 
