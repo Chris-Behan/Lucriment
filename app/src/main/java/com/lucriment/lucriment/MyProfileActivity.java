@@ -302,7 +302,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             }
         }
 
-        personalName.setText(firebaseAuth.getCurrentUser().getDisplayName());
+        personalName.setText(userInfo.getFullName());
         if(userInfo!=null) {
 //            educationField.setText(userInfo.getTitle());
         }

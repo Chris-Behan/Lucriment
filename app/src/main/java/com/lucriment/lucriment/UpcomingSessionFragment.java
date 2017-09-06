@@ -1,6 +1,9 @@
 package com.lucriment.lucriment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -12,11 +15,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +57,8 @@ public class UpcomingSessionFragment extends Fragment {
     private ListView requestListView, bookedListView;
     private ArrayList<String> requestSessionKeys = new ArrayList<>();
     private ArrayList<String> bookedSessionKeys = new ArrayList<>();
+    private ProgressBar progressBar;
+    private RelativeLayout relativeLayout;
 
 
 
@@ -59,9 +67,14 @@ public class UpcomingSessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.upcoming_session_tab, container,false);
+
+
         Bundle args = getArguments();
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
+        progressBar = (ProgressBar) view.findViewById(R.id.marker_progress);
+        relativeLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+
 
 
         //GET SESSION LIST
@@ -146,8 +159,16 @@ public class UpcomingSessionFragment extends Fragment {
         }
         if(requestListView!=null) {
             requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ProgressDialog progDialog = ProgressDialog.show( getContext(), null, null, false, true );
+                    progDialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                    progDialog.setContentView( R.layout.progress_bar_circle );
+                   // progressBar.setVisibility(View.VISIBLE);
+                    //relativeLayout.setAlpha(200);
+                  //  view.getForeground().setAlpha(220);
+                      //  relativeLayout.setVisibility(View.VISIBLE);
                     SessionRequest selectedSession = requestList.get(position);
                     // TutorInfo selectedTutor1 = tutors.get(position);
                     // selectedTutor1 = TutorListActivity.this.selectedTutor;
@@ -176,7 +197,7 @@ public class UpcomingSessionFragment extends Fragment {
                         i.putExtra("requestKey", key);
 
                         //  i.putExtra("selectedTutor", selectedTutor1);
-
+                        //progressBar.setVisibility(View.GONE);
                         startActivity(i);
 
                     }
@@ -198,7 +219,11 @@ public class UpcomingSessionFragment extends Fragment {
         bookedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                progressBar.setVisibility(View.VISIBLE);
                 SessionRequest selectedSession = bookedSessions.get(position);
+                ProgressDialog progDialog = ProgressDialog.show( getContext(), null, null, false, true );
+                progDialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                progDialog.setContentView( R.layout.progress_bar_circle );
                 // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(getApplicationContext(), BookedDetailsActivity.class);
@@ -226,7 +251,7 @@ public class UpcomingSessionFragment extends Fragment {
                     i.putExtra("requestKey", key);
 
                     //  i.putExtra("selectedTutor", selectedTutor1);
-
+                    progressBar.setVisibility(View.GONE);
                     startActivity(i);
 
                 }

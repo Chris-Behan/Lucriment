@@ -68,6 +68,7 @@ public class TutorListActivity extends BaseActivity {
         setContentView(R.layout.activity_tutor_list);
         tutorAddresses = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
+
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
