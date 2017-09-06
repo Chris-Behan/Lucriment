@@ -245,6 +245,17 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
 
         if(v == requestButton){
+            if(field1.getData().isEmpty()||field1.getData().equals("Select")){
+                Toast.makeText(RequestSessionActivity.this, "Please select a subject",Toast.LENGTH_LONG).show();
+                return;
+            }
+            else if(field2.getData().isEmpty()||field2.getData().equals("Select")){
+                Toast.makeText(RequestSessionActivity.this, "Please select a location",Toast.LENGTH_LONG).show();
+                return;
+            }else if(field3.getData().isEmpty()||field3.getData().equals("Select")){
+                Toast.makeText(RequestSessionActivity.this, "Please select a time",Toast.LENGTH_LONG).show();
+                return;
+            }
 
             SessionRequest sessionRequest = new SessionRequest(selectedLocation,tutor.getId(),tutor.getFullName(),user.getUid(),userInfo.getFullName(), field1.getData(),sessioncost,requestedTime );
             sessionReqList.add(sessionRequest);

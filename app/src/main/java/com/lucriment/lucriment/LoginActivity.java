@@ -215,6 +215,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             finish();
                             startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
                             // updateUI(user);
@@ -325,6 +326,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         } else{
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
+            progressDialog.setMessage("Signing up...");
+            progressDialog.show();
         }
 
     }

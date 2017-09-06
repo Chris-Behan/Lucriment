@@ -247,6 +247,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
             final ImageView imageView = (ImageView)itemView.findViewById(R.id.imageView5);
             Glide.with(getApplicationContext())
                     .load(currentTutor.getProfileImage())
+                    .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                     .apply(RequestOptions.circleCropTransform())
                     .into(imageView);
             // set image imageVIew.setImageResource();

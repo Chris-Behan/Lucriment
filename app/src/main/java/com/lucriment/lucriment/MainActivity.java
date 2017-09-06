@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // check if user is already logged in
         if(firebaseAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
         }
         //create progress bar
         progressDialog = new ProgressDialog(this);
@@ -307,6 +307,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else{
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
+            progressDialog.setMessage("Signing up...");
+            progressDialog.show();
         }
 
     }
@@ -325,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(MainActivity.this, "Success",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             finish();
                             startActivity(new Intent(MainActivity.this, TutorListActivity.class));
                             // updateUI(user);

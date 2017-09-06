@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.LightingColorFilter;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,6 +47,10 @@ public class Favourites extends BaseActivity {
     private double tutorScore;
     private ArrayList<String> favouritesLocations = new ArrayList<>();
     private ProgressDialog progressDialog;
+    private Button undoButton;
+    private ArrayAdapter<TutorInfo> adapter;
+    private TutorInfo removedTutor;
+    private boolean undo = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,8 @@ public class Favourites extends BaseActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        undoButton = (Button) findViewById(R.id.undoButton);
+
         //GET INTENTS
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -71,7 +79,16 @@ public class Favourites extends BaseActivity {
         progressDialog.show();
         getFavourites();
 
-
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                undo = false;
+                tutors.add(removedTutor);
+                favourites.add(removedTutor.getId());
+                adapter.notifyDataSetChanged();
+                undoButton.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -120,6 +137,7 @@ public class Favourites extends BaseActivity {
         tutorRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                tutors.clear();
                 for(DataSnapshot t: dataSnapshot.getChildren()){
                     TutorInfo currentTutor = t.getValue(TutorInfo.class);
 
@@ -168,7 +186,7 @@ public class Favourites extends BaseActivity {
                 itemView = getLayoutInflater().inflate(R.layout.favourite_profile_layout, parent, false);
             }
             //Find tutor to work with
-            TutorInfo currentTutor = tutors.get(position);
+            final TutorInfo currentTutor = tutors.get(position);
 
 
             //fill the view
@@ -206,7 +224,13 @@ public class Favourites extends BaseActivity {
             bookMark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(Favourites.this, "it worked!", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(Favourites.this, currentTutor.getFullName()+" Removed from favourites", Toast.LENGTH_SHORT).show();
+                    undo = true;
+                    beginRemoval(currentTutor);
+
+
+
                 }
             });
 
@@ -217,6 +241,24 @@ public class Favourites extends BaseActivity {
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+    }
+    private void beginRemoval(TutorInfo tutor){
+        tutors.remove(tutor);
+        favourites.remove(tutor.getId());
+        removedTutor = tutor;
+        adapter.notifyDataSetChanged();
+        undoButton.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               undoButton.setVisibility(View.INVISIBLE);
+                if(undo) {
+                    databaseReference.setValue(favourites);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }, 4000);
+
     }
     //REGISTER CLICKS
     private void registerFavouriteClicks(){
@@ -248,7 +290,7 @@ public class Favourites extends BaseActivity {
 
     //POPULATE TUTOR LIST
     private void populateTutorList(){
-        ArrayAdapter<TutorInfo> adapter = new Favourites.myListAdapter();
+        adapter = new Favourites.myListAdapter();
         ListView list = (ListView) findViewById(R.id.tView);
         list.setAdapter(adapter);
         registerFavouriteClicks();
