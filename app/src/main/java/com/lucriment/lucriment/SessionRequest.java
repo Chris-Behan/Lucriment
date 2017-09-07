@@ -6,6 +6,7 @@ package com.lucriment.lucriment;
 
 public class SessionRequest {
     private boolean confirmed;
+    private boolean sessionDeclined = false, sessionCancelled = false;
     private String location;
     private String tutorId;
     private String tutorName;
@@ -61,6 +62,22 @@ public class SessionRequest {
         this.studentReview = studentReview;
     }
 
+
+    public boolean isSessionDeclined() {
+        return sessionDeclined;
+    }
+
+    public void setSessionDeclined(boolean sessionDeclined) {
+        this.sessionDeclined = sessionDeclined;
+    }
+
+    public boolean isSessionCancelled() {
+        return sessionCancelled;
+    }
+
+    public void setSessionCancelled(boolean sessionCancelled) {
+        this.sessionCancelled = sessionCancelled;
+    }
 
     public boolean isConfirmed() {
         return confirmed;

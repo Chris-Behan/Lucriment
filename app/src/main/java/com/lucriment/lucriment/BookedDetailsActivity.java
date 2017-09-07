@@ -227,8 +227,8 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
         if(userType.equals("tutor")) {
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key);
-            databaseReference2.removeValue();
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionCancelled");
+            databaseReference2.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
@@ -237,8 +237,8 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
             i.putExtra("userInfo", userInfo);
             startActivity(i);
         }else{
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key);
-            databaseReference2.removeValue();
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            databaseReference2.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);

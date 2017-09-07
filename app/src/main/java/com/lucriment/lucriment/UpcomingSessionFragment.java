@@ -112,8 +112,10 @@ public class UpcomingSessionFragment extends Fragment {
                                 }
 
                             } else {
-                                requestList.add(currentIteratedSession);
-                                requestSessionKeys.add(innerSnap.getKey());
+                                if(!currentIteratedSession.isSessionDeclined()&&!currentIteratedSession.isSessionCancelled()) {
+                                    requestList.add(currentIteratedSession);
+                                    requestSessionKeys.add(innerSnap.getKey());
+                                }
                             }
                         }
                         }

@@ -128,7 +128,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             messageText = (TextView) itemView.findViewById(R.id.text_message_body);
             timeText = (TextView) itemView.findViewById(R.id.text_message_time);
-            profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
+           // profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
 
 
         }
@@ -141,12 +141,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(dateString);
-            Glide.with(mContext)
-
-                    .load(convoImage)
-                    .apply(RequestOptions.circleCropTransform())
-
-                    .into(profileImage);
 
 
             // Insert the profile image from the URL into the ImageView.

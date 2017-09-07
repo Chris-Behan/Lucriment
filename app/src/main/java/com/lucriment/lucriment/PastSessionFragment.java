@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -36,11 +38,13 @@ public class PastSessionFragment extends Fragment {
     private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
 
     private ArrayList<SessionRequest> pastSessions = new ArrayList<>();
+    private ArrayList<SessionRequest> cancelledSessions = new ArrayList<>();
+    private ArrayList<SessionRequest> declinedSessions = new ArrayList<>();
 
     private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     ArrayList<String> strings = new ArrayList<>();
-    private ArrayAdapter<SessionRequest> adapter, adapter2;
-    private ListView requestListView, bookedListView;
+    private ArrayAdapter<SessionRequest> adapter, adapter2, declineAdapter, cancelledAdapter;
+    private ListView requestListView, bookedListView, declinedList, cancelledList;
     private ArrayList<String> pastSessionKeys = new ArrayList<>();
 
 
@@ -71,6 +75,13 @@ public class PastSessionFragment extends Fragment {
                             SessionRequest currentIteratedSession = innerSnap.getValue(SessionRequest.class);
                             if(currentIteratedSession.getTutorId().equals(userInfo.getId())&&userType.equals("tutor")
                                     || userType.equals("student")&&currentIteratedSession.getStudentId().equals(userInfo.getId())){
+                                if(currentIteratedSession.isSessionCancelled()){
+                                    cancelledSessions.add(currentIteratedSession);
+                                }
+                                if(currentIteratedSession.isSessionDeclined()){
+                                    declinedSessions.add(currentIteratedSession);
+                                }
+
                             if (currentIteratedSession.isConfirmed()) {
                                 if (currentTime < currentIteratedSession.getTime().getFrom()) {
 
@@ -91,6 +102,8 @@ public class PastSessionFragment extends Fragment {
 
 
                         populatPastSessions();
+                        populateDeclinedSessions();
+                        populateCancelledSessions();
 
                     }
 
@@ -126,10 +139,7 @@ public class PastSessionFragment extends Fragment {
                 // TutorInfo selectedTutor1 = tutors.get(position);
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
                 Intent i = new Intent(getApplicationContext(), PastDetailsActivity.class);
-
-
                 if(selectedSession.getLocation()==null){
-
                 }else {
                     String key = pastSessionKeys.get(position);
                     if (userType.equals("tutor")) {
@@ -144,22 +154,29 @@ public class PastSessionFragment extends Fragment {
                     i.putExtra("subject", selectedSession.getSubject());
                     i.putExtra("userType", userType);
                     i.putExtra("userInfo", userInfo);
-
                     i.putExtra("requestKey", key);
-
                     //  i.putExtra("selectedTutor", selectedTutor1);
-
                     startActivity(i);
-
                 }
-
             }
         });
-
-
-
     }
 
+    private void populateDeclinedSessions(){
+        declineAdapter = new PastSessionFragment.declinedListAdapter();
+        if(getView()!=null) {
+            declinedList = (ListView) getView().findViewById(R.id.declineSessionsList);
+            declinedList.setAdapter(declineAdapter);
+
+        }
+    }
+    private void populateCancelledSessions(){
+        cancelledAdapter = new PastSessionFragment.cancelledListAdapter();
+        if(getView()!=null){
+            cancelledList = (ListView) getView().findViewById(R.id.cancelledSessionsList);
+            cancelledList.setAdapter(cancelledAdapter);
+        }
+    }
 
     private class bookedListAdapter extends ArrayAdapter<SessionRequest>  {
 
@@ -211,5 +228,108 @@ public class PastSessionFragment extends Fragment {
 
 
     }
+
+    private class declinedListAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public declinedListAdapter(){
+            super(getApplicationContext(), R.layout.bookedsessionlayout, declinedSessions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getActivity().getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
+            }
+            final SessionRequest session = declinedSessions.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM \n ");
+            if(session.getLocation()==null){
+                nameText.setText("No Declined Requests");
+                subjectText.setText("");
+                timeText.setText("");
+                locationText.setText("");
+            }else if(userType.equals("tutor")) {
+
+                //set inner fields
+                nameText.setText(session.getStudentName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+            }else{
+                nameText.setText(session.getTutorName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+
+            }
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+    }
+
+    private class cancelledListAdapter extends ArrayAdapter<SessionRequest>  {
+
+        public cancelledListAdapter(){
+            super(getApplicationContext(), R.layout.bookedsessionlayout, cancelledSessions);
+        }
+
+
+        // @NonNull
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View itemView = convertView;
+            // make sure we have a view to work with
+            if(itemView == null){
+                itemView = getActivity().getLayoutInflater().inflate(R.layout.bookedsessionlayout, parent, false);
+            }
+            final SessionRequest session = cancelledSessions.get(position);
+
+            //initialize inner fields
+            TextView nameText = (TextView) itemView.findViewById(R.id.name);
+            TextView subjectText = (TextView) itemView.findViewById(R.id.subject);
+            final TextView timeText = (TextView) itemView.findViewById(R.id.timeInterval);
+            TextView locationText = (TextView) itemView.findViewById(R.id.locationtext);
+
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd MMM \n ");
+            if(session.getLocation()==null){
+                nameText.setText("No Cancelled Sessions");
+                subjectText.setText("");
+                timeText.setText("");
+                locationText.setText("");
+            }else if(userType.equals("tutor")) {
+
+                //set inner fields
+                nameText.setText(session.getStudentName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+            }else{
+                nameText.setText(session.getTutorName());
+                subjectText.setText(session.getSubject());
+                timeText.setText(session.getTime().returnSessionTime());
+                locationText.setText(session.getLocation());
+
+            }
+
+            return itemView;
+            // return super.getView(position, convertView, parent);
+        }
+
+
+    }
+
 
 }

@@ -65,6 +65,8 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private MessageAdapter messageAdapter;
     static String Sender_Name;
     private boolean existingConvo = false;
+    private TutorInfo tutorInfo;
+    private double score;
 
    // public DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
    // public static int Device_Width = metrics.widthPixels;
@@ -93,33 +95,67 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(messageAdapter);
 
+        sender = firebaseAuth.getCurrentUser().getDisplayName();
+        receiver = tutor.getFullName();
+        senderID = firebaseAuth.getCurrentUser().getUid().toString();
+        receiverID = tutor.getId();
+        getMessageFromFirebaseUser(senderID,receiverID);
+        // chatID = getIntent().getExtras().get("chatID").toString();
+        userName = userInfo.getFullName();
+        actionBar.setTitle(receiver);
 
-            sender = firebaseAuth.getCurrentUser().getDisplayName();
-            receiver = tutor.getFullName();
-            senderID = firebaseAuth.getCurrentUser().getUid().toString();
-            receiverID = tutor.getId();
-            getMessageFromFirebaseUser(senderID,receiverID);
-           // chatID = getIntent().getExtras().get("chatID").toString();
-            userName = userInfo.getFullName();
-            actionBar.setTitle(receiver);
+        DatabaseReference tutorRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(receiverID);
+        tutorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                   tutorInfo = dataSnapshot.getValue(TutorInfo.class);
+                if(tutorInfo!=null) {
+                    if(tutorInfo.getRating()!=null) {
+                        score = tutorInfo.getRating().getTotalScore() / tutorInfo.getRating().getNumberOfReviews();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         //IMAGE IN ACTION BAR
-        /*
+
         actionBar.setDisplayOptions(actionBar.getDisplayOptions()
                 | ActionBar.DISPLAY_SHOW_CUSTOM);
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(this)
                 .load(tutor.getProfileImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                  .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
         ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
                 150,
-                150, Gravity.START
+                150, Gravity.END
                 | Gravity.CENTER_VERTICAL);
         layoutParams.rightMargin = 40;
         imageView.setLayoutParams(layoutParams);
-        actionBar.setCustomView(imageView); */
+        actionBar.setCustomView(imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(tutorInfo!=null) {
+                    Intent i = new Intent(MessageActivity.this, SelectedTutorActivity.class);
+                    i.putExtra("selectedTutor", tutorInfo);
+                    i.putExtra("tutorScore", score);
+                    i.putExtra("userType", userType);
+                    i.putExtra("userInfo", userInfo);
+
+                    startActivity(i);
+                }
+            }
+        });
            //userName = getIntent().getExtras().get("userName").toString();
       //  chatName = getIntent().getExtras().get("chatName").toString();
        // DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("Chats");

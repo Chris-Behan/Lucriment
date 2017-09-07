@@ -135,11 +135,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
     private void initializeFields(){
-        titleText.setText(requesteeInfo.getHeadline());
+
+            titleText.setText(requesteeInfo.getHeadline());
+
         ratingText.setText("4.5");
         Glide.with(getApplicationContext())
                 .load(requesteeInfo.getProfileImage())
@@ -238,8 +238,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
         if(userType.equals("tutor")) {
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key);
-            databaseReference2.removeValue();
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionDeclined");
+            databaseReference2.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
@@ -248,8 +248,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             i.putExtra("userInfo", userInfo);
             startActivity(i);
         }else{
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key);
-            databaseReference2.removeValue();
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            databaseReference2.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);

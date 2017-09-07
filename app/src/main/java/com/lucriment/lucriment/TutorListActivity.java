@@ -34,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import android.app.SearchManager;
 import android.widget.SearchView.OnQueryTextListener;
@@ -72,7 +73,8 @@ public class TutorListActivity extends BaseActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = databaseReference;
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
