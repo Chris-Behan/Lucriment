@@ -99,7 +99,7 @@ public class UpcomingSessionFragment extends Fragment {
                             if(currentIteratedSession.getTutorId().equals(userInfo.getId())&&userType.equals("tutor")
                                     || userType.equals("student")&&currentIteratedSession.getStudentId().equals(userInfo.getId())){
                             if (currentIteratedSession.isConfirmed()) {
-                                if (currentTime < currentIteratedSession.getTime().getFrom()) {
+                                if (currentTime < currentIteratedSession.getTime().getFrom()&&!currentIteratedSession.isSessionDeclined()&&!currentIteratedSession.isSessionCancelled()) {
 
                                     bookedSessions.add(currentIteratedSession);
                                     bookedSessionKeys.add(innerSnap.getKey());

@@ -48,6 +48,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
     private ArrayAdapter<UserInfo> arrayAdapter;
     private ArrayList<Chat> listOfChats = new ArrayList<>();
     private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("chats");
+    private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
     private List<String> usersIds = new ArrayList<>();
@@ -85,8 +86,9 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
             item.setChecked(false);
         }
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
+      //  FirebaseDatabase.getInstance().getReference().child("users").child("P6Q1eBzDqBbsrurFVpbOlFLqfQL2").child("lastName").push().setValue("test");
 
-        FirebaseDatabase.getInstance().getReference().child("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+        chatRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Chat> chats = new ArrayList<Chat>();
@@ -112,23 +114,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                     }
                 }
 
-                FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(String id:usersIds){
-                            users.add(dataSnapshot.child(id).getValue(UserInfo.class));
-                        }
-                        registerChatSelect();
-                        progressDialog.dismiss();
-                        arrayAdapter.notifyDataSetChanged();
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
             }
 
@@ -137,38 +123,24 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
             }
         });
-/*
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child("users")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        HashSet<String> set = new HashSet<String>();
-                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
-                                .iterator();
-                        users = new ArrayList<>();
-                        while (dataSnapshots.hasNext()) {
-                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
-                            UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if(user.getChatsWith()!= null) {
-                                if (user.getChatsWith().contains(FirebaseAuth.getInstance().getCurrentUser().getUid().toString())) {
-                                    users.add(user);
-                                    set.add(user.getFullName());
+        userRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(String id:usersIds){
+                    users.add(dataSnapshot.child(id).getValue(UserInfo.class));
+                }
+                registerChatSelect();
+                progressDialog.dismiss();
+                arrayAdapter.notifyDataSetChanged();
 
-                                }
-                            }
-                        } listOfChats.addAll(set);
-                        arrayAdapter.notifyDataSetChanged();
-                        // All users are retrieved except the one who is currently logged
-                        // in device.
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Unable to retrieve the users.
-                    }
-                }); */
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
         tutorId = getIntent().getParcelableExtra("tutorID");
@@ -191,36 +163,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         }
 
 
-        /*
-        chatRoot.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                HashSet<String> set = new HashSet<String>();
-                Iterator<DataSnapshot> i = dataSnapshot.getChildren().iterator();
 
-                while(i.hasNext()){
-                    String currentKey = ((DataSnapshot)i.next()).getKey();
-                    //    String tutorName = ((DataSnapshot)i.next()).getKey();
-                    if(currentKey.contains(myID)){
-                        //  int a = currentKey.indexOf('_') +1;
-                        //  int b = currentKey.length();
-                        set.add(currentKey);
-                    }
-                    //  set.add(((DataSnapshot)i.next()).getKey());
-
-                }
-                // HashSet<String> nameSet = convertToTutorUserName(set);
-                listOfChats.clear();
-                listOfChats.addAll(set);
-
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        }); */
 
     }
 
@@ -290,30 +233,6 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
 
 
-    private HashSet<String> convertToTutorUserName(final HashSet<String> set){
-        final HashSet<String> tutorNames = new HashSet<String>();
-        DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("Tutors");
-        for(final String s : set){
-
-            dbr.addValueEventListener(new ValueEventListener() {
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String Name = dataSnapshot.child(s).child("name").getValue().toString();
-                    tutorNames.add(Name);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            //String Name = dbr.child(s).child("name").getKey().toString();
-            //tutorNames.add(Name);
-
-        }
-        return tutorNames;
-    }
 
     private void registerChatSelect(){
         final String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -337,37 +256,6 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-    public void getAllUsersFromFirebase() {
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .child("chats")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren()
-                                .iterator();
-                        users = new ArrayList<>();
-                        chatList = new ArrayList<Chat>();
-                        while (dataSnapshots.hasNext()) {
-                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
-                            Chat currentChat = dataSnapshotChild.getValue(Chat.class);
-                            UserInfo user = dataSnapshotChild.getValue(UserInfo.class);
-                            if (currentChat.senderId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) ||
-                                    currentChat.receiverId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                                users.add(user);
-                               // listOfChats.add(user.getFullName());
-                            }
-                        }
-                        // All users are retrieved except the one who is currently logged
-                        // in device.
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Unable to retrieve the users.
-                    }
-                });
-    }
 
 
     @Override

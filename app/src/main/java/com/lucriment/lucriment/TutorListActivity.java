@@ -114,36 +114,25 @@ public class TutorListActivity extends BaseActivity {
 
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = firebaseAuth.getCurrentUser();
-            databaseReference = FirebaseDatabase.getInstance().getReference();
+            FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(thisUser.getUid());
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    DataSnapshot tutorSnap = dataSnapshot.child("tutors");
-                    FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
-                    DataSnapshot studentSnap = dataSnapshot.child("users").child(thisUser.getUid());
 
-                    if (studentSnap.hasChild("firstName")) {
+                    if (dataSnapshot.hasChild("firstName")) {
 
-                                userInfo = studentSnap.getValue(UserInfo.class);
+                                userInfo = dataSnapshot.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
 
 
-                    } else if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        userType = userInfo.getUserType();
-                        finish();
-                        startActivity(new Intent(TutorListActivity.this, TutorSessionsActivity.class));
-                    } else {
+                    }  else {
                         finish();
                         startActivity(new Intent(TutorListActivity.this, CreationActivity.class));
                     }
 
-                    if (tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        Intent y = new Intent(TutorListActivity.this, TutorSessionsActivity.class);
-                        y.putExtra("userType", userType);
-                        y.putExtra("userInfo",userInfo);
-                        startActivity(y);
-                    }
+
                     // finish();
                     //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
                     // initializeButtons();

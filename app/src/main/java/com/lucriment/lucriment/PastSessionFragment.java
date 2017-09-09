@@ -131,35 +131,36 @@ public class PastSessionFragment extends Fragment {
         if(getView()!=null) {
             bookedListView = (ListView) getView().findViewById(R.id.pastSessionList);
             bookedListView.setAdapter(adapter2);
-        }
-        bookedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SessionRequest selectedSession = pastSessions.get(position);
-                // TutorInfo selectedTutor1 = tutors.get(position);
-                // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                Intent i = new Intent(getApplicationContext(), PastDetailsActivity.class);
-                if(selectedSession.getLocation()==null){
-                }else {
-                    String key = pastSessionKeys.get(position);
-                    if (userType.equals("tutor")) {
-                        i.putExtra("name", selectedSession.getStudentName());
-                        i.putExtra("requestId", selectedSession.getStudentId());
+
+            bookedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    SessionRequest selectedSession = pastSessions.get(position);
+                    // TutorInfo selectedTutor1 = tutors.get(position);
+                    // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                    Intent i = new Intent(getApplicationContext(), PastDetailsActivity.class);
+                    if (selectedSession.getLocation() == null) {
                     } else {
-                        i.putExtra("name", selectedSession.getTutorName());
-                        i.putExtra("requestId", selectedSession.getTutorId());
+                        String key = pastSessionKeys.get(position);
+                        if (userType.equals("tutor")) {
+                            i.putExtra("name", selectedSession.getStudentName());
+                            i.putExtra("requestId", selectedSession.getStudentId());
+                        } else {
+                            i.putExtra("name", selectedSession.getTutorName());
+                            i.putExtra("requestId", selectedSession.getTutorId());
+                        }
+                        i.putExtra("time", selectedSession.getTime());
+                        i.putExtra("location", selectedSession.getLocation());
+                        i.putExtra("subject", selectedSession.getSubject());
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        i.putExtra("requestKey", key);
+                        //  i.putExtra("selectedTutor", selectedTutor1);
+                        startActivity(i);
                     }
-                    i.putExtra("time", selectedSession.getTime());
-                    i.putExtra("location", selectedSession.getLocation());
-                    i.putExtra("subject", selectedSession.getSubject());
-                    i.putExtra("userType", userType);
-                    i.putExtra("userInfo", userInfo);
-                    i.putExtra("requestKey", key);
-                    //  i.putExtra("selectedTutor", selectedTutor1);
-                    startActivity(i);
                 }
-            }
-        });
+            });
+        }
     }
 
     private void populateDeclinedSessions(){
