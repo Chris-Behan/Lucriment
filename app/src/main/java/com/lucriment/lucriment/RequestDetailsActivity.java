@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RequestDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DeclineDialogFragment.NoticeDialogListener, AcceptDialogFragment.NoticeDialogListener, CancelSessionDialogFragment.NoticeDialogListener {
@@ -49,6 +50,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private ArrayAdapter<TwoItemField> optionsAdapter;
     private Button acceptButton, declineButton;
     private String key;
+    private double price;
+    private String accountDest;
 
 
 
@@ -68,6 +71,9 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         // GET INTENTS
         if(getIntent().hasExtra("requestId")){
             requesteeUid = getIntent().getStringExtra("requestId");
+        }
+        if(getIntent().hasExtra("price")){
+            price = getIntent().getDoubleExtra("price",0);
         }
         if(getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
@@ -97,6 +103,21 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         itemList.add(field1);
         itemList.add(field2);
         itemList.add(field3);
+        if(userInfo.getUserType().equals("tutor")) {
+            DatabaseReference myAcctRef = FirebaseDatabase.getInstance().getReference("tutors").child(userInfo.getId()).child("stripe_connected").child("id");
+            myAcctRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    accountDest = dataSnapshot.getValue(String.class);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -218,6 +239,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     public void onAcceptPositiveClick(DialogFragment dialog) {
         DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
         databaseReference2.setValue(true);
+        DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid).child("charges");
+        HashMap<String,Object> amountMap = new HashMap<String, Object>();
+        amountMap.put("amount",price*100);
+        amountMap.put("destination",accountDest);
+        dbr.push().setValue(amountMap);
         Toast.makeText(RequestDetailsActivity.this, "Session Booked",
                 Toast.LENGTH_SHORT).show();
         Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);

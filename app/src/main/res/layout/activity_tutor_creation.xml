@@ -138,8 +138,19 @@
             android:text="Become a Tutor"
             android:textColor="#ffffff"
             android:background="@drawable/rounded_button"
+
+            android:layout_above="@+id/TOS"
+            android:layout_centerHorizontal="true"
+             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:id="@+id/TOS"
+
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

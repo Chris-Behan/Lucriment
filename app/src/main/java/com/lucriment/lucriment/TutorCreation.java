@@ -1,13 +1,21 @@
 package com.lucriment.lucriment;
 
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class TutorCreation extends AppCompatActivity implements View.OnClickListener {
+public class TutorCreation extends AppCompatActivity implements View.OnClickListener, ProvinceSelectionDialog.NoticeDialogListener{
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private String displayName;
@@ -66,12 +74,15 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     private int year, month, day;
     private EditText dateOfBirth, phoneNumber, address, city, province;
     private String addressString, cityString, provinceString;
+    private  ProvinceSelectionDialog psd;
+    private TextView TOS;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_creation);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         userInfo = getIntent().getParcelableExtra("userInfo");
         subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
@@ -85,12 +96,51 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         address = (EditText) findViewById(R.id.addressLine);
         city = (EditText) findViewById(R.id.city);
         province = (EditText) findViewById(R.id.province);
+        TOS = (TextView) findViewById(R.id.TOS);
+
+        SpannableString ss = new SpannableString("By becoming a tutor you agree to our Service Agreement and the Stripe Connected Account Agreement");
+        ClickableSpan span1 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                String url = "https://lucriment.com";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        };
+
+        ClickableSpan span2 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                String url = "https://stripe.com/ca/connect-account/legal";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        };
+
+        ss.setSpan(span1, 37, 54, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(span2, 63, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        TOS.setText(ss);
+        TOS.setMovementMethod(LinkMovementMethod.getInstance());
+
        // subjectSelector.setVisibility(View.VISIBLE);
     //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
         addClassButton.setOnClickListener(this);
         dateOfBirth.setOnClickListener(this);
-
+        province.setOnClickListener(this);
+        province.setKeyListener(null);
+        province.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    psd = new ProvinceSelectionDialog();
+                    psd.show(getFragmentManager(), "Province");
+                }
+            }
+        });
         dateOfBirth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -101,6 +151,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
                     day = calendar.get(Calendar.DAY_OF_MONTH);
                     DatePickerDialog datePickerDialog = new DatePickerDialog(TutorCreation.this,android.R.style.Theme_Holo_Light_Dialog,myDateListener, year, month, day);
                     datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+
                     // datePickerDialog.getDatePicker().setMinDate(calendar.get(Calendar.MILLISECOND));
                     Window window = datePickerDialog.getWindow();
                    // window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -157,6 +208,17 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
                 }
             };
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+        province.setText(psd.getSelection());
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }
+
     private class taughtClassAdapter extends ArrayAdapter<String> {
 
         public taughtClassAdapter(){
@@ -184,7 +246,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onClick(View v) {
                     subjectsTaught.remove(position);
-                    databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                   // databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
                     adapter.notifyDataSetChanged();
                 }
             });
@@ -192,6 +254,16 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             return itemView;
             // return super.getView(position, convertView, parent);
         }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        Intent i = new Intent(TutorCreation.this, SettingsActivity.class);
+        i.putExtra("userType", "student");
+        i.putExtra("userInfo",userInfo);
+        startActivity(i);
+        return true;
     }
 
     private void handleSpinner(){
@@ -208,12 +280,12 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
                 subjectPath = subjectSelector.getSelectedItem().toString();
 
 
-                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference();
+                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("subjects").child("highschool");
                 db3.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(subjectPath!= null) {
-                            DataSnapshot categorySnap = dataSnapshot.child("subjects").child("highschool").child(subjectPath);
+                            DataSnapshot categorySnap = dataSnapshot.child(subjectPath);
                             classes.clear();
 
                             for(DataSnapshot classSnap: categorySnap.getChildren()){
@@ -251,6 +323,10 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         if(v == becomeTutor){
             createTutorProfile();
         }
+        if(v == province){
+            psd = new ProvinceSelectionDialog();
+            psd.show(getFragmentManager(),"Province");
+        }
         if(v== dateOfBirth){
             Calendar calendar = Calendar.getInstance();
             year = calendar.get(Calendar.YEAR);
@@ -267,6 +343,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             if(addingClass){
                 subjectsTaught.add(classSelector.getSelectedItem().toString());
                 //databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
+                adapter.notifyDataSetChanged();
                 addingClass = false;
 
             }else{

@@ -189,6 +189,7 @@ public class UpcomingSessionFragment extends Fragment {
                         i.putExtra("time", selectedSession.getTime());
                         i.putExtra("location", selectedSession.getLocation());
                         i.putExtra("subject", selectedSession.getSubject());
+                        i.putExtra("price",selectedSession.getPrice());
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         if(userType.equals("tutor")) {
