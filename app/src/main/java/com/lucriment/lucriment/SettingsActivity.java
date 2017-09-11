@@ -1,7 +1,9 @@
 package com.lucriment.lucriment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,6 +48,9 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private TwoItemField sOption2 = new TwoItemField("Payment","");
     private TwoItemField sOption3 = new TwoItemField("Switch to Tutor","");
     private TwoItemField sOption4 = new TwoItemField("Share","");
+    private TwoItemField option5 = new TwoItemField("Disputes","");
+    private TwoItemField option6 = new TwoItemField("About This App","");
+
     private boolean isTutor = false;
     private DatabaseReference myRef, baseRef;
 
@@ -76,14 +81,16 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                 }
 
                 if(userType.equals("tutor")) {
-                    optionList.add(option1);
+
                     optionList.add(option2);
                     optionList.add(option3);
                     optionList.add(option4);
+                    optionList.add(option6);
+
                     populateOptionList();
                     registerOptionClicks();
                 }else{
-                    optionList.add(sOption1);
+
                     optionList.add(sOption2);
                     if(isTutor){
 
@@ -92,6 +99,8 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                     }
                     optionList.add(sOption3);
                     optionList.add(sOption4);
+                    optionList.add(option5);
+                    optionList.add(option6);
                     populateOptionList();
                     registerOptionClicks();
 
@@ -161,14 +170,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(userType.equals("student")) {
 
-                    if (position == 1) {
+                    if (position == 0) {
                         finish();
                         Intent i = new Intent(SettingsActivity.this, PaymentActivity.class);
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         startActivity(i);
                     }
-                    if (position == 2) {
+                    if (position == 1) {
                         finish();
                         if(!isTutor) {
                             Intent i = new Intent(SettingsActivity.this, TutorCreation.class);
@@ -190,18 +199,61 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                             amountMap.put("amount",5500);
                             dbr.push().setValue(amountMap); */
                     }
-                }else{
-                    if (position == 0) {
-
+                    if(position ==2){
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        String shareSub = "Lucriment, an Online Marketplace for Tutors";
+                        String shareBody = "Download now: www.lucriment.com";
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share using"));
                     }
-                    if (position == 1) {
+                    if(position ==3){
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                SettingsActivity.this);
+
+                        // set title
+                        alertDialogBuilder.setTitle("Disputes");
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("If you have a dispute regarding a session, email us at disputes@lucriment.com" +
+                                        " with a detailed message as to why you deserve a refund and we will get back to you " +
+                                        "immediately")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        dialog.dismiss();
+                                    }
+                                });
+
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                    if(position==4){
+                        Intent i = new Intent(SettingsActivity.this, AppInfoActivity.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo",userInfo);
+                        startActivity(i);
+                    }
+
+
+                }else{
+
+                    if (position == 0) {
                         finish();
                         Intent i = new Intent(SettingsActivity.this, TutorPayoutActivity.class);
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
                         startActivity(i);
                     }
-                    if(position == 2){
+                    if(position == 1){
                         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference()
                                 .child("users").child(userInfo.getId()).child("userType");
                         myRef.setValue("student");
@@ -210,6 +262,21 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         userType = "student";
                         i.putExtra("userType", userType);
                         i.putExtra("userInfo", userInfo);
+                        startActivity(i);
+                    }
+                    if(position ==2){
+                        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                        sharingIntent.setType("text/plain");
+                        String shareSub = "Lucriment, an Online Marketplace for Tutors";
+                        String shareBody = "Download now: www.lucriment.com";
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                        startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                    }
+                    if(position ==3){
+                        Intent i = new Intent(SettingsActivity.this, AppInfoActivity.class);
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo",userInfo);
                         startActivity(i);
                     }
 

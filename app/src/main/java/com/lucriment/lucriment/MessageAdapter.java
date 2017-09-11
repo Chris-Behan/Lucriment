@@ -36,8 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<Chat> mMessageList;
     private String convoImage;
-    private Calendar cal = Calendar.getInstance();
-    private long currentTime = cal.getTimeInMillis();
+
 
     public MessageAdapter(Context context, List<Chat> messageList, String imageURL) {
         mContext = context;
