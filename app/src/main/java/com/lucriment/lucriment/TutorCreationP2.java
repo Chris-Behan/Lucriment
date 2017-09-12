@@ -93,7 +93,7 @@ public class TutorCreationP2 extends AppCompatActivity {
                 SIN = SINfield.getText().toString();
                 initializeBankAccount();
                 finish();
-                Intent y =new Intent(TutorCreationP2.this, SettingsActivity.class);
+                Intent y =new Intent(TutorCreationP2.this, CreationSubjectSelection.class);
                 y.putExtra("userType",userType);
                 y.putExtra("userInfo",userInfo);
                 startActivity(y);

@@ -4,16 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SearchForSubjects extends AppCompatActivity {
+public class CreationSubjectSelection extends AppCompatActivity {
     private UserInfo userInfo;
     private TutorInfo tutorInfo;
     private String userType;
@@ -51,13 +48,14 @@ public class SearchForSubjects extends AppCompatActivity {
         if(getIntent().hasExtra("tutorInfo")){
             tutorInfo = getIntent().getParcelableExtra("tutorInfo");
         }
+        mySubjectRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("subjects");
 
-        String subArray[] = tutorInfo.returnSubjectString().split(",");
-        Collections.addAll(currentSubjects,subArray);
+       // String subArray[] = tutorInfo.returnSubjectString().split(",");
+        //Collections.addAll(currentSubjects,subArray);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.search_subjects_actionbar);
+        getSupportActionBar().setCustomView(R.layout.subject_creation_actionbar);
 
         View view =getSupportActionBar().getCustomView();
 
@@ -69,23 +67,7 @@ public class SearchForSubjects extends AppCompatActivity {
         subjectListAdapter.notifyDataSetChanged();
 
 
-        mySubjectRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorInfo.getId()).child("subjects");
-        mySubjectRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                currentSubjects.clear();
-                for(DataSnapshot subs: dataSnapshot.getChildren()){
-                    currentSubjects.add(subs.getValue(String.class));
-                }
-                subjectListAdapter.notifyDataSetChanged();
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         //SET DATABASE REFERENCE
         databaseReference = FirebaseDatabase.getInstance().getReference().child("subjects");
@@ -140,7 +122,7 @@ public class SearchForSubjects extends AppCompatActivity {
                 }else{
                     currentSubjects.add(all.get(position));
                 }
-                mySubjectRef.setValue(currentSubjects);
+                subjectListAdapter.notifyDataSetChanged();
 
             }
         });
@@ -172,29 +154,23 @@ public class SearchForSubjects extends AppCompatActivity {
         });
 
         //SET ACTIONBAR LISTENERS
-        TextView back = (TextView) view.findViewById(R.id.action_bar_back);
+
         TextView edit = (TextView) view.findViewById(R.id.edit_about_action_bar);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(SearchForSubjects.this, EditTutorProfile.class);
 
-                i.putExtra("userInfo", userInfo);
-                i.putExtra("userType",userType);
-                i.putExtra("tutorInfo",tutorInfo);
-
-                startActivity(i);
-            }
-        });
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editing){
-                    editing = false;
-                    mySubjectRef.setValue(currentSubjects);
-                }else{
-                    editing = true;
+                if(currentSubjects.isEmpty()){
+                    Toast.makeText(CreationSubjectSelection.this,"You must teach atleast one course to become a Tutor",Toast.LENGTH_LONG).show();
+                    return;
                 }
+                mySubjectRef.setValue(currentSubjects);
+                finish();
+                Intent y =new Intent(CreationSubjectSelection.this, SettingsActivity.class);
+                y.putExtra("userType",userType);
+                y.putExtra("userInfo",userInfo);
+                startActivity(y);
+
 
             }
         });

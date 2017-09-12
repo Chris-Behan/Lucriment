@@ -88,8 +88,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private ProgressDialog picUploadDialog;
     private static final int GALLERYINTENT = 2;
     private ImageView imageView;
-    private Spinner subjectSelector;
-    private Spinner classSelector;
+
     private String subjectPath;
     private Uri downloadUri;
     private Button addClassButton;
@@ -109,10 +108,11 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<Review> revList = new ArrayList<>();
     private ArrayAdapter<Review> revAdapter;
     private ScrollView scrollView;
-
+    private ArrayList<String> subList = new ArrayList<>();
     private TextView ratingBar;
     private float score;
     private ArrayList<String> options = new ArrayList<>();
+    private String classesTaught ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,82 +147,20 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
-        /*
-        optionsList = (ListView) findViewById(R.id.optionsList);
 
-        options.add("Read all Reviews");
-        options.add("Availability Calendar");
-        options.add("Report this profile");
-        ArrayAdapter<String> optionAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,options);
-        optionsList.setAdapter(optionAdapter);
-        */
-        DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference();
-        databaseReference3.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference subjectRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("subjects");
+        subjectRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot studentSnap = dataSnapshot.child("users");
-                DataSnapshot tutorSnap = dataSnapshot.child("tutors");
-                FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                if( studentSnap.hasChild(thisUser.getUid())){
-                    for(DataSnapshot userSnapShot: studentSnap.getChildren()){
-                        if(userSnapShot.getKey().equals(firebaseAuth.getCurrentUser().getUid())){
-                            userInfo = userSnapShot.getValue(UserInfo.class);
-                            userType = userInfo.getUserType();
-                        }
-                    }
-                } else if(tutorSnap.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                    userType = userInfo.getUserType();
-                }else{
-                    finish();
-                    startActivity(new Intent(MyProfileActivity.this, CreationActivity.class));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot highSchoolSnap = dataSnapshot.child("subjects").child("highschool");
-
-                for(DataSnapshot subjectSnap: highSchoolSnap.getChildren()){
-                    subjects.add(subjectSnap.getKey());
+                for(DataSnapshot sSnapShot:dataSnapshot.getChildren()){
+                    subList.add(sSnapShot.getValue(String.class));
                 }
 
-
-
-                handleSpinner();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot studentSnap = dataSnapshot.child("users");
-                DataSnapshot tutorSnap = dataSnapshot.child("tutors").child(currentKey).child("subjects");
-                for(DataSnapshot tutorSnapShot: tutorSnap.getChildren()){
-                    subjectsTaught.add(tutorSnapShot.getValue().toString());
+                for(String s:subList){
+                    classesTaught = classesTaught + s+ "  ";
                 }
-                for(DataSnapshot userSnapShot: studentSnap.getChildren()){
-                    if(userSnapShot.getKey().equals(currentKey)){
-                        userInfo = userSnapShot.getValue(UserInfo.class);
-                    }
-                }
-                populateTaughtList();
-
+                TextView subjectList = (TextView) findViewById(R.id.taughtlist);
+                subjectList.setText(classesTaught);
             }
 
             @Override
@@ -257,8 +195,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         headline = (TextView) findViewById(R.id.title);
         imageView = (ImageView) findViewById(R.id.ProfileImage);
-        subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
-        classSelector = (Spinner) findViewById(R.id.classSpinner);
+
         addClassButton = (Button) findViewById(R.id.addClassButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
         editButton = (Button) findViewById(R.id.editButton);
@@ -411,11 +348,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             rText.setVisibility(View.INVISIBLE);
         }
     }
-    private void populateTaughtList() {
-      //  adapter = new MyProfileActivity.taughtClassAdapter();
-        TextView subjectList = (TextView) findViewById(R.id.taughtlist);
-        subjectList.setText(subjectsTaught.toString());
-    }
 
     private void setUpMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -444,42 +376,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private class taughtClassAdapter extends ArrayAdapter<String> {
 
-        public taughtClassAdapter(){
-            super(MyProfileActivity.this, R.layout.taught_item, subjectsTaught);
-        }
-
-
-        // @NonNull
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View itemView = convertView;
-            // make sure we have a view to work with
-            if(itemView == null){
-                itemView = getLayoutInflater().inflate(R.layout.taught_item, parent, false);
-            }
-            //Find tutor to work with
-            Button deleteButton = (Button) itemView.findViewById(R.id.delete);
-            String subject = subjectsTaught.get(position);
-
-            //fill the view
-
-            TextView subjectText = (TextView) itemView.findViewById(R.id.taughtLabel);
-            subjectText.setText(subject);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    subjectsTaught.remove(position);
-                    databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
-                    adapter.notifyDataSetChanged();
-                }
-            });
-
-            return itemView;
-            // return super.getView(position, convertView, parent);
-        }
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
@@ -568,55 +465,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     }
 
 
-    private void handleSpinner(){
-
-        subjectArray = subjects.toArray(new String[subjects.size()]);
-        ArrayAdapter<String> subjectNameAdapter = new ArrayAdapter<String>(MyProfileActivity.this,
-                android.R.layout.simple_list_item_1, subjectArray);
-        subjectNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subjectSelector.setAdapter(subjectNameAdapter);
-
-        subjectSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                subjectPath = subjectSelector.getSelectedItem().toString();
-
-
-                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference();
-                db3.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(subjectPath!= null) {
-                            DataSnapshot categorySnap = dataSnapshot.child("subjects").child("highschool").child(subjectPath);
-                            classes.clear();
-
-                            for(DataSnapshot classSnap: categorySnap.getChildren()){
-                                classes.add(classSnap.getValue().toString());
-
-                            }
-                            String[] classesArray = classes.toArray(new String[classes.size()]);
-                            ArrayAdapter<String> classNameAdapter = new ArrayAdapter<String>(MyProfileActivity.this,
-                                    android.R.layout.simple_list_item_1, classesArray);
-                            classNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            classSelector.setAdapter(classNameAdapter);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        subjectPath = subjectSelector.getSelectedItem().toString();
-
-    }
 
 
 
@@ -671,26 +519,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
             }
         }
 
-        if(v == addClassButton){
-            if(addingClass){
-                subjectsTaught.add(classSelector.getSelectedItem().toString());
-                databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
-                addingClass = false;
 
-            }else{
-                addingClass = true;
-            }
-
-            if(addingClass){
-                addClassButton.setText("Select");
-                subjectSelector.setVisibility(View.VISIBLE);
-                classSelector.setVisibility(View.VISIBLE);
-            }else{
-                addClassButton.setText("Add Class");
-                subjectSelector.setVisibility(View.INVISIBLE);
-                classSelector.setVisibility(View.INVISIBLE);
-            }
-        }
 
         if(v == editButton){
             Intent i = new Intent(MyProfileActivity.this, EditTutorProfile.class);

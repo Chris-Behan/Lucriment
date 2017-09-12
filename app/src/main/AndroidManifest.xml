@@ -109,7 +109,8 @@
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".TutorPayoutActivity" />
         <activity android:name=".TutorCreationP2" />
-        <activity android:name=".AppInfoActivity"></activity>
+        <activity android:name=".AppInfoActivity" />
+        <activity android:name=".CreationSubjectSelection"></activity>
     </application>
 
 </manifest>

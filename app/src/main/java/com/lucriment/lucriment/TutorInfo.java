@@ -26,7 +26,7 @@ public class TutorInfo implements Parcelable {
     private String postalCode;
     private String about;
     private ArrayList<Availability> availability;
-    private long phoneNumber;
+    private String phoneNumber;
     private ArrayList<String> subjects;
     private int rate;
     private String subjectString;
@@ -39,7 +39,7 @@ public class TutorInfo implements Parcelable {
 
 
 
-    public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate, ArrayList<String> subjects) {
+    public TutorInfo(UserInfo user, String postalCode, String phoneNumber, int rate, ArrayList<String> subjects) {
         this.fullName = user.getFullName();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
@@ -64,14 +64,14 @@ public class TutorInfo implements Parcelable {
         result.put("id",id);
         result.put("email",email);
         result.put("userType",userType);
-        result.put("phoneNumber",phoneNumber);
+        result.put("phoneNumber",(phoneNumber));
         result.put("postalCode",postalCode);
         result.put("rate",rate);
         result.put("subjects",subjects);
         return result;
     }
 
-    public TutorInfo(UserInfo user, String postalCode, long phoneNumber, int rate) {
+    public TutorInfo(UserInfo user, String postalCode, String phoneNumber, int rate) {
         this.fullName = user.getFullName();
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
@@ -102,7 +102,7 @@ public class TutorInfo implements Parcelable {
         this.userType = data[7];
         this.postalCode = data[8];
         this.about = data[9];
-        this.phoneNumber = Long.parseLong(data[10]);
+        this.phoneNumber = (data[10]);
         this.rate = Integer.parseInt(data[11]);
         this.profileImage = data[12];
         this.subjectString = data[13];
@@ -248,11 +248,11 @@ public class TutorInfo implements Parcelable {
         this.availability = availability;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

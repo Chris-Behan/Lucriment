@@ -1,7 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

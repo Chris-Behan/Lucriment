@@ -85,9 +85,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         userInfo = getIntent().getParcelableExtra("userInfo");
-        subjectSelector = (Spinner) findViewById(R.id.subjectSpinner);
-        classSelector = (Spinner) findViewById(R.id.classSpinner);
-        addClassButton = (Button) findViewById(R.id.addClassButton);
+
         rateField = (EditText) findViewById(R.id.rateField);
         educationField = (EditText) findViewById(R.id.educationField);
         becomeTutor = (Button) findViewById(R.id.becomeTutor);
@@ -128,7 +126,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
        // subjectSelector.setVisibility(View.VISIBLE);
     //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
-        addClassButton.setOnClickListener(this);
+
         dateOfBirth.setOnClickListener(this);
         province.setOnClickListener(this);
         province.setKeyListener(null);
@@ -163,26 +161,8 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        adapter = new TutorCreation.taughtClassAdapter();
-        ListView list = (ListView) findViewById(R.id.taughtlist);
-        list.setAdapter(adapter);
 
-        DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("subjects").child("highschool");
-        dbr.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot subSnap:dataSnapshot.getChildren()){
-                    subjects.add(subSnap.getKey());
-                }
 
-                    handleSpinner();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
        // DatePickerDialog birthPicker = new DatePickerDialog()
 
 
@@ -266,57 +246,6 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
-    private void handleSpinner(){
-
-        subjectArray = subjects.toArray(new String[subjects.size()]);
-        ArrayAdapter<String> subjectNameAdapter = new ArrayAdapter<String>(TutorCreation.this,
-                android.R.layout.simple_list_item_1, subjectArray);
-        subjectNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subjectSelector.setAdapter(subjectNameAdapter);
-
-        subjectSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                subjectPath = subjectSelector.getSelectedItem().toString();
-
-
-                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("subjects").child("highschool");
-                db3.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(subjectPath!= null) {
-                            DataSnapshot categorySnap = dataSnapshot.child(subjectPath);
-                            classes.clear();
-
-                            for(DataSnapshot classSnap: categorySnap.getChildren()){
-                                classes.add(classSnap.getValue().toString());
-
-                            }
-                            String[] classesArray = classes.toArray(new String[classes.size()]);
-                            ArrayAdapter<String> classNameAdapter = new ArrayAdapter<String>(TutorCreation.this,
-                                    android.R.layout.simple_list_item_1, classesArray);
-                            classNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            classSelector.setAdapter(classNameAdapter);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        subjectPath = subjectSelector.getSelectedItem().toString();
-
-    }
-
-
 
     @Override
     public void onClick(View v) {
@@ -339,27 +268,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             datePickerDialog.show();
         }
 
-        if(v == addClassButton){
-            if(addingClass){
-                subjectsTaught.add(classSelector.getSelectedItem().toString());
-                //databaseReference.child("tutors").child(user.getUid()).child("subjects").setValue(subjectsTaught);
-                adapter.notifyDataSetChanged();
-                addingClass = false;
 
-            }else{
-                addingClass = true;
-            }
-
-            if(addingClass){
-                addClassButton.setText("select");
-                subjectSelector.setVisibility(View.VISIBLE);
-                classSelector.setVisibility(View.VISIBLE);
-            }else{
-                addClassButton.setText("Add class");
-                subjectSelector.setVisibility(View.INVISIBLE);
-                classSelector.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     private void createTutorProfile(){
@@ -416,12 +325,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
             Toast.makeText(TutorCreation.this,"Please enter a valid phone number",Toast.LENGTH_SHORT).show();
             phoneNumber.requestFocus();
             return;
-        }else if(subjectsTaught.isEmpty()){
-            Toast.makeText(TutorCreation.this,"You must select at least one class to teach",Toast.LENGTH_SHORT).show();
-
-            return;
         }
-
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -432,9 +336,9 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
        //
         //classes = classField.getText().toString();
 
-        TutorInfo tutorInfo = new TutorInfo(userInfo,education,Long.valueOf(phoneNumberString),rate);
+        TutorInfo tutorInfo = new TutorInfo(userInfo,education,phoneNumberString,rate);
 
-        tutorInfo.setSubjects(subjectsTaught);
+        //tutorInfo.setSubjects(subjectsTaught);
 
         tutorInfo.setProfileImage(userInfo.getProfileImage());
         databaseReference.child("tutors").child(user.getUid()).updateChildren(tutorInfo.toMap());
