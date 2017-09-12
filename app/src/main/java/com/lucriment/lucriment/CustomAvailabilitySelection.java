@@ -318,8 +318,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             String keyToDelete = "";
                     for(String key:keys){
                         TimeInterval currentTi = innerMap.get(key);
-                        long from1 = currentTi.getFrom();
-                        long from2 = timeslot.getFrom();
+                     //   long from1 = currentTi.getFrom();
+                     //   long from2 = timeslot.getFrom();
                         if(currentTi.getFrom()==timeslot.getFrom()){
                             keyToDelete = key;
 
@@ -327,7 +327,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                     }
 
                     selectedTime.remove(position);
-
+                        keys.remove(keyToDelete);
                         customAvas.remove(timeslot);
                         databaseReference.child("tutors").child(userInfo.getId()).child("customAvailability").child(selectedDay + "").child(keyToDelete).removeValue();
 
@@ -405,11 +405,17 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         Toast.makeText(getApplicationContext(),"Please enter To time",Toast.LENGTH_LONG).show();
                         return;
                     }
+
                         cal.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif2.getData().toString()));
                         cal2.add(Calendar.MINUTE, hoursAndMinutesToMinutes(tif3.getData().toString()));
+
                         TimeInterval timeInterval = new TimeInterval(cal.getTimeInMillis(),cal2.getTimeInMillis());
                         Calendar cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         Calendar cal4 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        if(cal.getTimeInMillis()<=cal3.getTimeInMillis()){
+                            Toast.makeText(getApplicationContext(),"Invalid Time",Toast.LENGTH_LONG).show();
+                            return;
+                        }
                        // cal4.setTime(todaysDate);
                         //cal3.setTime(todaysDate);
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");

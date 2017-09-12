@@ -14,6 +14,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,7 +82,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
     private UserInfo userInfo;
     private EditText editBioText;
     private FirebaseUser user;
-    private Button logoutButton, aboutButton, editButton;
+    private Button logoutButton, aboutButton;
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> classes = new ArrayList<>();
     private StorageReference storageReference;
@@ -124,9 +125,39 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         databaseReference2 = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         final String currentKey = firebaseAuth.getCurrentUser().getUid();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.about_action_bar);
+        View view =getSupportActionBar().getCustomView();
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setText("Profile");
+        TextView back = (TextView) view.findViewById(R.id.action_bar_back);
+        TextView edit = (TextView) view.findViewById(R.id.edit_about_action_bar);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MyProfileActivity.this, SettingsActivity.class);
 
+                i.putExtra("userInfo", userInfo);
+                i.putExtra("userType",userType);
+                i.putExtra("tutorInfo",tutorInfo);
+
+                startActivity(i);
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MyProfileActivity.this, EditTutorProfile.class);
+                overridePendingTransition(R.anim.bottom_up,R.anim.top_down);
+                i.putExtra("userInfo", userInfo);
+                i.putExtra("userType",userType);
+
+                startActivity(i);
+            }
+        });
 
 
 
@@ -198,7 +229,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         addClassButton = (Button) findViewById(R.id.addClassButton);
         logoutButton = (Button) findViewById(R.id.logoutButton);
-        editButton = (Button) findViewById(R.id.editButton);
+
         aboutButton = (Button) findViewById(R.id.editAbout);
         hourlyRate = (TextView) findViewById(R.id.browseRate);
         cityText = (TextView) findViewById(R.id.cityText);
@@ -220,7 +251,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         logoutButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
-        editButton.setOnClickListener(this);
+
 
 
 
@@ -247,23 +278,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 
 
-        //     if(userInfo.getProfileImage()!= null) {
-        //  Picasso.with(PersonalProfileActivity.this).load("https://firebasestorage.googleapis.com/v0/b/lucriment.appspot.com/o/ProfilePics%2FRG095XpINNSl7W1BPFiIqtJvO2h2?alt=media&token=d18e97f6-3087-4858-9260-ff9694cc6bf7").fit().centerCrop().into(imageView);
-        //    }
-        //setup buttons and fields
-        //  tutorName.setText();
-
     }
 
-    /*
-    private void updateNavigationBarState(int actionId){
-        Menu menu = bottomNavigationView.getMenu();
 
-        for (int i = 0, size = menu.size(); i < size; i++) {
-            MenuItem item = menu.getItem(i);
-            item.setChecked(item.getItemId() == actionId);
-        }
-    } */
     @Override
     int getContentViewId() {
         return R.layout.activity_personal_profile;
@@ -521,14 +538,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
 
 
-        if(v == editButton){
-            Intent i = new Intent(MyProfileActivity.this, EditTutorProfile.class);
-            overridePendingTransition(R.anim.bottom_up,R.anim.top_down);
-            i.putExtra("userInfo", userInfo);
-            i.putExtra("userType",userType);
 
-            startActivity(i);
-        }
 
 
 

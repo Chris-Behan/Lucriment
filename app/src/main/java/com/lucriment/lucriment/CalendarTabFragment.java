@@ -75,7 +75,16 @@ public class CalendarTabFragment extends Fragment {
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
         cv = (CompactCalendarView) view.findViewById(R.id.calendarView);
-
+        java.util.Calendar cal7 = java.util.Calendar.getInstance();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.set(java.util.Calendar.YEAR,cal7.get(java.util.Calendar.YEAR));
+        cal.set(java.util.Calendar.MONTH, cal7.get(java.util.Calendar.MONTH));
+        cal.set(java.util.Calendar.DAY_OF_MONTH, cal7.get(java.util.Calendar.DAY_OF_MONTH));
+        cal.set(java.util.Calendar.HOUR_OF_DAY,0);
+        cal.set(java.util.Calendar.MINUTE,0);
+        cal.set(java.util.Calendar.SECOND,0);
+        cal.set(java.util.Calendar.MILLISECOND,0);
+        currentSelectedDate = new Date(cal.getTimeInMillis());
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
         timeList.setAdapter(adapter);
@@ -388,7 +397,7 @@ public class CalendarTabFragment extends Fragment {
                 int year = cal.get(Calendar.YEAR);
                 int dayOfMonth = cal.get(Calendar.DATE);
                 int month = cal.get(Calendar.MONTH);
-                currentSelectedDate = initDate;
+               // currentSelectedDate = initDate;
                 SimpleDateFormat getDayOfWeek = new SimpleDateFormat("EEEE");
                 selectedDayOfWeek = getDayOfWeek.format(currentSelectedDate);
                 try {

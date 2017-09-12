@@ -58,7 +58,7 @@ public class UpcomingSessionFragment extends Fragment {
     private ArrayList<String> requestSessionKeys = new ArrayList<>();
     private ArrayList<String> bookedSessionKeys = new ArrayList<>();
     private ProgressBar progressBar;
-    private RelativeLayout relativeLayout;
+    private RelativeLayout sessionIndicator;
 
 
 
@@ -73,7 +73,7 @@ public class UpcomingSessionFragment extends Fragment {
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
         progressBar = (ProgressBar) view.findViewById(R.id.marker_progress);
-        relativeLayout = (RelativeLayout) view.findViewById(R.id.mainLayout);
+        sessionIndicator = (RelativeLayout) view.findViewById(R.id.currentSession);
 
 
 
@@ -127,6 +127,7 @@ public class UpcomingSessionFragment extends Fragment {
                 }
                 populateRequestList();
                 populateBookedList();
+                checkCurrentSession();
                 
             }
 
@@ -209,6 +210,11 @@ public class UpcomingSessionFragment extends Fragment {
         }
 
         ArrayList<String> t23 = strings;
+    }
+    private void checkCurrentSession(){
+        if(!thisSession.isEmpty()){
+            sessionIndicator.setVisibility(View.VISIBLE);
+        }
     }
 
     private void populateBookedList(){
