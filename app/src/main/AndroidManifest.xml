@@ -110,7 +110,8 @@
         <activity android:name=".TutorPayoutActivity" />
         <activity android:name=".TutorCreationP2" />
         <activity android:name=".AppInfoActivity" />
-        <activity android:name=".CreationSubjectSelection"></activity>
+        <activity android:name=".CreationSubjectSelection" />
+        <activity android:name=".CurrentSessionDetails"></activity>
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -214,6 +215,69 @@ public class UpcomingSessionFragment extends Fragment {
     private void checkCurrentSession(){
         if(!thisSession.isEmpty()){
             sessionIndicator.setVisibility(View.VISIBLE);
+            TextView name = (TextView) getView().findViewById(R.id.name);
+            TextView time = (TextView) getView().findViewById(R.id.time);
+            TextView subject =(TextView) getView().findViewById(R.id.subject);
+            TextView location = (TextView) getView().findViewById(R.id.location);
+            if(userType.equals("tutor")){
+                SessionRequest sr = thisSession.get(0);
+                name.setText(sr.getStudentName());
+                time.setText(sr.getTime().returnCurrentSessionTIme());
+                subject.setText(sr.getSubject());
+                location.setText(sr.getLocation());
+
+            } else  if(userType.equals("student")){
+                SessionRequest sr = thisSession.get(0);
+                name.setText(sr.getTutorName());
+                time.setText(sr.getTime().returnCurrentSessionTIme());
+                subject.setText(sr.getSubject());
+                location.setText(sr.getLocation());
+
+            }
+
+            sessionIndicator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    SessionRequest selectedSession = thisSession.get(0);
+                    ProgressDialog progDialog = ProgressDialog.show( getContext(), null, null, false, true );
+                    progDialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                    progDialog.setContentView( R.layout.progress_bar_circle );
+                    // TutorInfo selectedTutor1 = tutors.get(position);
+                    // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                    Intent i = new Intent(getApplicationContext(), CurrentSessionDetails.class);
+
+
+                    if(selectedSession.getLocation()==null){
+
+                    }else {
+                       // String key = bookedSessionKeys.get(position);
+                        if (userType.equals("tutor")) {
+                            i.putExtra("name", selectedSession.getStudentName());
+                        } else {
+                            i.putExtra("name", selectedSession.getTutorName());
+                        }
+                        i.putExtra("time", selectedSession.getTime());
+                        i.putExtra("location", selectedSession.getLocation());
+                        i.putExtra("subject", selectedSession.getSubject());
+                        i.putExtra("userType", userType);
+                        i.putExtra("userInfo", userInfo);
+                        if(userType.equals("tutor")) {
+                            i.putExtra("requestId", selectedSession.getStudentId());
+                        }else{
+                            i.putExtra("requestId", selectedSession.getTutorId());
+                        }
+                       // i.putExtra("requestKey", key);
+
+                        //  i.putExtra("selectedTutor", selectedTutor1);
+                        progressBar.setVisibility(View.GONE);
+                        startActivity(i);
+
+                    }
+                }
+            });
+
+
         }
     }
 

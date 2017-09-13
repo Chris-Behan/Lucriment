@@ -70,7 +70,7 @@ public class PaymentActivity extends BaseActivity {
         }
 
         DatabaseReference currentPaymentMethod = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("paymentInfo");
-        currentPaymentMethod.addListenerForSingleValueEvent(new ValueEventListener() {
+        currentPaymentMethod.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

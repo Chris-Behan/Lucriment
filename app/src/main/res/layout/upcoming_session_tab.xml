@@ -63,6 +63,7 @@
         android:background="@drawable/current_session_indicator"
         android:visibility="invisible"
         android:layout_alignBottom="@+id/confirmedSessionLabel"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="37dp"
@@ -70,6 +71,53 @@
         android:layout_marginRight="37dp"
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="37dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Session"
+            android:id="@+id/currentSessionLabel"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:textSize="18sp"
+            android:layout_marginBottom="5dp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/currentSessionLabel"
+            android:id="@+id/time"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/name"
+            android:layout_marginBottom="5dp"
+            android:textColor="#ffffff"
+            android:id="@+id/subject"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/subject"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textAlignment="center"
+            android:id="@id/location"/>
     </RelativeLayout>
 
 </RelativeLayout>
