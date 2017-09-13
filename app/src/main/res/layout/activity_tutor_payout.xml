@@ -57,6 +57,16 @@
                 android:layout_centerVertical="true"
                 android:layout_alignRight="@+id/line2"
                 android:layout_alignEnd="@+id/line2" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Required"
+                android:id="@+id/enterAccountNumber"
+                android:visibility="invisible"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignRight="@+id/line2"
+                android:layout_alignEnd="@+id/line2" />
             <View
                 android:id="@+id/line2"
                 android:layout_below="@id/accountNumberLabel"
@@ -98,6 +108,17 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Required"
+                android:visibility="invisible"
+                android:id="@+id/enterTransitNumber"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
             <View
                 android:id="@+id/line3"
                 android:layout_below="@id/transitNumberLabel"
@@ -133,6 +154,17 @@
                 android:layout_height="wrap_content"
                 android:text="Required"
                 android:id="@+id/institutionNumber"
+                android:textSize="18sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Required"
+                android:id="@+id/enterInstNumber"
+                android:visibility="invisible"
                 android:textSize="18sp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"

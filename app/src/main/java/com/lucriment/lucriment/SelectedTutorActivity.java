@@ -365,6 +365,10 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     startActivity(i);
                 }
                 if(position==1){
+                    if(!userInfo.isHasPamyent()){
+                        Toast.makeText(SelectedTutorActivity.this,"You must have a payment method to view this.",Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     Intent i = new Intent(SelectedTutorActivity.this, TimePickerActivity.class);
                     i.putExtra("tutor", selectedTutor);
                     i.putExtra("userType", userType);
@@ -417,6 +421,11 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 
         }
         if(v == requestButton) {
+
+            if(!userInfo.isHasPamyent()){
+                Toast.makeText(SelectedTutorActivity.this,"You must have a payment method to request a session.",Toast.LENGTH_LONG).show();
+                return;
+            }
 
             Intent i = new Intent(SelectedTutorActivity.this, RequestSessionActivity.class);
 

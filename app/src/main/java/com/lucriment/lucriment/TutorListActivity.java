@@ -125,6 +125,7 @@ public class TutorListActivity extends BaseActivity {
 
                                 userInfo = dataSnapshot.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
+                                userInfo.setHasPamyent(true);
 
 
                     }  else {

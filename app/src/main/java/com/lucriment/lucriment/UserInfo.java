@@ -25,6 +25,8 @@ public class UserInfo implements Parcelable {
     private ArrayList<String> savedTutors;
     private String customer_id;
     private Rating rating;
+    private HashMap<String,Object> paymentInfo;
+    private boolean hasPamyent = false;
 
 
     public UserInfo(){
@@ -56,7 +58,7 @@ public class UserInfo implements Parcelable {
 
 
     public UserInfo(Parcel in ){
-        String[] data = new String[10];
+        String[] data = new String[11];
         in.readStringArray(data);
         this.fullName = data[0];
         this.lastName = data[1];
@@ -68,6 +70,7 @@ public class UserInfo implements Parcelable {
         this.profileImage = data[7];
         this.userType = data[8];
         this.customer_id = data[9];
+        this.hasPamyent = Boolean.parseBoolean(data[10]);
 
 
 
@@ -83,6 +86,22 @@ public class UserInfo implements Parcelable {
         result.put("email",email);
         result.put("userType",userType);
         return result;
+    }
+
+    public boolean isHasPamyent() {
+        return hasPamyent;
+    }
+
+    public void setHasPamyent(boolean hasPamyent) {
+        this.hasPamyent = hasPamyent;
+    }
+
+    public HashMap<String, Object> getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public void setPaymentInfo(HashMap<String, Object> paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 
     public Rating getRating() {
@@ -189,7 +208,7 @@ public class UserInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.profileImage,
-        this.userType,this.customer_id});
+        this.userType,this.customer_id, String.valueOf(this.hasPamyent)});
 
     }
 

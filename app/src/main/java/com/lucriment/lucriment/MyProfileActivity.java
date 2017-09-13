@@ -143,7 +143,6 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 i.putExtra("userInfo", userInfo);
                 i.putExtra("userType",userType);
                 i.putExtra("tutorInfo",tutorInfo);
-
                 startActivity(i);
             }
         });
@@ -154,13 +153,9 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 overridePendingTransition(R.anim.bottom_up,R.anim.top_down);
                 i.putExtra("userInfo", userInfo);
                 i.putExtra("userType",userType);
-
                 startActivity(i);
             }
         });
-
-
-
 
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);

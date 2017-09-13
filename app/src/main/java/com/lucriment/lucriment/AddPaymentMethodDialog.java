@@ -43,6 +43,7 @@ public class AddPaymentMethodDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.addpaymentmethod,null);
       //  final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
         final CardForm cardForm = (CardForm) view.findViewById(R.id.card_form);
+
         cardForm.cardRequired(true)
                 .expirationRequired(true)
                 .cvvRequired(true)
