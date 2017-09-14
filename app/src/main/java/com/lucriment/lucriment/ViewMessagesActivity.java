@@ -47,7 +47,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
     private Button backButton;
     private ArrayAdapter<UserInfo> arrayAdapter;
     private ArrayList<Chat> listOfChats = new ArrayList<>();
-    private DatabaseReference chatRoot = FirebaseDatabase.getInstance().getReference().child("chats");
+    private DatabaseReference chatRoot;
     private DatabaseReference userRoot = FirebaseDatabase.getInstance().getReference().child("users");
     private String myID, tutorId;
     private List<UserInfo> users = new ArrayList<>();
@@ -87,14 +87,14 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         }
         menu.findItem(getNavigationMenuItemId()).setChecked(true);
       //  FirebaseDatabase.getInstance().getReference().child("users").child("P6Q1eBzDqBbsrurFVpbOlFLqfQL2").child("lastName").push().setValue("test");
-
+        chatRoot = FirebaseDatabase.getInstance().getReference().child("chats").child(userInfo.getId());
         chatRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Chat> chats = new ArrayList<Chat>();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
 
-                    if(ds.getKey().contains(userInfo.getId())){
+
 
                         String convoString = ds.getKey();
                         Chat lastChat = new Chat();
@@ -111,7 +111,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                             listOfChats.add(lastChat);
                             usersIds.add(lastChat.receiverId);
                         }
-                    }
+
                 }
 
 

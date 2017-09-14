@@ -198,24 +198,24 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
+    public void getMessageFromFirebaseUser(final String senderUid, final String receiverUid) {
         final String room_type_1 = senderUid + "_" + receiverUid;
         final String room_type_2 = receiverUid + "_" + senderUid;
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference();
 
-        databaseReference.child("chats")
+        databaseReference.child("chats").child(userInfo.getId())
                 .getRef()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild(room_type_1)) {
+
                             //Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_1 + " exists");
                             FirebaseDatabase.getInstance()
                                     .getReference()
-                                    .child("chats")
-                                    .child(room_type_1)
+                                    .child("chats").child(userInfo.getId()).child(receiverUid)
+
                                     .addChildEventListener(new ChildEventListener() {
                                         @Override
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -250,49 +250,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                             // Unable to get message.
                                         }
                                     });
-                        } else if (dataSnapshot.hasChild(room_type_2)) {
-                           // Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
-                            FirebaseDatabase.getInstance()
-                                    .getReference()
-                                    .child("chats")
-                                    .child(room_type_2)
-                                    .addChildEventListener(new ChildEventListener() {
-                                        @Override
-                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                            // Chat message is retreived.
-                                            Chat chat = dataSnapshot.getValue(Chat.class);
-                                            chatString = chat.text;
 
-                                            displayNameString = chat.senderName;
-                                            messages.add(chat);
-                                            messageAdapter.notifyDataSetChanged();
-                                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
-                                            existingConvo = true;
-                                        }
-
-                                        @Override
-                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            // Unable to get message.
-                                        }
-                                    });
-                        } else {
-                          //  Log.e(TAG, "getMessageFromFirebaseUser: no such room available");
-                        }
                     }
 
                     @Override
@@ -322,42 +280,43 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference();
 
-        databaseReference.child("chats")
+        databaseReference.child("chats").child(userInfo.getId())
                 .getRef()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.hasChild(room_type_1)) {
+                        if (dataSnapshot.hasChild(receiverID)) {
                             //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_1 + " exists");
                             databaseReference.child("chats")
-                                    .child(room_type_1)
-                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
+                                    .child(senderID)
+                                    .child(receiverID)
+                                    .push()
                                     .setValue(chat);
-                            if(!existingConvo){
-                                messages.add(chat);
-                                messageAdapter.notifyDataSetChanged();
-                                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
-                            }
-                        } else if (dataSnapshot.hasChild(room_type_2)) {
-                            //  Log.e(TAG, "sendMessageToFirebaseUser: " + room_type_2 + " exists");
                             databaseReference.child("chats")
-                                    .child(room_type_2)
-                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
+                                    .child(receiverID)
+                                    .child(senderID)
+                                    .push()
                                     .setValue(chat);
                             if(!existingConvo){
-                                messages.add(chat);
+                               // messages.add(chat);
                                 messageAdapter.notifyDataSetChanged();
                                 recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                             }
-                        } else {
+                        }  else {
                             // Log.e(TAG, "sendMessageToFirebaseUser: success");
                             databaseReference.child("chats")
-                                    .child(room_type_1)
-                                    .child(FirebaseDatabase.getInstance().getReference().push().getKey())
+                                    .child(senderID)
+                                    .child(receiverID)
+                                    .push()
                                     .setValue(chat);
-                            messages.add(chat);
-                            messageAdapter.notifyDataSetChanged();
-                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                            databaseReference.child("chats")
+                                    .child(receiverID)
+                                    .child(senderID)
+                                    .push()
+                                    .setValue(chat);
+                           // messages.add(chat);
+                            //messageAdapter.notifyDataSetChanged();
+                            //recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
                          //   HashMap<String, Object> myMap = new HashMap<String, Object>();
                          //   myMap.put(receiverID,true);
                         //    databaseReference.child("users").child(userInfo.getId()).child("chatsWith").updateChildren(myMap);
