@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BookedDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, CancelSessionDialogFragment.NoticeDialogListener{
@@ -49,6 +50,9 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
     private ArrayAdapter<TwoItemField> optionsAdapter;
     private Button acceptButton, declineButton;
     private String key;
+    private DatabaseReference thisCharge;
+    private String chargeId;
+    private String tutorBank;
 
 
 
@@ -97,6 +101,39 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         itemList.add(field1);
         itemList.add(field2);
         itemList.add(field3);
+        if(userType.equals("tutor")) {
+            DatabaseReference findChargeRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId())
+                    .child("stripe_connected").child("id");
+            findChargeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    tutorBank = dataSnapshot.getValue(String.class);
+                    determineRefundInfo();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            DatabaseReference findChargeRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid)
+                    .child("stripe_connected").child("id");
+            findChargeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    tutorBank = dataSnapshot.getValue(String.class);
+                    determineRefundInfo();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -212,31 +249,69 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
         }
         if (v == declineButton){
-            CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
-            declineDialogFragment.dialogMessage("By cancelling this session it will be removed from your booked sessions," +
-                    " the tutor will be notified, and you will not be charged. Are you sure you wish to cancel the session?");
-            declineDialogFragment.show(getFragmentManager(), "Decline");
-
+            if(userType.equals("tutor")) {
+                CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
+                declineDialogFragment.dialogMessage("By cancelling this session it will be removed from your booked sessions," +
+                        " the student will be notified, and you will not be receive payment. Are you sure you wish to cancel the session?");
+                declineDialogFragment.show(getFragmentManager(), "Decline");
+            }else{
+                CancelSessionDialogFragment declineDialogFragment = new CancelSessionDialogFragment();
+                declineDialogFragment.dialogMessage("By cancelling this session it will be removed from your booked sessions," +
+                        " the tutor will be notified, and you will not be charged. Are you sure you wish to cancel the session?");
+                declineDialogFragment.show(getFragmentManager(), "Decline");
+            }
 
         }
 
     }
 
+    private void determineRefundInfo(){
 
+        if(userType.equals("tutor")) {
+            thisCharge = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(requesteeUid).child("charges");
+        }else{
+            thisCharge = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userInfo.getId()).child("charges");
+        }
+        thisCharge.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot charge: dataSnapshot.getChildren()){
+                    if(charge.child("destination").getValue().equals(tutorBank)){
+                        chargeId = charge.child("id").getValue(String.class);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
+        HashMap<String,String> refundMap = new HashMap<>();
+        refundMap.put("chargeId",chargeId);
         if(userType.equals("tutor")) {
             DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionCancelled");
             databaseReference2.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
+            DatabaseReference refundRef = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(requesteeUid).child("refunds");
+            refundRef.push().setValue(refundMap);
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
 
             i.putExtra("userType", userType);
             i.putExtra("userInfo", userInfo);
             startActivity(i);
         }else{
+            DatabaseReference refundRef = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userInfo.getId()).child("refunds");
+            refundRef.push().setValue(refundMap);
             DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
             databaseReference2.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
