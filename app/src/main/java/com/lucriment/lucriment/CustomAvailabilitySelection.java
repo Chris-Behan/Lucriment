@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -419,8 +419,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                        // cal4.setTime(todaysDate);
                         //cal3.setTime(todaysDate);
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                    String hourAndMin1 = sdf.format(cal);
-                    String hourAndMin2 = sdf.format(cal2);
+                    String hourAndMin1 = sdf.format(cal.getTimeInMillis());
+                    String hourAndMin2 = sdf.format(cal2.getTimeInMillis());
                     try {
 
                         Date fromDate = sdf.parse(hourAndMin1);

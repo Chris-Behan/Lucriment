@@ -74,7 +74,7 @@ public class TutorListActivity extends BaseActivity {
         progressDialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         Query query = databaseReference;
-
+        query.limitToFirst(25);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -126,6 +126,12 @@ public class TutorListActivity extends BaseActivity {
 
                                 userInfo = dataSnapshot.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
+                                if(userType.equals("tutor")){
+                                    Intent y = new Intent(TutorListActivity.this, TutorSessionsActivity.class);
+                                    y.putExtra("userType", getUserType());
+                                    y.putExtra("userInfo",getUserInformation());
+                                    startActivity(y);
+                                }
                                 if(userInfo.getPaymentInfo()!=null){
                                     userInfo.setHasPamyent(true);
                                 }

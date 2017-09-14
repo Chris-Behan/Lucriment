@@ -109,7 +109,7 @@
             android:id="@+id/acceptButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/map"
+            android:layout_above="@+id/declineButton"
             android:layout_marginTop="15dp"
             android:background="@color/cardview_light_background"
             android:textAllCaps="false"
@@ -128,9 +128,10 @@
         <Button
 
             android:layout_marginTop="5dp"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/acceptButton"
+
             android:id="@+id/declineButton"
             android:background="@color/cardview_light_background"
             android:textAllCaps="false"

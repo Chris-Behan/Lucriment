@@ -187,7 +187,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
 
             mImageUri = data.getData();
             profileImage.setImageURI(mImageUri);
-            StorageReference filePath = mStorage.child("ProfilePics").child(userInfo.getId());
+            StorageReference filePath = mStorage.child("ProfileImages").child(userInfo.getId());
               progressDialog = new ProgressDialog(studentProfileActivity.this);
             progressDialog.setMessage("Uploading Image....");
             progressDialog.show();

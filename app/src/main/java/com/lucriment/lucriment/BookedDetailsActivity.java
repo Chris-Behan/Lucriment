@@ -68,30 +68,29 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         TwoItemField field2 = new TwoItemField("Time", "Select");
 
 
-
         // GET INTENTS
-        if(getIntent().hasExtra("requestId")){
+        if (getIntent().hasExtra("requestId")) {
             requesteeUid = getIntent().getStringExtra("requestId");
         }
-        if(getIntent().hasExtra("userInfo")) {
+        if (getIntent().hasExtra("userInfo")) {
             userInfo = getIntent().getParcelableExtra("userInfo");
         }
-        if(getIntent().hasExtra("userType")){
+        if (getIntent().hasExtra("userType")) {
             userType = getIntent().getStringExtra("userType");
         }
-        if(getIntent().hasExtra("time")){
+        if (getIntent().hasExtra("time")) {
             ti = getIntent().getParcelableExtra("time");
         }
-        if(getIntent().hasExtra("name")){
+        if (getIntent().hasExtra("name")) {
             requesteeName = getIntent().getStringExtra("name");
         }
-        if(getIntent().hasExtra("location")){
+        if (getIntent().hasExtra("location")) {
             locationName = getIntent().getStringExtra("location");
         }
-        if(getIntent().hasExtra("subject")){
+        if (getIntent().hasExtra("subject")) {
             subject = getIntent().getStringExtra("subject");
         }
-        if(getIntent().hasExtra("requestKey")){
+        if (getIntent().hasExtra("requestKey")) {
             key = getIntent().getStringExtra("requestKey");
         }
         field1.setData(subject);
@@ -101,7 +100,7 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         itemList.add(field1);
         itemList.add(field2);
         itemList.add(field3);
-        if(userType.equals("tutor")) {
+        if (userType.equals("tutor")) {
             DatabaseReference findChargeRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId())
                     .child("stripe_connected").child("id");
             findChargeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -116,7 +115,7 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
                 }
             });
-        }else{
+        } else {
             DatabaseReference findChargeRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid)
                     .child("stripe_connected").child("id");
             findChargeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,21 +133,38 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
         }
 
+        if (userType.equals("tutor")) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+                    initializeFields();
+                    populateOptionsList();
+                }
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                requesteeInfo = dataSnapshot.getValue(UserInfo.class);
-                initializeFields();
-                populateOptionsList();
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } else {
 
-            }
-        });
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+                    initializeFields();
+                    populateOptionsList();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         //INITIALIZE WIDGETS
         nameText = (TextView) findViewById(R.id.requestName);
         titleText = (TextView) findViewById(R.id.requestTitle);
@@ -175,10 +191,19 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
     }
     private void initializeFields(){
-        titleText.setText(requesteeInfo.getHeadline());
-        ratingText.setText("4.5");
+
+
+            titleText.setText(requesteeInfo.getHeadline());
+            if (requesteeInfo.getRating() != null) {
+                double rating = requesteeInfo.getRating().getTotalScore() / requesteeInfo.getRating().getNumberOfReviews();
+                ratingText.setText(rating + "");
+            } else {
+                ratingText.setText("  0");
+            }
+
         Glide.with(getApplicationContext())
                 .load(requesteeInfo.getProfileImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }

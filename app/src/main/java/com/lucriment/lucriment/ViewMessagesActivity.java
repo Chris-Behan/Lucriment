@@ -2,7 +2,7 @@ package com.lucriment.lucriment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -123,6 +123,8 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
             }
         });
+        
+
         userRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

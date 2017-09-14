@@ -211,6 +211,23 @@ public class PastSessionFragment extends Fragment {
         if(getView()!=null){
             cancelledList = (ListView) getView().findViewById(R.id.cancelledSessionsList);
             cancelledList.setAdapter(cancelledAdapter);
+            TextView pastLabel = (TextView) getView().findViewById(R.id.cancelledSessionsLabel);
+            final ViewGroup.LayoutParams test8 = cancelledList.getLayoutParams();
+            test8.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            pastLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(test8.height == 0){
+                        test8.height =  ViewGroup.LayoutParams.WRAP_CONTENT;
+                        cancelledList.setLayoutParams(test8);
+                    }else{
+                        test8.height =  0;
+                        cancelledList.setLayoutParams(test8);
+                    }
+                }
+            });
+
         }
     }
 

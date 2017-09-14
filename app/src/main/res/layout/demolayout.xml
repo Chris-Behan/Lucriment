@@ -148,13 +148,16 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="wrap_content"
+                android:id="@+id/aboutLayout">
+
 
                 <View
                     android:id="@+id/line2"
                     android:layout_width="match_parent"
                     android:layout_height="1dip"
                     android:layout_weight="1"
+
                     android:layout_marginLeft="10dp"
                     android:layout_centerHorizontal="true"
                     android:background="#c9c9c9"
@@ -172,21 +175,33 @@
                     android:layout_marginLeft="12dp"
                     android:textStyle="bold"
                     android:layout_marginStart="12dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginBottom="20dp"/>
 
                 <TextView
                     android:id="@+id/tutorAboutField"
-                    android:layout_width="280dp"
-                    android:layout_height="130dp"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginStart="14dp"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
                     android:text="TextView"
-                    android:maxWidth="150dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="4dp"
                     android:layout_alignTop="@+id/AboutLabel"
                     android:layout_toRightOf="@+id/AboutLabel"
+                    android:layout_marginLeft="5dp"
+
                     android:layout_alignRight="@+id/line2"
                     android:layout_alignEnd="@+id/line2" />
+                <Button
+                    android:id="@+id/editAbout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:textAllCaps="false"
+                    android:visibility="invisible"
+                    android:text="Edit"
+                    android:layout_alignBottom="@+id/AboutLabel"
+                    android:layout_alignRight="@+id/line2"
+                    android:layout_alignEnd="@+id/line2"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginEnd="35dp" />
 
             </RelativeLayout>
 
@@ -222,12 +237,13 @@
                     android:id="@+id/classesField"
                     android:layout_width="250dp"
                     android:layout_height="100dp"
+                    android:layout_marginTop="5dp"
                     android:text="test"
                     android:layout_alignTop="@+id/subjectsLabel"
                     android:layout_toRightOf="@+id/subjectsLabel"
                     android:layout_toEndOf="@+id/subjectsLabel"
-                    android:layout_marginLeft="37dp"
-                    android:layout_marginStart="37dp" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp" />
             </RelativeLayout>
 
 

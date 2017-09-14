@@ -203,7 +203,7 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
 
             mImageUri = data.getData();
             profileImage.setImageURI(mImageUri);
-            StorageReference filePath = mStorage.child("ProfilePics").child(userInfo.getId());
+            StorageReference filePath = mStorage.child("ProfileImages").child(userInfo.getId());
             //  progressDialog = new ProgressDialog(UploadActivity.this);
             progressDialog.setMessage("Uploading Image....");
             progressDialog.show();
@@ -248,6 +248,9 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if(v== editButton){
             if(editing){
+
+
+
                 editing = false;
                 editButton.setText("Edit");
                 firstNameRef.setValue(enterFirstName.getText().toString().trim());

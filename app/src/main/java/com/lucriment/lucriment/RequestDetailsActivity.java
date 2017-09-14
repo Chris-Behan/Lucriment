@@ -118,21 +118,38 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             });
         }
 
+        if (userType.equals("tutor")) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+                    initializeFields();
+                    populateOptionsList();
+                }
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                requesteeInfo = dataSnapshot.getValue(UserInfo.class);
-                initializeFields();
-                populateOptionsList();
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } else {
 
-            }
-        });
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+                    initializeFields();
+                    populateOptionsList();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         //INITIALIZE WIDGETS
         nameText = (TextView) findViewById(R.id.requestName);
         titleText = (TextView) findViewById(R.id.requestTitle);
@@ -159,11 +176,17 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     }
     private void initializeFields(){
 
-            titleText.setText(requesteeInfo.getHeadline());
+                titleText.setText(requesteeInfo.getHeadline());
+                if (requesteeInfo.getRating() != null) {
+                    double rating = requesteeInfo.getRating().getTotalScore() / requesteeInfo.getRating().getNumberOfReviews();
+                    ratingText.setText(rating + "");
+                } else {
+                    ratingText.setText("  0");
+                }
 
-        ratingText.setText("4.5");
         Glide.with(getApplicationContext())
                 .load(requesteeInfo.getProfileImage())
+                .apply(RequestOptions.placeholderOf(R.drawable.com_facebook_profile_picture_blank_portrait))
                 .apply(RequestOptions.circleCropTransform())
                 .into(imageView);
     }

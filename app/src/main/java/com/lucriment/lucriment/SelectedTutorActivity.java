@@ -2,6 +2,7 @@ package com.lucriment.lucriment;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
@@ -13,6 +14,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -375,6 +377,32 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
                     i.putExtra("userInfo",userInfo);
                     i.putExtra("tutorScore",score);
                     startActivity(i);
+                }if(position ==2){
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            SelectedTutorActivity.this);
+
+                    // set title
+                    alertDialogBuilder.setTitle("Disputes");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("To report this profile, email us at contact@lucriment.com with the tutors first and last name, along with" +
+                                    " why you are reporting them.")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    dialog.dismiss();
+                                }
+                            });
+
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
                 }
 
             }

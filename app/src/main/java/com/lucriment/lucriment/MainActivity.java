@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ClickableSpan span1 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                String url = "https://lucriment.com";
+                String url = "https://lucriment.com/tos";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

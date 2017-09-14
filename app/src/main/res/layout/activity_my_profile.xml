@@ -114,7 +114,7 @@
                         android:text="TextView"
 
                         android:layout_marginBottom="6dp"
-                        android:layout_marginRight="40dp"
+                        android:layout_marginRight="10dp"
                         android:layout_alignBottom="@+id/browseRate"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true" />
@@ -141,16 +141,9 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
-                    <EditText
-                        android:id="@+id/editBioField"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="say something about yourself"
-                        android:visibility="invisible"
-                        android:layout_alignTop="@+id/tutorAboutField"
-                        android:layout_alignLeft="@+id/tutorAboutField"
-                        android:layout_alignStart="@+id/tutorAboutField" />
+                    android:layout_height="wrap_content"
+                    android:id="@+id/aboutLayout">
+
 
                     <View
                         android:id="@+id/line2"
@@ -175,18 +168,19 @@
                         android:layout_marginLeft="12dp"
                         android:textStyle="bold"
                         android:layout_marginStart="12dp"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_marginBottom="20dp"/>
 
                     <TextView
                         android:id="@+id/tutorAboutField"
                         android:layout_width="300dp"
-                        android:layout_height="130dp"
-                        android:layout_marginLeft="14dp"
-                        android:layout_marginStart="14dp"
+                        android:layout_height="wrap_content"
                         android:text="TextView"
-
+                        android:layout_marginTop="4dp"
                         android:layout_alignTop="@+id/AboutLabel"
                         android:layout_toRightOf="@+id/AboutLabel"
+                        android:layout_marginLeft="5dp"
+
                         android:layout_alignRight="@+id/line2"
                         android:layout_alignEnd="@+id/line2" />
                     <Button
