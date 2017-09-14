@@ -358,6 +358,12 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                             messages.add(chat);
                             messageAdapter.notifyDataSetChanged();
                             recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);
+                         //   HashMap<String, Object> myMap = new HashMap<String, Object>();
+                         //   myMap.put(receiverID,true);
+                        //    databaseReference.child("users").child(userInfo.getId()).child("chatsWith").updateChildren(myMap);
+                       //     myMap.clear();
+                      //      myMap.put(userInfo.getId(),true);
+                      //      databaseReference.child("users").child(receiverID).child("chatsWith").updateChildren(myMap);
                         }
                     }
 

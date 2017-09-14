@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/pastSessionsLabel"
         android:layout_width="match_parent"
@@ -22,9 +23,10 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@+id/pastSessionsLabel"
-        android:id="@+id/pastSessionList">
+        android:id="@+id/pastSessionList"
+        >
 
     </ListView>
 

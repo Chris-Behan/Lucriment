@@ -131,6 +131,23 @@ public class PastSessionFragment extends Fragment {
         if(getView()!=null) {
             bookedListView = (ListView) getView().findViewById(R.id.pastSessionList);
             bookedListView.setAdapter(adapter2);
+            TextView pastLabel = (TextView) getView().findViewById(R.id.pastSessionsLabel);
+            final ViewGroup.LayoutParams test7 = bookedListView.getLayoutParams();
+            test7.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            pastLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(test7.height == 0){
+                        test7.height =  ViewGroup.LayoutParams.WRAP_CONTENT;
+                        bookedListView.setLayoutParams(test7);
+                    }else{
+                        test7.height =  0;
+                        bookedListView.setLayoutParams(test7);
+                    }
+                }
+            });
+
 
             bookedListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -168,6 +185,24 @@ public class PastSessionFragment extends Fragment {
         if(getView()!=null) {
             declinedList = (ListView) getView().findViewById(R.id.declineSessionsList);
             declinedList.setAdapter(declineAdapter);
+            TextView pastLabel = (TextView) getView().findViewById(R.id.declineSessionsLabel);
+            final ViewGroup.LayoutParams test8 = declinedList.getLayoutParams();
+            test8.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            pastLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(test8.height == 0){
+                        test8.height =  ViewGroup.LayoutParams.WRAP_CONTENT;
+                        declinedList.setLayoutParams(test8);
+                    }else{
+                        test8.height =  0;
+                        declinedList.setLayoutParams(test8);
+                    }
+                }
+            });
+
+
 
         }
     }

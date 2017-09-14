@@ -71,7 +71,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
         firebaseAuth = FirebaseAuth.getInstance();
         baseRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("stripe_connected").child("update");
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("userType");
-
+        DatabaseReference testRefund = FirebaseDatabase.getInstance().getReference().child("users").child("qrD21Pv02RhjQlGPDdxGyBHMoVr2")
+                .child("refunds");
+        HashMap<String,String> refundMap = new HashMap<>();
+        refundMap.put("chargeId","ch_1B1NrAGQFWOITl4suXjiUW8V");
+        testRefund.push().setValue(refundMap);
         DatabaseReference checkT = FirebaseDatabase.getInstance().getReference().child("tutors");
         checkT.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

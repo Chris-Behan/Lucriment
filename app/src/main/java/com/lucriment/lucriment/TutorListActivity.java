@@ -74,6 +74,7 @@ public class TutorListActivity extends BaseActivity {
         progressDialog.show();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         Query query = databaseReference;
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,7 +126,9 @@ public class TutorListActivity extends BaseActivity {
 
                                 userInfo = dataSnapshot.getValue(UserInfo.class);
                                 userType = userInfo.getUserType();
-                                userInfo.setHasPamyent(true);
+                                if(userInfo.getPaymentInfo()!=null){
+                                    userInfo.setHasPamyent(true);
+                                }
 
 
                     }  else {

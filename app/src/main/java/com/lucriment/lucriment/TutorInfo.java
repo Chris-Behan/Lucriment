@@ -44,7 +44,7 @@ public class TutorInfo implements Parcelable {
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
         this.id = user.getId();
-        this.chatsWith = user.getChatsWith();
+
         this.email = user.getEmail();
         this.headline = user.getHeadline();
         this.userType = user.getUserType();
@@ -76,7 +76,7 @@ public class TutorInfo implements Parcelable {
         this.lastName = user.getLastName();
         this.firstName = user.getFirstName();
         this.id = user.getId();
-        this.chatsWith = user.getChatsWith();
+
         this.email = user.getEmail();
         this.headline = user.getHeadline();
         this.userType = user.getUserType();
