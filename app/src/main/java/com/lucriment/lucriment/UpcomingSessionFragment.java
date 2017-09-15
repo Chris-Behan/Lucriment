@@ -45,7 +45,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class UpcomingSessionFragment extends Fragment {
     private UserInfo userInfo;
     private String userType;
-    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
+    private DatabaseReference databaseReference1;
     private ArrayList<SessionRequest> currentSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> allSessions = new ArrayList<SessionRequest>();
     private ArrayList<SessionRequest> requestList = new ArrayList<SessionRequest>();
@@ -75,6 +75,7 @@ public class UpcomingSessionFragment extends Fragment {
         userType = args.getString("userType");
         progressBar = (ProgressBar) view.findViewById(R.id.marker_progress);
         sessionIndicator = (RelativeLayout) view.findViewById(R.id.currentSession);
+        databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId());
 
 
 

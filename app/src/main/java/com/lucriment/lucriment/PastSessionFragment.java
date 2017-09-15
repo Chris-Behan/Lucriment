@@ -35,7 +35,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class PastSessionFragment extends Fragment {
     private UserInfo userInfo;
     private String userType;
-    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
+    private DatabaseReference databaseReference1;
 
     private ArrayList<SessionRequest> pastSessions = new ArrayList<>();
     private ArrayList<SessionRequest> cancelledSessions = new ArrayList<>();
@@ -56,7 +56,7 @@ public class PastSessionFragment extends Fragment {
         Bundle args = getArguments();
         userInfo = args.getParcelable("userInfo");
         userType = args.getString("userType");
-
+        databaseReference1  =  FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId());
 
         //GET SESSION LIST
         databaseReference1.addValueEventListener(new ValueEventListener() {

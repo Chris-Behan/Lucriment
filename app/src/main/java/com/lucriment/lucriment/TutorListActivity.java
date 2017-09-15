@@ -110,8 +110,8 @@ public class TutorListActivity extends BaseActivity {
         }
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
+
         }
-        if(userInfo==null) {
 
             firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -155,13 +155,13 @@ public class TutorListActivity extends BaseActivity {
 
                 }
             });
-        }else {
+
 
             BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
             BottomNavHelper.disableShiftMode(bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
             bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        }
+
         //  Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
 
     }

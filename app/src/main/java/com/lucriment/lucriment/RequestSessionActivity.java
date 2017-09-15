@@ -44,6 +44,8 @@ import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestSessionActivity extends BaseActivity implements View.OnClickListener, SubjectSelectionDialog.NoticeDialogListener {
 
@@ -220,7 +222,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
           //  field1.setData(tutor.getSubjects().get(0));
            field3.setData(selectedTimeInterval);
             double r = requestedTime.returnTimeInHours();
-            sessioncost =  (requestedTime.returnTimeInHours()*tutor.getRate());
+            sessioncost =  Math.round(((requestedTime.returnTimeInHours()*tutor.getRate()*1.029)+0.3)*100.0)/100.0 ;
             cost.setText(" $"+sessioncost+"");
             cost.setVisibility(View.VISIBLE);
         }
@@ -261,7 +263,14 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             sessionReqList.add(sessionRequest);
           //  SessionRequest sessionRequest = new SessionRequest(tutor.getClasses(), selectedLocation, requestedTime, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),sessioncost);
             //sessionReqList.add(sessionRequest);
-        databaseReference.child("sessions").child(user.getUid()+"_"+tutor.getId()).push().setValue(sessionRequest);
+            DatabaseReference pushID = databaseReference.child("keys").push();
+            pushID.setValue(true);
+            String sessionKey = pushID.getKey();
+
+
+            databaseReference.child("sessions").child(userInfo.getId()).child(user.getUid()+"_"+tutor.getId()).child(sessionKey).setValue(sessionRequest);
+            databaseReference.child("sessions").child(tutor.getId()).child(user.getUid()+"_"+tutor.getId()).child(sessionKey).setValue(sessionRequest);
+
             Toast.makeText(RequestSessionActivity.this, "Request Sent.",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestSessionActivity.this, SelectedTutorActivity.class);

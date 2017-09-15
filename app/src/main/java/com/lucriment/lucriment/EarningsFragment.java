@@ -31,7 +31,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class EarningsFragment extends Fragment {
     private UserInfo userInfo;
     private String userType;
-    private DatabaseReference earningsRef = FirebaseDatabase.getInstance().getReference().child("sessions");
+    private DatabaseReference earningsRef;
     private ArrayList<SessionRequest> mySessions = new ArrayList<>();
     private ListView earningsList;
     private ArrayAdapter<SessionRequest> adapter;
@@ -45,6 +45,7 @@ public class EarningsFragment extends Fragment {
         userType = args.getString("userType");
        // earningsList = (ListView) view.findViewById(R.id.earningsList);
 
+       earningsRef  = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId());
         earningsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

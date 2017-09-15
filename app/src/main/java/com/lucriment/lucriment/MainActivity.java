@@ -93,14 +93,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ClickableSpan span1 = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                String url = "https://lucriment.com/tos";
+                String url = "https://lucriment.com/tos.html";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
             }
         };
 
-        ss.setSpan(span1, 32, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ClickableSpan span2 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                String url = "https://lucriment.com/privacy.html";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        };
+
+        ss.setSpan(span1, 32, 48, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(span2, 53, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         TOS.setText(ss);
         TOS.setMovementMethod(LinkMovementMethod.getInstance());

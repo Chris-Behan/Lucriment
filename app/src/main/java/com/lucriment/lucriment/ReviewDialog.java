@@ -31,7 +31,7 @@ import java.util.HashMap;
 public class ReviewDialog extends DialogFragment{
     private UserInfo userInfo, receiver;
     private String userType, sessionId, sessionKey;
-    private DatabaseReference reviewRef, receiverRating, sessionRef;
+    private DatabaseReference reviewRef, receiverRating, sessionRef, sessionRef2;
     private Rating rating;
     private float score;
 
@@ -55,14 +55,18 @@ public class ReviewDialog extends DialogFragment{
 
             reviewRef = FirebaseDatabase.getInstance().getReference().child("users").child(receiver.getId()).
                     child("reviews").child(sessionKey);
-            sessionRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(sessionId)
+            sessionRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(sessionId)
+                    .child(sessionKey).child("studentReview");
+            sessionRef2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(receiver.getId()).child(sessionId)
                     .child(sessionKey).child("studentReview");
 
         }else{
             receiverRating = FirebaseDatabase.getInstance().getReference().child("tutors").child(receiver.getId()).child("rating");
             reviewRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(receiver.getId()).
                     child("reviews").child(sessionKey);
-            sessionRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(sessionId)
+            sessionRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(sessionId)
+                    .child(sessionKey).child("tutorReview");
+            sessionRef2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(receiver.getId()).child(sessionId)
                     .child(sessionKey).child("tutorReview");
         }
 
@@ -108,6 +112,7 @@ public class ReviewDialog extends DialogFragment{
                         receiverRating.setValue(rating);
                         reviewRef.setValue(review);
                         sessionRef.setValue(review);
+                        sessionRef2.setValue(review);
 
 
 

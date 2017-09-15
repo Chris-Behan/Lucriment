@@ -1,7 +1,7 @@
 package com.lucriment.lucriment;
 
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;

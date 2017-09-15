@@ -170,7 +170,9 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
         postalCode.setTextColor(nameLabel.getTextColors());
         hourlyRate.setText(tutorInfo.getRate()+"");
         hourlyRate.setTextColor(nameLabel.getTextColors());
-        subjects.setText(tutorInfo.getSubjects().toString());
+        if(tutorInfo.getSubjects()!=null) {
+            subjects.setText(tutorInfo.getSubjects().toString());
+        }
         headline.setText(tutorInfo.getHeadline());
         headline.setTextColor(nameLabel.getTextColors());
 

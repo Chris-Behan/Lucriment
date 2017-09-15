@@ -50,7 +50,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
     private SessionRequest clickedSession;
     private int indexOfClickedSession;
     private FirebaseUser user = firebaseAuth.getCurrentUser();
-    private DatabaseReference databaseReference1 =  FirebaseDatabase.getInstance().getReference().child("sessions");
+    private DatabaseReference databaseReference1;
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private Button backButton;
     private String ID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -78,6 +78,7 @@ public class SessionsActivity extends BaseActivity implements DeclineDialogFragm
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId());
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);

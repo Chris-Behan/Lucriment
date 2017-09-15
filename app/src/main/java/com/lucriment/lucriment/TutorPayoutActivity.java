@@ -116,10 +116,11 @@ public class TutorPayoutActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                     acctLast4 = dataSnapshot.child("last4").getValue(String.class);
                     routingNum = dataSnapshot.child("routing_number").getValue(String.class);
-
-                   accountNumber.setText("********"+acctLast4);
-                    transitNumber.setText(routingNum.substring(0,routingNum.indexOf('-')));
-                    institutionNumber.setText(routingNum.substring(routingNum.indexOf('-')+1,routingNum.length()));
+                    if(acctLast4!=null) {
+                        accountNumber.setText("********" + acctLast4);
+                        transitNumber.setText(routingNum.substring(0, routingNum.indexOf('-')));
+                        institutionNumber.setText(routingNum.substring(routingNum.indexOf('-') + 1, routingNum.length()));
+                    }
             }
 
             @Override

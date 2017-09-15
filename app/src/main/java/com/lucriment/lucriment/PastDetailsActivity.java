@@ -215,10 +215,10 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
 
     private void checkReviewStatus(){
         if(userType.equals("tutor")){
-            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeInfo.getId()+"_"+userInfo.getId())
+            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(requesteeInfo.getId()+"_"+userInfo.getId())
                     .child(key);
         }else {
-            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+"_"+requesteeInfo.getId())
+            reviewRef = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(userInfo.getId()+"_"+requesteeInfo.getId())
                     .child(key);
         }
         reviewRef.addValueEventListener(new ValueEventListener() {

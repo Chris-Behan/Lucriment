@@ -260,8 +260,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     public void onAcceptPositiveClick(DialogFragment dialog) {
-        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
+        DatabaseReference databaseReference2 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
         databaseReference2.setValue(true);
+        DatabaseReference databaseReference3 =  FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid).child(requesteeUid+"_"+userInfo.getId()).child(key).child("confirmed");
+        databaseReference3.setValue(true);
         DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().child("users").child(requesteeUid).child("charges");
         HashMap<String,Object> amountMap = new HashMap<String, Object>();
         amountMap.put("amount",price*100);
@@ -287,8 +289,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     @Override
     public void onDeclinePositiveClick(DialogFragment dialog) {
         if(userType.equals("tutor")) {
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionDeclined");
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid).child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionDeclined");
             databaseReference2.setValue(true);
+            DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionDeclined");
+            databaseReference3.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
@@ -297,8 +301,10 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             i.putExtra("userInfo", userInfo);
             startActivity(i);
         }else{
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
             databaseReference2.setValue(true);
+            DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid).child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            databaseReference3.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);

@@ -123,7 +123,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
             }
         });
-        
+
 
         userRoot.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

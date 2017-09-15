@@ -321,8 +321,10 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         HashMap<String,String> refundMap = new HashMap<>();
         refundMap.put("chargeId",chargeId);
         if(userType.equals("tutor")) {
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionCancelled");
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionCancelled");
             databaseReference2.setValue(true);
+            DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid).child(requesteeUid + "_" + userInfo.getId()).child(key).child("sessionCancelled");
+            databaseReference3.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
             DatabaseReference refundRef = FirebaseDatabase.getInstance().getReference().child("users")
@@ -337,8 +339,10 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
             DatabaseReference refundRef = FirebaseDatabase.getInstance().getReference().child("users")
                     .child(userInfo.getId()).child("refunds");
             refundRef.push().setValue(refundMap);
-            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("sessions").child(userInfo.getId()).child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
             databaseReference2.setValue(true);
+            DatabaseReference databaseReference3 = FirebaseDatabase.getInstance().getReference().child("sessions").child(requesteeUid).child(userInfo.getId()+ "_"+requesteeUid).child(key).child("sessionCancelled");
+            databaseReference3.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
