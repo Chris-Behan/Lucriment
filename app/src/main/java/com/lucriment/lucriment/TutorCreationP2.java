@@ -33,6 +33,10 @@ public class TutorCreationP2 extends AppCompatActivity {
     private String accountNumber, transitNumber, institutionNumber,SIN;
     private EditText accountNumField, transitNumField, institutionNumField, SINfield;
     private Button addAccountButton;
+    private String accountRegex = "^[0-9]{5,12}$";
+    private String transitRegex = "^[0-9]{5}$";
+    private String institutionRegex = "^[0-9]{3}$";
+    private String SinRegex = "^[0-9]{9}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +89,30 @@ public class TutorCreationP2 extends AppCompatActivity {
                     Toast.makeText(TutorCreationP2.this,"Please enter SIN number",Toast.LENGTH_SHORT).show();
                     SINfield.requestFocus();
                     return;
+                }else if(!accountNumField.getText().toString().matches(accountRegex)){
+                    Toast.makeText(TutorCreationP2.this,"Invalid Account Number",Toast.LENGTH_SHORT).show();
+                    accountNumField.requestFocus();
+                    return;
+                }else if(!transitNumField.getText().toString().matches(transitRegex)){
+                    Toast.makeText(TutorCreationP2.this,"Invalid Transit Number",Toast.LENGTH_SHORT).show();
+                    transitNumField.requestFocus();
+                    return;
+                }else if(!institutionNumField.getText().toString().matches(institutionRegex)){
+                    Toast.makeText(TutorCreationP2.this,"Invalid Institution Number",Toast.LENGTH_SHORT).show();
+                    institutionNumField.requestFocus();
+                    return;
                 }
+                else if(!SINfield.getText().toString().matches(SinRegex)){
+                    Toast.makeText(TutorCreationP2.this,"Invalid SIN Number",Toast.LENGTH_SHORT).show();
+                    SINfield.requestFocus();
+                    return;
+                }
+
 
                 accountNumber = accountNumField.getText().toString();
                 transitNumber = transitNumField.getText().toString();
                 institutionNumber = institutionNumField.getText().toString();
-                SIN = SINfield.getText().toString();
+                SIN = SINfield.getText().toString().replaceAll("\\s+","");
                 initializeBankAccount();
                 finish();
                 Intent y =new Intent(TutorCreationP2.this, CreationSubjectSelection.class);

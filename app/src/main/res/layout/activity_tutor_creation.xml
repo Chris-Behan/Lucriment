@@ -69,6 +69,7 @@
             android:id="@+id/addressLine"
             android:layout_below="@id/phoneNumber"
             android:hint="Address"
+            android:inputType="textPostalAddress"
             />
         <EditText
             android:layout_width="match_parent"
@@ -76,6 +77,7 @@
             android:layout_below="@+id/addressLine"
             android:id="@+id/city"
             android:hint="City"
+            android:inputType="textPostalAddress"
             />
         <EditText
             android:layout_width="match_parent"

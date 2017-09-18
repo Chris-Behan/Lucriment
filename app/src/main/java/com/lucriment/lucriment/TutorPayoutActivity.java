@@ -1,12 +1,14 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,10 @@ public class TutorPayoutActivity extends AppCompatActivity {
     private EditText enterAccountNumber, enterTransitNumber, enterInstNumber;
     private boolean editing = false;
     private DatabaseReference baseRef;
+    private Button stripeBadge;
+    private String accountRegex = "^[0-9]{5,12}$";
+    private String transitRegex = "^[0-9]{5}$";
+    private String institutionRegex = "^[0-9]{3}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,7 @@ public class TutorPayoutActivity extends AppCompatActivity {
         title.setText("Profile");
         TextView back = (TextView) view.findViewById(R.id.action_bar_back);
         TextView edit = (TextView) view.findViewById(R.id.edit_about_action_bar);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +59,16 @@ public class TutorPayoutActivity extends AppCompatActivity {
                 i.putExtra("userType",userType);
                 //i.putExtra("tutorInfo",tutorInfo);
 
+                startActivity(i);
+            }
+        });
+        stripeBadge = (Button) findViewById(R.id.stripeBadge3);
+        stripeBadge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://stripe.com";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
                 startActivity(i);
             }
         });
@@ -71,6 +88,18 @@ public class TutorPayoutActivity extends AppCompatActivity {
                         return;
                     }else if (TextUtils.isEmpty(enterInstNumber.getText().toString())){
                         Toast.makeText(TutorPayoutActivity.this,"Please enter institution number",Toast.LENGTH_SHORT).show();
+                        enterInstNumber.requestFocus();
+                        return;
+                    }else if(!enterAccountNumber.getText().toString().matches(accountRegex)){
+                        Toast.makeText(TutorPayoutActivity.this,"Invalid Account Number",Toast.LENGTH_SHORT).show();
+                        enterAccountNumber.requestFocus();
+                        return;
+                    }else if(!enterTransitNumber.getText().toString().matches(transitRegex)){
+                        Toast.makeText(TutorPayoutActivity.this,"Invalid Transit Number",Toast.LENGTH_SHORT).show();
+                        enterTransitNumber.requestFocus();
+                        return;
+                    }else if(!enterInstNumber.getText().toString().matches(institutionRegex)){
+                        Toast.makeText(TutorPayoutActivity.this,"Invalid Institution Number",Toast.LENGTH_SHORT).show();
                         enterInstNumber.requestFocus();
                         return;
                     }

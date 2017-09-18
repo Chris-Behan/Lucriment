@@ -72,6 +72,7 @@ public class TutorListActivity extends BaseActivity {
 
         progressDialog.setMessage("Loading...");
         progressDialog.show();
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         Query query = databaseReference;
         query.limitToFirst(25);
@@ -210,6 +211,8 @@ public class TutorListActivity extends BaseActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -351,6 +354,7 @@ public class TutorListActivity extends BaseActivity {
 
     private void registerTutorClicks() {
         ListView list = (ListView) findViewById(R.id.tView);
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -365,6 +369,7 @@ public class TutorListActivity extends BaseActivity {
                 progressDialog.setMessage("Loading...");
                 progressDialog.show();
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
+                progressDialog.dismiss();
                 Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", selectedTutor1);
                 i.putExtra("tutorScore",tutorScore);

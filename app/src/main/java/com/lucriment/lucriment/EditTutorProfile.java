@@ -229,6 +229,7 @@ public class EditTutorProfile extends AppCompatActivity implements View.OnClickL
                             // .placeholder(R.drawable.loading)
                             //   .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                             .into(profileImage);
+                    userInfo.setProfileImage(downloadUri.toString());
                     Toast.makeText(getApplicationContext(), "Updated Complete", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }

@@ -1,10 +1,13 @@
 package com.lucriment.lucriment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -55,7 +58,7 @@ public class AboutActivity extends AppCompatActivity {
         editAbout.setText(tutorInfo.getAbout());
 
         TextView back = (TextView) view.findViewById(R.id.action_bar_back);
-        TextView edit = (TextView) view.findViewById(R.id.edit_about_action_bar);
+        final TextView edit = (TextView) view.findViewById(R.id.edit_about_action_bar);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,14 +76,19 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(editing){
                     editing = false;
+                    edit.setText("Edit");
                     aboutView.setText(editAbout.getText().toString().trim());
                     aboutRef.setValue(aboutView.getText().toString().trim());
                     aboutView.setVisibility(View.VISIBLE);
                     editAbout.setVisibility(View.INVISIBLE);
                 }else{
                     editing = true;
+                    edit.setText("Finish");
                     aboutView.setVisibility(View.INVISIBLE);
                     editAbout.setVisibility(View.VISIBLE);
+                    editAbout.requestFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editAbout, InputMethodManager.SHOW_IMPLICIT);
                 }
             }
         });

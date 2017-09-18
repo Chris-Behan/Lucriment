@@ -10,6 +10,17 @@
         android:text="Add Payment Method:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_centerHorizontal="true"/>
+    <Button
+        android:id="@+id/stripeBadge2"
+        android:layout_width="100dp"
+        android:layout_height="22dp"
+
+        android:background="@drawable/powered_by_stripe3xl"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/card_form"
+        android:layout_marginRight="10dp"/>
 
     <com.braintreepayments.cardform.view.CardForm
         android:id="@+id/card_form"

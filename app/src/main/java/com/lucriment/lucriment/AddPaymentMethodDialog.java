@@ -5,9 +5,12 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.braintreepayments.cardform.view.CardForm;
@@ -31,6 +34,7 @@ import java.util.Objects;
 
 public class AddPaymentMethodDialog extends DialogFragment {
     private UserInfo userInfo;
+    private Button stripeBadge;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -41,6 +45,16 @@ public class AddPaymentMethodDialog extends DialogFragment {
 
 
         View view = inflater.inflate(R.layout.addpaymentmethod,null);
+        stripeBadge = (Button) view.findViewById(R.id.stripeBadge2);
+        stripeBadge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://stripe.com";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
       //  final CardInputWidget mCardInputWidget = (CardInputWidget) view.findViewById(R.id.card_input_widget);
         final CardForm cardForm = (CardForm) view.findViewById(R.id.card_form);
 

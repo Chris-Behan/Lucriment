@@ -13,6 +13,10 @@
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
 
@@ -27,12 +31,14 @@
 
         <Button
             android:id="@+id/addPayment"
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
+            android:layout_width="100dp"
+            android:layout_height="27dp"
             android:text="Change"
+            android:textColor="#ffffff"
+            android:background="@drawable/rounded_button"
             android:textAllCaps="false"
-            android:layout_alignBaseline="@+id/cardInfo"
-            android:layout_alignBottom="@+id/cardInfo"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -82,6 +88,17 @@
             android:layout_alignParentBottom="true"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="459dp" />
+
+        <Button
+            android:id="@+id/stripeBadge1"
+            android:layout_width="100dp"
+            android:layout_height="22dp"
+
+            android:background="@drawable/powered_by_stripe3xl"
+           android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="60dp"/>
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class PaymentActivity extends BaseActivity {
     private ListView transactionHistory;
     private ArrayList<TwoItemField> transactions = new ArrayList<>();
     private ArrayAdapter<TwoItemField> adapter;
+    private Button stripeBadge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class PaymentActivity extends BaseActivity {
         cardInfo = (TextView) findViewById(R.id.cardInfo);
         addPaymentButton = (Button) findViewById(R.id.addPayment);
         transactionHistory = (ListView) findViewById(R.id.transactionHistory);
+        stripeBadge = (Button) findViewById(R.id.stripeBadge1);
         //INITIALIZE BOTTOM NAVIGATION VIEW
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavHelper.disableShiftMode(bottomNavigationView);
@@ -94,6 +97,15 @@ public class PaymentActivity extends BaseActivity {
             }
         });
 
+        stripeBadge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://stripe.com";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
         DatabaseReference transactionRef = FirebaseDatabase.getInstance().getReference().child("users").child(userInfo.getId()).child("charges");
        /* HashMap<String,Object> charge = new HashMap<>();
         charge.put("amount",5000);

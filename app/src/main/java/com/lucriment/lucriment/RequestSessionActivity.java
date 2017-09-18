@@ -385,10 +385,13 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
                 if(position ==0){
 
                     Bundle args = new Bundle();
-                    String[] testArr = tutor.stringToArr(tutor.returnSubjectString());
-                    args.putStringArray("subjects",testArr);
-                    se.setArguments(args);
-                    se.show(getFragmentManager(), "my dialog");
+                    if(tutor.getSubjects()!=null) {
+                        String[] testArr = tutor.stringToArr(tutor.returnSubjectString());
+                        args.putStringArray("subjects", testArr);
+                        se.setArguments(args);
+                        se.show(getFragmentManager(), "my dialog");
+                    }
+                    Toast.makeText(RequestSessionActivity.this, "This tutor does not yet teach any subjects",Toast.LENGTH_LONG).show();
                 }
                 if(position ==1){
 

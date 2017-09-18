@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,8 +53,10 @@ public class SearchForSubjects extends AppCompatActivity {
             tutorInfo = getIntent().getParcelableExtra("tutorInfo");
         }
 
-        String subArray[] = tutorInfo.returnSubjectString().split(",");
-        Collections.addAll(currentSubjects,subArray);
+        if(tutorInfo.getSubjects()!=null) {
+            String subArray[] = tutorInfo.returnSubjectString().split(",");
+            Collections.addAll(currentSubjects, subArray);
+        }
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -136,6 +139,10 @@ public class SearchForSubjects extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentSubjects.contains(all.get(position))){
+                    if(currentSubjects.size()==1){
+                        Toast.makeText(SearchForSubjects.this,"You must teach atleast one subject",Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     currentSubjects.remove(all.get(position));
                 }else{
                     currentSubjects.add(all.get(position));
@@ -186,18 +193,7 @@ public class SearchForSubjects extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editing){
-                    editing = false;
-                    mySubjectRef.setValue(currentSubjects);
-                }else{
-                    editing = true;
-                }
-
-            }
-        });
+       edit.setText("");
     }
 
 

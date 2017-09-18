@@ -126,7 +126,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
        // subjectSelector.setVisibility(View.VISIBLE);
     //    classSelector.setVisibility(View.VISIBLE);
         becomeTutor.setOnClickListener(this);
-
+        dateOfBirth.setKeyListener(null);
         dateOfBirth.setOnClickListener(this);
         province.setOnClickListener(this);
         province.setKeyListener(null);
@@ -192,6 +192,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
     public void onDialogPositiveClick(DialogFragment dialog) {
 
         province.setText(psd.getSelection());
+        educationField.requestFocus();
     }
 
     @Override
@@ -301,7 +302,7 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         }
 
         rate = Integer.parseInt(rateField.getText().toString());
-        education = educationField.getText().toString();
+        education = educationField.getText().toString().replaceAll("\\s+","");;
         email = firebaseAuth.getCurrentUser().getEmail();
         phoneNumberString = phoneNumber.getText().toString();
         userInfo.setUserType("tutor");
