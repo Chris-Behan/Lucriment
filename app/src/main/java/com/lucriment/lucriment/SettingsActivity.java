@@ -41,11 +41,11 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     private ArrayList<TwoItemField> optionList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> adapter;
     private TwoItemField option1 = new TwoItemField("Notifications","");
-    private TwoItemField option2 = new TwoItemField("Payout","");
+    private TwoItemField option2 = new TwoItemField("Payout Info","");
     private TwoItemField option3 = new TwoItemField("Switch to Student","");
     private TwoItemField option4 = new TwoItemField("Share","");
     private TwoItemField sOption1 = new TwoItemField("Notifications","");
-    private TwoItemField sOption2 = new TwoItemField("Payment","");
+    private TwoItemField sOption2 = new TwoItemField("Payment Info","");
     private TwoItemField sOption3 = new TwoItemField("Switch to Tutor","");
     private TwoItemField sOption4 = new TwoItemField("Share","");
     private TwoItemField option5 = new TwoItemField("Disputes","");
@@ -207,7 +207,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         String shareSub = "Lucriment, an Online Marketplace for Tutors";
-                        String shareBody = "Download now: www.lucriment.com";
+                        String shareBody = "Download now: https://play.google.com/store/apps/details?id=com.lucriment.lucriment&hl=en";
                         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                         startActivity(Intent.createChooser(sharingIntent, "Share using"));
@@ -272,7 +272,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         String shareSub = "Lucriment, an Online Marketplace for Tutors";
-                        String shareBody = "Download now: www.lucriment.com";
+                        String shareBody = "Download now: https://play.google.com/store/apps/details?id=com.lucriment.lucriment&hl=en";
                         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                         startActivity(Intent.createChooser(sharingIntent, "Share using"));

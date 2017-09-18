@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.icu.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class CalendarTabFragment extends Fragment {
     private ArrayList<SessionRequest> bookedSessions = new ArrayList<>();
     private String selectedDayOfWeek;
     private long clickedTime;
+    private TextView monthName;
     private HashMap<String, ArrayList<TimeInterval>> customMap;
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
@@ -84,6 +86,8 @@ public class CalendarTabFragment extends Fragment {
         cal.set(java.util.Calendar.MINUTE,0);
         cal.set(java.util.Calendar.SECOND,0);
         cal.set(java.util.Calendar.MILLISECOND,0);
+        monthName = (TextView) view.findViewById(R.id.monthName);
+        monthName.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
         currentSelectedDate = new Date(cal.getTimeInMillis());
         adapter = new TimeTabAdapter(getApplicationContext(),todaysAvailability);
         ListView timeList = (ListView) view.findViewById(R.id.timesList);
@@ -161,6 +165,9 @@ public class CalendarTabFragment extends Fragment {
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
 
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(firstDayOfNewMonth);
+                monthName.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()));
             }
         });
 

@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -175,6 +176,9 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
         declineButton = (Button) findViewById(R.id.declineButton);
         acceptButton.setOnClickListener(this);
         declineButton.setOnClickListener(this);
+        if(ti.getFrom() < Calendar.getInstance().getTimeInMillis() + 86400000l&&userType.equals("student")){
+            declineButton.setVisibility(View.INVISIBLE);
+        }
 
         if(userType.equals("student")){
             acceptButton.setText("Contact Tutor");

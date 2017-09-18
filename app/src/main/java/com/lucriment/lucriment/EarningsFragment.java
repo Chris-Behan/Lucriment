@@ -57,10 +57,11 @@ public class EarningsFragment extends Fragment {
                             mySessions.add(individualSnap.getValue(SessionRequest.class));
 
                         }
-                        sortMySessions();
-                        populateEarningsList();
+
                     }
                 }
+                sortMySessions();
+                populateEarningsList();
 
             }
 
@@ -134,7 +135,8 @@ public class EarningsFragment extends Fragment {
                 nameText.setText(session.getStudentName());
                 dateText.setText(sdf.format(session.getTime().getFrom()));
                 timeText.setText(session.getTime().returnTimeInHours()*60+" min");
-                amountText.setText("$"+session.getPrice()+"");
+                double earnings = Math.round(((session.getPrice())*.85)*100.0)/100.0;
+                amountText.setText("$"+earnings+"");
             }
 
             return itemView;
