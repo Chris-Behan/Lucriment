@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class SearchForSubjects extends AppCompatActivity {
     private UserInfo userInfo;
@@ -34,7 +35,7 @@ public class SearchForSubjects extends AppCompatActivity {
     private ArrayList<String> categories = new ArrayList<>();
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> all = new ArrayList<>();
-    private DatabaseReference databaseReference, mySubjectRef;
+    private DatabaseReference databaseReference, mySubjectRef, teachersRef;
     private ArrayList<String> currentSubjects = new ArrayList<>();
     private boolean editing = false;
 
@@ -70,6 +71,7 @@ public class SearchForSubjects extends AppCompatActivity {
 
         listView.setAdapter(subjectListAdapter);
         subjectListAdapter.notifyDataSetChanged();
+        teachersRef = FirebaseDatabase.getInstance().getReference().child("search");
 
 
         mySubjectRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorInfo.getId()).child("subjects");
@@ -140,12 +142,16 @@ public class SearchForSubjects extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentSubjects.contains(all.get(position))){
                     if(currentSubjects.size()==1){
-                        Toast.makeText(SearchForSubjects.this,"You must teach atleast one subject",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SearchForSubjects.this,"You must teach at least one subject",Toast.LENGTH_LONG).show();
                         return;
                     }
                     currentSubjects.remove(all.get(position));
+                    teachersRef.child(all.get(position)).child(userInfo.getId()).removeValue();
                 }else{
                     currentSubjects.add(all.get(position));
+                    HashMap<String, Object> teachesMap = new HashMap<String, Object>();
+                    teachesMap.put(userInfo.getId(), true);
+                    teachersRef.child(all.get(position)).updateChildren(teachesMap);
                 }
                 mySubjectRef.setValue(currentSubjects);
 

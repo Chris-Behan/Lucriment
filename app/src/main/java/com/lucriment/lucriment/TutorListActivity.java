@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -52,7 +53,7 @@ public class TutorListActivity extends BaseActivity {
     private UserInfo userInfo;
     private String userType;
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, subjectRef;
     private double tutorScore;
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
     ArrayAdapter<TutorInfo> adapter;
@@ -60,6 +61,11 @@ public class TutorListActivity extends BaseActivity {
     private Menu currentMenu;
     private ProgressDialog progressDialog;
     private ArrayList<String> tutorAddresses;
+    private ArrayList<String> categories = new ArrayList<>();
+    private ArrayList<String> subjects = new ArrayList<>();
+    private ArrayList<String> all = new ArrayList<>();
+    private SubjectListViewAdapter subjectListAdapter;
+    private ListView tutorList, subjectList;
 
 
 
@@ -69,9 +75,34 @@ public class TutorListActivity extends BaseActivity {
         setContentView(R.layout.activity_tutor_list);
         tutorAddresses = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
+        subjectListAdapter = new SubjectListViewAdapter(this,categories,subjects,all,new ArrayList<String>());
+        subjectList = (ListView) findViewById(R.id.subjectList);
+        subjectList.setAdapter(subjectListAdapter);
+        subjectRef = FirebaseDatabase.getInstance().getReference().child("subjects");
+        subjectRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot category: dataSnapshot.getChildren()){
+                    categories.add(category.getKey());
+                    all.add(category.getKey());
+                    for(DataSnapshot subject:category.getChildren()){
+                        subjects.add(subject.getValue(String.class));
+                        all.add(subject.getValue(String.class));
+                    }
+                }
+                subjectListAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
         Query query = databaseReference;
@@ -176,7 +207,20 @@ public class TutorListActivity extends BaseActivity {
         MenuItem item = currentMenu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setQueryHint("Search by Class...");
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tutorList.setVisibility(View.INVISIBLE);
+                subjectList.setVisibility(View.VISIBLE);
+            }
+        });
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Toast.makeText(TutorListActivity.this,"Worked!",Toast.LENGTH_LONG).show();
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -187,23 +231,15 @@ public class TutorListActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                searchResult.clear();
-                for (TutorInfo ti : tutors) {
-                    ArrayList<String> subjects = ti.getSubjects();
-                    if (subjects != null) {
-
-                        for (String s : subjects) {
-                            s = s.toLowerCase();
-                            if (s.contains((newText))) {
-                                if (!searchResult.contains(ti)) {
-                                    searchResult.add(ti);
-                                }
-                            }
-                        }
+                all.clear();
+                for(String s:subjects){
+                    String sL = s.toLowerCase();
+                    String newL = newText.toLowerCase();
+                    if(sL.contains(newL)){
+                        all.add(s);
                     }
-
                 }
-                adapter.notifyDataSetChanged();
+                subjectListAdapter.notifyDataSetChanged();
 
                 return false;
             }
@@ -256,8 +292,8 @@ public class TutorListActivity extends BaseActivity {
     private void populateTutorList(){
         //  populateTutorList();
         adapter = new myListAdapter();
-        ListView list = (ListView) findViewById(R.id.tView);
-        list.setAdapter(adapter);
+        tutorList = (ListView) findViewById(R.id.tView);
+        tutorList.setAdapter(adapter);
         registerTutorClicks();
         //adapter.getView();
 

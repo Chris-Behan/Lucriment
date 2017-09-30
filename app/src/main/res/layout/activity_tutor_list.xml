@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context="com.lucriment.lucriment.ImageLayout">
 
     <RelativeLayout
@@ -25,10 +26,19 @@
         >
 
         <ListView
-            android:id="@+id/tView"
+        android:id="@+id/tView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+
+        android:layout_above="@+id/navigation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+        <ListView
+            android:id="@+id/subjectList"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-
+            android:visibility="invisible"
             android:layout_above="@+id/navigation"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"

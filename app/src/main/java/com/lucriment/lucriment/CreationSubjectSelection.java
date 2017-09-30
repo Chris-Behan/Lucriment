@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class CreationSubjectSelection extends AppCompatActivity {
     private UserInfo userInfo;
@@ -30,7 +31,7 @@ public class CreationSubjectSelection extends AppCompatActivity {
     private ArrayList<String> categories = new ArrayList<>();
     private ArrayList<String> subjects = new ArrayList<>();
     private ArrayList<String> all = new ArrayList<>();
-    private DatabaseReference databaseReference, mySubjectRef;
+    private DatabaseReference databaseReference, mySubjectRef, teachersRef;
     private ArrayList<String> currentSubjects = new ArrayList<>();
     private boolean editing = false;
 
@@ -67,7 +68,7 @@ public class CreationSubjectSelection extends AppCompatActivity {
         subjectListAdapter.notifyDataSetChanged();
 
 
-
+        teachersRef = FirebaseDatabase.getInstance().getReference().child("search");
 
         //SET DATABASE REFERENCE
         databaseReference = FirebaseDatabase.getInstance().getReference().child("subjects");
@@ -119,8 +120,12 @@ public class CreationSubjectSelection extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentSubjects.contains(all.get(position))){
                     currentSubjects.remove(all.get(position));
+                    teachersRef.child(all.get(position)).child(userInfo.getId()).removeValue();
                 }else{
                     currentSubjects.add(all.get(position));
+                    HashMap<String, Object> teachesMap = new HashMap<String, Object>();
+                    teachesMap.put(userInfo.getId(), true);
+                    teachersRef.child(all.get(position)).updateChildren(teachesMap);
                 }
                 subjectListAdapter.notifyDataSetChanged();
 
