@@ -1,6 +1,7 @@
 package com.lucriment.lucriment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -66,6 +68,8 @@ public class TutorListActivity extends BaseActivity {
     private ArrayList<String> all = new ArrayList<>();
     private SubjectListViewAdapter subjectListAdapter;
     private ListView tutorList, subjectList;
+    private SearchView searchView;
+    private InputMethodManager inputManager;
 
 
 
@@ -75,9 +79,11 @@ public class TutorListActivity extends BaseActivity {
         setContentView(R.layout.activity_tutor_list);
         tutorAddresses = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
+        tutorList = (ListView) findViewById(R.id.tView);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         progressDialog.setMessage("Loading...");
-        progressDialog.show();
+       // progressDialog.show();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         subjectListAdapter = new SubjectListViewAdapter(this,categories,subjects,all,new ArrayList<String>());
         subjectList = (ListView) findViewById(R.id.subjectList);
         subjectList.setAdapter(subjectListAdapter);
@@ -102,32 +108,57 @@ public class TutorListActivity extends BaseActivity {
 
             }
         });
+        inputManager = (InputMethodManager) TutorListActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
-        Query query = databaseReference;
-        query.limitToFirst(25);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        subjectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
-                    TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
-                    tutors.add(tutor);
-                    searchResult.add(tutor);
-                }
-                getTutorAddresses();
-                populateTutorList();
-                setMenuSearch();
+            public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+                Query query = FirebaseDatabase.getInstance().getReference().child("tutors");
+                searchResult.clear();
+                tutors.clear();
 
-                // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
-                //  populateTutorList(tNames);
-            }
+                query.orderByChild(all.get(position)).equalTo(true)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot tutorSnapShot: dataSnapshot.getChildren()){
+                            Object test = tutorSnapShot.getValue();
+                            TutorInfo tutor = tutorSnapShot.getValue(TutorInfo.class);
+                            tutors.add(tutor);
+                            searchResult.add(tutor);
+                        }
+                        getTutorAddresses();
+                        populateTutorList();
+                        setMenuSearch();
+                        subjectList.setVisibility(View.INVISIBLE);
+                        tutorList.setVisibility(View.VISIBLE);
+                        try
+                        {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                            inputManager.hideSoftInputFromWindow(TutorListActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                        }
+                        catch (Exception e)
+                        {
+                            // Ignore exceptions if any
+                           // Log.e("KeyBoardUtil", e.toString(), e);
+                        }
+                        searchView.setQuery(all.get(position),true);
+                        adapter.notifyDataSetChanged();
+                        searchView.clearFocus();
+                        // tutors =  collectNames((Map<String,Object>) dataSnapshot.getValue());
+                        //  populateTutorList(tNames);
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("tutors");
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference("tutors");
@@ -205,20 +236,32 @@ public class TutorListActivity extends BaseActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, currentMenu);
         MenuItem item = currentMenu.findItem(R.id.menuSearch);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
         searchView.setQueryHint("Search by Class...");
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tutorList.setVisibility(View.INVISIBLE);
                 subjectList.setVisibility(View.VISIBLE);
+                searchView.clearFocus();
+               // Toast.makeText(TutorListActivity.this,"Triggered!",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    tutorList.setVisibility(View.INVISIBLE);
+                    subjectList.setVisibility(View.VISIBLE);
+                }
             }
         });
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(TutorListActivity.this,"Worked!",Toast.LENGTH_LONG).show();
+
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -231,6 +274,11 @@ public class TutorListActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(!subjects.contains(newText)) {
+                    tutorList.setVisibility(View.INVISIBLE);
+                    subjectList.setVisibility(View.VISIBLE);
+                }
+
                 all.clear();
                 for(String s:subjects){
                     String sL = s.toLowerCase();
@@ -292,7 +340,7 @@ public class TutorListActivity extends BaseActivity {
     private void populateTutorList(){
         //  populateTutorList();
         adapter = new myListAdapter();
-        tutorList = (ListView) findViewById(R.id.tView);
+
         tutorList.setAdapter(adapter);
         registerTutorClicks();
         //adapter.getView();

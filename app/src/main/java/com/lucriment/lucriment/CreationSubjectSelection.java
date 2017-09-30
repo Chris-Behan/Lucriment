@@ -68,7 +68,7 @@ public class CreationSubjectSelection extends AppCompatActivity {
         subjectListAdapter.notifyDataSetChanged();
 
 
-        teachersRef = FirebaseDatabase.getInstance().getReference().child("search");
+        teachersRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId());
 
         //SET DATABASE REFERENCE
         databaseReference = FirebaseDatabase.getInstance().getReference().child("subjects");
@@ -120,12 +120,12 @@ public class CreationSubjectSelection extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentSubjects.contains(all.get(position))){
                     currentSubjects.remove(all.get(position));
-                    teachersRef.child(all.get(position)).child(userInfo.getId()).removeValue();
+                    teachersRef.child(all.get(position)).removeValue();
                 }else{
                     currentSubjects.add(all.get(position));
                     HashMap<String, Object> teachesMap = new HashMap<String, Object>();
-                    teachesMap.put(userInfo.getId(), true);
-                    teachersRef.child(all.get(position)).updateChildren(teachesMap);
+                    teachesMap.put(all.get(position), true);
+                    teachersRef.updateChildren(teachesMap);
                 }
                 subjectListAdapter.notifyDataSetChanged();
 

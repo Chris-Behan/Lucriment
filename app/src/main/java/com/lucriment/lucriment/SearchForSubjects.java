@@ -71,7 +71,7 @@ public class SearchForSubjects extends AppCompatActivity {
 
         listView.setAdapter(subjectListAdapter);
         subjectListAdapter.notifyDataSetChanged();
-        teachersRef = FirebaseDatabase.getInstance().getReference().child("search");
+        teachersRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId());
 
 
         mySubjectRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorInfo.getId()).child("subjects");
@@ -146,12 +146,12 @@ public class SearchForSubjects extends AppCompatActivity {
                         return;
                     }
                     currentSubjects.remove(all.get(position));
-                    teachersRef.child(all.get(position)).child(userInfo.getId()).removeValue();
+                    teachersRef.child(all.get(position)).removeValue();
                 }else{
                     currentSubjects.add(all.get(position));
                     HashMap<String, Object> teachesMap = new HashMap<String, Object>();
-                    teachesMap.put(userInfo.getId(), true);
-                    teachersRef.child(all.get(position)).updateChildren(teachesMap);
+                    teachesMap.put(all.get(position), true);
+                    teachersRef.updateChildren(teachesMap);
                 }
                 mySubjectRef.setValue(currentSubjects);
 
