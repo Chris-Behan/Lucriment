@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,8 @@ public class TutorListActivity extends BaseActivity {
     private ListView tutorList, subjectList;
     private SearchView searchView;
     private InputMethodManager inputManager;
+    private RelativeLayout searchLayout;
+    private TextView searchText;
 
 
 
@@ -83,6 +86,10 @@ public class TutorListActivity extends BaseActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         progressDialog.setMessage("Loading...");
        // progressDialog.show();
+
+        searchLayout = (RelativeLayout) findViewById(R.id.startSearching);
+        searchText = (TextView) findViewById(R.id.searchText);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         subjectListAdapter = new SubjectListViewAdapter(this,categories,subjects,all,new ArrayList<String>());
         subjectList = (ListView) findViewById(R.id.subjectList);
@@ -132,6 +139,12 @@ public class TutorListActivity extends BaseActivity {
                         setMenuSearch();
                         subjectList.setVisibility(View.INVISIBLE);
                         tutorList.setVisibility(View.VISIBLE);
+                        if(tutors.isEmpty()){
+                            searchText.setText("There are currently no tutors for that subject.");
+                            searchLayout.setVisibility(View.VISIBLE);
+
+
+                        }
                         try
                         {
 
@@ -241,6 +254,7 @@ public class TutorListActivity extends BaseActivity {
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                searchLayout.setVisibility(View.INVISIBLE);
                 tutorList.setVisibility(View.INVISIBLE);
                 subjectList.setVisibility(View.VISIBLE);
                 searchView.clearFocus();
@@ -253,6 +267,7 @@ public class TutorListActivity extends BaseActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     tutorList.setVisibility(View.INVISIBLE);
+                    searchLayout.setVisibility(View.INVISIBLE);
                     subjectList.setVisibility(View.VISIBLE);
                 }
             }
@@ -276,6 +291,7 @@ public class TutorListActivity extends BaseActivity {
             public boolean onQueryTextChange(String newText) {
                 if(!subjects.contains(newText)) {
                     tutorList.setVisibility(View.INVISIBLE);
+                    searchLayout.setVisibility(View.INVISIBLE);
                     subjectList.setVisibility(View.VISIBLE);
                 }
 
