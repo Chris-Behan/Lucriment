@@ -305,10 +305,10 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             //fill the view
 
             TextView timeSlotText = (TextView) itemView.findViewById(R.id.taughtLabel);
-            timeSlotText.setText(timeslot.returnFromTime()+" - " +timeslot.returnToTime());
+            timeSlotText.setText(timeslot.amPmTime());
             if(customAvas.isEmpty()){
                 deleteButton.setVisibility(View.INVISIBLE);
-                SimpleDateFormat sdf = new SimpleDateFormat("h:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 timeSlotText.setText(sdf.format(timeslot.getFrom())+" - "+sdf.format(timeslot.getTo()));
             }
@@ -365,11 +365,12 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0){
+                    /*
                     Bundle args = new Bundle();
                     String[] testArr = getResources().getStringArray(R.array.daysOfWeek);
                     args.putStringArray("days",testArr);
                     daySelectDialog.setArguments(args);
-                    daySelectDialog.show(getFragmentManager(), "my dialog");
+                    daySelectDialog.show(getFragmentManager(), "my dialog"); */
 
                 }
                 if(position ==1) {

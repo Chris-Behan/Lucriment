@@ -257,7 +257,7 @@ public class DayAvailability extends AppCompatActivity implements TimePickerDial
             //fill the view
 
             TextView timeSlotText = (TextView) itemView.findViewById(R.id.taughtLabel);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             String c =(sdf.format(timeslot.getFrom())+" - "+sdf.format(timeslot.getTo()));
             timeSlotText.setText(c);

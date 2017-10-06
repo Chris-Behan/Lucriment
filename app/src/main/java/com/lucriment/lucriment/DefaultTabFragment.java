@@ -107,7 +107,7 @@ public class DefaultTabFragment extends Fragment {
                             TimeInterval t1 = mondayTime.get(0);
                       SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                       sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                      String c =(sdf.format(t1.getFrom())+" - "+sdf.format(t1.getTo()));
+                      String c = t1.amPmTime();
                            // String c = t1.returnFromTime()+"-"+t1.returnToTime();
                             Monday.setData(c);
                      // itemList.add(tif);
@@ -120,7 +120,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         tuesdayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Tuesday.setData(c);
                         // itemList.add(tif);
@@ -133,7 +133,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         wednesdayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Wednesday.setData(c);
 
@@ -147,7 +147,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         thursdayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Thursday.setData(c);
                     }
@@ -159,7 +159,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         fridayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Friday.setData(c);
                     }
@@ -171,7 +171,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         saturdayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Saturday.setData(c);
                     }
@@ -183,7 +183,7 @@ public class DefaultTabFragment extends Fragment {
                     for(DataSnapshot mSnap: mondaySnap.getChildren()){
                         TimeInterval tif = mSnap.getValue(TimeInterval.class);
                         sundayTime.add(tif);
-                        String c = tif.returnFromTime() + "-" + tif.returnToTime();
+                        String c = tif.amPmTime();
 
                         Sunday.setData(c);
                     }

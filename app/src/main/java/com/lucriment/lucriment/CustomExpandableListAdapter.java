@@ -53,7 +53,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         }
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         expandedListTextView.setText(sdf.format(expandedListText.getFrom())+" - "+sdf.format(expandedListText.getTo()));
         return convertView;

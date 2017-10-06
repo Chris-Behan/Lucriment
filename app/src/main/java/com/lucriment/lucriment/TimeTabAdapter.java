@@ -43,7 +43,7 @@ public class TimeTabAdapter extends ArrayAdapter<TimeInterval> {
         TextView Time = (TextView) convertView.findViewById(R.id.time);
         // Populate the data into the template view using the data object
 
-        Time.setText(day.returnFromTime()+" - "+day.returnToTime());
+        Time.setText(day.amPmTime());
         // Return the completed view to render on screen
 
 

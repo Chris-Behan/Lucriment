@@ -142,6 +142,12 @@ public class TimeInterval implements Parcelable{
 
     }
 
+    public String amPmTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+        String amPm = sdf.format(getFrom())+ " - "+ sdf.format(getTo());
+        return amPm;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public String returnToTime(){
         Calendar cal = Calendar.getInstance();
