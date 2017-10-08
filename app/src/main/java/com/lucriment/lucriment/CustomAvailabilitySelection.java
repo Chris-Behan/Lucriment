@@ -166,7 +166,22 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     selectedTime.clear();
+                Calendar re1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                Calendar re2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 for(DataSnapshot timeSnap: dataSnapshot.getChildren()){
+               /*     TimeInterval ti = timeSnap.getValue(TimeInterval.class);
+                    re1.setTimeInMillis(selectedDay);
+                    re2.setTimeInMillis(selectedDay);
+                    SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
+                    sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    String fromString = sdf3.format(ti.getFrom());
+                    String toString = sdf3.format(ti.getTo());
+                    re1.add(Calendar.MINUTE,hoursAndMinutesToMinutes(fromString));
+                    re2.add(Calendar.MINUTE,hoursAndMinutesToMinutes(toString));
+                    long fromLong = re1.getTimeInMillis();
+                    long toLong =re2.getTimeInMillis();
+                    TimeInterval defaultToCustom = new TimeInterval(fromLong, toLong);
+                    selectedTime.add(defaultToCustom); */
                     selectedTime.add(timeSnap.getValue(TimeInterval.class));
                     defaultAvas.add(timeSnap.getValue(TimeInterval.class));
 
@@ -414,7 +429,7 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         Calendar cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         Calendar cal4 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                         if(cal.getTimeInMillis()<=cal3.getTimeInMillis()){
-                            Toast.makeText(getApplicationContext(),"Invalid Time",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Availability cannot be set in the past.",Toast.LENGTH_LONG).show();
                             return;
                         }
                        // cal4.setTime(todaysDate);
@@ -480,6 +495,8 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                         re2.setTimeInMillis(selectedDay);
 
                         for(TimeInterval ti: defaultAvas){
+                            re1.setTimeInMillis(selectedDay);
+                            re2.setTimeInMillis(selectedDay);
                             SimpleDateFormat sdf3 = new SimpleDateFormat("HH:mm");
                             sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String fromString = sdf3.format(ti.getFrom());
