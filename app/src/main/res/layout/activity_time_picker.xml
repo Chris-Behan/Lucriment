@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            app:compactCalendarBackgroundColor="#42C6DD"
+            app:compactCalendarBackgroundColor="@color/colorPrimary"
             app:compactCalendarCurrentDayBackgroundColor="#42C6DD"
             app:compactCalendarCurrentSelectedDayBackgroundColor="#07e3d2"
             app:compactCalendarMultiEventIndicatorColor="#fff"

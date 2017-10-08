@@ -134,7 +134,7 @@ public class TutorListActivity extends BaseActivity {
                             tutors.add(tutor);
                             searchResult.add(tutor);
                         }
-                        getTutorAddresses();
+                      //  getTutorAddresses();
                         populateTutorList();
                         setMenuSearch();
                         subjectList.setVisibility(View.INVISIBLE);
@@ -340,11 +340,13 @@ public class TutorListActivity extends BaseActivity {
         Geocoder gc = new Geocoder(this);
         try {
             for(TutorInfo ti:tutors) {
-                List<Address> addresses = gc.getFromLocationName(ti.getPostalCode(), 1);
-                if(!addresses.isEmpty()) {
+                if (ti.getAddress() == null){
+                    List<Address> addresses = gc.getFromLocationName(ti.getPostalCode(), 1);
+                if (!addresses.isEmpty()) {
 
                     tutorAddresses.add(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
                 }
+            }
             }
             progressDialog.dismiss();
         } catch (IOException e) {
@@ -412,9 +414,12 @@ public class TutorListActivity extends BaseActivity {
             TutorInfo currentTutor = searchResult.get(position);
 
             TextView city = (TextView) itemView.findViewById(R.id.cityText);
-
+            /*
             if(!tutorAddresses.isEmpty()) {
                 city.setText(tutorAddresses.get(position));
+            } */
+            if(currentTutor.getAddress()!=null) {
+                city.setText(currentTutor.getAddress());
             }
             ImageView imageView = (ImageView)itemView.findViewById(R.id.ProfileImage);
 
@@ -477,6 +482,9 @@ public class TutorListActivity extends BaseActivity {
                 i.putExtra("userInfo",userInfo);
                 if(!tutorAddresses.isEmpty()) {
                     i.putExtra("location", tutorAddresses.get(position));
+                }
+                if(selectedTutor1.getAddress()!=null) {
+                    i.putExtra("location", selectedTutor1.getAddress());
                 }
                 startActivity(i);
 

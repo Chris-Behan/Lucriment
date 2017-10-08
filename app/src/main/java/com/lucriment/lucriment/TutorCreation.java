@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -38,8 +40,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class TutorCreation extends AppCompatActivity implements View.OnClickListener, ProvinceSelectionDialog.NoticeDialogListener{
     private FirebaseAuth firebaseAuth;
@@ -334,10 +338,24 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         databaseReference = FirebaseDatabase.getInstance().getReference();
         id = firebaseAuth.getCurrentUser().getUid();
         displayName = firebaseAuth.getCurrentUser().getDisplayName();
+        Geocoder gc = new Geocoder(this);
+
+        List<Address> addresses = null;
+        try {
+            addresses = gc.getFromLocationName(education, 1);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
        //
         //classes = classField.getText().toString();
 
         TutorInfo tutorInfo = new TutorInfo(userInfo,education,phoneNumberString,rate);
+        tutorInfo.setAddress(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea());
 
         //tutorInfo.setSubjects(subjectsTaught);
 
@@ -349,9 +367,9 @@ public class TutorCreation extends AppCompatActivity implements View.OnClickList
         Toast.makeText(this, "You are now a Tutor!", Toast.LENGTH_SHORT).show();
         finish();
         Intent y =new Intent(TutorCreation.this, TutorCreationP2.class);
-        y.putExtra("day", day);
-        y.putExtra("month",month);
-        y.putExtra("year", year);
+        y.putExtra("day", tutorDay);
+        y.putExtra("month",tutorMonth);
+        y.putExtra("year", tutorYear);
         y.putExtra("userInfo",userInfo);
         y.putExtra("userType",userType);
         y.putExtra("address",addressString);

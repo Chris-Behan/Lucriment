@@ -132,7 +132,8 @@ public class TimePickerActivity extends AppCompatActivity  {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHH:mm");
                     String rMonth = "";
                     String rDay = "";
-                    if(today.returnMonth()<10){
+                    if(today.returnMonth()<9){
+                        int tea = today.returnMonth();
                         rMonth = "0"+ (today.returnMonth()+1);
                     }else{
                         rMonth = ""+(today.returnMonth()+1);

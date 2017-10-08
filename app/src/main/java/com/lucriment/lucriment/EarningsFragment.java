@@ -55,7 +55,7 @@ public class EarningsFragment extends Fragment {
                     if (sessionSnap.getKey().contains(userInfo.getId())) {
                         for (DataSnapshot individualSnap : sessionSnap.getChildren()) {
                             SessionRequest completedSession = individualSnap.getValue(SessionRequest.class);
-                            if(!completedSession.isSessionDeclined()&&!completedSession.isSessionCancelled()) {
+                            if(!completedSession.isSessionDeclined()&&!completedSession.isSessionCancelled()&&completedSession.getTutorId().equals(userInfo.getId())) {
                                 mySessions.add(completedSession);
                             }
                         }

@@ -31,6 +31,7 @@ public class TutorInfo implements Parcelable {
     private int rate;
     private String subjectString;
     private Rating rating;
+    private String address;
 
 
     public TutorInfo(){
@@ -68,6 +69,7 @@ public class TutorInfo implements Parcelable {
         result.put("postalCode",postalCode);
         result.put("rate",rate);
         result.put("subjects",subjects);
+        result.put("address",address);
         return result;
     }
 
@@ -90,7 +92,7 @@ public class TutorInfo implements Parcelable {
 
 
     public TutorInfo(Parcel in){
-        String[] data = new String[14];
+        String[] data = new String[15];
         in.readStringArray(data);
         this.fullName = data[0];
         this.lastName = data[1];
@@ -106,6 +108,7 @@ public class TutorInfo implements Parcelable {
         this.rate = Integer.parseInt(data[11]);
         this.profileImage = data[12];
         this.subjectString = data[13];
+        this.address = data[14];
         //this.subjects = data[13];
     }
 
@@ -134,6 +137,14 @@ public class TutorInfo implements Parcelable {
     public UserInfo generateUserInfo(){
         UserInfo gU = new UserInfo(getFullName(),getLastName(),getFirstName(),getId(),getEmail(),getUserType(),getHeadline());
        return gU;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setFullName(String fullName) {
@@ -282,10 +293,10 @@ public class TutorInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         if (subjects == null) {
             dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.userType,
-                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, this.subjectString});
+                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, this.subjectString,this.address});
         }else{
             dest.writeStringArray(new String[]{this.fullName,this.lastName,this.firstName,this.id,this.chatsWith,this.email,this.headline,this.userType,
-                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, arrToString(this.subjects)});
+                    this.postalCode,this.about, String.valueOf(this.phoneNumber),String.valueOf(this.rate),this.profileImage, arrToString(this.subjects),this.address});
         }
 
 
