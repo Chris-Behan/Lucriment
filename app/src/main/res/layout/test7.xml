@@ -2,14 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp">
+   <ScrollView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textView6"
@@ -21,7 +16,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
-            android:id="@+id/aboutTOS"
+            android:id="@+id/textView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView6"
@@ -36,7 +31,7 @@ and Privacy Policy." />
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="This app uses the following open-source libraries:"
-            android:layout_below="@+id/aboutTOS"
+            android:layout_below="@+id/textView19"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -155,6 +150,6 @@ OTHER DEALINGS IN THE SOFTWARE."
             android:layout_alignStart="@+id/textView23" />
 
 
-        </RelativeLayout>
-    </ScrollView>
+
+   </ScrollView>
 </RelativeLayout>

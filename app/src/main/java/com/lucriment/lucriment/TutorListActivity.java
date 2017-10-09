@@ -232,11 +232,11 @@ public class TutorListActivity extends BaseActivity {
                 }
             });
 
-
+            /*
             BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
             BottomNavHelper.disableShiftMode(bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
-            bottomNavigationView.setOnNavigationItemSelectedListener(this);
+            bottomNavigationView.setOnNavigationItemSelectedListener(this); */
 
         //  Toast.makeText(ImageLayout.this, "Wait ! Fetching List...", Toast.LENGTH_SHORT).show();
 

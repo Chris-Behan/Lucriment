@@ -123,7 +123,7 @@ public class TimeInterval implements Parcelable{
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public String returnSessionTime(){
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM \n h:mm a");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("d MMM \n h:mm a");
         SimpleDateFormat sdf2 = new SimpleDateFormat("h:mm a");
         String from = sdf1.format(getFrom());
         String to = sdf2.format(getTo());
@@ -133,7 +133,7 @@ public class TimeInterval implements Parcelable{
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     public String returnCurrentSessionTIme(){
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM, h:mm a");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("d MMM, h:mm a");
         SimpleDateFormat sdf2 = new SimpleDateFormat("h:mm a");
         String from = sdf1.format(getFrom());
         String to = sdf2.format(getTo());
