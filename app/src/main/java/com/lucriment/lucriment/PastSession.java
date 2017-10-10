@@ -250,15 +250,15 @@ public class PastSession extends BaseActivity implements View.OnClickListener {
                 reviewField.setVisibility(View.VISIBLE);
             }
             else{
-                android.icu.util.Calendar cc = android.icu.util.Calendar.getInstance();
+                java.util.Calendar cc = java.util.Calendar.getInstance();
                 if(userType.equals("Tutor")) {
                     double rating = Double.valueOf(ratingBar.getRating());
-                    Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    Review review = new Review(thisSession.getTutorName(), rating, reviewField.getText().toString(), cc.getTimeInMillis(),userInfo.getId());
                     thisSession.setStudentReview(review);
                     reviews.add(review);
                 }else{
                     double rating = Double.valueOf(ratingBar.getRating());
-                    Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis());
+                    Review review = new Review(thisSession.getStudentName(), rating, reviewField.getText().toString(), cc.getTimeInMillis(),userInfo.getId());
                     thisSession.setTutorReview(review);
                     reviews.add(review);
                 }

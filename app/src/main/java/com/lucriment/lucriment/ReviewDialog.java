@@ -99,7 +99,7 @@ public class ReviewDialog extends DialogFragment{
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        android.icu.util.Calendar cc = android.icu.util.Calendar.getInstance();
+                        java.util.Calendar cc = java.util.Calendar.getInstance();
                         Dialog dialog1  = (Dialog) dialog;
                         Context context = dialog1.getContext();
                         if(rating!=null) {
@@ -108,7 +108,7 @@ public class ReviewDialog extends DialogFragment{
                         }else{
                             rating = new Rating(ratingBar.getRating(),1);
                         }
-                        Review review = new Review(userInfo.getFullName(),ratingBar.getRating(),reviewField.getText().toString(),cc.getTimeInMillis());
+                        Review review = new Review(userInfo.getFullName(),ratingBar.getRating(),reviewField.getText().toString(),cc.getTimeInMillis(), userInfo.getId());
                         receiverRating.setValue(rating);
                         reviewRef.setValue(review);
                         sessionRef.setValue(review);

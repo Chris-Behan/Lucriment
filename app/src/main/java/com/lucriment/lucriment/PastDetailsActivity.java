@@ -228,6 +228,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 if(userType.equals("tutor")){
                     if(dataSnapshot.hasChild("studentReview")){
                         revLayout.setVisibility(View.VISIBLE);
+                        reviewButton.setVisibility(View.INVISIBLE);
                         Review studentReview = dataSnapshot.child("studentReview").getValue(Review.class);
                         TextView rName = (TextView) findViewById(R.id.reviewerName);
                         TextView rScore = (TextView) findViewById(R.id.reviewScore);
@@ -249,6 +250,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 }else{
                     if(dataSnapshot.hasChild("tutorReview")){
                         revLayout.setVisibility(View.VISIBLE);
+                        reviewButton.setVisibility(View.INVISIBLE);
                         Review studentReview = dataSnapshot.child("tutorReview").getValue(Review.class);
                         TextView rName = (TextView) findViewById(R.id.reviewerName);
                         TextView rScore = (TextView) findViewById(R.id.reviewScore);

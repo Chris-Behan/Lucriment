@@ -12,25 +12,31 @@ public class Review implements Parcelable{
     private double rating;
     private String text;
     private long timeStamp;
+    private String authorId;
 
     public Review(){
 
     }
-    public Review(String author, double rating, String text, long timeStamp) {
+    public Review(String author, double rating, String text, long timeStamp, String id) {
         this.author = author;
         this.rating = rating;
         this.text = text;
         this.timeStamp = timeStamp;
+        this.authorId = id;
     }
     public Review(Parcel in){
-        String[] data = new String[4];
+        String[] data = new String[5];
         in.readStringArray(data);
         this.author = data[0];
         this.rating = Double.valueOf(data[1]);
         this.text = data[2];
         this.timeStamp = Long.valueOf(data[3]);
+        this.authorId = data[4];
     }
 
+    public String getAuthorId() {
+        return authorId;
+    }
 
     public String getAuthor() {
         return author;
@@ -55,7 +61,7 @@ public class Review implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[]{this.author, String.valueOf(this.rating), this.text, String.valueOf(this.timeStamp)});
+        dest.writeStringArray(new String[]{this.author, String.valueOf(this.rating), this.text, String.valueOf(this.timeStamp), this.authorId});
     }
     public static final Parcelable.Creator<Review> CREATOR = new Parcelable.Creator<Review>(){
         @Override
