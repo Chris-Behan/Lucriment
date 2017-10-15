@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 if(firebaseAuth.getCurrentUser() !=null){
                     finish();
-                    startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
+                    startActivity(new Intent(LoginActivity.this, RedirectOnLogin.class));
                 }
             }
         };
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
             finish();
-            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
+            startActivity(new Intent(getApplicationContext(), RedirectOnLogin.class));
         }
         // initizlie buttons
 
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             finish();
-                            startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
+                            startActivity(new Intent(LoginActivity.this, RedirectOnLogin.class));
                             // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -263,7 +263,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         progressDialog.dismiss();
                         if(task.isSuccessful()){
                             finish();
-                            startActivity(new Intent(getApplicationContext(), TutorListActivity.class));
+                            startActivity(new Intent(getApplicationContext(), RedirectOnLogin.class));
                         }else{
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, "Invalid email or password. Please try again.", Toast.LENGTH_SHORT).show();
@@ -356,7 +356,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             finish();
                             progressDialog.dismiss();
-                            startActivity(new Intent(LoginActivity.this, TutorListActivity.class));
+                            startActivity(new Intent(LoginActivity.this, RedirectOnLogin.class));
 
                             //  updateUI(user);
                         } else {

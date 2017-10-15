@@ -111,7 +111,8 @@
         <activity android:name=".TutorCreationP2" />
         <activity android:name=".AppInfoActivity" />
         <activity android:name=".CreationSubjectSelection" />
-        <activity android:name=".CurrentSessionDetails"></activity>
+        <activity android:name=".CurrentSessionDetails" />
+        <activity android:name=".RedirectOnLogin"></activity>
     </application>
 
 </manifest>

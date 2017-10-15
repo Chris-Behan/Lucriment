@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +108,7 @@ public class CurrentSessionDetails extends AppCompatActivity implements OnMapRea
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+                setRatings();
                 initializeFields();
                 populateOptionsList();
             }
@@ -187,6 +191,21 @@ public class CurrentSessionDetails extends AppCompatActivity implements OnMapRea
         list.setClickable(false);
         list.setFocusableInTouchMode(false);
 
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setRatings(){
+
+            Rating rating = (requesteeInfo.getRating());
+            if(rating!=null) {
+                double ratingAvg = (rating.getTotalScore() / rating.getNumberOfReviews());
+                DecimalFormat df = new DecimalFormat("#.#");
+                ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+                ratingText.setText(ratingAvg + "");
+            }
 
 
     }

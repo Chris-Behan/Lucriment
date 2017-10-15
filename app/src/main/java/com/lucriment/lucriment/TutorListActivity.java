@@ -188,49 +188,49 @@ public class TutorListActivity extends BaseActivity {
             userType = getIntent().getStringExtra("userType");
 
         }
-
-            firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(thisUser.getUid());
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                    if (dataSnapshot.hasChild("firstName")) {
-
-                                userInfo = dataSnapshot.getValue(UserInfo.class);
-                                userType = userInfo.getUserType();
-                                if(userType.equals("tutor")){
-                                    Intent y = new Intent(TutorListActivity.this, TutorSessionsActivity.class);
-                                    y.putExtra("userType", getUserType());
-                                    y.putExtra("userInfo",getUserInformation());
-                                    startActivity(y);
-                                }
-                                if(userInfo.getPaymentInfo()!=null){
-                                    userInfo.setHasPamyent(true);
-                                }
-
-
-                    }  else {
-                        finish();
-                        startActivity(new Intent(TutorListActivity.this, CreationActivity.class));
-                    }
-
-
-                    // finish();
-                    //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
-                    // initializeButtons();
-
-                    setUp();
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+        setUp();
+//            firebaseAuth = FirebaseAuth.getInstance();
+//            FirebaseUser user = firebaseAuth.getCurrentUser();
+//            FirebaseUser thisUser = FirebaseAuth.getInstance().getCurrentUser();
+//            databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(thisUser.getUid());
+//            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//
+//                    if (dataSnapshot.hasChild("firstName")) {
+//
+//                                userInfo = dataSnapshot.getValue(UserInfo.class);
+//                                userType = userInfo.getUserType();
+//                                if(userType.equals("tutor")){
+//                                    Intent y = new Intent(TutorListActivity.this, TutorSessionsActivity.class);
+//                                    y.putExtra("userType", getUserType());
+//                                    y.putExtra("userInfo",getUserInformation());
+//                                    startActivity(y);
+//                                }
+//                                if(userInfo.getPaymentInfo()!=null){
+//                                    userInfo.setHasPamyent(true);
+//                                }
+//
+//
+//                    }  else {
+//                        finish();
+//                        startActivity(new Intent(TutorListActivity.this, CreationActivity.class));
+//                    }
+//
+//
+//                    // finish();
+//                    //   startActivity(new Intent(ProfileActivity.this, TutorListActivity.class));
+//                    // initializeButtons();
+//
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
             /*
             BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -474,7 +474,7 @@ public class TutorListActivity extends BaseActivity {
                 progressDialog.setMessage("Loading...");
                 progressDialog.show();
                 // selectedTutor1 = TutorListActivity.this.selectedTutor;
-                progressDialog.dismiss();
+
                 Intent i = new Intent(TutorListActivity.this, SelectedTutorActivity.class);
                 i.putExtra("selectedTutor", selectedTutor1);
                 i.putExtra("tutorScore",tutorScore);
@@ -487,6 +487,8 @@ public class TutorListActivity extends BaseActivity {
                     i.putExtra("location", selectedTutor1.getAddress());
                 }
                 startActivity(i);
+                finish();
+
 
             }
         });

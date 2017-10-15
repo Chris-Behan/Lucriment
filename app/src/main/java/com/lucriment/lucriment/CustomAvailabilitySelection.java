@@ -435,10 +435,13 @@ public class CustomAvailabilitySelection extends AppCompatActivity implements Ti
                        // cal4.setTime(todaysDate);
                         //cal3.setTime(todaysDate);
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                   // sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
                     String hourAndMin1 = sdf.format(cal.getTimeInMillis());
                     String hourAndMin2 = sdf.format(cal2.getTimeInMillis());
                     try {
 
+                        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                         Date fromDate = sdf.parse(hourAndMin1);
                         Date toDate = sdf.parse(hourAndMin2);
                         cal.add(Calendar.MILLISECOND, (int) fromDate.getTime());
