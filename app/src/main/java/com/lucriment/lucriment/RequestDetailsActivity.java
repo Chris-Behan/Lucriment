@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -177,9 +178,13 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private void initializeFields(){
 
                 titleText.setText(requesteeInfo.getHeadline());
+                 Rating rating = (requesteeInfo.getRating());
                 if (requesteeInfo.getRating() != null) {
-                    double rating = requesteeInfo.getRating().getTotalScore() / requesteeInfo.getRating().getNumberOfReviews();
-                    ratingText.setText(rating + "");
+                    double ratingAvg = (rating.getTotalScore() / rating.getNumberOfReviews());
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+                    ratingText.setText(ratingAvg + "");
                 } else {
                     ratingText.setText("  0");
                 }

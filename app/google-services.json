@@ -15,6 +15,26 @@
       },
       "oauth_client": [
         {
+          "client_id": "744405150169-14qsgcj629l8nmjf9v63lkjh1352afl7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lucriment.lucriment",
+            "certificate_hash": "573ea852aea710f8606744c8a0aeb6f1ab86cb2b"
+          }
+        },
+        {
+          "client_id": "744405150169-3u4vvkmm3memil42oc55a9psa3ivh2jh.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "744405150169-t1ius874jkmcnseap3a57tb3e7iehe58.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lucriment.lucriment",
+            "certificate_hash": "012cfa9a68c2ff84c12e6e3d56e258a5473a6d8d"
+          }
+        },
+        {
           "client_id": "744405150169-43uoat0nsbtvdb5ilun6or995skabg1h.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +49,21 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744405150169-3u4vvkmm3memil42oc55a9psa3ivh2jh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "744405150169-7qqsrv51aacmkjqqfu0ko0kmid0mgohm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.lucriment.lucriment",
+                "app_store_id": "1243145417"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

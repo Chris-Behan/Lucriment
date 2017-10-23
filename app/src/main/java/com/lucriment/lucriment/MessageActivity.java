@@ -67,6 +67,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
     private boolean existingConvo = false;
     private TutorInfo tutorInfo;
     private double score;
+    private DatabaseReference notificationRef;
 
    // public DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
    // public static int Device_Width = metrics.widthPixels;
@@ -94,7 +95,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(messageAdapter);
-
+        notificationRef = FirebaseDatabase.getInstance().getReference().child("messageNotifications");
         sender = firebaseAuth.getCurrentUser().getDisplayName();
         receiver = tutor.getFullName();
         senderID = firebaseAuth.getCurrentUser().getUid().toString();
@@ -297,6 +298,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                     .child(senderID)
                                     .push()
                                     .setValue(chat);
+                            HashMap<String, String> notificationMap = new HashMap<String, String>();
+                            notificationMap.put("from", senderID);
+                            notificationRef.child(receiverID).push().setValue(notificationMap);
                             if(!existingConvo){
                                // messages.add(chat);
                                 messageAdapter.notifyDataSetChanged();
@@ -314,6 +318,9 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
                                     .child(senderID)
                                     .push()
                                     .setValue(chat);
+                            HashMap<String, String> notificationMap = new HashMap<String, String>();
+                            notificationMap.put("from", senderID);
+                            notificationRef.child(receiverID).push().setValue(notificationMap);
                            // messages.add(chat);
                             //messageAdapter.notifyDataSetChanged();
                             //recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()-1);

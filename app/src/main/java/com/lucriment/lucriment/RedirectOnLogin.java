@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RedirectOnLogin extends AppCompatActivity {
     private UserInfo userInfo;
@@ -37,6 +38,8 @@ public class RedirectOnLogin extends AppCompatActivity {
         //Initialize database listener to check account type and status
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(thisUser.getUid());
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        databaseReference.child("deviceToken").setValue(deviceToken);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
