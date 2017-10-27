@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\8e9a37a686dd9d41302e3d56a4021d0d94054280\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9ed08fab37c3a572da1d9ed2bf2e36c8d3e2bc48">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_56634407bf4c0e7159ecf3499d46f5134979983b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\8c3e5794a9661c2d26075edfc75183677c47aee8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="aa6a6e385297077a344e0bb95ab6c22f22119261">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f0cfac1549695febfee4aa8e7092914204ca879a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\43daab716c466d95763ac2d4c279cecd7879a6df\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="597d0d34e15e713c486e8f4ccf739f0c7d05bde4">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8563e295f027d67042c67ea920c8b5d2138f47e2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\983c01d7fd1d6e1d7435cfc21bcd0b76b35f7b0c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="ed811c4b4ba5237a0266b12b7e1c991e5ae80a94">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a57dae125c5369c1652fb0b171df3722205650c0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\5496c131755a59c6d98ed084a13114a66ca517c8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d3efa7f57187532c3abed6fd797d197bf09fbfb6">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_9b14f90d33fa1d62f289fbfccb4b9f029019313b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\ce03ec4453728a0944a433c6a401278099e911bf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9d5ae39b0de30b0f73c815513024feff3542f36e">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6f1b87b5dce0243ffa79a98634940041ee1cd586\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\c580e060cbfe8c82a0983142e4c3cc485db39245\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="45f697922e6f072daa12f8a2995dc77ab03c11da">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6ee36f1013314e35f87cd35eb567235cf9d648e2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-applinks\1.4.0\8ad21bf21784dacce5f2043afb97218cc377e835\bolts-applinks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8ad21bf21784dacce5f2043afb97218cc377e835">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\bolts-applinks-1.4.0_595b7acb4558d85e3b20f22c99648479d5725b04\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\d469e5444f0dd1bb013bd55254ed6fee14061884\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="82ea5a937ab84229fbd2f3fc8cf2a72cbdf0ee0f">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a855def71bc55cf879dcad317e599f39157398b0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\9b2e60d91655cf2924b5d9efa50c4206f58c2f62\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="2ed7ba48801a0a361727833ade3b6cf096968cc0">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d0386898c17228b50ef230d4319247ec8dca96b6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\annotations\4.0.0-RC1\84c524dcd1a3088edd5560a8ac176eae1317f770\annotations-4.0.0-RC1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="84c524dcd1a3088edd5560a8ac176eae1317f770">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\annotations-4.0.0-RC1_453796dcb154e5286bac43b25db375f8c7dae165\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\d2a530f6575f332c7208e1723c65d97ab5f66460\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e94be096920f10f81fbfe980704acdf89d556502\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\4360b7957483dea871383a82cbb80d0f419d914c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="88ae4c6ceaeab7beca5e396e0698c6958e26a2d2">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_0c310110b6b39a597b4d670b9e49d72ca4a0239e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\9f0f773d7829e502f5fae41774336d7dffbe073c\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4a26a1154d053ab11aaf4c3967c42a4d66390991">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_95741196b004408cc1dd8826fb14b72ee47e9a89\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\57d11458b766e697e5bfbb899710153264e3521a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="98ac18f891a8279ae57c4771cbf4a2a65f95b04c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1549b98f52ca0f93c7371afce4ce6240e58bf5e6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\32a96b4f6942f647298079d9940c11e3de6a8e95\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9a0c96cb2e74d3a6e692d920c9e03326e77f6429">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f59d28a566c58ed4b5d9a69a252635a1fb102f4c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\c995739ad46074e40a88d767908aed416cb1fd2e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="efb8cb62d47d157c29d1521daac7eefd4cb881ee">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_666ae5b132967404fbb046d079d41cbb4c3fd69e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\dd6029ca7fdc9f141de019bc364b284128f06d5b\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="da27a32db6af8954ee8061537c7d476fcb1df46f">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_6e1f432684f94db04c39940aadcb84bd6bd36ea7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\2742820a32760dfe82671a92d21ea6f16a87eb14\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="183e4fb7cf95f4fa54963cfcdaf0f4d7e2397bad">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4f89cf9fa2b09270c6d466d7a481c1d66a6ddf72\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\6edabe53ab11f327642306e1bbae4fe718cdb088\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bc9ea2bc291bbebc83f5b160d115c699bddc4e16">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8bff5af0be63742397eceb99a63dc899167de5f8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\dce3eabf398e4610ee2b55603360e018a9d455cb\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6f88c3700a5702f122a59f16001ae7d8efcb877b">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_2d1ab1d8881a3c7141b6cc1acf3464f1753617e0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\9e1f22aa3678292bc92553b2a0e2631ced087d2e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6d0d5e86f5b7203834df01ed78ebfdd5cbf74d48">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1e25aeb6b7d329221a4a9228b123d4f78a8e4714\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\98a44f2786250e72394454927b6df727d1ecb527\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a75030f7a3f5f96a15acdab44829bed93154d09f">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b12dcba40c328361c22d536fe8ee82eb1c4ceafb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\6caf611e56a9baf2a132fb45c69039c125f61338\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="143e5647b772c08c9f0d807b24bbc0b05ff6c7d2">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5f6a8544e6fd8eaaeb7fc26c17a212cc8d44c48e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\994e5e100d53e11c8a89683ac6983dd30fcdbb3f\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="dd1d0d84da2cff18f741c63a9c3af7d9aa89fdd6">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ff637ab974818beca3b554e7270334a339d20801\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\281c9c9f1af0565e2c3a0549b0cd90939bf4dcf3\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="287051610dd01cc6eeaed7fc689712c31ad1ff70">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8dd04d1acf3ef52be5d59fa85afc28679b99b3b5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\cf3ca305d3e769ea4f48086d6efb175bdfe58e56\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8748e15968514ff1708deb3bb7f0c17623e50bbb">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7909dda5b759cd09817cf3d6b19799903150aeca\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\d4532c8552be520e6d0054f9180e6fb614607c50\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="2ef283f6e85ab9e84372ae5e894aeef34fe6c68c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_532f231fb6fe7563964dc566c12e99075e8e90b0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f60fe672067a349b429d78acf09d54f518d46c51\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="cf8c0b6ec17f059cf61ecd101296e16c38562196">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f03b5b9d31f030d5e4fd08c3bd1b09938c9e2bec\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\gifdecoder\4.0.0-RC1\c425e31eda1069f978a0e823ad50e567ab422656\gifdecoder-4.0.0-RC1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c425e31eda1069f978a0e823ad50e567ab422656">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\gifdecoder-4.0.0-RC1_a2b1624f2e2946831e2c666bf23e8636f73672e7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\disklrucache\4.0.0-RC1\1b4bba8f8d3df8db064c875c043c01e9ca3cdee9\disklrucache-4.0.0-RC1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="1b4bba8f8d3df8db064c875c043c01e9ca3cdee9">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\disklrucache-4.0.0-RC1_f64e6a400d0909ce8b4e0363915c76afa5f3412f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\4.0.0-RC1\7baec7d5132e7343100a99630a56a6584a33addc\glide-4.0.0-RC1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7baec7d5132e7343100a99630a56a6584a33addc">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\glide-4.0.0-RC1_2933c9e4ef55d891902f229c20ba964dc6c0da2c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\308bc892ebaee74819c0cb243474258395a4e56d\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="acc7a846f0bc56ecccda535fc919fd338b2b3e2c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b5c65bcc033237e48b49629f24a5c5164d8e5eeb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\7d1e5618c9c90cc0d6de593d44bb306faf2c86a5\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="0e23941db151e67886844de6586e180bb2b860ad">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e9beed0a410f12d8c4e26b30856e5d1b2531cd48\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f5baba0f073abfbff71a8d98f132ff3170723207\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6ef31f1555bb4cc513ec8d52711365a8b89f3600">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_500026493db6987b4f5e2fcb8073ea45e0882803\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\0fc5103575b8d6f93adb985aa8a91f28cbc52681\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d66b8668122393a15c90471c5c974c25439d193a">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d4f41b359daed094f70e83f0c9e5997697256c85\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\4874debdfbdc0dcc0fcce4bd2b67ec03a5c1f887\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5cba8868595f6aaff54cf7d1798591108cf5611c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d6ef31b7234d4ff33b484fc760c125f112241981\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\a14e862494b44a85ab791c663647b306836d886a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="54933c89f90a872aa342004e82b23e776fe12736">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_46f021b210bb69ee63fb41cafedd73f053283527\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\9880d80ca9f134c0594dad3cf93080943b2de0e0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="688809418e4c2b5014a028c02708d6aeaba466ff">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ce0b07d15654f0170c69b347792c57602ae6c92e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f2207bb3fa3efb551afe2c26e868faefdedc7265\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="29d9916bd9ad8406a53edbafbbce5e18943aa882">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_0bc138df67a19c14f5ce48eec874f2a920f40783\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\a8507b3e32a18b31fbec97c9d23ce8337724e7a4\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b8b26b28aae0ba8e2db55ad9fe0ebc770530c5ef">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7383a60561d38bc6925ca7ba6403d04b52cb2e5a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\ca0c8b0ff3e80a7341b4c76346adb12a76c359d7\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="657abe17c5ba58f5d24803ba303c6005b180897a">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_aee25da8a737031ec85098ec2161247278621f64\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\39944ea2a9eeca339c94c58f0d4bfc1e7ee62679\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7e0f082141b7aa90aab5d3a47ab09b0edc958f6b">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a30d1e2a0fe63fd1ffeed6b1ea5c358635377b2e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\7b6d7c90cf1ee9387218597806c0b984d68d32f8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="0c6d948e6cb9ea6f535d175fb61ba2930719c0e9">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_430328afea7a90758e020aff775d3dbcd9197692\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\1752608026067d44c628648567526792027f5a6e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="150252b33b00274cc868578ade018fda0d43a3eb">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d01f89f1a2d1398f0b67c6a646287b39cb62c723\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\959bb5d752c3ba49d055dbcb39c6d695054bc3f8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b2b4d3ecd541814f08200f8171def113095d5f39">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_9f2b0ab9155b864e99c118bc898f18fa1eaf507d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\cb7c47980ea5c91a2de8bce4dd15bf37b248e95e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5803db663655ef5cb38c6bcb17ba326fdb9edfbd">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1b67d1b01ddfabbb440bc99e15e40ae0b6541e59\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\aba07723b58d7ee25aafd5c06f4f337cd6d285ae\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d2d27edb6fbc12fdf28008cdff920e66f08cf159">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_559f00fd9f042042242931633a8d7c56b810c6c1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\cf85f39155826e2db6c82b975b975bc883655670\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8fdf15d202000492aefe43092b21af5332df0178">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_eacdbbe7e8c81d0d8e9613a92ef1130523c18a81\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\7a6e5b64e6ff99fdc77d4c815d821a8e79615868\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c76804333008c855433cad5cfd1256e86045e97b">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5be8e788a7bcc060d96a39fe9ba1ec090eb646b7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\4f86f5660b469afc225b8d46dad64b98b56639d9\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="0d394688dd7030b83dea8eed3fa483410c24afe0">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_15cff5e8c90beaff2ef420d1a57289c23b8625d5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\158a2f83e1d4f64d064f2df864957ab12c274f30\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6c8a4af7cf76d958c76ed7682f39e4b386b69305">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_4809e637c74cfd0b2e51f7b4983b9753477afa81\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\333cd022138744dab8637bb3302c351791ba0bad\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="43df709c95f6b0501b3adbc7da992b6a69a03214">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b134f84605e779d0936432e03c5fde690bd1abcf\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\2a48213285d6f1fb9a4f73f00f258c5dd5752980\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b327fbe2fad414bc38cf0ce8f7efe1a38f572837">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_7e48f4f3d1a585d2bbc7c8d6b3e1fcfef1bfc96a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\fac3f89e39fecc10fdb0e0aa69c1d49b0093bf42\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="252896ce41f2a84a2849e29235e66098be7d12ee">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ba7e4d63dd9ef7459c06546e4b597378bf49b9e6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\a78de083740a74a1684b5864922c2d6f13dc2c79\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="95519720620b553f63afc789beba9ad582807f7c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a8f539ba81bba920636a05cbbe00b7b8ca4d71d5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d85884acf6810a3bbbecb587f239005cbc846dc4">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\bolts-tasks-1.4.0_c52898f1ba374bdd6121606cdaa9bfa243599404\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_a47555703c974be401430ce2a3c300d94c619547\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\30086fadde03746ec32799b8a8328fa898589fbe\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="052f5f840f21174a3ecf6544130194e2652cbb73">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_82f1d069c719ae0a56c765e5ecea191d5083921f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\6ef98e388d2c56802c7e8fe6fec893795e4f2d76\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="90236fba9ac4dfb1f4196e231aab964522143ef6">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_87dc2dcd573bd7e1d77b2ef7512ebc2eac38c86d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\a738c914dc5ab8cf5ae14d8691522523af9f6e97\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="02e70fe04e0767ccfa16745b3398816d1171f0ad">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8ce4a5c44f0004b64eeeb8ad85a4148852a63580\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\99fbd4974d1b13569a0a3f4f37e7ff5f44aefdf9\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b50fe5288bba9d1635ba619bd3c308319205543e">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_cccc3da32ac6c279aa83c129ee0a330676cc233e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\e70e8ce1deccc378c13addb24f3e6bb5f4e565e1\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="dde643ce80b967f869e9b111255815ba4d391653">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_07e8001dd3d5d7e7984d660cf90f55288b2ccf14\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\AppData\Local\Android\sdk\extras\m2repository\com\android\support\constraint\constraint-layout-solver\1.0.2\constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\constraint-layout-solver-1.0.2_76f3965f639ab5fa496ea39a3ebf1fa88f9783d7\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\picasso-2.5.2_7489d44bc920e77c71a2ccef01879be6d07c92ac\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\c54d77f50a58cdd448c5731c9c1a756e6616ef71\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6b8d1a53648f7ecfe9e7bf0baf9ca657c5a1ff91">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c02938ea09a691a861b22a18f795cfd8a2c0f288\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\64772843860b524a3b2e511a7e6bdf5d137677b0\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6b8ad09b76c4ffaedf443ca54bc2418760870689">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_3e97c82c3f3b86aa8d0c2aa0d2f85b24129d2f1b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="78ea77503f2f4cb9ab87fb878d9c22bc9016ff34">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_5c7284e95ac4e5331e017a8f9a4122ae6472cba6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\273e83309acc7512a9c8184f598dcc81003b84bf\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="53e8932b1ac8c7dfc35cfeda1f9efbc9822ceaf3">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_11a6d6facc56c9a0efdd9459bc3cdec0e0261754\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\7f80ba2aa4a06e4c482f016ecfb155923db1b362\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="610ae6a6872d9718fc05e2c726758206bd367595">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_40571a059647e2c78b65273a5cdaee63d2dd3738\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.3.1\support-annotations-25.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="bf8841d29fa39e077730e7a91222c2ce269fa7c9">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.3.1_06c9719c7412dfa50d33a86005df019c8833700b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\2a48213285d6f1fb9a4f73f00f258c5dd5752980\output\jars\libs\internal_impl-24.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b6763651ec29b4c95e7bbe63fc393ffcc8c4c2c5">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.0.0_a878aed261a192c736e721f5ffc79428cc35ed36\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\97beb7fbde4793f96f59eb1c174f3b1ecefd455b\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="914f5d3e3ace66080e59613708f06d129a222e25">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_1802a6823aa29360fa1b525a8086441ffe187063\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.gradle\caches\modules-2\files-2.1\com.google.zxing\core\3.3.0\73c49077166faa4c3c0059c5f583d1d7bd1475fe\core-3.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="73c49077166faa4c3c0059c5f583d1d7bd1475fe">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\core-3.3.0_c89a7478ebeb8debfbb558160bda113d7c8ae5dc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f36ec30e10f17c2112f50797e0e1488fdcb81c03\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="f5bcd9cbfeedc58f493339841a7c5d0347a39f0b">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_d7672cf8c075a4ef2d0ee1132faa778f17718340\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\349de783d159efba02b8f009208b2d84a050a1e7\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="93094dbb2af50e23339620bebd7b4b6161410edb">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_67f004c8ffdc595b222e4f70cc4882767242c2d8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\59f33f9844fec85aabefe10ffcfbc75dfc741cc5\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="2188ba20a948ec6e7fa671b818c69d876d8bf32d">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ac25dabbb26957b229e8b466a95b71a7d897eabd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\cc81577082233ba68a61d7fdbbda4faeb44c2216\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="32aa1b2a2f68f455403d10d41d8ded37c9812f11">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5993a22424182dce28d99c77b63d54a3c9fdf64e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\36d3a757188ddebaaef3b9dc4de057c6861676e7\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c01990d0a9bbc67f4c2b9610c1170046c2e37b3e">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e2708cafadb9ebf05b706f963be862bc2bafdfa4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\e0f4f9d85cb69dad53098ad83c9ef70ebc00367a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a9c8affe1f564ec0d063be68469d26e972455217">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_51ebeb463127a12a3978568da6d020793088340c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\380a3b2770c5e1a75dedec5baf0ae18db7b4a98a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_f41f167d7c2530cba93c574cfa03ea7eabb9dfd0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\406fe010cd6012663801fd40e50f9638b0f9eb5a\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="47635644d0d5c103c1dd8360549eb9ba3225c7d3">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e747e648debdcf90ea07f791114a4d80d033bb7b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\89598e8cc622f13057977387f1ed2b2164b5df72\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d72eb1ceff1b0bac4916088eb44bb93f86b1265c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_5230593048c6c954af38b55b90308b8b3d19e47a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\d675cb5b23a4d38265b6df64e3e604389e0a173e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_90da04f7f2113a54fa254404460f3d58b2fc47c8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f2ab7454b12960d35d38855505ab2f9e8069c162\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="2482bfd874e8b3927f4141105674ad392ff83698">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_e7a69bb31334e7f88ca8723a9b594cce32ce9afe\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\e126bb6b2e73a3c8eee577f1ef445c8c46ad79fb\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="701c58abf53f488bc5bb0162f1305a38a32fb5f1">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_80f71d4d983a1c7c5d26203526516268f98c6f2b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\8663a6a62a590d69544651976401270d68f00ac3\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="fe159787dd4c4bc9ed6a9d4f7430e9af1f3516c8">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_0e70811d5fd0e21b21b4ca7097a19eee31fc53b3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\9186500a15b95fae26734f632243a3a12cd23a25\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="80ecaefc1035fde747999e4c20e18d207363efa2">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_c14ca76d515684ba8dd0d378d57d5e30a85d5ce3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\f91f57376190fe99169b7ecfc53d54ecba97233e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="29e4e634375ab2ed25f8db5387b564c78980422a">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_38d4712f15bd5ceedaaa920c3d19328771ea9c95\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\78dfd64c0a2c4d237e61bdbe67220f031dc08b8f\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="4eeba61bbc47e49a5fbdfd9aa21af5d10bf4df7c">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_19e39584464229ad1e5331defc68f5f8ac038a80\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\8da2d54b0bfd0c6283078851d81b2fa38792388e\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="1b95f2bf44857a158b097e9f80d5d18d69f32584">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_ab01688a21a6cdc30403c80391fa3a5b6f52c98a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\christopher.behan\.android\build-cache\5c57ae5663f439171ca8edaf8c08f6d4e0bc9e24\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="807751a24cf96566fd8675517c94d8463cf364db">
+        <dex dex="C:\Users\christopher.behan\StudioProjects\Lucriment\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_84578cd27e841e1d232d217f454cdebc3bf1c4b3\classes.dex" />
+    </item>
+
+</items>
