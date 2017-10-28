@@ -211,12 +211,47 @@ exports.sendMessageNotification = functions.database
 
   return deviceToken.then(result => {
 
-    token_id = result.val();
+    const token_id = result.val();
 
     const payload = {
       notification: {
         title : "Message",
         body : "You have receieved a message",
+        icon : "default"
+      }
+    };
+
+    return admin.messaging().sendToDevice(token_id , payload).then(response => {
+      console.log('Notification sent');
+    });
+
+  });
+
+
+
+});
+
+exports.sendSessionNotification = functions.database
+.ref('/requestNotifications/{user_id}/{notification_id}').onWrite(event => {
+  const user_id = event.params.user_id;
+  const notification_id = event.params.notification_id;
+
+  console.log('Sent notification to : ', user_id );
+
+  if(!event.data.val()){
+    return console.log('A notification has been deleted from the database : ', notification_id);
+  }
+
+  const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+  return deviceToken.then(result => {
+
+    token_id = result.val();
+
+    const payload = {
+      notification: {
+        title : "Session Request",
+        body : "You have receieved a session request",
         icon : "default"
       }
     };

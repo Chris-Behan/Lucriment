@@ -267,6 +267,10 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
             pushID.setValue(true);
             String sessionKey = pushID.getKey();
 
+            DatabaseReference notificationRef = FirebaseDatabase.getInstance().getReference().child("requestNotifications");
+            HashMap<String, String> notificationMap = new HashMap<String, String>();
+            notificationMap.put("from", userInfo.getId());
+            notificationRef.child(tutor.getId()).push().setValue(notificationMap);
 
             databaseReference.child("sessions").child(userInfo.getId()).child(user.getUid()+"_"+tutor.getId()).child(sessionKey).setValue(sessionRequest);
             databaseReference.child("sessions").child(tutor.getId()).child(user.getUid()+"_"+tutor.getId()).child(sessionKey).setValue(sessionRequest);
