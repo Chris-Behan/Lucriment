@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/ProfileImage"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
@@ -37,7 +37,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Rate"
         android:id="@+id/browseRate"
-
         android:layout_gravity="center_horizontal"
         android:layout_alignBottom="@+id/imageView6"
         android:layout_toRightOf="@+id/imageView6"
@@ -53,7 +52,7 @@
         android:textAlignment="center"
         android:maxHeight="30dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:layout_below="@+id/ProfileImage"
+        android:layout_below="@+id/title"
         android:layout_alignLeft="@+id/ProfileImage"
         android:layout_alignStart="@+id/ProfileImage" />
 
@@ -81,7 +80,6 @@
 
     <TextView
         android:id="@+id/cityText"
-        android:maxWidth="150dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -95,7 +93,6 @@
         android:id="@+id/location"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_toRightOf="@+id/browseRate"
         android:tint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_location_on_black_24dp"
 
@@ -108,11 +105,11 @@
         android:id="@+id/fbookMark"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/bookmaryselector"
+        android:layout_alignParentEnd="true"
 
-        android:focusable="false"
-        android:layout_alignTop="@+id/browseDisplayName"
-        android:layout_alignRight="@+id/cityText"
-        android:layout_alignEnd="@+id/cityText" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bookmaryselector"
+        android:focusable="false" />
 
 </RelativeLayout>

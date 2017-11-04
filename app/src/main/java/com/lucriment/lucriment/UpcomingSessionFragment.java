@@ -213,6 +213,7 @@ public class UpcomingSessionFragment extends Fragment {
 
         ArrayList<String> t23 = strings;
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void checkCurrentSession(){
         if(!thisSession.isEmpty()){
             sessionIndicator.setVisibility(View.VISIBLE);
@@ -418,6 +419,7 @@ public class UpcomingSessionFragment extends Fragment {
 
 
         // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;
@@ -460,6 +462,7 @@ public class UpcomingSessionFragment extends Fragment {
 
 
         // @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View itemView = convertView;

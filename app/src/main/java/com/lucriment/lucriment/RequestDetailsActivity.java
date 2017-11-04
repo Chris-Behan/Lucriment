@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -57,6 +59,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,8 +279,13 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         dbr.push().setValue(amountMap);
         Toast.makeText(RequestDetailsActivity.this, "Session Booked",
                 Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
 
+        DatabaseReference databaseReference4 = FirebaseDatabase.getInstance().getReference().child("confirmedNotifications");
+        HashMap<String, String> notificationMap = new HashMap<String, String>();
+        notificationMap.put("from", userInfo.getId());
+        databaseReference4.child(requesteeUid).push().setValue(notificationMap);
+
+        Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
         i.putExtra("userType", userType);
         i.putExtra("userInfo",userInfo);
         startActivity(i);
@@ -300,8 +308,12 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             databaseReference3.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
+            DatabaseReference databaseReference4 = FirebaseDatabase.getInstance().getReference().child("declinedNotifications");
+            HashMap<String, String> notificationMap = new HashMap<String, String>();
+            notificationMap.put("from", userInfo.getId());
+            databaseReference4.child(requesteeUid).push().setValue(notificationMap);
 
+            Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
             i.putExtra("userType", userType);
             i.putExtra("userInfo", userInfo);
             startActivity(i);
@@ -312,8 +324,11 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
             databaseReference3.setValue(true);
             Toast.makeText(RequestDetailsActivity.this, "Session Declined",
                     Toast.LENGTH_SHORT).show();
+            DatabaseReference databaseReference4 = FirebaseDatabase.getInstance().getReference().child("declinedNotifications");
+            HashMap<String, String> notificationMap = new HashMap<String, String>();
+            notificationMap.put("from", userInfo.getId());
+            databaseReference4.child(requesteeUid).push().setValue(notificationMap);
             Intent i = new Intent(RequestDetailsActivity.this, TutorSessionsActivity.class);
-
             i.putExtra("userType", userType);
             i.putExtra("userInfo", userInfo);
             startActivity(i);

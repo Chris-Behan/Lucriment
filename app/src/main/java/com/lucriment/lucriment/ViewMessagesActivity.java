@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -106,14 +107,23 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
 
                         if(lastChat.receiverName.equals(userInfo.getFullName())) {
                             listOfChats.add(lastChat);
-                            usersIds.add(lastChat.senderId);
+                         //   usersIds.add(lastChat.senderId);
                         }else{
                             listOfChats.add(lastChat);
-                            usersIds.add(lastChat.receiverId);
+                          //  usersIds.add(lastChat.receiverId);
                         }
 
                 }
 
+                Collections.sort(listOfChats, new ChatTimeComparator());
+
+                for(Chat c : listOfChats){
+                    if(c.receiverName.equals(userInfo.getFullName())){
+                        usersIds.add(c.senderId);
+                    }else {
+                        usersIds.add(c.receiverId);
+                    }
+                }
 
 
             }

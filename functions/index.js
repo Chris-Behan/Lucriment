@@ -8,7 +8,7 @@ admin.initializeApp(functions.config().firebase);
 
 let TOKEN_URI = 'https://connect.stripe.com/oauth/token';
 let AUTHORIZE_URI = 'https://connect.stripe.com/oauth/authorize';
-const stripe = require('stripe')("sk_test_P7SJhYfnVaZ1kZg4L6dg2jnj"),
+const stripe = require('stripe')("sk_live_CkXUB4FiJlJBSK4VtlCxuFtT"),
   currency = functions.config().stripe.currency || 'CAD';
 
 exports.updateConnected = functions.database.ref("tutors/{userId}/stripe_connected/update").onWrite(event =>{
@@ -207,62 +207,238 @@ exports.sendMessageNotification = functions.database
     return console.log('A notification has been deleted from the database : ', notification_id);
   }
 
-  const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+  const fromUser = admin.database().ref(`/messageNotifications/${user_id}/${notification_id}`).once('value');
+  return fromUser.then(fromUserResult => {
 
-  return deviceToken.then(result => {
+    const from_user_id = fromUserResult.val().from;
 
-    const token_id = result.val();
+    console.log('Received notification from : ', from_user_id);
 
-    const payload = {
-      notification: {
-        title : "Message",
-        body : "You have receieved a message",
-        icon : "default"
-      }
-    };
+    const userQuery = admin.database().ref(`users/${from_user_id}/firstName`).once('value');
+    return userQuery.then(userResult => {
 
-    return admin.messaging().sendToDevice(token_id , payload).then(response => {
-      console.log('Notification sent');
+      const firstName = userResult.val();
+
+      const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+      return deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        const payload = {
+          notification: {
+            title : "Message",
+            body : `${firstName} sent you a message!`,
+            icon : "default"
+          }
+        };
+
+        return admin.messaging().sendToDevice(token_id , payload).then(response => {
+          console.log('Notification sent');
+        });
+
+      });
+
     });
 
   });
 
-
-
 });
 
-exports.sendSessionNotification = functions.database
+exports.sendRequestNotification = functions.database
 .ref('/requestNotifications/{user_id}/{notification_id}').onWrite(event => {
   const user_id = event.params.user_id;
   const notification_id = event.params.notification_id;
 
-  console.log('Sent notification to : ', user_id );
+  console.log('Sent request to : ', user_id );
 
   if(!event.data.val()){
-    return console.log('A notification has been deleted from the database : ', notification_id);
+    return console.log('A request has been deleted from the database : ', notification_id);
   }
 
-  const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+  const fromUser = admin.database().ref(`/requestNotifications/${user_id}/${notification_id}`).once('value');
+  return fromUser.then(fromUserResult => {
 
-  return deviceToken.then(result => {
+    const from_user_id = fromUserResult.val().from;
 
-    token_id = result.val();
+    console.log('Received notification from : ', from_user_id);
 
-    const payload = {
-      notification: {
-        title : "Session Request",
-        body : "You have receieved a session request",
-        icon : "default"
-      }
-    };
+    const userQuery = admin.database().ref(`users/${from_user_id}/firstName`).once('value');
+    return userQuery.then(userResult => {
 
-    return admin.messaging().sendToDevice(token_id , payload).then(response => {
-      console.log('Notification sent');
+      const firstName = userResult.val();
+
+      const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+      return deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        const payload = {
+          notification: {
+            title : "Session Request",
+            body : `${firstName} sent you a session request!`,
+            icon : "default"
+          }
+        };
+
+        return admin.messaging().sendToDevice(token_id , payload).then(response => {
+          console.log('Notification sent');
+        });
+
+      });
+
     });
 
   });
 
+});
 
+
+exports.confirmedNotification = functions.database
+.ref('/confirmedNotifications/{user_id}/{notification_id}').onWrite(event => {
+  const user_id = event.params.user_id;
+  const notification_id = event.params.notification_id;
+
+  console.log('Sent request to : ', user_id );
+
+  if(!event.data.val()){
+    return console.log('A request has been deleted from the database : ', notification_id);
+  }
+
+  const fromUser = admin.database().ref(`/confirmedNotifications/${user_id}/${notification_id}`).once('value');
+  return fromUser.then(fromUserResult => {
+
+    const from_user_id = fromUserResult.val().from;
+
+    console.log('Received notification from : ', from_user_id);
+
+    const userQuery = admin.database().ref(`users/${from_user_id}/firstName`).once('value');
+    return userQuery.then(userResult => {
+
+      const firstName = userResult.val();
+
+      const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+      return deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        const payload = {
+          notification: {
+            title : "Request Confirmed",
+            body : `${firstName} accepted your session request!`,
+            icon : "default"
+          }
+        };
+
+        return admin.messaging().sendToDevice(token_id , payload).then(response => {
+          console.log('Notification sent');
+        });
+
+      });
+
+    });
+
+  });
+
+});
+
+exports.cancelledNotification = functions.database
+.ref('/cancelledNotifications/{user_id}/{notification_id}').onWrite(event => {
+  const user_id = event.params.user_id;
+  const notification_id = event.params.notification_id;
+
+  console.log('Sent request to : ', user_id );
+
+  if(!event.data.val()){
+    return console.log('A request has been deleted from the database : ', notification_id);
+  }
+
+  const fromUser = admin.database().ref(`/cancelledNotifications/${user_id}/${notification_id}`).once('value');
+  return fromUser.then(fromUserResult => {
+
+    const from_user_id = fromUserResult.val().from;
+
+    console.log('Received notification from : ', from_user_id);
+
+    const userQuery = admin.database().ref(`users/${from_user_id}/firstName`).once('value');
+    return userQuery.then(userResult => {
+
+      const firstName = userResult.val();
+
+      const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+      return deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        const payload = {
+          notification: {
+            title : "Session Cancelled",
+            body : `${firstName} cancelled the session.`,
+            icon : "default"
+          }
+        };
+
+        return admin.messaging().sendToDevice(token_id , payload).then(response => {
+          console.log('Notification sent');
+        });
+
+      });
+
+    });
+
+  });
+
+});
+
+exports.declinedNotification = functions.database
+.ref('/declinedNotifications/{user_id}/{notification_id}').onWrite(event => {
+  const user_id = event.params.user_id;
+  const notification_id = event.params.notification_id;
+
+  console.log('Sent request to : ', user_id );
+
+  if(!event.data.val()){
+    return console.log('A request has been deleted from the database : ', notification_id);
+  }
+
+  const fromUser = admin.database().ref(`/declinedNotifications/${user_id}/${notification_id}`).once('value');
+  return fromUser.then(fromUserResult => {
+
+    const from_user_id = fromUserResult.val().from;
+
+    console.log('Received notification from : ', from_user_id);
+
+    const userQuery = admin.database().ref(`users/${from_user_id}/firstName`).once('value');
+    return userQuery.then(userResult => {
+
+      const firstName = userResult.val();
+
+      const deviceToken = admin.database().ref(`/users/${user_id}/deviceToken`).once('value');
+
+      return deviceToken.then(result => {
+
+        const token_id = result.val();
+
+        const payload = {
+          notification: {
+            title : "Session Cancelled",
+            body : `${firstName} declined the session.`,
+            icon : "default"
+          }
+        };
+
+        return admin.messaging().sendToDevice(token_id , payload).then(response => {
+          console.log('Notification sent');
+        });
+
+      });
+
+    });
+
+  });
 
 });
 

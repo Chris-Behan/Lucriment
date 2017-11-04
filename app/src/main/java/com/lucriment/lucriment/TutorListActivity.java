@@ -480,9 +480,7 @@ public class TutorListActivity extends BaseActivity {
                 i.putExtra("tutorScore",tutorScore);
                 i.putExtra("userType", userType);
                 i.putExtra("userInfo",userInfo);
-                if(!tutorAddresses.isEmpty()) {
-                    i.putExtra("location", tutorAddresses.get(position));
-                }
+
                 if(selectedTutor1.getAddress()!=null) {
                     i.putExtra("location", selectedTutor1.getAddress());
                 }

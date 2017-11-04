@@ -197,6 +197,7 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
         DatabaseReference reviewRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(userInfo.getId()).child("reviews");
         reviewRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot revSnap: dataSnapshot.getChildren()){

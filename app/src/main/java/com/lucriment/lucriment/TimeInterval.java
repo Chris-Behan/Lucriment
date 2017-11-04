@@ -94,6 +94,7 @@ public class TimeInterval implements Parcelable{
         return toMinute;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public String returnFormattedDate(){
         String fd = returnDate() +" "+ returnFromTime()+" - "+returnToTime();
         return fd;

@@ -72,11 +72,11 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
     private double sessioncost;
     private String selectedTimeInterval;
     private UserInfo userInfo;
-    private String userType;
+    private String userType, tutorLocation;
     private TextView ratingBar;
     private TutorInfo selectedTutor;
     private ProgressDialog progressDialog;
-    private TextView headline;
+    private TextView headline, city;
     double score;
 //    private SubjectSelectionDialog se = new SubjectSelectionDialog();
     TwoItemField field1 = new TwoItemField("Subject", "Select");
@@ -104,6 +104,7 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+
         if(getIntent().hasExtra("subject"))
             subjectSelection = getIntent().getStringExtra("subject");
         if(getIntent().hasExtra("location"))
@@ -117,6 +118,10 @@ public class RequestSessionActivity extends BaseActivity implements View.OnClick
         requestButton = (Button) findViewById(R.id.requestButton);
         cost = (TextView) findViewById(R.id.costView);
         headline = (TextView) findViewById(R.id.title);
+        city = (TextView) findViewById(R.id.cityText);
+        tutorLocation = selectedTutor.getAddress();
+
+        city.setText(tutorLocation);
 
         headline.setText(selectedTutor.getHeadline());
         ratingBar = (TextView) findViewById(R.id.rating);

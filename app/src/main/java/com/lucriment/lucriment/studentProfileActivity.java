@@ -41,7 +41,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
     private DatabaseReference databaseReference;
     private StorageReference mStorage;
     private ProgressDialog progressDialog;
-    private DatabaseReference mdatabaseRef, mRoofRef, firstNameRef, lastNameRef, headlineRef;
+    private DatabaseReference mdatabaseRef, mRoofRef, firstNameRef, lastNameRef, headlineRef, fullNameRef;
 
 
     @Override
@@ -76,6 +76,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
         mRoofRef = mdatabaseRef.child("users").child(userInfo.getId()).child("profileImage");
         firstNameRef = mdatabaseRef.child("users").child(userInfo.getId()).child("firstName");
         lastNameRef = mdatabaseRef.child("users").child(userInfo.getId()).child("lastName");
+        fullNameRef = mdatabaseRef.child("users").child(userInfo.getId()).child("fullName");
         headlineRef = mdatabaseRef.child("users").child(userInfo.getId()).child("headline");
 
         firstName.setText(userInfo.getFirstName());
@@ -118,6 +119,7 @@ public class studentProfileActivity extends AppCompatActivity implements View.On
                 editing = false;
                 firstNameRef.setValue(firstName.getText().toString());
                 lastNameRef.setValue(lastName.getText().toString());
+                fullNameRef.setValue(firstName.getText().toString().trim()+" " +lastName.getText().toString().trim());
                 headlineRef.setValue(editAbout.getText().toString());
                 fNameLabel.setVisibility(View.VISIBLE);
                 lNameLabel.setVisibility(View.VISIBLE);

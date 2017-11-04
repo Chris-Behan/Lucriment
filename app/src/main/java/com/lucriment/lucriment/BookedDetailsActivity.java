@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -58,6 +61,7 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,9 +202,13 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
 
 
             titleText.setText(requesteeInfo.getHeadline());
+        Rating rating = (requesteeInfo.getRating());
             if (requesteeInfo.getRating() != null) {
-                double rating = requesteeInfo.getRating().getTotalScore() / requesteeInfo.getRating().getNumberOfReviews();
-                ratingText.setText(rating + "");
+                double ratingAvg = (rating.getTotalScore() / rating.getNumberOfReviews());
+                DecimalFormat df = new DecimalFormat("#.#");
+                ratingAvg = Double.valueOf(df.format(ratingAvg));
+
+                ratingText.setText(ratingAvg + "");
             } else {
                 ratingText.setText("  0");
             }
@@ -334,8 +342,11 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
             DatabaseReference refundRef = FirebaseDatabase.getInstance().getReference().child("users")
                     .child(requesteeUid).child("refunds");
             refundRef.push().setValue(refundMap);
+            DatabaseReference cancelRef = FirebaseDatabase.getInstance().getReference().child("cancelledNotifications");
+            HashMap<String, String> notificationMap = new HashMap<String, String>();
+            notificationMap.put("from", userInfo.getId());
+            cancelRef.child(requesteeUid).push().setValue(notificationMap);
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
-
             i.putExtra("userType", userType);
             i.putExtra("userInfo", userInfo);
             startActivity(i);
@@ -349,6 +360,10 @@ public class BookedDetailsActivity extends AppCompatActivity implements OnMapRea
             databaseReference3.setValue(true);
             Toast.makeText(BookedDetailsActivity.this, "Session Canceled",
                     Toast.LENGTH_SHORT).show();
+            DatabaseReference cancelRef = FirebaseDatabase.getInstance().getReference().child("cancelledNotifications");
+            HashMap<String, String> notificationMap = new HashMap<String, String>();
+            notificationMap.put("from", userInfo.getId());
+            cancelRef.child(requesteeUid).push().setValue(notificationMap);
             Intent i = new Intent(BookedDetailsActivity.this, TutorSessionsActivity.class);
 
             i.putExtra("userType", userType);

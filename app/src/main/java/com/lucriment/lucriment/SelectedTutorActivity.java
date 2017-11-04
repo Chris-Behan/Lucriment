@@ -261,6 +261,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         });
         DatabaseReference reviewRoot = FirebaseDatabase.getInstance().getReference().child("tutors").child(tutorID).child("reviews");
         reviewRoot.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

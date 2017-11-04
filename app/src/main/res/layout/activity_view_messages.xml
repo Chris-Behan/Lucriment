@@ -24,7 +24,7 @@
        >
 
         <ListView
-            android:layout_marginTop="10dp"
+
             android:id="@+id/currentChats"
             android:layout_width="match_parent"
             android:layout_height="400dp"
