@@ -1,6 +1,5 @@
 package com.lucriment.lucriment;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +8,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+
+import Messaging.ViewMessagesActivity;
+import Misc.BottomNavHelper;
+import Students.Favourites;
+import Students.SettingsActivity;
+import Students.UserInfo;
+import Tutors.DefaultAvailability;
+import Tutors.StatsActivity;
+import Students.TutorListActivity;
+import Tutors.TutorSessionsActivity;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -136,12 +143,12 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
         }
     }
 
-    abstract int getContentViewId();
+    protected abstract int getContentViewId();
 
-    abstract int getNavigationMenuItemId();
+    public abstract int getNavigationMenuItemId();
 
-    abstract String getUserType();
+    protected abstract String getUserType();
 
-    abstract UserInfo getUserInformation();
+    protected abstract UserInfo getUserInformation();
 
 }

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         multiDexEnabled true
@@ -40,8 +40,8 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
     compile 'com.firebaseui:firebase-ui-storage:1.2.0'
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-auth:10.2.4'
     compile 'com.google.firebase:firebase-database:10.2.4'
@@ -51,8 +51,8 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.4'
     compile 'com.google.firebase:firebase-storage:10.2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:recyclerview-v7:26.0.0'
+    compile 'com.android.support:design:26.0.0'
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.1'
     compile 'com.stripe:stripe-android:4.1.1'
     testCompile 'junit:junit:4.12'
