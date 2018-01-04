@@ -34,7 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import Messaging.MessageActivity;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
+import Students.Rating;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

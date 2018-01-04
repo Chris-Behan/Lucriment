@@ -1,4 +1,4 @@
-package com.lucriment.lucriment;
+package Misc;
 
 import android.app.Activity;
 import android.app.AlertDialog;

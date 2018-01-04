@@ -11,7 +11,7 @@ import android.widget.ViewFlipper;
 
 import com.lucriment.lucriment.LoginActivity;
 import com.lucriment.lucriment.MainActivity;
-import com.lucriment.lucriment.OnSwipeTouchListener;
+import Misc.OnSwipeTouchListener;
 import com.lucriment.lucriment.R;
 import com.rd.PageIndicatorView;
 

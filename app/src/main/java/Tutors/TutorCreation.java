@@ -34,7 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.lucriment.lucriment.ProvinceSelectionDialog;
+import Misc.ProvinceSelectionDialog;
 import com.lucriment.lucriment.R;
 import Students.SettingsActivity;
 import Students.UserInfo;

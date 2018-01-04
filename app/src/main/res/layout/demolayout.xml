@@ -31,7 +31,7 @@
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="60dp"
@@ -69,26 +69,28 @@
 
             <TextView
                 android:id="@+id/rating"
-                android:layout_width="31dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/location"
+                android:layout_alignLeft="@+id/ProfileImage"
+                android:layout_alignStart="@+id/ProfileImage"
+                android:layout_below="@+id/title"
+                android:layout_marginLeft="10dp"
+                android:maxHeight="30dp"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:maxHeight="30dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:layout_below="@+id/ProfileImage"
-                android:layout_alignLeft="@+id/ProfileImage"
-                android:layout_alignStart="@+id/ProfileImage" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:tint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_star_rate_black_18dp"
-                android:layout_below="@+id/ProfileImage"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/rating"
 
                 android:layout_toRightOf="@+id/rating"
-                android:layout_toEndOf="@+id/rating" />
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_star_rate_black_18dp" />
 
             <TextView
                 android:id="@+id/title"
@@ -131,13 +133,12 @@
                 android:id="@+id/bookMark"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bookmaryselector"
-                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
 
-                android:focusable="false"
-                android:layout_alignTop="@+id/browseDisplayName"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentTop="true"
+                android:background="@drawable/bookmaryselector"
+                android:focusable="false" />
 
 
         </RelativeLayout>
@@ -168,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About:"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="5dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -182,14 +183,11 @@
                     android:id="@+id/tutorAboutField"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    android:layout_marginTop="4dp"
-                    android:layout_alignTop="@+id/AboutLabel"
-                    android:layout_toRightOf="@+id/AboutLabel"
-                    android:layout_marginLeft="5dp"
-
-                    android:layout_alignRight="@+id/line2"
-                    android:layout_alignEnd="@+id/line2" />
+                    android:layout_alignLeft="@+id/AboutLabel"
+                    android:layout_marginBottom="10dp"
+                    android:layout_alignStart="@+id/AboutLabel"
+                    android:layout_below="@+id/editAbout"
+                    android:text="TextView" />
                 <Button
                     android:id="@+id/editAbout"
                     android:layout_width="wrap_content"
@@ -226,24 +224,24 @@
                     android:id="@+id/subjectsLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="8dp"
                     android:text="Subjects:"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textStyle="bold"
                     android:layout_below="@+id/line3"
                     android:layout_alignLeft="@+id/line3"
                     android:layout_alignStart="@+id/line3" />
+
                 <TextView
                     android:id="@+id/classesField"
                     android:layout_width="250dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="5dp"
-                    android:text="test"
-                    android:layout_alignTop="@+id/subjectsLabel"
-                    android:layout_toRightOf="@+id/subjectsLabel"
-                    android:layout_toEndOf="@+id/subjectsLabel"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp" />
+                    android:layout_alignLeft="@+id/subjectsLabel"
+                    android:layout_alignStart="@+id/subjectsLabel"
+                    android:layout_below="@+id/subjectsLabel"
+                    android:text="test" />
+
             </RelativeLayout>
 
 

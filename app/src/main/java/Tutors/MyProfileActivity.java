@@ -53,7 +53,7 @@ import Misc.BottomNavHelper;
 import com.lucriment.lucriment.LoginActivity;
 import Students.ProfileActivity;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
+import Students.Rating;
 import Sessions.Review;
 import Students.SettingsActivity;
 import Students.UserInfo;

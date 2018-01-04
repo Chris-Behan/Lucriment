@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.lucriment.lucriment.BaseActivity;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
+import Students.Rating;
 
 import Students.CreationActivity;
 import Students.SelectedTutorActivity;

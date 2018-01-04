@@ -30,7 +30,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.lucriment.lucriment.BaseActivity;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
 
 import java.io.IOException;
 import java.util.ArrayList;

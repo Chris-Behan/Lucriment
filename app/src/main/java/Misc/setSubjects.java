@@ -1,4 +1,4 @@
-package com.lucriment.lucriment;
+package Misc;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

@@ -3,8 +3,6 @@ package Students;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lucriment.lucriment.Rating;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

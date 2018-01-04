@@ -1,4 +1,4 @@
-package com.lucriment.lucriment;
+package Students;
 
 /**
  * Created by ChrisBehan on 6/12/2017.

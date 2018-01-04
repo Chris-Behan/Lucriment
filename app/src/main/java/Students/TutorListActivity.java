@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.lucriment.lucriment.BaseActivity;
 import Misc.BottomNavHelper;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
+
 import Sessions.SubjectListViewAdapter;
 
 import java.io.IOException;
@@ -440,7 +440,7 @@ public class TutorListActivity extends BaseActivity {
                 double score = rating.getTotalScore()/rating.getNumberOfReviews();
                 ratingScore.setText(score+"");
             }else{
-                ratingScore.setText("  "+0);
+                ratingScore.setText("N/A");
             }
 
             TextView titleText = (TextView) itemView.findViewById(R.id.title);

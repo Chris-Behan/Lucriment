@@ -1,4 +1,4 @@
-package com.lucriment.lucriment;
+package Misc;
 
 /**
  * Created by ChrisBehan on 8/24/2017.

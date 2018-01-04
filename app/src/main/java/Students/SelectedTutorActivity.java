@@ -49,7 +49,7 @@ import Misc.BottomNavHelper;
 
 import Messaging.MessageActivity;
 import com.lucriment.lucriment.R;
-import com.lucriment.lucriment.Rating;
+
 import Sessions.RequestSessionActivity;
 import Sessions.Review;
 
@@ -156,14 +156,33 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
 //        educationField.setText(selectedTutor.getTitle());
         aboutField.setText(selectedTutor.getAbout());
         rateField.setText("$"+String.valueOf(selectedTutor.getRate()));
-
-        ratingText.setText(score +"");
+        //If tutor does not have a rating, set text
+        if(score == 0){
+            ratingText.setText("N/A");
+        }else {
+            ratingText.setText(score + "");
+        }
         locationText.setText(location);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        //Get Location if Empty
+        if(location == null){
+            DatabaseReference getLocationRef = FirebaseDatabase.getInstance().getReference().child("tutors").child(selectedTutor.getId()).child("address");
+            getLocationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    location = dataSnapshot.getValue(String.class);
+                    locationText.setText(location);
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
 
         //     backButton.setOnClickListener(this);

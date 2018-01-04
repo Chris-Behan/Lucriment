@@ -3,7 +3,7 @@ package Tutors;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.lucriment.lucriment.Rating;
+import Students.Rating;
 import Students.UserInfo;
 
 import java.util.ArrayList;
