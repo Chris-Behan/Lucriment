@@ -117,12 +117,15 @@ public class PaymentActivity extends BaseActivity {
                    // Object testamount = transactionMap.get("amount");
                     double amount = Double.valueOf(transactionMap.get("amount"));
                     amount = amount/100;
-                    long created = Long.valueOf(transactionMap.get("created"));
-                    created = created*1000;
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    String dateString = formatter.format(new Date(created));
-                    TwoItemField thisTransaction = new TwoItemField("$"+amount,dateString);
-                    transactions.add(thisTransaction);
+                    if(transactionMap.containsKey("created")) {
+                        long created = Long.valueOf(transactionMap.get("created"));
+                        created = created * 1000;
+
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        String dateString = formatter.format(new Date(created));
+                        TwoItemField thisTransaction = new TwoItemField("$" + amount, dateString);
+                        transactions.add(thisTransaction);
+                    }
                 }
                 populateTransactionList();
 

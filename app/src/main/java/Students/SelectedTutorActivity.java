@@ -141,6 +141,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         locationText = (TextView) findViewById(R.id.cityText);
         headlineText = (TextView) findViewById(R.id.title);
         optionsList = (ListView) findViewById(R.id.optionsList);
+        ImageView star = (ImageView) findViewById(R.id.imageView6);
 
 
         options.add("Read all Reviews");
@@ -159,6 +160,8 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
         //If tutor does not have a rating, set text
         if(score == 0){
             ratingText.setText("N/A");
+            ratingText.setVisibility(View.INVISIBLE);
+            star.setVisibility(View.INVISIBLE);
         }else {
             ratingText.setText(score + "");
         }
@@ -462,7 +465,7 @@ public class SelectedTutorActivity extends AppCompatActivity implements View.OnC
             Intent intent = new Intent(getApplicationContext(), MessageActivity.class);
             UserInfo selectedUser;
 
-            selectedUser = selectedTutor.generateUserInfo();
+            selectedUser = selectedTutor.generateUserInfo(selectedTutor.getProfileImage());
             // if(myID.equalsIgnoreCase(((TextView)view).getText().toString())){
             //       myID = tutorId;
             //  }

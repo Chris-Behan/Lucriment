@@ -50,21 +50,19 @@
             android:id="@+id/requestTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:layout_below="@+id/requestName"
             android:layout_alignLeft="@+id/requestName"
-            android:layout_alignStart="@+id/requestName" />
+            android:layout_alignStart="@+id/requestName"
+            android:layout_below="@+id/requestName" />
 
         <TextView
             android:id="@+id/studentScore"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="4.9"
-            android:textSize="20sp"
-            android:layout_below="@+id/requestPic"
             android:layout_alignLeft="@+id/requestPic"
-            android:layout_alignStart="@+id/requestPic" />
+            android:layout_alignStart="@+id/requestPic"
+            android:layout_below="@+id/requestPic"
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/imageView8"

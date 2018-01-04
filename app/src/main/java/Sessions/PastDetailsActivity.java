@@ -55,7 +55,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
     private String locationName;
     private String subject;
     private TextView nameText, titleText, ratingText;
-    private ImageView imageView;
+    private ImageView imageView, star;
     private ListView optionsList;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> optionsAdapter;
@@ -69,12 +69,13 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Session Request");
+        getSupportActionBar().setTitle("Past Session");
         TwoItemField field1 = new TwoItemField("Subject", "Select");
         TwoItemField field3 = new TwoItemField("Location", "Select");
         TwoItemField field2 = new TwoItemField("Time", "Select");
@@ -120,6 +121,8 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 requesteeInfo = dataSnapshot.getValue(UserInfo.class);
+              //  String headLine = dataSnapshot.child("headline").getValue(String.class);
+               // requesteeInfo.setHeadline(headLine);
                 checkReviewStatus();
 
 
@@ -133,6 +136,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
 
             DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("tutors").child(requesteeUid);
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     tutorInfo = dataSnapshot.getValue(TutorInfo.class);
@@ -157,6 +161,7 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
         acceptButton = (Button) findViewById(R.id.acceptButton);
         reviewButton = (Button) findViewById(R.id.reviewButton);
         revLayout = (RelativeLayout) findViewById(R.id.reviewLayout);
+        star = (ImageView) findViewById(R.id.imageView8);
 
         if(userType.equals("student")){
             acceptButton.setText("Contact Tutor");
@@ -193,6 +198,9 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 ratingAvg = Double.valueOf(df.format(ratingAvg));
 
                 ratingText.setText(ratingAvg + "");
+            }else{
+                ratingText.setVisibility(View.INVISIBLE);
+                star.setVisibility(View.INVISIBLE);
             }
         }else{
 
@@ -203,6 +211,9 @@ public class PastDetailsActivity extends AppCompatActivity implements OnMapReady
                 ratingAvg = Double.valueOf(df.format(ratingAvg));
 
                 ratingText.setText(ratingAvg + "");
+            }else{
+                ratingText.setVisibility(View.INVISIBLE);
+                star.setVisibility(View.INVISIBLE);
             }
         }
 

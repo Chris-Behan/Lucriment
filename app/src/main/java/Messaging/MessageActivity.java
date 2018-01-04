@@ -1,6 +1,8 @@
 package Messaging;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -68,6 +70,7 @@ public class MessageActivity extends AppCompatActivity implements View.OnClickLi
    // public DisplayMetrics metrics = getApplicationContext().getResources().getDisplayMetrics();
    // public static int Device_Width = metrics.widthPixels;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

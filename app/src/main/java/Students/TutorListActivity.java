@@ -434,6 +434,8 @@ public class TutorListActivity extends BaseActivity {
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
 
+            ImageView star = (ImageView) itemView.findViewById(R.id.imageView6);
+
             TextView ratingScore = (TextView) itemView.findViewById(R.id.rating);
             if(currentTutor.getRating()!=null) {
                 Rating rating = currentTutor.getRating();
@@ -441,6 +443,10 @@ public class TutorListActivity extends BaseActivity {
                 ratingScore.setText(score+"");
             }else{
                 ratingScore.setText("N/A");
+                ratingScore.setVisibility(View.INVISIBLE);
+                star.setVisibility(View.INVISIBLE);
+                //RelativeLayout.LayoutParams middle = new RelativeLayout.LayoutParams(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+               // ratingScore.setLayoutParams(middle);
             }
 
             TextView titleText = (TextView) itemView.findViewById(R.id.title);

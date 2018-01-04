@@ -53,7 +53,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
     private String locationName;
     private String subject;
     private TextView nameText, titleText, ratingText;
-    private ImageView imageView;
+    private ImageView imageView, star;
     private ListView optionsList;
     private ArrayList<TwoItemField> itemList = new ArrayList<>();
     private ArrayAdapter<TwoItemField> optionsAdapter;
@@ -168,6 +168,7 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
         optionsList = (ListView) findViewById(R.id.requestOptions);
         acceptButton = (Button) findViewById(R.id.acceptButton);
         declineButton = (Button) findViewById(R.id.declineButton);
+        star = (ImageView) findViewById(R.id.imageView8);
         acceptButton.setOnClickListener(this);
         declineButton.setOnClickListener(this);
 
@@ -195,7 +196,8 @@ public class RequestDetailsActivity extends AppCompatActivity implements OnMapRe
 
                     ratingText.setText(ratingAvg + "");
                 } else {
-                    ratingText.setText("  0");
+                    ratingText.setVisibility(View.INVISIBLE);
+                    star.setVisibility(View.INVISIBLE);
                 }
 
         Glide.with(getApplicationContext())

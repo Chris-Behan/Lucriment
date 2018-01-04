@@ -137,8 +137,9 @@ public class TutorInfo implements Parcelable {
         return arr;
     }
 
-    public UserInfo generateUserInfo(){
+    public UserInfo generateUserInfo(String profileImage){
         UserInfo gU = new UserInfo(getFullName(),getLastName(),getFirstName(),getId(),getEmail(),getUserType(),getHeadline());
+        gU.setProfileImage(profileImage);
        return gU;
     }
 
