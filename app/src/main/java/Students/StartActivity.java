@@ -9,10 +9,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ViewFlipper;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.lucriment.lucriment.LoginActivity;
 import com.lucriment.lucriment.MainActivity;
 import Misc.OnSwipeTouchListener;
 import com.lucriment.lucriment.R;
+import com.lucriment.lucriment.RedirectOnLogin;
 import com.rd.PageIndicatorView;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{
@@ -20,12 +22,21 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private Animation in, out, inR, outR;
     private  PageIndicatorView pageIndicatorView;
     private Button createAccountButton, loginButton;
+    private FirebaseAuth firebaseAuth;
     private boolean flipping = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        // check if user is already logged in
+        if(firebaseAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(getApplicationContext(), RedirectOnLogin.class));
+        }
+
         pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicatorView);
         createAccountButton = (Button) findViewById(R.id.createAccount);
         loginButton = (Button) findViewById(R.id.logInButton);

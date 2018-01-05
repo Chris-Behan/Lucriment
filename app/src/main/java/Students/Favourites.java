@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class Favourites extends BaseActivity {
     private String userType;
     private UserInfo userInfo;
     private ArrayList<TutorInfo> tutors = new ArrayList<>();
+    private RelativeLayout noFavLayout;
     private double tutorScore;
     private ArrayList<String> favouritesLocations = new ArrayList<>();
     private ProgressDialog progressDialog;
@@ -63,6 +65,7 @@ public class Favourites extends BaseActivity {
         BottomNavHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         undoButton = (Button) findViewById(R.id.undoButton);
+        noFavLayout = (RelativeLayout) findViewById(R.id.noFavLayout);
 
         //GET INTENTS
         if(getIntent().hasExtra("userInfo")) {
@@ -124,6 +127,9 @@ public class Favourites extends BaseActivity {
                 for(DataSnapshot t :dataSnapshot.getChildren()){
                     String favourite = t.getValue(String.class);
                     favourites.add(favourite);
+                }
+                if(favourites.isEmpty()){
+                    noFavLayout.setVisibility(View.VISIBLE);
                 }
                 getTutors();
             }
@@ -202,6 +208,7 @@ public class Favourites extends BaseActivity {
             // set image imageVIew.setImageResource();
             TextView nameText = (TextView) itemView.findViewById(R.id.browseDisplayName);
             nameText.setText(currentTutor.getFullName());
+            ImageView star = (ImageView) itemView.findViewById(R.id.imageView6);
 
             TextView ratingScore = (TextView) itemView.findViewById(R.id.rating);
             if(currentTutor.getRating()!=null) {
@@ -210,7 +217,8 @@ public class Favourites extends BaseActivity {
                 ratingScore.setText(score+"");
 
             }else{
-                ratingScore.setText("  0");
+                ratingScore.setVisibility(View.INVISIBLE);
+                star.setVisibility(View.INVISIBLE);
             }
             TextView city = (TextView) itemView.findViewById(R.id.cityText);
             if(!favouritesLocations.isEmpty()) {

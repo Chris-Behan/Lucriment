@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import Students.UserInfo;
@@ -54,6 +55,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
     private List<Chat> chatList = new ArrayList<>();
     private UserInfo userInfo;
     private String userType;
+    private RelativeLayout noMessages;
     private ProgressDialog progressDialog;
     private BottomNavigationView bottomNavigationView;
     @Override
@@ -66,6 +68,7 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
         if(getIntent().hasExtra("userType")){
             userType = getIntent().getStringExtra("userType");
         }
+        noMessages = (RelativeLayout) findViewById(R.id.noMessages);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
@@ -122,7 +125,9 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
                         usersIds.add(c.receiverId);
                     }
                 }
-
+                if(listOfChats.isEmpty()){
+                    noMessages.setVisibility(View.VISIBLE);
+                }
 
             }
 
