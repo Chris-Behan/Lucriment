@@ -2,6 +2,8 @@ package Messaging;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -31,6 +33,7 @@ import Misc.BottomNavHelper;
 import com.lucriment.lucriment.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -217,7 +220,22 @@ public class ViewMessagesActivity extends BaseActivity implements View.OnClickLi
             messageText.setText(currentChat.text);
 
             TextView timeText = (TextView) itemView.findViewById(R.id.timeText);
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, h:mm a");
+            SimpleDateFormat sdf;
+            Calendar currentTime = Calendar.getInstance();
+            Calendar messageTime = Calendar.getInstance();
+            messageTime.setTimeInMillis(currentChat.timestamp);
+            int current = currentTime.get(Calendar.WEEK_OF_YEAR);
+            int message = messageTime.get(Calendar.WEEK_OF_YEAR);
+            if(current == message  ){
+                if(currentTime.get(Calendar.DAY_OF_YEAR) == messageTime.get(Calendar.DAY_OF_YEAR)){
+                    sdf  = new SimpleDateFormat("hh:mm a");
+                }else{
+                    sdf  = new SimpleDateFormat("EEE");
+                }
+
+            }else{
+                sdf  = new SimpleDateFormat("MMM d" );
+            }
             timeText.setText(sdf.format(currentChat.timestamp));
            // timeText.setText(sdf.format(1503554400000l));
 

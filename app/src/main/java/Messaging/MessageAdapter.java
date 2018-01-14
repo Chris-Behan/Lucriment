@@ -105,7 +105,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         @RequiresApi(api = Build.VERSION_CODES.N)
         void bind(Chat message) {
             messageText.setText(message.text);
-            String dateString = new SimpleDateFormat("hh:mm").format(message.timestamp);
+            String dateString = new SimpleDateFormat("h:mm a").format(message.timestamp);
             timeText.setText(dateString);
 
             // Format the stored timestamp into a readable String using method.
@@ -130,7 +130,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
         @RequiresApi(api = Build.VERSION_CODES.N)
         void bind(Chat message) {
             messageText.setText(message.text);
-            String dateString = new SimpleDateFormat("hh:mm").format(message.timestamp);
+            String dateString = new SimpleDateFormat("h:mm a").format(message.timestamp);
 
 
             // Format the stored timestamp into a readable String using method.
