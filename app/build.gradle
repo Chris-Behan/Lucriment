@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+
     defaultConfig {
         multiDexEnabled true
         applicationId "com.lucriment.lucriment"
         minSdkVersion 15
-        targetSdkVersion 25
-        versionName '1.03'
+        targetSdkVersion 26
+        versionName '1.05'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionCode 5
+        versionCode 7
     }
     buildTypes {
         debug {
@@ -55,6 +55,7 @@ dependencies {
     compile 'com.android.support:design:26.0.0'
     compile 'com.github.sundeepk:compact-calendar-view:2.0.2.1'
     compile 'com.stripe:stripe-android:4.1.1'
+    compile 'com.android.support:animated-vector-drawable:26.0.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
 }

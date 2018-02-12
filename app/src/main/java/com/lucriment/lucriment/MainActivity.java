@@ -50,9 +50,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import Students.StartActivity;
-import Students.TutorListActivity;
-import Students.UserInfo;
+import students.StartActivity;
+import students.TutorListActivity;
+import students.UserInfo;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
 

@@ -9,15 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import Messaging.ViewMessagesActivity;
-import Misc.BottomNavHelper;
-import Students.Favourites;
-import Students.SettingsActivity;
-import Students.UserInfo;
-import Tutors.DefaultAvailability;
-import Tutors.StatsActivity;
-import Students.TutorListActivity;
-import Tutors.TutorSessionsActivity;
+import messaging.ViewMessagesActivity;
+import misc.BottomNavHelper;
+import students.Favourites;
+import students.SettingsActivity;
+import students.UserInfo;
+import tutors.DefaultAvailability;
+import tutors.StatsActivity;
+import students.TutorListActivity;
+import tutors.TutorSessionsActivity;
 
 public abstract class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 

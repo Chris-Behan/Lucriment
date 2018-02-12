@@ -43,7 +43,7 @@ import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 
-import Students.StartActivity;
+import students.StartActivity;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 

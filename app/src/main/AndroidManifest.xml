@@ -40,12 +40,12 @@
             </intent-filter>
         </activity>
 
-        <service android:name="Messaging.MyFirebaseMessagingService">
+        <service android:name="messaging.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="Messaging.MyFirebaseInstanceIDService">
+        <service android:name="messaging.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -55,7 +55,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-        <activity android:name="Students.StartActivity">
+        <activity android:name="students.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,55 +63,55 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name="Students.ProfileActivity" />
+        <activity android:name="students.ProfileActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".LoginActivity" />
-        <activity android:name="Students.CreationActivity" />
-        <activity android:name="Misc.BrowseActivity" />
-        <activity android:name="Tutors.TutorCreation" />
-        <activity android:name="Students.TutorListActivity" />
-        <activity android:name="Students.SelectedTutorActivity" />
-        <activity android:name="Messaging.MessageActivity" />
-        <activity android:name="Messaging.ViewMessagesActivity" />
-        <activity android:name="Tutors.PersonalProfileActivity" />
-        <activity android:name="Tutors.ScheduleActivity" />
-        <activity android:name="Sessions.RequestSessionActivity" />
-        <activity android:name="Sessions.TimePickerActivity" />
-        <activity android:name="Sessions.SessionsActivity" />
-        <activity android:name="Misc.SessionsTableActivity" />
-        <activity android:name="Sessions.SessionDetails" />
-        <activity android:name="Sessions.CurrentSession" />
-        <activity android:name="Sessions.PastSession" />
-        <activity android:name="Students.Favourites" />
-        <activity android:name="Misc.UploadActivity" />
-        <activity android:name="Misc.ImageLayout" />
-        <activity android:name="Tutors.MyProfileActivity" />
-        <activity android:name="Students.SettingsActivity" />
-        <activity android:name="Tutors.DefaultAvailability" />
-        <activity android:name="Tutors.DayAvailability" />
-        <activity android:name="Students.studentProfileActivity" />
-        <activity android:name="Tutors.CustomAvailabilitySelection" />
-        <activity android:name="Students.PaymentActivity" />
-        <activity android:name="Tutors.EditTutorProfile" />
-        <activity android:name="Tutors.AboutActivity" />
-        <activity android:name="Tutors.SearchForSubjects" />
-        <activity android:name="Tutors.AllReviewsActivity" />
-        <activity android:name="Tutors.TutorSessionsActivity" />
-        <activity android:name="Sessions.RequestDetailsActivity" />
-        <activity android:name="Sessions.BookedDetailsActivity" />
-        <activity android:name="Sessions.PastDetailsActivity" />
-        <activity android:name="Tutors.TutorAvailabilityActivity" />
-        <activity android:name="Tutors.StatsActivity" />
+        <activity android:name="students.CreationActivity" />
+        <activity android:name="misc.BrowseActivity" />
+        <activity android:name="tutors.TutorCreation" />
+        <activity android:name="students.TutorListActivity" />
+        <activity android:name="students.SelectedTutorActivity" />
+        <activity android:name="messaging.MessageActivity" />
+        <activity android:name="messaging.ViewMessagesActivity" />
+        <activity android:name="tutors.PersonalProfileActivity" />
+        <activity android:name="tutors.ScheduleActivity" />
+        <activity android:name="sessions.RequestSessionActivity" />
+        <activity android:name="sessions.TimePickerActivity" />
+        <activity android:name="sessions.SessionsActivity" />
+        <activity android:name="misc.SessionsTableActivity" />
+        <activity android:name="sessions.SessionDetails" />
+        <activity android:name="sessions.CurrentSession" />
+        <activity android:name="sessions.PastSession" />
+        <activity android:name="students.Favourites" />
+        <activity android:name="misc.UploadActivity" />
+        <activity android:name="misc.ImageLayout" />
+        <activity android:name="tutors.MyProfileActivity" />
+        <activity android:name="students.SettingsActivity" />
+        <activity android:name="tutors.DefaultAvailability" />
+        <activity android:name="tutors.DayAvailability" />
+        <activity android:name="students.studentProfileActivity" />
+        <activity android:name="tutors.CustomAvailabilitySelection" />
+        <activity android:name="students.PaymentActivity" />
+        <activity android:name="tutors.EditTutorProfile" />
+        <activity android:name="tutors.AboutActivity" />
+        <activity android:name="tutors.SearchForSubjects" />
+        <activity android:name="tutors.AllReviewsActivity" />
+        <activity android:name="tutors.TutorSessionsActivity" />
+        <activity android:name="sessions.RequestDetailsActivity" />
+        <activity android:name="sessions.BookedDetailsActivity" />
+        <activity android:name="sessions.PastDetailsActivity" />
+        <activity android:name="tutors.TutorAvailabilityActivity" />
+        <activity android:name="tutors.StatsActivity" />
         <activity android:name=".ResetPasswordActivity" />
-        <activity android:name="Tutors.TutorPayoutActivity" />
-        <activity android:name="Tutors.TutorCreationP2" />
-        <activity android:name="Students.AppInfoActivity" />
-        <activity android:name="Tutors.CreationSubjectSelection" />
-        <activity android:name="Sessions.CurrentSessionDetails" />
+        <activity android:name="tutors.TutorPayoutActivity" />
+        <activity android:name="tutors.TutorCreationP2" />
+        <activity android:name="students.AppInfoActivity" />
+        <activity android:name="tutors.CreationSubjectSelection" />
+        <activity android:name="sessions.CurrentSessionDetails" />
         <activity android:name=".RedirectOnLogin"></activity>
     </application>
 

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Lucriment v1.03"
+            android:text="Lucriment v1.05"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
